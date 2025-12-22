@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects & Reports | BR & G Contractor Construction Service</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container header-flex">
+    <h1 class="logo">BR & G <span>Construction</span></h1>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+       <a href="contractor.html">Contractors</a>
+      <a href="projects-reports.html" class="active">Projects & Reports</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <h2>Projects & Reports</h2>
+    <p>Transparent execution, documented progress, and proven results</p>
+  </div>
+</section>
+
+<!-- PROJECTS SECTION -->
+<section class="projects">
+  <div class="container">
+    <h2 class="section-title">Our Projects</h2>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-img"></div>
+        <div class="project-info">
+          <h3>Residential Building – RCC Work</h3>
+          <p><strong>Location:</strong> Pune</p>
+          <p><strong>Work:</strong> Slab Shuttering & Labour Supply</p>
+          <span class="status completed">Completed</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-img"></div>
+        <div class="project-info">
+          <h3>Commercial Complex</h3>
+          <p><strong>Location:</strong> Mumbai</p>
+          <p><strong>Work:</strong> Technician & Labour Supply</p>
+          <span class="status ongoing">Ongoing</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-img"></div>
+        <div class="project-info">
+          <h3>Warehouse Foundation</h3>
+          <p><strong>Location:</strong> Nashik</p>
+          <p><strong>Work:</strong> Soil Filling & Leveling</p>
+          <span class="status completed">Completed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- CLIENT PROJECT TABLE -->
+ <!-- SEARCH BAR -->
+<div class="table-search">
+  <input
+    type="text"
+    id="projectSearch"
+    placeholder="Search by Client Name, Project Name, or Project ID"
+    onkeyup="filterProjects()"
+  />
+</div>
+
+<section class="project-table-section">
+  <div class="container">
+    <h2 class="section-title">Client Project Records</h2>
+
+    <div class="table-wrapper">
+      <table class="project-table">
+        <thead>
+          <tr>
+            <th>Client Name</th>
+            <th>Project Name</th>
+            <th>Project ID</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Rahul Sharma</td>
+            <td>Residential RCC Building</td>
+            <td>BRG-001</td>
+            <td>
+              <button class="view-btn" onclick="openModal('project1')">
+                View
+              </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Amit Patil</td>
+            <td>Commercial Complex</td>
+            <td>BRG-002</td>
+            <td>
+              <button class="view-btn" onclick="openModal('project2')">
+                View
+              </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Suresh Kulkarni</td>
+            <td>Warehouse Foundation</td>
+            <td>BRG-003</td>
+            <td>
+              <button class="view-btn" onclick="openModal('project3')">
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- REPORTS SECTION -->
+<section class="reports">
+  <div class="container">
+    <h2 class="section-title">Project Reports</h2>
+
+    <div class="report-list">
+      <div class="report-card">
+        <h3>Daily Work Progress Report</h3>
+        <p>
+          Includes daily manpower, work completed, materials used,
+          and site photographs for transparency.
+        </p>
+      </div>
+
+      <div class="report-card">
+        <h3>Safety & Compliance Report</h3>
+        <p>
+          Documents safety measures, PPE usage, toolbox meetings,
+          and site compliance records.
+        </p>
+      </div>
+
+      <div class="report-card">
+        <h3>Completion Report</h3>
+        <p>
+          Final project summary including work scope, completion date,
+          client approval, and handover confirmation.
+        </p>
+      </div>
+
+      <div class="report-card">
+        <h3>Monthly Summary Report</h3>
+        <p>
+          Consolidated monthly progress, workforce details,
+          challenges faced, and next-phase planning.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2>Want to See Transparent & Professional Execution?</h2>
+    <p>Partner with BR & G Contractor Construction Service</p>
+    <a href="contact.html" class="btn primary">Contact Us</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 BR & G Contractor Construction Service. All Rights Reserved.</p>
+  </div>
+</footer>
+<!-- IMAGE MODAL -->
+<!-- IMAGE MODAL WITH SLIDER -->
+<div id="imageModal" class="modal">
+  <div class="modal-content slider-modal">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+
+    <h3>Project Images</h3>
+
+    <div class="slider-container">
+      <button class="nav-btn prev" onclick="prevImage()">❮</button>
+
+      <img id="sliderImage" src="" alt="Project Image" />
+
+      <button class="nav-btn next" onclick="nextImage()">❯</button>
+    </div>
+
+    <div class="image-count" id="imageCount"></div>
+  </div>
+</div>
+
+</div>
+<script>
+    const projectImages = {
+    project1: [
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e",
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd",
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
+    ],
+    project2: [
+      "https://images.unsplash.com/photo-1590650046871-92c887180603",
+      "https://images.unsplash.com/photo-1581090700227-1e37b190418e"
+    ],
+    project3: [
+      "https://images.unsplash.com/photo-1585123334904-845d60e97b29",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+    ]
+  };
+
+  let currentImages = [];
+  let currentIndex = 0;
+
+  function openModal(projectKey) {
+    currentImages = projectImages[projectKey];
+    currentIndex = 0;
+
+    updateSlider();
+    document.getElementById("imageModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
+
+  function updateSlider() {
+    const img = document.getElementById("sliderImage");
+    const counter = document.getElementById("imageCount");
+
+    img.src = currentImages[currentIndex];
+    counter.innerText = `${currentIndex + 1} / ${currentImages.length}`;
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % currentImages.length;
+    updateSlider();
+  }
+
+  function prevImage() {
+    currentIndex =
+      (currentIndex - 1 + currentImages.length) % currentImages.length;
+    updateSlider();
+  }
+
+  // Keyboard support
+  document.addEventListener("keydown", function (e) {
+    const modal = document.getElementById("imageModal");
+    if (modal.style.display === "flex") {
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+      if (e.key === "Escape") closeModal();
+    }
+  });
+</script>
+
+<script>
+  function filterProjects() {
+    const input = document.getElementById("projectSearch");
+    const filter = input.value.toUpperCase();
+    const table = document.querySelector(".project-table");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName("td");
+      let matchFound = false;
+
+      for (let j = 0; j < 3; j++) {
+        if (cells[j]) {
+          const textValue = cells[j].textContent || cells[j].innerText;
+          if (textValue.toUpperCase().indexOf(filter) > -1) {
+            matchFound = true;
+            break;
+          }
+        }
+      }
+
+      rows[i].style.display = matchFound ? "" : "none";
+    }
+  }
+</script>
+
+
+</body>
+</html>
