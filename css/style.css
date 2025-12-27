@@ -121,8 +121,38 @@ body {
   font-size: 14px;
   margin-right: 10px;
 }
-
 .primary {
+  background: #10c3b1;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease; /* smooth animation */
+}
+
+.primary:hover {
+  transform: scale(1.05); /* slight zoom */
+  box-shadow: 0 4px 12px rgba(16, 195, 177, 0.5); /* glow effect */
+}
+
+.secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondary:hover {
+  background: #fff;
+  color: #10c3b1;
+  transform: translateY(-3px); /* lift effect */
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+}
+/*.primary {
   background: #10c3b1;
   color: #000;
 }
@@ -133,7 +163,7 @@ body {
   border: 1px solid #fff;
 }
 
-/* ================= SERVICES ================= */
+ ================= SERVICES ================= */
 /* ================= CORE SERVICES GRADIENT ================= */
 .service-card {
   position: relative;
