@@ -63,7 +63,46 @@
     </div>
   </div>
 </section>
+<!-- HERO -->
+<section class="contractors-hero">
+  <div class="container">
+    <h2>Our Professional Contractors</h2>
+    <p>Verified, skilled, and experienced workforce across India</p>
+  </div>
+</section>
 
+<!-- FILTERS -->
+<section class="container filters">
+  <div class="filter-grid">
+    <input type="text" id="searchName" placeholder="Search by name">
+    <select id="filterType">
+      <option value="">All Contractor Types</option>
+      <option value="Mason">Mason</option>
+      <option value="Electrician">Electrician</option>
+      <option value="Carpenter">Carpenter</option>
+      <option value="Shuttering">Shuttering</option>
+      <option value="Tiles and Mrbles">Tiles and Mrbles</option>
+      <option value="Plumber">Plumber</option>
+      <option value="Painter">Painter</option>
+    </select>
+    <select id="filterState">
+      <option value="">All States</option>
+      <option value="Haryana">Haryana</option>
+      <option value="Punjab">Punjab</option>
+      <option value="Uttar Pradesh">Uttar Pradesh</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Maharashtra">Maharashtra</option>
+    </select>
+    <input type="text" id="filterDistrict" placeholder="District">
+  </div>
+</section>
+
+<!-- CONTRACTORS -->
+<section class="contractors">
+  <div class="container">
+    <div class="contractor-grid" id="contractorGrid"></div>
+  </div>
+</section>
 <!-- WHO CAN JOIN -->
 <section class="workflow">
   <div class="container">
@@ -83,7 +122,6 @@
     </div>
   </div>
 </section>
-
 <!-- WORK FLOW -->
 <section class="services">
   <div class="container">
@@ -143,6 +181,113 @@
     <p>© 2025 BR & G Contractor Construction Service. All Rights Reserved.</p>
   </div>
 </footer>
+<script>
+  const contractors = [
+    {
+      name: "Ramesh Kumar",
+      type: "Mason",
+      experience: 12,
+      rating: 4.6,
+      state: "Haryana",
+      district: "Panipat",
+      photo: "https://i.pravatar.cc/150?img=11",
+      desc: "Expert in residential and commercial masonry work with high precision."
+    },
+    {
+      name: "Sanjay Verma",
+      type: "Electrician",
+      experience: 8,
+      rating: 4.3,
+      state: "Delhi",
+      district: "South Delhi",
+      photo: "https://i.pravatar.cc/150?img=32",
+      desc: "Certified electrician handling industrial and home wiring projects."
+    },
+    {
+      name: "Amit Singh",
+      type: "Shuttering",
+      experience: 15,
+      rating: 4.8,
+      state: "Haryana",
+      district: "Sonipat",
+      photo: "https://i.pravatar.cc/150?img=14",
+      desc: "Specialist in RCC slab shuttering and structural formwork."
+    },
+    {
+      name: "Amit Singh",
+      type: "Tiles and Mrbles",
+      experience: 15,
+      rating: 4.8,
+      state: "Punjab",
+      district: "Ludhiana",
+      photo: "https://i.pravatar.cc/150?img=14",
+      desc: "Specialist in RCC slab shuttering and structural formwork."
+    },
+    {
+      name: "Amit",
+      type: "Plumber",
+      experience: 15,
+      rating: 4.8,
+      state: "Haryana",
+      district: "Sonipat",
+      photo: "https://i.pravatar.cc/150?img=14",
+      desc: "Specialist in RCC slab shuttering and structural formwork."
+    },
+    {
+      name: "rohit",
+      type: "Painter",
+      experience: 10,
+      rating: 4.5,
+      state: "Haryana",
+      district: "Ambala",
+      photo: "https://i.pravatar.cc/150?img=14",
+      desc: "Specialist in RCC slab shuttering and structural formwork."
+    },
 
+  ];
+
+  const grid = document.getElementById("contractorGrid");
+
+  function render(list) {
+    grid.innerHTML = "";
+    list.forEach(c => {
+      grid.innerHTML += `
+        <div class="contractor-card">
+          <div class="contractor-header">
+            <img src="${c.photo}" alt="${c.name}">
+            <div>
+              <h3>${c.name}</h3>
+              <span>${c.type} • ${c.experience} yrs</span>
+            </div>
+          </div>
+          <div class="rating">⭐ ${c.rating.toFixed(1)}</div>
+          <div class="meta">${c.state}, ${c.district}</div>
+          <div class="desc">${c.desc}</div>
+        </div>
+      `;
+    });
+  }
+
+  function filter() {
+    const name = searchName.value.toLowerCase();
+    const type = filterType.value;
+    const state = filterState.value;
+    const district = filterDistrict.value.toLowerCase();
+
+    const result = contractors.filter(c =>
+      c.name.toLowerCase().includes(name) &&
+      (type === "" || c.type === type) &&
+      (state === "" || c.state === state) &&
+      c.district.toLowerCase().includes(district)
+    );
+
+    render(result);
+  }
+
+  document.querySelectorAll("#searchName, #filterType, #filterState, #filterDistrict")
+    .forEach(el => el.addEventListener("input", filter));
+
+  render(contractors);
+</script>
 </body>
 </html>
