@@ -1413,9 +1413,7 @@ body {
 .policy ul {
   margin-left: 20px;
 }
-   /* ================= CONTRACTORS PAGE ================= */
-
-    .contractors-hero {
+.contractors-hero {
       background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #ffffff;
       padding: 70px 0;
