@@ -4035,5 +4035,997 @@ const THEORY_DATA = [
     <br><br>
     <img src="https://example.com/acoustic-work.jpg" alt="Acoustic Work Image" />
   `
+},
+  // -------------------- MODULAR KITCHEN WORK --------------------
+{
+  question: "what is modular kitchen work in construction?",
+  keywords: "modular kitchen construction cabinets countertops fittings",
+  answer: `
+    <strong>Modular kitchen work</strong> involves prefabricated units for efficient and aesthetic cooking spaces.
+    <br><br>
+    <strong>Components:</strong>
+    <ul>
+      <li>Cabinets – base units, wall units, tall units</li>
+      <li>Countertops – granite, quartz, marble</li>
+      <li>Storage solutions – drawers, shelves, pull-outs</li>
+      <li>Appliances – chimney, hob, oven, refrigerator</li>
+      <li>Lighting – task and ambient</li>
+    </ul>
+    <br><br>
+    <strong>Process:</strong>
+    <ul>
+      <li>Layout design – L-shape, U-shape, parallel</li>
+      <li>Cabinet installation – prefabricated modules</li>
+      <li>Countertop fixing – stone or engineered surfaces</li>
+      <li>Appliance integration – electrical and plumbing connections</li>
+      <li>Finishing – laminates, polish, lighting</li>
+    </ul>
+    
+  `
+},
+{
+  question: "निर्माण में मॉड्यूलर किचन कार्य क्या है?",
+  keywords: "निर्माण मॉड्यूलर किचन कैबिनेट्स काउंटरटॉप फिटिंग्स",
+  answer: `
+    <strong>मॉड्यूलर किचन कार्य</strong> प्रीफैब्रिकेटेड यूनिट्स से कुशल और आकर्षक कुकिंग स्पेस तैयार करता है।
+    <br><br>
+    <strong>घटक:</strong>
+    <ul>
+      <li>कैबिनेट्स – बेस यूनिट, वॉल यूनिट, टॉल यूनिट</li>
+      <li>काउंटरटॉप – ग्रेनाइट, क्वार्ट्ज, संगमरमर</li>
+      <li>स्टोरेज समाधान – दराज, शेल्फ, पुल-आउट</li>
+      <li>उपकरण – चिमनी, हॉब, ओवन, रेफ्रिजरेटर</li>
+      <li>लाइटिंग – टास्क और एंबियंट</li>
+    </ul>
+    <br><br>
+    <strong>प्रक्रिया:</strong>
+    <ul>
+      <li>लेआउट डिज़ाइन – L-शेप, U-शेप, पैरेलल</li>
+      <li>कैबिनेट इंस्टॉलेशन – प्रीफैब्रिकेटेड मॉड्यूल</li>
+      <li>काउंटरटॉप लगाना – पत्थर या इंजीनियर्ड सतह</li>
+      <li>उपकरण इंटीग्रेशन – इलेक्ट्रिकल और प्लंबिंग कनेक्शन</li>
+      <li>फिनिशिंग – लैमिनेट, पॉलिश, लाइटिंग</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- BATHROOM WORK --------------------
+{
+  question: "what is bathroom finishing work in construction?",
+  keywords: "bathroom work construction sanitary fittings tiling waterproofing",
+  answer: `
+    <strong>Bathroom finishing work</strong> ensures functionality, hygiene, and aesthetics in wet areas.
+    <br><br>
+    <strong>Components:</strong>
+    <ul>
+      <li>Sanitary fittings – WC, washbasin, shower, bathtub</li>
+      <li>Plumbing – concealed pipes, hot & cold water lines</li>
+      <li>Tiling – ceramic, vitrified, anti-skid tiles</li>
+      <li>Waterproofing – membranes, chemical coatings</li>
+      <li>Accessories – mirrors, towel racks, cabinets</li>
+    </ul>
+    <br><br>
+    <strong>Process:</strong>
+    <ul>
+      <li>Plumbing layout and pipe installation</li>
+      <li>Waterproofing treatment</li>
+      <li>Tiling and joint grouting</li>
+      <li>Sanitary fitting installation</li>
+      <li>Finishing – mirrors, cabinets, lighting</li>
+    </ul>
+    
+  `
+},
+{
+  question: "निर्माण में बाथरूम फिनिशिंग कार्य क्या है?",
+  keywords: "निर्माण बाथरूम कार्य सैनिटरी फिटिंग्स टाइलिंग वाटरप्रूफिंग",
+  answer: `
+    <strong>बाथरूम फिनिशिंग कार्य</strong> गीले क्षेत्रों में कार्यक्षमता, स्वच्छता और सौंदर्य सुनिश्चित करता है।
+    <br><br>
+    <strong>घटक:</strong>
+    <ul>
+      <li>सैनिटरी फिटिंग्स – WC, वॉशबेसिन, शॉवर, बाथटब</li>
+      <li>प्लंबिंग – कंसील्ड पाइप, गर्म और ठंडे पानी की लाइनें</li>
+      <li>टाइलिंग – सिरेमिक, विट्रिफाइड, एंटी-स्किड टाइलें</li>
+      <li>वाटरप्रूफिंग – मेम्ब्रेन, केमिकल कोटिंग</li>
+      <li>एक्सेसरीज़ – शीशे, तौलिया रैक, कैबिनेट</li>
+    </ul>
+    <br><br>
+    <strong>प्रक्रिया:</strong>
+    <ul>
+      <li>प्लंबिंग लेआउट और पाइप इंस्टॉलेशन</li>
+      <li>वाटरप्रूफिंग ट्रीटमेंट</li>
+      <li>टाइलिंग और जोड़ ग्राउटिंग</li>
+      <li>सैनिटरी फिटिंग इंस्टॉलेशन</li>
+      <li>फिनिशिंग – शीशे, कैबिनेट, लाइटिंग</li>
+    </ul>
+    
+  `
+},
+// -------------------- SMART HOME AUTOMATION --------------------
+{
+  question: "what is smart home automation in construction?",
+  keywords: "smart home automation IoT lighting security energy",
+  answer: `
+    <strong>Smart home automation</strong> integrates IoT devices and systems for convenience, security, and energy efficiency.
+    <br><br>
+    <strong>Components:</strong>
+    <ul>
+      <li>Lighting automation – smart bulbs, dimmers, motion sensors</li>
+      <li>Security systems – CCTV, smart locks, alarms</li>
+      <li>Climate control – smart thermostats, HVAC integration</li>
+      <li>Energy management – smart meters, solar integration</li>
+      <li>Voice & app control – Alexa, Google Home, mobile apps</li>
+    </ul>
+    <br><br>
+    <strong>Process:</strong>
+    <ul>
+      <li>System design – identify devices and connectivity</li>
+      <li>Installation – wiring, sensors, controllers</li>
+      <li>Integration – connect to Wi-Fi and apps</li>
+      <li>Testing – automation routines and safety checks</li>
+    </ul>
+    
+  `
+},
+{
+  question: "निर्माण में स्मार्ट होम ऑटोमेशन क्या है?",
+  keywords: "निर्माण स्मार्ट होम ऑटोमेशन IoT लाइटिंग सुरक्षा ऊर्जा",
+  answer: `
+    <strong>स्मार्ट होम ऑटोमेशन</strong> IoT उपकरणों और सिस्टम को एकीकृत करता है ताकि सुविधा, सुरक्षा और ऊर्जा दक्षता मिले।
+    <br><br>
+    <strong>घटक:</strong>
+    <ul>
+      <li>लाइटिंग ऑटोमेशन – स्मार्ट बल्ब, डिमर, मोशन सेंसर</li>
+      <li>सुरक्षा सिस्टम – CCTV, स्मार्ट लॉक, अलार्म</li>
+      <li>क्लाइमेट कंट्रोल – स्मार्ट थर्मोस्टैट, HVAC इंटीग्रेशन</li>
+      <li>ऊर्जा प्रबंधन – स्मार्ट मीटर, सोलर इंटीग्रेशन</li>
+      <li>वॉइस और ऐप कंट्रोल – Alexa, Google Home, मोबाइल ऐप</li>
+    </ul>
+    <br><br>
+    <strong>प्रक्रिया:</strong>
+    <ul>
+      <li>सिस्टम डिज़ाइन – उपकरण और कनेक्टिविटी पहचानना</li>
+      <li>इंस्टॉलेशन – वायरिंग, सेंसर, कंट्रोलर</li>
+      <li>इंटीग्रेशन – Wi-Fi और ऐप से जोड़ना</li>
+      <li>टेस्टिंग – ऑटोमेशन रूटीन और सुरक्षा जांच</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- SMART SECURITY SYSTEMS --------------------
+{
+  question: "what are smart security systems in buildings?",
+  keywords: "smart security systems construction CCTV alarms locks",
+  answer: `
+    <strong>Smart security systems</strong> protect buildings using connected devices and automation.
+    <br><br>
+    <strong>Components:</strong>
+    <ul>
+      <li>CCTV cameras – remote monitoring</li>
+      <li>Smart locks – biometric or app-controlled</li>
+      <li>Intrusion alarms – motion and door sensors</li>
+      <li>Video door phones – visitor identification</li>
+      <li>Integration – mobile apps and cloud storage</li>
+    </ul>
+    <br><br>
+    <strong>Benefits:</strong> Enhanced safety, remote access, real-time alerts.
+    
+  `
+},
+{
+  question: "भवनों में स्मार्ट सुरक्षा सिस्टम क्या हैं?",
+  keywords: "भवन स्मार्ट सुरक्षा सिस्टम CCTV अलार्म लॉक",
+  answer: `
+    <strong>स्मार्ट सुरक्षा सिस्टम</strong> जुड़े हुए उपकरणों और ऑटोमेशन से भवनों की सुरक्षा करते हैं।
+    <br><br>
+    <strong>घटक:</strong>
+    <ul>
+      <li>CCTV कैमरे – रिमोट मॉनिटरिंग</li>
+      <li>स्मार्ट लॉक – बायोमेट्रिक या ऐप-नियंत्रित</li>
+      <li>इंट्रूज़न अलार्म – मोशन और दरवाज़ा सेंसर</li>
+      <li>वीडियो डोर फोन – आगंतुक पहचान</li>
+      <li>इंटीग्रेशन – मोबाइल ऐप और क्लाउड स्टोरेज</li>
+    </ul>
+    <br><br>
+    <strong>लाभ:</strong> बेहतर सुरक्षा, रिमोट एक्सेस, रियल-टाइम अलर्ट।
+    
+  `
+},
+// -------------------- SOLAR ENERGY SYSTEMS --------------------
+{
+  question: "what is the role of solar energy in green buildings?",
+  keywords: "green building solar panels renewable energy",
+  answer: `
+    <strong>Solar energy systems</strong> provide renewable power for buildings, reducing dependency on fossil fuels.
+    <br><br>
+    <strong>Components:</strong>
+    <ul>
+      <li>Solar panels – photovoltaic modules</li>
+      <li>Inverters – convert DC to AC</li>
+      <li>Battery storage – backup power</li>
+      <li>Grid connection – net metering</li>
+    </ul>
+    <br><br>
+    <strong>Benefits:</strong> Clean energy, reduced electricity bills, sustainability.
+   
+  `
+},
+{
+  question: "ग्रीन बिल्डिंग में सोलर एनर्जी की भूमिका क्या है?",
+  keywords: "ग्रीन बिल्डिंग सोलर पैनल नवीकरणीय ऊर्जा",
+  answer: `
+    <strong>सोलर एनर्जी सिस्टम</strong> भवनों को नवीकरणीय ऊर्जा प्रदान करते हैं और जीवाश्म ईंधन पर निर्भरता कम करते हैं।
+    <br><br>
+    <strong>घटक:</strong>
+    <ul>
+      <li>सोलर पैनल – फोटोवोल्टिक मॉड्यूल</li>
+      <li>इन्वर्टर – DC को AC में बदलना</li>
+      <li>बैटरी स्टोरेज – बैकअप पावर</li>
+      <li>ग्रिड कनेक्शन – नेट मीटरिंग</li>
+    </ul>
+    <br><br>
+    <strong>लाभ:</strong> स्वच्छ ऊर्जा, बिजली बिल में कमी, स्थिरता।
+    
+  `
+},
+
+// -------------------- RAINWATER HARVESTING --------------------
+{
+  question: "what is rainwater harvesting in construction?",
+  keywords: "rainwater harvesting green building water conservation",
+  answer: `
+    <strong>Rainwater harvesting</strong> collects and stores rainwater for reuse in buildings.
+    <br><br>
+    <strong>Process:</strong>
+    <ul>
+      <li>Collection – rooftop catchment</li>
+      <li>Filtration – remove debris</li>
+      <li>Storage – tanks or underground reservoirs</li>
+      <li>Distribution – reuse for flushing, irrigation</li>
+    </ul>
+    <br><br>
+    <strong>Benefits:</strong> Water conservation, reduced dependency on municipal supply, sustainability.
+    
+  `
+},
+{
+  question: "निर्माण में वर्षा जल संचयन क्या है?",
+  keywords: "निर्माण वर्षा जल संचयन ग्रीन बिल्डिंग जल संरक्षण",
+  answer: `
+    <strong>वर्षा जल संचयन</strong> भवनों में वर्षा जल को एकत्रित और संग्रहित करके पुन: उपयोग करता है।
+    <br><br>
+    <strong>प्रक्रिया:</strong>
+    <ul>
+      <li>संग्रहण – छत से पानी पकड़ना</li>
+      <li>फिल्ट्रेशन – मलबा हटाना</li>
+      <li>भंडारण – टैंक या भूमिगत जलाशय</li>
+      <li>वितरण – फ्लशिंग, सिंचाई में उपयोग</li>
+    </ul>
+    <br><br>
+    <strong>लाभ:</strong> जल संरक्षण, नगरपालिका आपूर्ति पर निर्भरता कम करना, स्थिरता।
+    
+  `
+},
+
+// -------------------- ENERGY-EFFICIENT MATERIALS --------------------
+{
+  question: "what are energy-efficient materials in green construction?",
+  keywords: "energy efficient materials green building insulation",
+  answer: `
+    <strong>Energy-efficient materials</strong> reduce energy consumption and improve building performance.
+    <br><br>
+    <strong>Examples:</strong>
+    <ul>
+      <li>Insulated concrete blocks</li>
+      <li>Low-E glass windows</li>
+      <li>Recycled steel and timber</li>
+      <li>Cool roofing materials</li>
+    </ul>
+    <br><br>
+    <strong>Benefits:</strong> Lower energy bills, thermal comfort, eco-friendly construction.
+    
+    
+  `
+},
+{
+  question: "ग्रीन निर्माण में ऊर्जा-कुशल सामग्री क्या हैं?",
+  keywords: "ग्रीन निर्माण ऊर्जा-कुशल सामग्री इंसुलेशन",
+  answer: `
+    <strong>ऊर्जा-कुशल सामग्री</strong> ऊर्जा खपत कम करती हैं और भवन प्रदर्शन को बेहतर बनाती हैं।
+    <br><br>
+    <strong>उदाहरण:</strong>
+    <ul>
+      <li>इंसुलेटेड कंक्रीट ब्लॉक</li>
+      <li>लो-ई ग्लास खिड़कियाँ</li>
+      <li>रीसाइकल स्टील और लकड़ी</li>
+      <li>कूल रूफिंग सामग्री</li>
+    </ul>
+    <br><br>
+    <strong>लाभ:</strong> कम बिजली बिल, थर्मल आराम, पर्यावरण-अनुकूल निर्माण।
+    
+  `
+},
+
+// -------------------- WASTE MANAGEMENT --------------------
+{
+  question: "what is waste management in sustainable construction?",
+  keywords: "waste management green building recycling",
+  answer: `
+    <strong>Waste management</strong> ensures proper disposal and recycling of construction and household waste.
+    <br><br>
+    <strong>Process:</strong>
+    <ul>
+      <li>Segregation – biodegradable, recyclable, hazardous waste</li>
+      <li>Recycling – reuse of steel, timber, concrete</li>
+      <li>Composting – organic waste treatment</li>
+      <li>Safe disposal – hazardous materials</li>
+    </ul>
+    <br><br>
+    <strong>Benefits:</strong> Reduced pollution, resource conservation, eco-friendly environment.
+    
+  `
+},
+{
+  question: "सस्टेनेबल निर्माण में वेस्ट मैनेजमेंट क्या है?",
+  keywords: "सस्टेनेबल निर्माण वेस्ट मैनेजमेंट रीसाइक्लिंग",
+  answer: `
+    <strong>वेस्ट मैनेजमेंट</strong> निर्माण और घरेलू अपशिष्ट के उचित निपटान और रीसाइक्लिंग को सुनिश्चित करता है।
+    <br><br>
+    <strong>प्रक्रिया:</strong>
+    <ul>
+      <li>विभाजन – बायोडिग्रेडेबल, रीसाइक्लेबल, खतरनाक अपशिष्ट</li>
+      <li>रीसाइक्लिंग – स्टील, लकड़ी, कंक्रीट का पुन: उपयोग</li>
+      <li>कम्पोस्टिंग – जैविक अपशिष्ट का उपचार</li>
+      <li>सुरक्षित निपटान – खतरनाक सामग्री</li>
+    </ul>
+    <br><br>
+    <strong>लाभ:</strong> प्रदूषण कम करना, संसाधन संरक्षण, पर्यावरण-अनुकूल वातावरण।
+    
+  `
+},
+// -------------------- PROJECT MANAGEMENT --------------------
+{
+  question: "what is project management in construction?",
+  keywords: "project management construction scheduling cost control safety",
+  answer: `
+    <strong>Project management</strong> ensures timely, cost-effective, and quality delivery of construction projects.
+    <br><br>
+    <strong>Key Points (8):</strong>
+    <ol>
+      <li>Planning – define scope, objectives, resources</li>
+      <li>Scheduling – prepare timelines and milestones</li>
+      <li>Budgeting – cost estimation and control</li>
+      <li>Resource allocation – manpower, materials, equipment</li>
+      <li>Risk management – identify and mitigate risks</li>
+      <li>Communication – coordination among stakeholders</li>
+      <li>Monitoring – track progress and performance</li>
+      <li>Closing – handover and documentation</li>
+    </ol>
+    
+  `
+},
+{
+  question: "निर्माण में प्रोजेक्ट मैनेजमेंट क्या है?",
+  keywords: "निर्माण प्रोजेक्ट मैनेजमेंट शेड्यूलिंग लागत नियंत्रण सुरक्षा",
+  answer: `
+    <strong>प्रोजेक्ट मैनेजमेंट</strong> निर्माण परियोजनाओं को समय पर, लागत-प्रभावी और गुणवत्तापूर्ण तरीके से पूरा करता है।
+    <br><br>
+    <strong>मुख्य बिंदु (8):</strong>
+    <ol>
+      <li>योजना – स्कोप, उद्देश्य और संसाधन तय करना</li>
+      <li>शेड्यूलिंग – टाइमलाइन और माइलस्टोन बनाना</li>
+      <li>बजटिंग – लागत अनुमान और नियंत्रण</li>
+      <li>संसाधन आवंटन – जनशक्ति, सामग्री, उपकरण</li>
+      <li>जोखिम प्रबंधन – जोखिम पहचान और समाधान</li>
+      <li>संचार – हितधारकों के बीच समन्वय</li>
+      <li>निगरानी – प्रगति और प्रदर्शन ट्रैक करना</li>
+      <li>समापन – हैंडओवर और डॉक्यूमेंटेशन</li>
+    </ol>
+    
+  `
+},
+
+// -------------------- QUALITY CONTROL --------------------
+{
+  question: "what is quality control in construction?",
+  keywords: "quality control construction material testing safety audits",
+  answer: `
+    <strong>Quality control</strong> ensures construction meets standards, specifications, and safety requirements.
+    <br><br>
+    <strong>Key Points (8):</strong>
+    <ol>
+      <li>Material testing – cement, steel, aggregates</li>
+      <li>Workmanship inspection – finishing and accuracy</li>
+      <li>Safety audits – compliance with safety norms</li>
+      <li>Site supervision – daily monitoring</li>
+      <li>Documentation – records of tests and approvals</li>
+      <li>Standard compliance – IS codes, building regulations</li>
+      <li>Defect rectification – identify and correct issues</li>
+      <li>Final inspection – approval before handover</li>
+    </ol>
+    
+  `
+},
+{
+  question: "निर्माण में क्वालिटी कंट्रोल क्या है?",
+  keywords: "निर्माण क्वालिटी कंट्रोल सामग्री परीक्षण सुरक्षा ऑडिट",
+  answer: `
+    <strong>क्वालिटी कंट्रोल</strong> सुनिश्चित करता है कि निर्माण मानकों, विनिर्देशों और सुरक्षा आवश्यकताओं को पूरा करे।
+    <br><br>
+    <strong>मुख्य बिंदु (8):</strong>
+    <ol>
+      <li>सामग्री परीक्षण – सीमेंट, स्टील, एग्रीगेट्स</li>
+      <li>वर्कमैनशिप निरीक्षण – फिनिशिंग और सटीकता</li>
+      <li>सुरक्षा ऑडिट – सुरक्षा मानकों का पालन</li>
+      <li>साइट सुपरविजन – दैनिक निगरानी</li>
+      <li>डॉक्यूमेंटेशन – परीक्षण और अनुमोदन का रिकॉर्ड</li>
+      <li>मानक अनुपालन – IS कोड, बिल्डिंग रेगुलेशन</li>
+      <li>दोष सुधार – समस्याओं की पहचान और समाधान</li>
+      <li>अंतिम निरीक्षण – हैंडओवर से पहले अनुमोदन</li>
+    </ol>
+    
+  `
+},
+// -------------------- CONSTRUCTION DOCUMENTATION --------------------
+{
+  question: "what is construction documentation?",
+  keywords: "construction documentation drawings BOQ site records",
+  answer: `
+    <strong>Construction documentation</strong> refers to all records, drawings, and reports used to plan and execute projects.
+    <br><br>
+    <strong>Key Points (8):</strong>
+    <ol>
+      <li>Architectural drawings – plans, elevations, sections</li>
+      <li>Structural drawings – reinforcement and load details</li>
+      <li>MEP drawings – mechanical, electrical, plumbing layouts</li>
+      <li>BOQ (Bill of Quantities) – material and cost estimates</li>
+      <li>Specifications – standards and quality requirements</li>
+      <li>Site records – daily logs, progress reports</li>
+      <li>Inspection reports – quality and safety checks</li>
+      <li>Completion certificates – final approvals</li>
+    </ol>
+    
+  `
+},
+{
+  question: "निर्माण दस्तावेज़ीकरण क्या है?",
+  keywords: "निर्माण दस्तावेज़ीकरण ड्रॉइंग्स BOQ साइट रिकॉर्ड",
+  answer: `
+    <strong>निर्माण दस्तावेज़ीकरण</strong> उन सभी रिकॉर्ड, ड्रॉइंग और रिपोर्ट को कहते हैं जो परियोजनाओं की योजना और निष्पादन में उपयोग होते हैं।
+    <br><br>
+    <strong>मुख्य बिंदु (8):</strong>
+    <ol>
+      <li>आर्किटेक्चरल ड्रॉइंग – प्लान, एलिवेशन, सेक्शन</li>
+      <li>स्ट्रक्चरल ड्रॉइंग – रिइनफोर्समेंट और लोड विवरण</li>
+      <li>MEP ड्रॉइंग – मैकेनिकल, इलेक्ट्रिकल, प्लंबिंग लेआउट</li>
+      <li>BOQ (बिल ऑफ क्वांटिटी) – सामग्री और लागत अनुमान</li>
+      <li>स्पेसिफिकेशन – मानक और गुणवत्ता आवश्यकताएँ</li>
+      <li>साइट रिकॉर्ड – दैनिक लॉग, प्रगति रिपोर्ट</li>
+      <li>निरीक्षण रिपोर्ट – गुणवत्ता और सुरक्षा जांच</li>
+      <li>कम्प्लीशन सर्टिफिकेट – अंतिम अनुमोदन</li>
+    </ol>
+   
+  `
+},
+
+// -------------------- CONSTRUCTION CONTRACTS --------------------
+{
+  question: "what are construction contracts?",
+  keywords: "construction contracts agreements tender documents",
+  answer: `
+    <strong>Construction contracts</strong> are legally binding agreements between client and contractor for project execution.
+    <br><br>
+    <strong>Key Points (8):</strong>
+    <ol>
+      <li>Tender documents – invitation and bidding process</li>
+      <li>Agreement – signed contract between parties</li>
+      <li>Scope of work – detailed description of tasks</li>
+      <li>Payment terms – schedule and mode of payments</li>
+      <li>Time schedule – deadlines and milestones</li>
+      <li>Quality clauses – compliance with standards</li>
+      <li>Penalty clauses – delay or defect liabilities</li>
+      <li>Dispute resolution – arbitration or legal remedies</li>
+    </ol>
+   
+  `
+},
+{
+  question: "निर्माण अनुबंध क्या हैं?",
+  keywords: "निर्माण अनुबंध एग्रीमेंट टेंडर दस्तावेज़",
+  answer: `
+    <strong>निर्माण अनुबंध</strong> क्लाइंट और कॉन्ट्रैक्टर के बीच परियोजना निष्पादन के लिए कानूनी समझौते होते हैं।
+    <br><br>
+    <strong>मुख्य बिंदु (8):</strong>
+    <ol>
+      <li>टेंडर दस्तावेज़ – आमंत्रण और बोली प्रक्रिया</li>
+      <li>एग्रीमेंट – पक्षों के बीच हस्ताक्षरित अनुबंध</li>
+      <li>कार्य का दायरा – कार्यों का विस्तृत विवरण</li>
+      <li>भुगतान शर्तें – भुगतान का शेड्यूल और तरीका</li>
+      <li>समय शेड्यूल – डेडलाइन और माइलस्टोन</li>
+      <li>गुणवत्ता क्लॉज़ – मानकों का अनुपालन</li>
+      <li>दंड क्लॉज़ – देरी या दोष की जिम्मेदारी</li>
+      <li>विवाद समाधान – मध्यस्थता या कानूनी उपाय</li>
+    </ol>
+    
+  `
+},
+// -------------------- SITE MANAGEMENT --------------------
+{
+  question: "what is site management in construction?",
+  keywords: "site management construction daily logs manpower safety",
+  answer: `
+    <strong>Site management</strong> ensures smooth execution of construction activities on-site.
+    <br><br>
+    <strong>Key Points (8):</strong>
+    <ol>
+      <li>Daily logs – record work progress and issues</li>
+      <li>Manpower control – allocate and monitor workforce</li>
+      <li>Material management – track supply and usage</li>
+      <li>Equipment management – ensure availability and maintenance</li>
+      <li>Safety monitoring – enforce safety rules</li>
+      <li>Coordination – between contractors, engineers, and workers</li>
+      <li>Time management – meet deadlines and schedules</li>
+      <li>Reporting – communicate updates to project managers</li>
+    </ol>
+
+  `
+},
+{
+  question: "निर्माण में साइट मैनेजमेंट क्या है?",
+  keywords: "निर्माण साइट मैनेजमेंट दैनिक लॉग जनशक्ति सुरक्षा",
+  answer: `
+    <strong>साइट मैनेजमेंट</strong> निर्माण गतिविधियों के सुचारू निष्पादन को सुनिश्चित करता है।
+    <br><br>
+    <strong>मुख्य बिंदु (8):</strong>
+    <ol>
+      <li>दैनिक लॉग – कार्य प्रगति और समस्याओं का रिकॉर्ड</li>
+      <li>जनशक्ति नियंत्रण – कार्यबल का आवंटन और निगरानी</li>
+      <li>सामग्री प्रबंधन – आपूर्ति और उपयोग की निगरानी</li>
+      <li>उपकरण प्रबंधन – उपलब्धता और रखरखाव सुनिश्चित करना</li>
+      <li>सुरक्षा निगरानी – सुरक्षा नियमों का पालन</li>
+      <li>समन्वय – कॉन्ट्रैक्टर, इंजीनियर और मजदूरों के बीच</li>
+      <li>समय प्रबंधन – डेडलाइन और शेड्यूल पूरा करना</li>
+      <li>रिपोर्टिंग – प्रोजेक्ट मैनेजर को अपडेट देना</li>
+    </ol>
+
+  `
+},
+
+// -------------------- SITE SUPERVISION --------------------
+{
+  question: "what is site supervision in construction?",
+  keywords: "site supervision construction monitoring safety quality",
+  answer: `
+    <strong>Site supervision</strong> involves overseeing daily construction activities to ensure quality and safety.
+    <br><br>
+    <strong>Key Points (8):</strong>
+    <ol>
+      <li>Work monitoring – check progress against schedule</li>
+      <li>Quality inspection – ensure standards are met</li>
+      <li>Safety enforcement – PPE and site rules</li>
+      <li>Problem solving – address on-site challenges</li>
+      <li>Communication – link between workers and management</li>
+      <li>Documentation – maintain inspection and test records</li>
+      <li>Training – guide workers on procedures</li>
+      <li>Final approval – certify completed works</li>
+    </ol>
+    
+  `
+},
+{
+  question: "निर्माण में साइट सुपरविजन क्या है?",
+  keywords: "निर्माण साइट सुपरविजन निगरानी सुरक्षा गुणवत्ता",
+  answer: `
+    <strong>साइट सुपरविजन</strong> दैनिक निर्माण गतिविधियों की निगरानी करता है ताकि गुणवत्ता और सुरक्षा सुनिश्चित हो सके।
+    <br><br>
+    <strong>मुख्य बिंदु (8):</strong>
+    <ol>
+      <li>कार्य निगरानी – शेड्यूल के अनुसार प्रगति जांचना</li>
+      <li>गुणवत्ता निरीक्षण – मानकों का पालन सुनिश्चित करना</li>
+      <li>सुरक्षा प्रवर्तन – PPE और साइट नियम</li>
+      <li>समस्या समाधान – साइट पर चुनौतियों का निपटान</li>
+      <li>संचार – मजदूरों और प्रबंधन के बीच लिंक</li>
+      <li>डॉक्यूमेंटेशन – निरीक्षण और परीक्षण रिकॉर्ड बनाए रखना</li>
+      <li>प्रशिक्षण – मजदूरों को प्रक्रियाओं पर मार्गदर्शन देना</li>
+      <li>अंतिम अनुमोदन – पूर्ण कार्यों को प्रमाणित करना</li>
+    </ol>
+    
+  `
+},
+// -------------------- CONSTRUCTION SAFETY & HEALTH PRACTICES --------------------
+{
+  question: "what are construction safety and health practices?",
+  keywords: "construction safety health practices PPE audits emergency response",
+  answer: `
+    <strong>Construction safety & health practices</strong> protect workers and ensure safe project execution.
+    <br><br>
+    <strong>Key Points (10):</strong>
+    <ol>
+      <li>PPE (Personal Protective Equipment) – helmets, gloves, boots, masks</li>
+      <li>Safety training – induction and regular awareness sessions</li>
+      <li>Site safety audits – periodic inspections</li>
+      <li>Emergency response – fire drills, first aid, evacuation plans</li>
+      <li>Hazard identification – risk assessment and mitigation</li>
+      <li>Safe scaffolding & ladders – proper installation and use</li>
+      <li>Electrical safety – insulated wiring, lockout/tagout procedures</li>
+      <li>Health monitoring – medical check-ups and hygiene facilities</li>
+      <li>Worker welfare – clean drinking water, rest areas, sanitation</li>
+      <li>Documentation – safety records, incident reports, compliance certificates</li>
+    </ol>
+    
+  `
+},
+{
+  question: "निर्माण में सुरक्षा और स्वास्थ्य प्रथाएँ क्या हैं?",
+  keywords: "निर्माण सुरक्षा स्वास्थ्य PPE ऑडिट आपातकालीन प्रतिक्रिया",
+  answer: `
+    <strong>निर्माण सुरक्षा और स्वास्थ्य प्रथाएँ</strong> मजदूरों की रक्षा करती हैं और सुरक्षित परियोजना निष्पादन सुनिश्चित करती हैं।
+    <br><br>
+    <strong>मुख्य बिंदु (10):</strong>
+    <ol>
+      <li>PPE (पर्सनल प्रोटेक्टिव इक्विपमेंट) – हेलमेट, दस्ताने, बूट, मास्क</li>
+      <li>सुरक्षा प्रशिक्षण – इंडक्शन और नियमित जागरूकता सत्र</li>
+      <li>साइट सुरक्षा ऑडिट – समय-समय पर निरीक्षण</li>
+      <li>आपातकालीन प्रतिक्रिया – फायर ड्रिल, फर्स्ट एड, निकासी योजना</li>
+      <li>खतरे की पहचान – जोखिम मूल्यांकन और समाधान</li>
+      <li>सुरक्षित मचान और सीढ़ियाँ – सही इंस्टॉलेशन और उपयोग</li>
+      <li>इलेक्ट्रिकल सुरक्षा – इंसुलेटेड वायरिंग, लॉकआउट/टैगआउट प्रक्रियाएँ</li>
+      <li>स्वास्थ्य निगरानी – मेडिकल चेकअप और स्वच्छता सुविधाएँ</li>
+      <li>मजदूर कल्याण – स्वच्छ पेयजल, विश्राम क्षेत्र, शौचालय</li>
+      <li>डॉक्यूमेंटेशन – सुरक्षा रिकॉर्ड, घटना रिपोर्ट, अनुपालन प्रमाणपत्र</li>
+    </ol>
+   
+  `
+},
+// -------------------- BIM (Building Information Modeling) --------------------
+{
+  question: "what is BIM in construction technology?",
+  keywords: "BIM construction technology building information modeling",
+  answer: `
+    <strong>BIM (Building Information Modeling)</strong> is a digital representation of physical and functional aspects of a building.
+    <br><br>
+    <strong>Key Innovations:</strong>
+    <ul>
+      <li>3D modeling – visualize design before construction</li>
+      <li>Collaboration – architects, engineers, contractors work on one platform</li>
+      <li>Cost estimation – accurate BOQ and budgeting</li>
+      <li>Clash detection – identify conflicts in design</li>
+      <li>Lifecycle management – from design to demolition</li>
+    </ul>
+   
+  `
+},
+{
+  question: "निर्माण तकनीक में BIM क्या है?",
+  keywords: "निर्माण तकनीक BIM बिल्डिंग इंफॉर्मेशन मॉडलिंग",
+  answer: `
+    <strong>BIM (बिल्डिंग इंफॉर्मेशन मॉडलिंग)</strong> भवन के भौतिक और कार्यात्मक पहलुओं का डिजिटल प्रतिनिधित्व है।
+    <br><br>
+    <strong>मुख्य नवाचार:</strong>
+    <ul>
+      <li>3D मॉडलिंग – निर्माण से पहले डिज़ाइन देखना</li>
+      <li>सहयोग – आर्किटेक्ट, इंजीनियर, कॉन्ट्रैक्टर एक प्लेटफ़ॉर्म पर काम करते हैं</li>
+      <li>लागत अनुमान – सटीक BOQ और बजटिंग</li>
+      <li>क्लैश डिटेक्शन – डिज़ाइन में टकराव पहचानना</li>
+      <li>लाइफसाइकल मैनेजमेंट – डिज़ाइन से डिमोलिशन तक</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- DRONES --------------------
+{
+  question: "how are drones used in construction?",
+  keywords: "drones construction technology site survey monitoring",
+  answer: `
+    <strong>Drones</strong> are used for aerial surveys, monitoring, and safety checks in construction.
+    <br><br>
+    <strong>Applications:</strong>
+    <ul>
+      <li>Site surveys – mapping and topography</li>
+      <li>Progress monitoring – real-time aerial updates</li>
+      <li>Safety inspections – hard-to-reach areas</li>
+      <li>Material tracking – logistics and inventory</li>
+      <li>Marketing – aerial photography and videos</li>
+    </ul>
+    <br><br>
+    
+  `
+},
+{
+  question: "निर्माण में ड्रोन का उपयोग कैसे होता है?",
+  keywords: "निर्माण ड्रोन तकनीक साइट सर्वे निगरानी",
+  answer: `
+    <strong>ड्रोन</strong> निर्माण में हवाई सर्वे, निगरानी और सुरक्षा जांच के लिए उपयोग किए जाते हैं।
+    <br><br>
+    <strong>उपयोग:</strong>
+    <ul>
+      <li>साइट सर्वे – मैपिंग और टोपोग्राफी</li>
+      <li>प्रगति निगरानी – रियल-टाइम हवाई अपडेट</li>
+      <li>सुरक्षा निरीक्षण – कठिन स्थानों की जांच</li>
+      <li>सामग्री ट्रैकिंग – लॉजिस्टिक्स और इन्वेंटरी</li>
+      <li>मार्केटिंग – हवाई फोटोग्राफी और वीडियो</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- ROBOTICS --------------------
+{
+  question: "what is the role of robotics in construction?",
+  keywords: "robotics construction technology automation",
+  answer: `
+    <strong>Robotics</strong> automate repetitive and hazardous tasks in construction.
+    <br><br>
+    <strong>Applications:</strong>
+    <ul>
+      <li>Bricklaying robots – faster masonry</li>
+      <li>Concrete printing – automated pouring</li>
+      <li>Demolition robots – safe dismantling</li>
+      <li>Inspection robots – tunnels and pipelines</li>
+      <li>Safety robots – monitor hazardous zones</li>
+    </ul>
+    
+  `
+},
+{
+  question: "निर्माण में रोबोटिक्स की भूमिका क्या है?",
+  keywords: "निर्माण रोबोटिक्स तकनीक ऑटोमेशन",
+  answer: `
+    <strong>रोबोटिक्स</strong> निर्माण में दोहराए जाने वाले और खतरनाक कार्यों को स्वचालित करते हैं।
+    <br><br>
+    <strong>उपयोग:</strong>
+    <ul>
+      <li>ब्रिकलेइंग रोबोट – तेज़ मिस्त्री कार्य</li>
+      <li>कंक्रीट प्रिंटिंग – स्वचालित डालना</li>
+      <li>डिमोलिशन रोबोट – सुरक्षित विघटन</li>
+      <li>इंस्पेक्शन रोबोट – सुरंग और पाइपलाइन</li>
+      <li>सुरक्षा रोबोट – खतरनाक क्षेत्रों की निगरानी</li>
+    </ul>
+   
+  `
+},
+
+// -------------------- 3D PRINTING --------------------
+{
+  question: "what is 3D printing in construction?",
+  keywords: "3D printing construction technology concrete houses",
+  answer: `
+    <strong>3D printing</strong> builds structures layer by layer using automated machines.
+    <br><br>
+    <strong>Applications:</strong>
+    <ul>
+      <li>Concrete houses – rapid affordable housing</li>
+      <li>Complex designs – customized architecture</li>
+      <li>Prefabricated components – walls, slabs</li>
+      <li>Reduced waste – precise material usage</li>
+      <li>Speed – faster than traditional methods</li>
+    </ul>
+    
+  `
+},
+{
+  question: "निर्माण में 3D प्रिंटिंग क्या है?",
+  keywords: "निर्माण 3D प्रिंटिंग तकनीक कंक्रीट घर",
+  answer: `
+    <strong>3D प्रिंटिंग</strong> स्वचालित मशीनों द्वारा परत दर परत संरचनाएँ बनाता है।
+    <br><br>
+    <strong>उपयोग:</strong>
+    <ul>
+      <li>कंक्रीट घर – तेज़ और सस्ती आवास</li>
+      <li>जटिल डिज़ाइन – कस्टम आर्किटेक्चर</li>
+      <li>प्रीफैब्रिकेटेड कंपोनेंट – दीवारें, स्लैब</li>
+      <li>अपशिष्ट कम करना – सटीक सामग्री उपयोग</li>
+      <li>गति – पारंपरिक तरीकों से तेज़</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- AI TOOLS --------------------
+{
+  question: "how is AI used in construction?",
+  keywords: "AI tools construction technology predictive analytics automation",
+  answer: `
+    <strong>AI tools</strong> optimize construction processes with predictive analytics and automation.
+    <br><br>
+    <strong>Applications:</strong>
+    <ul>
+      <li>Predictive maintenance – equipment health monitoring</li>
+      <li>Project scheduling – AI-driven optimization</li>
+      <li>Safety monitoring – detect risks via cameras</li>
+      <li>Design optimization – AI-assisted architecture</li>
+      <li>Cost control – data-driven budgeting</li>
+    </ul>
+    
+  `
+},
+{
+  question: "निर्माण में AI का उपयोग कैसे होता है?",
+  keywords: "निर्माण AI उपकरण तकनीक प्रेडिक्टिव एनालिटिक्स ऑटोमेशन",
+  answer: `
+    <strong>AI उपकरण</strong> प्रेडिक्टिव एनालिटिक्स और ऑटोमेशन से निर्माण प्रक्रियाओं को अनुकूलित करते हैं।
+    <br><br>
+    <strong>उपयोग:</strong>
+    <ul>
+      <li>प्रेडिक्टिव मेंटेनेंस – उपकरण स्वास्थ्य निगरानी</li>
+      <li>प्रोजेक्ट शेड्यूलिंग – AI आधारित अनुकूलन</li>
+      <li>सुरक्षा निगरानी – कैमरों से जोखिम पहचान</li>
+      <li>डिज़ाइन अनुकूलन – AI-सहायता प्राप्त आर्किटेक्चर</li>
+      <li>लागत नियंत्रण – डेटा-आधारित बजटिंग</li>
+    </ul>
+    
+  `
+},
+// -------------------- SMART MATERIALS --------------------
+{
+  question: "what are smart materials in future construction?",
+  keywords: "smart materials construction self-healing carbon neutral",
+  answer: `
+    <strong>Smart materials</strong> are advanced building materials that adapt or respond to environmental conditions.
+    <br><br>
+    <strong>Examples:</strong>
+    <ul>
+      <li>Self-healing concrete – repairs cracks automatically</li>
+      <li>Phase-change materials – regulate temperature</li>
+      <li>Carbon-neutral cement – eco-friendly production</li>
+      <li>Transparent solar glass – generates electricity</li>
+    </ul>
+    
+  `
+},
+{
+  question: "भविष्य के निर्माण में स्मार्ट सामग्री क्या हैं?",
+  keywords: "भविष्य निर्माण स्मार्ट सामग्री सेल्फ-हीलिंग कार्बन न्यूट्रल",
+  answer: `
+    <strong>स्मार्ट सामग्री</strong> उन्नत निर्माण सामग्री हैं जो पर्यावरणीय परिस्थितियों के अनुसार प्रतिक्रिया करती हैं।
+    <br><br>
+    <strong>उदाहरण:</strong>
+    <ul>
+      <li>सेल्फ-हीलिंग कंक्रीट – दरारें स्वतः ठीक करता है</li>
+      <li>फेज़-चेंज सामग्री – तापमान नियंत्रित करती है</li>
+      <li>कार्बन-न्यूट्रल सीमेंट – पर्यावरण-अनुकूल उत्पादन</li>
+      <li>ट्रांसपेरेंट सोलर ग्लास – बिजली उत्पन्न करता है</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- CARBON-NEUTRAL BUILDINGS --------------------
+{
+  question: "what are carbon-neutral buildings?",
+  keywords: "carbon neutral buildings sustainable construction",
+  answer: `
+    <strong>Carbon-neutral buildings</strong> are designed to minimize or offset carbon emissions during their lifecycle.
+    <br><br>
+    <strong>Features:</strong>
+    <ul>
+      <li>Renewable energy integration – solar, wind</li>
+      <li>Efficient insulation – reduce energy use</li>
+      <li>Green roofs and walls – absorb CO2</li>
+      <li>Carbon offset programs – balance emissions</li>
+    </ul>
+    
+  `
+},
+{
+  question: "कार्बन-न्यूट्रल भवन क्या हैं?",
+  keywords: "कार्बन न्यूट्रल भवन सस्टेनेबल निर्माण",
+  answer: `
+    <strong>कार्बन-न्यूट्रल भवन</strong> ऐसे डिज़ाइन किए जाते हैं कि उनके जीवनचक्र में कार्बन उत्सर्जन न्यूनतम या संतुलित हो।
+    <br><br>
+    <strong>विशेषताएँ:</strong>
+    <ul>
+      <li>नवीकरणीय ऊर्जा इंटीग्रेशन – सोलर, विंड</li>
+      <li>कुशल इंसुलेशन – ऊर्जा उपयोग कम करना</li>
+      <li>ग्रीन रूफ और दीवारें – CO2 अवशोषित करना</li>
+      <li>कार्बन ऑफसेट प्रोग्राम – उत्सर्जन संतुलित करना</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- DIGITAL TWINS --------------------
+{
+  question: "what are digital twins in construction?",
+  keywords: "digital twins construction future technology",
+  answer: `
+    <strong>Digital twins</strong> are virtual replicas of physical buildings used for monitoring and optimization.
+    <br><br>
+    <strong>Applications:</strong>
+    <ul>
+      <li>Real-time monitoring – sensors feed live data</li>
+      <li>Predictive maintenance – anticipate failures</li>
+      <li>Energy optimization – reduce consumption</li>
+      <li>Lifecycle management – design to demolition</li>
+    </ul>
+   
+  `
+},
+{
+  question: "निर्माण में डिजिटल ट्विन्स क्या हैं?",
+  keywords: "निर्माण डिजिटल ट्विन्स भविष्य तकनीक",
+  answer: `
+    <strong>डिजिटल ट्विन्स</strong> भवनों की वर्चुअल प्रतिकृतियाँ होती हैं जिन्हें निगरानी और अनुकूलन के लिए उपयोग किया जाता है।
+    <br><br>
+    <strong>उपयोग:</strong>
+    <ul>
+      <li>रियल-टाइम निगरानी – सेंसर से लाइव डेटा</li>
+      <li>प्रेडिक्टिव मेंटेनेंस – विफलताओं का पूर्वानुमान</li>
+      <li>ऊर्जा अनुकूलन – खपत कम करना</li>
+      <li>लाइफसाइकल मैनेजमेंट – डिज़ाइन से डिमोलिशन तक</li>
+    </ul>
+    
+  `
+},
+
+// -------------------- MODULAR CONSTRUCTION --------------------
+{
+  question: "what is modular construction?",
+  keywords: "modular construction prefabrication future trend",
+  answer: `
+    <strong>Modular construction</strong> uses prefabricated units assembled on-site for faster and efficient building.
+    <br><br>
+    <strong>Advantages:</strong>
+    <ul>
+      <li>Speed – faster than traditional methods</li>
+      <li>Cost efficiency – reduced labor and waste</li>
+      <li>Flexibility – easy expansion or relocation</li>
+      <li>Sustainability – controlled factory production</li>
+    </ul>
+
+  `
+},
+{
+  question: "मॉड्यूलर निर्माण क्या है?",
+  keywords: "मॉड्यूलर निर्माण प्रीफैब्रिकेशन भविष्य प्रवृत्ति",
+  answer: `
+    <strong>मॉड्यूलर निर्माण</strong> प्रीफैब्रिकेटेड यूनिट्स का उपयोग करता है जिन्हें साइट पर असेंबल किया जाता है ताकि निर्माण तेज़ और कुशल हो।
+    <br><br>
+    <strong>लाभ:</strong>
+    <ul>
+      <li>गति – पारंपरिक तरीकों से तेज़</li>
+      <li>लागत दक्षता – श्रम और अपशिष्ट कम करना</li>
+      <li>लचीलापन – विस्तार या स्थानांतरण में आसानी</li>
+      <li>स्थिरता – नियंत्रित फैक्ट्री उत्पादन</li>
+    </ul>
+
+  `
+},
+
+// -------------------- SUSTAINABLE URBAN PLANNING --------------------
+{
+  question: "what is sustainable urban planning in future construction?",
+  keywords: "sustainable urban planning construction smart cities",
+  answer: `
+    <strong>Sustainable urban planning</strong> designs cities to balance growth with environmental and social needs.
+    <br><br>
+    <strong>Features:</strong>
+    <ul>
+      <li>Smart cities – IoT-based infrastructure</li>
+      <li>Green transport – EVs, cycling tracks</li>
+      <li>Public spaces – parks, community centers</li>
+      <li>Resource efficiency – water, energy, waste management</li>
+    </ul>
+ 
+  `
+},
+{
+  question: "भविष्य निर्माण में सस्टेनेबल अर्बन प्लानिंग क्या है?",
+  keywords: "भविष्य निर्माण सस्टेनेबल अर्बन प्लानिंग स्मार्ट सिटी",
+  answer: `
+    <strong>सस्टेनेबल अर्बन प्लानिंग</strong> शहरों को इस तरह डिज़ाइन करती है कि विकास पर्यावरण और सामाजिक आवश्यकताओं के साथ संतुलित हो।
+    <br><br>
+    <strong>विशेषताएँ:</strong>
+    <ul>
+      <li>स्मार्ट सिटी – IoT आधारित अवसंरचना</li>
+      <li>ग्रीन ट्रांसपोर्ट – EV, साइकिल ट्रैक</li>
+      <li>पब्लिक स्पेस – पार्क, सामुदायिक केंद्र</li>
+      <li>संसाधन दक्षता – जल, ऊर्जा, अपशिष्ट प्रबंधन</li>
+    </ul>
+  `
 }
 ];
