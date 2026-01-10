@@ -25,8 +25,6 @@
           <a href="contractor.html">Contractors</a>
           <a href="services.html">Services</a>
           <a href="projects-reports.html">Projects</a>
-          <a href="contact.html">Contact</a>
-          <a href="company-rules.html">Rules</a>
         </nav>
       </div>
     </header>
@@ -35,7 +33,7 @@
     <section class="hero">
       <div class="container hero-content">
         <div class="brand-slogan">
-          <span class="slogan-en">YOUR FAITH, WE BUILD IT</span>
+          <span class="slogan-en">YOUR FAITH, WE BUILD POWER</span>
           <span class="slogan-hi">आपका विश्वास, हमारी निर्माण शक्ति</span>
         </div>
 
@@ -46,12 +44,63 @@
           quality and transparency.
         </p>
         <div class="hero-buttons">
-          <a href="services.html" class="btn primary">Our Services</a>
-          <a href="contact.html" class="btn secondary">Contact Us</a>
+          <a href="contractor.html" class="btn primary">Contractors</a>
+          <a href="services.html" class="btn primary">Services</a>
+          <a href="projects-reports.html" class="btn secondary">Project</a>
         </div>
       </div>
     </section>
+    <!---search code here and voice code -->
+    <div class="search-container">
+      <!-- <h2>Search Contractors & Materials</h2>-->
 
+      <!-- SEARCH + VOICE -->
+      <div class="search-panel">
+        <!-- SEARCH ROW -->
+        <div class="search-top">
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search mason, cement, Haryana, Panipat..."
+            />
+            <button id="voiceBtn" class="mic-btn" title="Voice Search">
+              🎤
+            </button>
+          </div>
+
+          <button class="filter-toggle" id="filterToggle">🔍 Filters</button>
+        </div>
+
+        <!-- FILTERS (HIDDEN BY DEFAULT) -->
+        <div class="filter-box" id="filterBox">
+          <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="contractor">Contractors</option>
+            <option value="material">Materials</option>
+            <option value="technician">Technicians</option>
+          </select>
+          <div class="search-select">
+            <input type="text" id="stateFilter" placeholder="Search State" />
+            <ul id="stateList" class="options"></ul>
+          </div>
+
+          <div class="search-select">
+            <input
+              type="text"
+              id="districtFilter"
+              placeholder="Search District"
+            />
+            <ul id="districtList" class="options"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="results" id="results"></div>
+    </div>
+
+   
     <!-- ================= SERVICES ================= -->
     <section class="services">
       <div class="container">
@@ -115,7 +164,7 @@
     </section>
 
     <!-- ================= WORK FLOW ================= -->
-    <section class="workflow">
+    <!-- <section class="workflow">
       <div class="container">
         <h2 class="section-title">How We Work</h2>
 
@@ -126,7 +175,7 @@
           <div class="step">Completion & Report</div>
         </div>
       </div>
-    </section>
+    </section> -->
     <section class="plans">
       <div class="container">
         <h2 class="section-title">Engagement & Support Plans</h2>
@@ -300,26 +349,6 @@
             </table>
           </div>
         </div>
-        <div class="subscription-note">
-          <h3>Important Operational Notes</h3>
-          <p>
-            Large-scale construction activities such as <strong>slab filling, lantern work,
-           and raw material stacking, beams</strong> are not included in standard
-            charges and will be billed separately based on actual work
-            requirements. Rental materials and heavy equipment are also excluded
-            from any subscription or fixed plan. Charges for these items will be
-            calculated based on the project area, duration of equipment usage,
-            and volume of materials handled.
-          </p>
-          <p>
-            All major construction-related costs—including <strong>raw material filling,
-            rental material usage, labor uplift charges, and loading or
-            unloading logistics</strong>—will be evaluated by the site manager
-            . Pricing will be finalized according to on-site
-            conditions and actual execution needs, ensuring transparency and
-            accuracy in billing with Rate. <strong>CAWR (charge according to work rates).</strong>
-          </p>
-        </div>
       </div>
     </section>
 
@@ -331,18 +360,61 @@
           Contact BR & G today and experience professional execution with
           transparency.
         </p>
-        <a href="privacy.html" class="btn primary">Privacy policy</a>
+        <a href="privacy.html" class="btn primary">Policy</a>
         <a href="terms.html" class="btn primary">Terms</a>
+        <a href="contact.html" class="btn primary">Contact</a>
+        <a href="company-rules.html" class="btn primary">Rules</a>
       </div>
     </section>
+    <!-- DESIGN MODAL full screen view -->
+    <div id="designModal" class="design-modal">
+      <span class="close-modal" onclick="closeDesignModal()">×</span>
+
+      <div class="modal-content">
+        <img id="designModalImage" src="" alt="Blueprint" />
+
+        <div class="modal-details">
+          <h2 id="modalTitle"></h2>
+          <p id="modalArea"></p>
+          <p id="modalType"></p>
+
+          <a id="modalDownload" class="download-btn" download>
+            ⬇ Download Blueprint
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN theory MODAL full screen view -->
+    <div id="designTheoryModal" class="design-modal">
+      <span class="close-modal" onclick="closeDesignModal()">×</span>
+
+      <div class="modal-content">
+        <img id="modalImage" alt="Theory Image" />
+      </div>
+    </div>
+  <!----full screen view modal of media code -->
+  <div id="mediaModal" class="design-modal">
+  <span class="close-modal" onclick="closeDesignModal()">×</span>
+  <div class="modal-content">
+    <img id="mediaImage" style="display:none;">
+    <video id="mediaVideo" controls style="display:none;"></video>
+  </div>
+</div>
 
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
       <div class="container">
         <p>
-          © 2025 BR & G Contractor Construction Service. All Rights Reserved.
+          © 2025 BR & G Contractor Construction Service. "सर्वाधिकार सुरक्षिताः"
         </p>
       </div>
     </footer>
+    <script src="data/search-data.js"></script>
+    <script src="data/theory-data.js"></script>
+    <script src="data/design-data.js"></script>
+    <script src="web.js"></script>
+    <script src="data/media-data.js"></script>
+
   </body>
 </html>

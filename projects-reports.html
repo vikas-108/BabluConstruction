@@ -18,8 +18,7 @@
       <a href="index.html">Home</a>
       <a href="services.html">Services</a>
        <a href="contractor.html">Contractors</a>
-      <a href="projects-reports.html" class="active">Projects & Reports</a>
-      <a href="contact.html">Contact</a>
+
     </nav>
   </div>
 </header>
@@ -72,19 +71,22 @@
 </section>
 <!-- CLIENT PROJECT TABLE -->
  <!-- SEARCH BAR -->
-<div class="table-search">
-  <input
-    type="text"
-    id="projectSearch"
-    placeholder="Search by Client Name, Project Name, or Project ID"
-    onkeyup="filterProjects()"
-  />
-</div>
-
 <section class="project-table-section">
   <div class="container">
+    
     <h2 class="section-title">Client Project Records</h2>
 
+    <!-- Search bar inside the same frame -->
+    <div class="table-search">
+      <input
+        type="text"
+        id="projectSearch"
+        placeholder="Search by Client Name, Project Name, or Project ID"
+        onkeyup="filterProjects()"
+      />
+    </div>
+
+    <!-- Table -->
     <div class="table-wrapper">
       <table class="project-table">
         <thead>
@@ -95,38 +97,29 @@
             <th>Action</th>
           </tr>
         </thead>
-
         <tbody>
           <tr>
             <td>Rahul Sharma</td>
             <td>Residential RCC Building</td>
             <td>BRG-001</td>
             <td>
-              <button class="view-btn" onclick="openModal('project1')">
-                View
-              </button>
+              <button class="view-btn" onclick="openModal('project1')">View</button>
             </td>
           </tr>
-
           <tr>
             <td>Amit Patil</td>
             <td>Commercial Complex</td>
             <td>BRG-002</td>
             <td>
-              <button class="view-btn" onclick="openModal('project2')">
-                View
-              </button>
+              <button class="view-btn" onclick="openModal('project2')">View</button>
             </td>
           </tr>
-
           <tr>
             <td>Suresh Kulkarni</td>
             <td>Warehouse Foundation</td>
             <td>BRG-003</td>
             <td>
-              <button class="view-btn" onclick="openModal('project3')">
-                View
-              </button>
+              <button class="view-btn" onclick="openModal('project3')">View</button>
             </td>
           </tr>
         </tbody>
@@ -189,7 +182,7 @@
 <!-- FOOTER -->
 <footer class="footer">
   <div class="container">
-    <p>© 2025 BR & G Contractor Construction Service. All Rights Reserved.</p>
+    <p>© 2025 BR & G Contractor Construction Service."सर्वाधिकार सुरक्षिताः"</p>
   </div>
 </footer>
 <!-- IMAGE MODAL -->
