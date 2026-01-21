@@ -1763,3 +1763,20 @@ body {
 .hidden {
   display: none;
 }
+/*voice button css for text to speech*/
+.quiz-voice {
+  display: flex;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.quiz-voice button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 13px;
+  cursor: pointer;
+}
+
