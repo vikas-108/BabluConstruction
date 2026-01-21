@@ -70,7 +70,33 @@ const districts = [
   "Jalgaon",
   "Nashik",
 ];
+const SEARCH_STATE_KEY = "brg_search_state";
+function saveSearchState() {
+  const state = {
+    query: input.value,
+    category: categoryFilter?.value || "",
+    state: stateFilter?.value || "",
+    district: districtFilter?.value || ""
+  };
 
+  localStorage.setItem(SEARCH_STATE_KEY, JSON.stringify(state));
+}
+function restoreSearchState() {
+  const saved = localStorage.getItem(SEARCH_STATE_KEY);
+  if (!saved) return;
+
+  const state = JSON.parse(saved);
+
+  if (state.query) input.value = state.query;
+  if (categoryFilter && state.category) categoryFilter.value = state.category;
+  if (stateFilter && state.state) stateFilter.value = state.state;
+  if (districtFilter && state.district) districtFilter.value = state.district;
+
+  // Trigger search after restoring
+  setTimeout(() => {
+    applySearch();
+  }, 100);
+}
 function setupSearchableSelect(inputId, listId, data) {
   const input = document.getElementById(inputId);
   const list = document.getElementById(listId);
@@ -458,6 +484,7 @@ function debounce(fn, delay = 500) {
 function applySearch() {
   showSearchLoader(); // 🔄 start loader
   setTimeout(() => {
+     saveSearchState(); // 💾 SAVE BEFORE SEARCH
   const q = input.value.toLowerCase().trim();
   const category = categoryFilter.value.toLowerCase();
   const state = stateFilter.value.toLowerCase();
@@ -570,4 +597,7 @@ const filterBox = document.getElementById("filterBox");
 filterToggle.addEventListener("click", () => {
   filterBox.classList.toggle("show");
 });
+
+document.addEventListener("DOMContentLoaded", restoreSearchState);
+
 
