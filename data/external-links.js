@@ -124,3 +124,64 @@ if (isValidURL(input.value.trim())) {
     ...mediaResults,
   ]);
 } */
+
+
+
+
+
+
+
+
+
+
+  // 🔹 SEARCH DATA (ONLY ONCE)
+ /**  const dataResults = SEARCH_DATA.filter(
+    (item) =>
+      Object.values(item).join(" ").toLowerCase().includes(q) &&
+      (category === "" || item.category === category) &&
+      (state === "" || item.state === state) &&
+      (district === "" || item.district === district)
+  );
+  */
+
+
+
+//this is also delete recently
+
+  /**
+   * // previous code: instant search on input
+   * const debouncedSearch = debounce(applySearch, 800);
+
+[input, categoryFilter, stateFilter, districtFilter].forEach((el) =>
+  el.addEventListener("input", debouncedSearch)
+);
+
+results.innerHTML =
+  "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
+
+  
+ * // Main search input: only on Enter
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    applySearch();
+  }
+});
+
+// Filters: still update instantly
+[categoryFilter, stateFilter, districtFilter].forEach((el) => {
+  el.addEventListener("input", debounce(applySearch, 800));
+});
+// another way is to use a single debounced function for all inputs
+// Instead of listening to "input", listen to "keydown"
+[input, categoryFilter, stateFilter, districtFilter].forEach((el) => {
+  el.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      applySearch(); // run your search only when Enter is pressed
+    }
+  });
+});
+
+// Initial message
+results.innerHTML =
+  "<p style='text-align:center;color:#64748b;'>Press Enter after typing to see results.</p>";
+ */

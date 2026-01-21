@@ -48,7 +48,7 @@
       </div>
 
       <div class="project-card">
-        <div class="project-img"></div>
+        <div class="project-img"><img src="media/photos/bull.jpg"></div>
         <div class="project-info">
           <h3>Commercial Complex</h3>
           <p><strong>Location:</strong> Mumbai</p>
@@ -58,7 +58,7 @@
       </div>
 
       <div class="project-card">
-        <div class="project-img"></div>
+        <div class="project-img"><img src="media/photos/son.jpg"></div>
         <div class="project-info">
           <h3>Warehouse Foundation</h3>
           <p><strong>Location:</strong> Nashik</p>
@@ -187,8 +187,8 @@
 </footer>
 <!-- IMAGE MODAL -->
 <!-- IMAGE MODAL WITH SLIDER -->
-<div id="imageModal" class="modal">
-  <div class="modal-content slider-modal">
+<div id="imageModal" class="modal" onclick="overlayClose(event)">
+  <div class="modal-content slider-modal" onclick="event.stopPropagation()">
     <span class="close-btn" onclick="closeModal()">&times;</span>
 
     <h3>Project Images</h3>
@@ -197,7 +197,9 @@
       <button class="nav-btn prev" onclick="prevImage()">❮</button>
 
       <img id="sliderImage" src="" alt="Project Image" />
-
+       <video id="sliderVideo" controls >
+    <source id="videoSource" src="" type="video/mp4">
+  </video>
       <button class="nav-btn next" onclick="nextImage()">❯</button>
     </div>
 
@@ -206,6 +208,7 @@
 </div>
 
 </div>
+
 <script>
     const projectImages = {
     project1: [
@@ -215,11 +218,13 @@
     ],
     project2: [
       "https://images.unsplash.com/photo-1590650046871-92c887180603",
-      "https://images.unsplash.com/photo-1581090700227-1e37b190418e"
+      "https://images.unsplash.com/photo-1581090700227-1e37b190418e",
+      "media/photos/c1.jpg"
     ],
     project3: [
       "https://images.unsplash.com/photo-1585123334904-845d60e97b29",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+      "media/videos/lava.mp4"
     ]
   };
 
@@ -236,13 +241,31 @@
 
   function closeModal() {
     document.getElementById("imageModal").style.display = "none";
+    const video = document.getElementById("sliderVideo");
+  video.pause();
+  document.getElementById("imageModal").style.display = "none";
   }
 
   function updateSlider() {
     const img = document.getElementById("sliderImage");
+     const video = document.getElementById("sliderVideo");
+  const videoSource = document.getElementById("videoSource");
     const counter = document.getElementById("imageCount");
+  const src = currentImages[currentIndex];
 
-    img.src = currentImages[currentIndex];
+    // Reset
+  img.classList.remove("active");
+  video.classList.remove("active");
+  video.pause();
+
+  if (src.endsWith(".mp4")) {
+    videoSource.src = src;
+    video.load();
+    video.classList.add("active");
+  } else {
+    img.src = src;
+    img.classList.add("active");
+  }
     counter.innerText = `${currentIndex + 1} / ${currentImages.length}`;
   }
 
@@ -256,6 +279,13 @@
       (currentIndex - 1 + currentImages.length) % currentImages.length;
     updateSlider();
   }
+  function overlayClose(e) {
+  // Only close if click is directly on overlay
+  if (e.target.id === "imageModal") {
+    closeModal();
+  }
+}
+
 
   // Keyboard support
   document.addEventListener("keydown", function (e) {
