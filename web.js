@@ -140,7 +140,20 @@ function setupSearchableSelect(inputId, listId, data) {
     }
   });
 }
+function speakText(text) {
+  if (!window.speechSynthesis) {
+    alert("Voice not supported on this device");
+    return;
+  }
 
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-IN";        // good for Indian users
+  utterance.rate = 0.7;            // slower for kids
+  utterance.pitch = 1.1;           // friendly tone
+
+  window.speechSynthesis.cancel(); // stop previous
+  window.speechSynthesis.speak(utterance);
+}
 setupSearchableSelect("stateFilter", "stateList", states);
 setupSearchableSelect("districtFilter", "districtList", districts);
 /* ---------------- SEARCH FUNCTIONS ---------------- */
@@ -346,7 +359,14 @@ function render(items) {
   results.innerHTML += `
     <div class="card quiz-card">
       <h3>${item.question}</h3>
-
+<div class="quiz-voice">
+        <button onclick="speakText('Question: ${item.question}')">🔊 Question</button>
+        ${
+          item.hint
+            ? `<button onclick="speakText('Hint: ${item.hint}')">💡 Hint</button>`
+            : ""
+        }
+      </div>
       <div class="quiz-options">
         ${item.options.map(opt => `
          <button class="quiz-option"
