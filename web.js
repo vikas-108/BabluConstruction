@@ -509,10 +509,10 @@ function applySearch() {
   const category = categoryFilter.value.toLowerCase();
   const state = stateFilter.value.toLowerCase();
   const district = districtFilter.value.toLowerCase();
-showSearchLoader(); // 🔄 start loader
   if (!q && !category && !state && !district) {
     results.innerHTML =
       "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
+    hideSearchLoader(); // ✅ IMPORTANT
     return;
   }
 
