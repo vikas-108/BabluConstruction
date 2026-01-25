@@ -686,6 +686,83 @@ body {
 .cta h2 {
   margin-bottom: 10px;
 }
+/* CTA section  
+.cta {
+  padding: 40px 0;
+  background: #f8f8f8;
+}*/
+
+/* Button wrapper */
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap; /* critical for responsiveness */
+}
+
+/* CTA Button */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 120px;
+  padding: 12px 20px;
+
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+
+  border-radius: 6px;
+  border: 1px solid #000;
+
+  background-color: #000;
+  color: #fff;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease,
+              color 0.2s ease,
+              transform 0.1s ease;
+
+  -webkit-tap-highlight-color: transparent; /* mobile fix */
+}
+
+/* Hover (desktop only) */
+.cta-btn:hover {
+  background-color: #222;
+}
+
+/* Active (touch feedback) */
+.cta-btn:active {
+  transform: scale(0.97);
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .cta-btn {
+    min-width: 140px;
+    font-size: 15px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .cta-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cta-btn {
+    width: 100%;
+    max-width: 280px;
+    font-size: 16px;
+    padding: 14px;
+  }
+}
+
 
 /* ================= FOOTER ================= */
 .footer {
