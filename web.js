@@ -76,7 +76,7 @@ function saveSearchState() {
     query: input.value,
     category: categoryFilter?.value || "",
     state: stateFilter?.value || "",
-    district: districtFilter?.value || ""
+    district: districtFilter?.value || "",
   };
 
   localStorage.setItem(SEARCH_STATE_KEY, JSON.stringify(state));
@@ -97,6 +97,7 @@ function restoreSearchState() {
     applySearch();
   }, 100);
 }
+
 function setupSearchableSelect(inputId, listId, data) {
   const input = document.getElementById(inputId);
   const list = document.getElementById(listId);
@@ -147,78 +148,120 @@ function speakText(text) {
   }
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-IN";        // good for Indian users
-  utterance.rate = 0.7;            // slower for kids
-  utterance.pitch = 1.1;           // friendly tone
+  utterance.lang = "en-IN"; // good for Indian users
+  utterance.rate = 0.7; // slower for kids
+  utterance.pitch = 1.1; // friendly tone
 
   window.speechSynthesis.cancel(); // stop previous
   window.speechSynthesis.speak(utterance);
 }
+
 setupSearchableSelect("stateFilter", "stateList", states);
 setupSearchableSelect("districtFilter", "districtList", districts);
+function normalizeText(text) {
+  if (!text) return "";
+
+  return text
+    .toString()
+    .toLowerCase()
+    .normalize("NFKD")                // ✅ mobile unicode fix
+    .replace(/[\u0300-\u036f]/g, "")  // remove accents
+    .replace(/\u00A0/g, " ")          // non-breaking space
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function levenshtein(a, b) {
+  if (Math.abs(a.length - b.length) > 2) return Infinity;
+
+  const dp = Array.from({ length: a.length + 1 }, () =>
+    Array(b.length + 1).fill(0),
+  );
+
+  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+      );
+    }
+  }
+  return dp[a.length][b.length];
+}
+
 /* ---------------- SEARCH FUNCTIONS ---------------- */
 function searchTheory(query) {
   return THEORY_DATA.filter((item) =>
-    (item.question + " " + item.keywords).toLowerCase().includes(query)
+    (item.question + " " + item.keywords).toLowerCase().includes(query),
   );
 }
 function searchDesigns(query) {
   return DESIGN_DATA.filter((d) =>
     (d.title + " " + d.keywords + " " + d.area_sqft + " " + d.area_gaz)
       .toLowerCase()
-      .includes(query)
+      .includes(query),
   );
 }
 function searchMedia(query) {
   return MEDIA_DATA.filter((item) =>
-    (item.title + " " + item.keywords).toLowerCase().includes(query)
+    (item.title + " " + item.keywords).toLowerCase().includes(query),
   );
 }
 function searchMathFormulas(query) {
   return MATH_FORMULAS.filter((f) =>
-    (f.name + " " + f.formula + " " + f.keywords).toLowerCase().includes(query)
+    (f.name + " " + f.formula + " " + f.keywords).toLowerCase().includes(query),
   );
 }
-function searchKids(query){
- return KIDS_DATA.filter(item => {
-      const ql = query.toLowerCase();
+function searchKids(query) {
+  return KIDS_DATA.filter((item) => {
+    const ql = query.toLowerCase();
 
-      const textMatch =
-        (
-          item.title +
-          " " +
-          item.keywords +
-          " " +
-          (item.color || "") +
-          " " +
-          (item.taste || "") +
-          " " +
-          (item.season || "") +
-          " " +
-           (item.weather || "") +
-          " " +
-          (item.tags || []).join(" ")
-        ).toLowerCase().includes(ql);
+    const textMatch = (
+      item.title +
+      " " +
+      item.keywords +
+      " " +
+      (item.color || "") +
+      " " +
+      (item.taste || "") +
+      " " +
+      (item.season || "") +
+      " " +
+      (item.weather || "") +
+      " " +
+      (item.tags || []).join(" ")
+    )
+      .toLowerCase()
+      .includes(ql);
 
-      // number search → age group
-      if (/^\d+$/.test(ql) && item.ageGroup) {
-        return item.ageGroup.includes(Number(ql));
-      }
+    // number search → age group
+    if (/^\d+$/.test(ql) && item.ageGroup) {
+      return item.ageGroup.includes(Number(ql));
+    }
 
-      return textMatch;
-    });
+    return textMatch;
+  });
 }
-  function searchQuiz(query) {
+function searchQuiz(query) {
   const q = query.toLowerCase();
 
   // Filter results based on query
-  const results = QUIZ_DATA.filter(item => {
+  const results = QUIZ_DATA.filter((item) => {
     const text = (
       (item.question || "") +
       " " +
       (item.keywords || "") +
       " " +
-      (item.quizType || "")
+      (item.quizType || "") +
+      " " +
+      (item.category || "") +
+      " " +
+      (item.type || "")
     ).toLowerCase();
 
     return text.includes(q);
@@ -231,7 +274,7 @@ function shuffleArray(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
-  const SAD_EMOJIS = ["😢", "😞", "😔", "😭", "😕", "☹️"];
+const SAD_EMOJIS = ["😢", "😞", "😔", "😭", "😕", "☹️"];
 function checkQuizAnswer(button, selected, correct) {
   const card = button.closest(".quiz-card");
   const feedback = card.querySelector(".quiz-feedback");
@@ -244,7 +287,7 @@ function checkQuizAnswer(button, selected, correct) {
   }
 
   // Disable all buttons after one click
-  card.querySelectorAll(".quiz-option").forEach(btn => {
+  card.querySelectorAll(".quiz-option").forEach((btn) => {
     btn.disabled = true;
   });
 }
@@ -261,17 +304,20 @@ function showSearchLoader() {
   document.getElementById("searchLoader").classList.remove("hidden");
 }
 
+//function hideSearchLoader() {
+//  document.getElementById("searchLoader").classList.add("hidden");
+//}
 function hideSearchLoader() {
-  document.getElementById("searchLoader").classList.add("hidden");
+  const loader = document.getElementById("searchLoader");
+  if (!loader) return;
+  loader.classList.add("hidden");
 }
-
 
 function openDesignModal(image, title, sqft, gaz, type) {
   document.getElementById("designModalImage").src = image;
   document.getElementById("modalTitle").innerText = title;
-  document.getElementById(
-    "modalArea"
-  ).innerText = `Area: ${sqft} sq ft / ${gaz} gaz`;
+  document.getElementById("modalArea").innerText =
+    `Area: ${sqft} sq ft / ${gaz} gaz`;
   document.getElementById("modalType").innerText = `Type: ${type}`;
 
   const download = document.getElementById("modalDownload");
@@ -356,7 +402,7 @@ function render(items) {
     }
     // quiz card
     if (item.type === "quiz") {
-  results.innerHTML += `
+      results.innerHTML += `
     <div class="card quiz-card">
       <h3>${item.question}</h3>
 <div class="quiz-voice">
@@ -368,23 +414,27 @@ function render(items) {
         }
       </div>
       <div class="quiz-options">
-        ${item.options.map(opt => `
+        ${item.options
+          .map(
+            (opt) => `
          <button class="quiz-option"
   data-answer="${opt}"
   data-correct="${item.correctAnswer}">
   ${opt}
 </button>
-        `).join("")}
+        `,
+          )
+          .join("")}
       </div>
 
       <div class="quiz-feedback"></div>
     </div>
   `;
-  return;
-}
-// 🧒 KIDS ALPHABET CARD
-if (item.category === "kids") {
-  results.innerHTML += `
+      return;
+    }
+    // 🧒 KIDS ALPHABET CARD
+    if (item.category === "kids") {
+      results.innerHTML += `
     <div class="card kids-card">
       <div class="kids-3d-box">
         <img src="${item.image}" alt="${item.title}">
@@ -392,8 +442,8 @@ if (item.category === "kids") {
       <h3>${item.title}</h3>
     </div>
   `;
-  return;
-}
+      return;
+    }
 
     // THEORY ANSWER
     // THEORY ANSWER
@@ -504,27 +554,27 @@ function debounce(fn, delay = 500) {
 function applySearch() {
   showSearchLoader(); // 🔄 start loader
   setTimeout(() => {
-     saveSearchState(); // 💾 SAVE BEFORE SEARCH
-  const q = input.value.toLowerCase().trim();
-  const category = categoryFilter.value.toLowerCase();
-  const state = stateFilter.value.toLowerCase();
-  const district = districtFilter.value.toLowerCase();
-  if (!q && !category && !state && !district) {
-    results.innerHTML =
-      "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
-    hideSearchLoader(); // ✅ IMPORTANT
-    return;
-  }
+    saveSearchState(); // 💾 SAVE BEFORE SEARCH
+    const q = input.value.toLowerCase().trim();
+    const category = categoryFilter.value.toLowerCase();
+    const state = stateFilter.value.toLowerCase();
+    const district = districtFilter.value.toLowerCase();
+    if (!q && !category && !state && !district) {
+      results.innerHTML =
+        "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
+      hideSearchLoader(); // ✅ IMPORTANT
+      return;
+    }
 
-  // 🔹 SEARCH DATA (ONLY ONCE)
- /* const dataResults = SEARCH_DATA.filter(
+    // 🔹 SEARCH DATA (ONLY ONCE)
+    /* const dataResults = SEARCH_DATA.filter(
     (item) =>
       Object.values(item).join(" ").toLowerCase().includes(q) &&
       (category === "" || item.category === category) &&
       (state === "" || item.state === state) &&
       (district === "" || item.district === district)
   );*/
-  const dataResults = SEARCH_DATA.filter(item => {
+    /*const dataResults = SEARCH_DATA.filter(item => {
     const textMatch = Object.values(item)
       .join(" ")
       .toLowerCase()
@@ -540,36 +590,99 @@ function applySearch() {
       !district || item.district?.toLowerCase().includes(district);
 
     return textMatch && categoryMatch && stateMatch && districtMatch;
-  });
-  // 🔹 OTHER DATA SOURCES
-  const theoryResults = q ? searchTheory(q) : [];
-  const designResults = q ? searchDesigns(q) : [];
-  const mediaResults = q ? searchMedia(q) : [];
-  const mathResults = q ? searchMathFormulas(q) : [];
-  const kidsResults = q ? searchKids(q) : [];
-  const QuizResults = q ? searchQuiz(q) : [];
-  // 🔹 MERGE WITHOUT DUPLICATES
-  render([
-    ...theoryResults,
-    ...designResults,
-    ...mediaResults,
-    ...dataResults,
-    ...mathResults,
-    ...kidsResults,
-    ...QuizResults,
-  ]);
-   hideSearchLoader(); // ✅ STOP LOADER AFTER RENDER
+  });*/
+   const queryTokens = normalizeText(q)
+  .split(" ")
+  .filter(t => t.length >= 2);
+const dataResults = shuffleArray(
+  SEARCH_DATA.filter((item) => {
+    // 1. Build searchable text from item
+    const searchableText = normalizeText(
+      [
+        item.name,
+        item.type,
+        item.category,
+        item.state,
+        item.district,
+        item.city,
+        item.village,
+        item.description,
+      ]
+        .filter(Boolean)
+        .join(" ")
+    );
+
+    // 2. Token match (ALL tokens must match somewhere)
+    const tokenMatch = queryTokens.every((token) => {
+      if (searchableText.includes(token)) return true;
+
+      // spelling tolerance (only for longer words)
+      if (token.length >= 4) {
+        return searchableText
+          .split(" ")
+          .some((word) => levenshtein(word, token) <= 2);
+      }
+
+      return false;
+    });
+
+    // 3. Existing filters (unchanged)
+    const categoryMatch =
+      !category || item.category?.toLowerCase() === category;
+
+    const stateMatch =
+      !state || item.state?.toLowerCase() === state;
+
+    const districtMatch =
+      !district || item.district?.toLowerCase().includes(district);
+
+    return tokenMatch && categoryMatch && stateMatch && districtMatch;
+  })
+).slice(0, 50); // ✅ LIMIT RESULTS;
+
+
+    // 🔹 OTHER DATA SOURCES
+    const theoryResults = q ? searchTheory(q) : [];
+    const designResults = q ? searchDesigns(q) : [];
+    const mediaResults = q ? searchMedia(q) : [];
+    const mathResults = q ? searchMathFormulas(q) : [];
+    const kidsResults = q ? searchKids(q) : [];
+    const QuizResults = q ? searchQuiz(q) : [];
+    // 🔹 MERGE WITHOUT DUPLICATES
+    render([
+      ...theoryResults,
+      ...designResults,
+      ...mediaResults,
+      ...dataResults,
+      ...mathResults,
+      ...kidsResults,
+      ...QuizResults,
+    ]);
+    hideSearchLoader(); // ✅ STOP LOADER AFTER RENDER
   }, 300); // UX delay so loader is visible
 }
 
 /* ---------------- EVENTS ---------------- */
 const debouncedSearch = debounce(applySearch, 800);
-// Main search input: only on Enter
-input.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    applySearch();
+
+let isComposing = false;
+
+input.addEventListener("compositionstart", () => {
+  isComposing = true;
+});
+input.addEventListener("compositionend", () => {
+  isComposing = false;
+});
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !isComposing) {
+    e.preventDefault();        // stop form submit / keyboard close
+    debouncedSearch.cancel?.(); // safety
+    applySearch();             // ✅ ONLY trigger
   }
 });
+
+
 
 // Filters: still update instantly
 [categoryFilter, stateFilter, districtFilter].forEach((el) => {
@@ -619,5 +732,3 @@ filterToggle.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", restoreSearchState);
-
-
