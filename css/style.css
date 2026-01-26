@@ -1978,15 +1978,43 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
+/* Call button */
 .call-btn {
-  background: #e0f2fe;
+  background-color: #e0f2fe;
   color: #0369a1;
 }
 
+/* WhatsApp button */
 .whatsapp-btn {
-  background: #dcfce7;
+  background-color: #dcfce7;
   color: #166534;
 }
 
+/* Hover only on desktop */
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Touch feedback */
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Accessibility */
+.btn:focus-visible {
+  outline: 2px solid #0ea5e9;
+  outline-offset: 2px;
+}
