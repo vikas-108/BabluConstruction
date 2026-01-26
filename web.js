@@ -362,7 +362,9 @@ function closeDesignModal() {
   document.getElementById("imageModal").classList.remove("show");
   document.getElementById("mediaVideo").pause();
 }
-
+function cleanPhone(phone) {
+  return phone.replace(/[^0-9]/g, "");
+}
 function render(items) {
   results.innerHTML = "";
   if (!items.length) {
@@ -510,7 +512,8 @@ function render(items) {
       return;
     }
 
-    // CONTRACTOR / MATERIAL
+   // CONTRACTOR / MATERIAL
+    const phoneClean = item.phone ? cleanPhone(item.phone) : "";
     results.innerHTML += `
        <div class="card">
          ${
@@ -533,11 +536,22 @@ function render(items) {
         ${item.rating ? `<div class="rating">⭐ ${item.rating}</div>` : ""}
 
         <p>${item.state}, ${item.district}</p>
-        ${item.phone ? `<p>📞 ${item.phone}</p>` : ""}
+        ${
+      item.phone
+        ? `
+        <div class="contact-actions">
+          <a href="tel:${phoneClean}" class="btn call-btn">📞 Call</a>
+          <a href="https://wa.me/${phoneClean}" target="_blank" class="btn whatsapp-btn">💬 WhatsApp</a>
+        </div>
+        `
+        : ""
+    }
+
     ${item.email ? `<p>✉️ ${item.email}</p>` : ""}
-        <p>${item.description}</p>
-       </div>
-       `;
+
+    <p>${item.description}</p>
+  </div>
+`;
   });
 }
 // debouncing function code to limit search frequency code.
