@@ -540,9 +540,26 @@ function render(items) {
       item.phone
         ? `
         <div class="contact-actions">
-          <a href="tel:${phoneClean}" class="btn call-btn">📞 Call</a>
-          <a href="https://wa.me/${phoneClean}" target="_blank" class="btn whatsapp-btn">💬 WhatsApp</a>
-        </div>
+  <a href="tel:${phoneClean}" class="btn call-btn">
+    <!-- Call Icon -->
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M6.6 10.8c1.5 3 3.6 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2
+      1 .3 2.1.5 3.2.5.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2
+      C10.1 21.2 2.8 13.9 2.8 4.4c0-.7.5-1.2 1.2-1.2h3.6
+      c.7 0 1.2.5 1.2 1.2 0 1.1.2 2.2.5 3.2.1.4 0 .9-.3 1.2L6.6 10.8z"/>
+    </svg>
+    Call
+  </a>
+
+  <a href="https://wa.me/${phoneClean}" target="_blank" class="btn whatsapp-btn">
+    <!-- WhatsApp Icon -->
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M20.5 3.5A11 11 0 0 0 3.6 17.8L2 22l4.3-1.6
+      A11 11 0 1 0 20.5 3.5z"/>
+    </svg>
+    WhatsApp
+  </a>
+</div>
         `
         : ""
     }
