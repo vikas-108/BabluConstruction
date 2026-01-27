@@ -30,10 +30,19 @@
     <h2>Company Rules</h2>
     <p>Mandatory safety, discipline, and conduct rules for all members</p>
   </div>
+  <div class="language-toggle">
+  <button type="button" id="btn-en" class="active" onclick="toggleLang('en')">
+    English
+  </button>
+  <button type="button" id="btn-hi" onclick="toggleLang('hi')">
+    हिंदी
+  </button>
+</div>
+
 </section>
 
 <!-- RULES CONTENT -->
-<section class="policy">
+<section class="policy policy-en" id="policy-en">
   <div class="container">
 
     <h3>1. Applicability</h3>
@@ -139,7 +148,7 @@ The company’s decision in such matters shall be final and binding.
   </div>
 </section>
 <!-- RULES CONTENT -->
-<section class="policy">
+<section class="policy policy-hi" id="policy-hi" style="display:none;">
   <div class="container">
 
     <h3>1. लागू होने की सीमा</h3>
@@ -239,10 +248,31 @@ The company’s decision in such matters shall be final and binding.
 <!-- FOOTER -->
 <footer class="footer">
   <div class="container">
-    <p>© 2025 BR & G Contractor Construction Service. All Rights Reserved.</p>
+    <p>© 2025 BR & G Contractor Construction Service. "सर्वाधिकार सुरक्षिताः"</p>
   </div>
   
 </footer>
+<script>
+function toggleLang(lang) {
+  var en = document.getElementById('policy-en');
+  var hi = document.getElementById('policy-hi');
+
+  var btnEn = document.getElementById('btn-en');
+  var btnHi = document.getElementById('btn-hi');
+
+  if (lang === 'en') {
+    en.style.display = 'block';
+    hi.style.display = 'none';
+    btnEn.classList.add('active');
+    btnHi.classList.remove('active');
+  } else {
+    hi.style.display = 'block';
+    en.style.display = 'none';
+    btnHi.classList.add('active');
+    btnEn.classList.remove('active');
+  }
+}
+</script>
 
 </body>
 </html>

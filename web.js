@@ -70,6 +70,33 @@ const districts = [
   "Jalgaon",
   "Nashik",
 ];
+const SEARCH_STATE_KEY = "brg_search_state";
+function saveSearchState() {
+  const state = {
+    query: input.value,
+    category: categoryFilter?.value || "",
+    state: stateFilter?.value || "",
+    district: districtFilter?.value || "",
+  };
+
+  localStorage.setItem(SEARCH_STATE_KEY, JSON.stringify(state));
+}
+function restoreSearchState() {
+  const saved = localStorage.getItem(SEARCH_STATE_KEY);
+  if (!saved) return;
+
+  const state = JSON.parse(saved);
+
+  if (state.query) input.value = state.query;
+  if (categoryFilter && state.category) categoryFilter.value = state.category;
+  if (stateFilter && state.state) stateFilter.value = state.state;
+  if (districtFilter && state.district) districtFilter.value = state.district;
+
+  // Trigger search after restoring
+  setTimeout(() => {
+    applySearch();
+  }, 100);
+}
 
 function setupSearchableSelect(inputId, listId, data) {
   const input = document.getElementById(inputId);
@@ -114,72 +141,127 @@ function setupSearchableSelect(inputId, listId, data) {
     }
   });
 }
+function speakText(text) {
+  if (!window.speechSynthesis) {
+    alert("Voice not supported on this device");
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-IN"; // good for Indian users
+  utterance.rate = 0.7; // slower for kids
+  utterance.pitch = 1.1; // friendly tone
+
+  window.speechSynthesis.cancel(); // stop previous
+  window.speechSynthesis.speak(utterance);
+}
 
 setupSearchableSelect("stateFilter", "stateList", states);
 setupSearchableSelect("districtFilter", "districtList", districts);
+function normalizeText(text) {
+  if (!text) return "";
+
+  return text
+    .toString()
+    .toLowerCase()
+    .normalize("NFKD")                // ✅ mobile unicode fix
+    .replace(/[\u0300-\u036f]/g, "")  // remove accents
+    .replace(/\u00A0/g, " ")          // non-breaking space
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function levenshtein(a, b) {
+  if (Math.abs(a.length - b.length) > 2) return Infinity;
+
+  const dp = Array.from({ length: a.length + 1 }, () =>
+    Array(b.length + 1).fill(0),
+  );
+
+  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+      );
+    }
+  }
+  return dp[a.length][b.length];
+}
+
 /* ---------------- SEARCH FUNCTIONS ---------------- */
 function searchTheory(query) {
   return THEORY_DATA.filter((item) =>
-    (item.question + " " + item.keywords).toLowerCase().includes(query)
+    (item.question + " " + item.keywords).toLowerCase().includes(query),
   );
 }
 function searchDesigns(query) {
   return DESIGN_DATA.filter((d) =>
     (d.title + " " + d.keywords + " " + d.area_sqft + " " + d.area_gaz)
       .toLowerCase()
-      .includes(query)
+      .includes(query),
   );
 }
 function searchMedia(query) {
   return MEDIA_DATA.filter((item) =>
-    (item.title + " " + item.keywords).toLowerCase().includes(query)
+    (item.title + " " + item.keywords).toLowerCase().includes(query),
   );
 }
 function searchMathFormulas(query) {
   return MATH_FORMULAS.filter((f) =>
-    (f.name + " " + f.formula + " " + f.keywords).toLowerCase().includes(query)
+    (f.name + " " + f.formula + " " + f.keywords).toLowerCase().includes(query),
   );
 }
-function searchKids(query){
- return KIDS_DATA.filter(item => {
-      const ql = query.toLowerCase();
+function searchKids(query) {
+  return KIDS_DATA.filter((item) => {
+    const ql = query.toLowerCase();
 
-      const textMatch =
-        (
-          item.title +
-          " " +
-          item.keywords +
-          " " +
-          (item.color || "") +
-          " " +
-          (item.taste || "") +
-          " " +
-          (item.season || "") +
-          " " +
-           (item.weather || "") +
-          " " +
-          (item.tags || []).join(" ")
-        ).toLowerCase().includes(ql);
+    const textMatch = (
+      item.title +
+      " " +
+      item.keywords +
+      " " +
+      (item.color || "") +
+      " " +
+      (item.taste || "") +
+      " " +
+      (item.season || "") +
+      " " +
+      (item.weather || "") +
+      " " +
+      (item.tags || []).join(" ")
+    )
+      .toLowerCase()
+      .includes(ql);
 
-      // number search → age group
-      if (/^\d+$/.test(ql) && item.ageGroup) {
-        return item.ageGroup.includes(Number(ql));
-      }
+    // number search → age group
+    if (/^\d+$/.test(ql) && item.ageGroup) {
+      return item.ageGroup.includes(Number(ql));
+    }
 
-      return textMatch;
-    });
+    return textMatch;
+  });
 }
-  function searchQuiz(query) {
+function searchQuiz(query) {
   const q = query.toLowerCase();
 
   // Filter results based on query
-  const results = QUIZ_DATA.filter(item => {
+  const results = QUIZ_DATA.filter((item) => {
     const text = (
       (item.question || "") +
       " " +
       (item.keywords || "") +
       " " +
-      (item.quizType || "")
+      (item.quizType || "") +
+      " " +
+      (item.category || "") +
+      " " +
+      (item.type || "")
     ).toLowerCase();
 
     return text.includes(q);
@@ -192,7 +274,7 @@ function shuffleArray(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
-  const SAD_EMOJIS = ["😢", "😞", "😔", "😭", "😕", "☹️"];
+const SAD_EMOJIS = ["😢", "😞", "😔", "😭", "😕", "☹️"];
 function checkQuizAnswer(button, selected, correct) {
   const card = button.closest(".quiz-card");
   const feedback = card.querySelector(".quiz-feedback");
@@ -205,7 +287,7 @@ function checkQuizAnswer(button, selected, correct) {
   }
 
   // Disable all buttons after one click
-  card.querySelectorAll(".quiz-option").forEach(btn => {
+  card.querySelectorAll(".quiz-option").forEach((btn) => {
     btn.disabled = true;
   });
 }
@@ -223,16 +305,16 @@ function showSearchLoader() {
 }
 
 function hideSearchLoader() {
-  document.getElementById("searchLoader").classList.add("hidden");
+  const loader = document.getElementById("searchLoader");
+  if (!loader) return;
+  loader.classList.add("hidden");
 }
-
 
 function openDesignModal(image, title, sqft, gaz, type) {
   document.getElementById("designModalImage").src = image;
   document.getElementById("modalTitle").innerText = title;
-  document.getElementById(
-    "modalArea"
-  ).innerText = `Area: ${sqft} sq ft / ${gaz} gaz`;
+  document.getElementById("modalArea").innerText =
+    `Area: ${sqft} sq ft / ${gaz} gaz`;
   document.getElementById("modalType").innerText = `Type: ${type}`;
 
   const download = document.getElementById("modalDownload");
@@ -277,6 +359,152 @@ function closeDesignModal() {
   document.getElementById("imageModal").classList.remove("show");
   document.getElementById("mediaVideo").pause();
 }
+function cleanPhone(phone) {
+  return phone.replace(/[^0-9]/g, "");
+}
+function tokenize(expr) {
+  return expr
+    .replace(/\s+/g, "")
+    .match(/(sqrt|pow|\d+\.?\d*|\+|\-|\*|\/|\%|\^|\(|\)|,)/g);
+}
+const PRECEDENCE = {
+  "+": 1,
+  "-": 1,
+  "*": 2,
+  "/": 2,
+  "%": 2,
+  "^": 3
+};
+function toPostfix(tokens) {
+  const output = [];
+  const ops = [];
+
+  tokens.forEach(token => {
+    if (!isNaN(token)) {
+      output.push(Number(token));
+    } else if (token === "sqrt" || token === "pow") {
+      ops.push(token);
+    } else if (token === "(") {
+      ops.push(token);
+    } else if (token === ")") {
+      while (ops.length && ops[ops.length - 1] !== "(") {
+        output.push(ops.pop());
+      }
+      ops.pop(); // remove "("
+
+      // function handling
+      if (ops.length && (ops[ops.length - 1] === "sqrt" || ops[ops.length - 1] === "pow")) {
+        output.push(ops.pop());
+      }
+    } else if (token === ",") {
+      while (ops.length && ops[ops.length - 1] !== "(") {
+        output.push(ops.pop());
+      }
+    } else {
+      while (
+        ops.length &&
+        PRECEDENCE[ops[ops.length - 1]] >= PRECEDENCE[token]
+      ) {
+        output.push(ops.pop());
+      }
+      ops.push(token);
+    }
+  });
+
+  while (ops.length) output.push(ops.pop());
+
+  return output;
+}
+function evaluatePostfix(postfix, steps = []) {
+  const stack = [];
+
+  postfix.forEach(token => {
+    if (typeof token === "number") {
+      stack.push(token);
+    } else if (token === "sqrt") {
+      const a = stack.pop();
+      const r = Math.sqrt(a);
+      steps.push(`√${a} = ${r}`);
+      stack.push(r);
+    } else if (token === "pow" || token === "^") {
+      const b = stack.pop();
+      const a = stack.pop();
+      const r = Math.pow(a, b);
+      steps.push(`${a} ^ ${b} = ${r}`);
+      stack.push(r);
+    } else {
+      const b = stack.pop();
+      const a = stack.pop();
+      let r;
+
+      switch (token) {
+        case "+": r = a + b; break;
+        case "-": r = a - b; break;
+        case "*": r = a * b; break;
+        case "/": r = b !== 0 ? a / b : NaN; break;
+        case "%": r = a % b; break;
+      }
+
+      steps.push(`${a} ${token} ${b} = ${r}`);
+      stack.push(r);
+    }
+  });
+
+  return stack.pop();
+}
+function safeCalculate(input) {
+  try {
+    const tokens = tokenize(input);
+    if (!tokens) return null;
+
+    const postfix = toPostfix(tokens);
+    const steps = [];
+    const result = evaluatePostfix(postfix, steps);
+
+    if (typeof result === "number" && isFinite(result)) {
+      return { result, steps };
+    }
+  } catch (e) {
+    return null;
+  }
+  return null;
+}
+function isMathExpression(input) {
+  return /^[0-9+\-*/().%\s^,a-zA-Z]+$/.test(input) &&
+         /[\d]/.test(input); // must contain at least one number
+}
+function clearSearchAll() {
+  if (window.recognition) {
+    try { recognition.abort(); } catch (e) {}
+  }
+
+  input.value = "";
+  categoryFilter.value = "";
+  stateFilter.value = "";
+  districtFilter.value = "";
+
+  document.getElementById("calcResult")?.classList.add("hidden");
+
+  results.innerHTML =
+    "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
+
+  localStorage.removeItem(SEARCH_STATE_KEY);
+
+  hideSearchLoader();
+  toggleClearButton(); // ✅ HIDE CLEAR BUTTON
+}
+
+// clear button logic function
+function toggleClearButton() {
+  const clearBtn = document.getElementById("clearSearchBtn");
+  if (!clearBtn) return;
+
+  if (input.value.trim().length > 0) {
+    clearBtn.classList.remove("hidden");
+  } else {
+    clearBtn.classList.add("hidden");
+  }
+}
 
 function render(items) {
   results.innerHTML = "";
@@ -317,28 +545,39 @@ function render(items) {
     }
     // quiz card
     if (item.type === "quiz") {
-  results.innerHTML += `
-    <div class="card quiz-card">
+      results.innerHTML += `
+    <div class="card quiz-card" data-quiz-id="${item.id}">
       <h3>${item.question}</h3>
-
+<div class="quiz-voice">
+        <button onclick="speakText('Question: ${item.question}')">🔊 Question</button>
+        ${
+          item.hint
+            ? `<button onclick="speakText('Hint: ${item.hint}')">💡 Hint</button>`
+            : ""
+        }
+      </div>
       <div class="quiz-options">
-        ${item.options.map(opt => `
+        ${item.options
+          .map(
+            (opt) => `
          <button class="quiz-option"
   data-answer="${opt}"
   data-correct="${item.correctAnswer}">
   ${opt}
 </button>
-        `).join("")}
+        `,
+          )
+          .join("")}
       </div>
 
       <div class="quiz-feedback"></div>
     </div>
   `;
-  return;
-}
-// 🧒 KIDS ALPHABET CARD
-if (item.category === "kids") {
-  results.innerHTML += `
+      return;
+    }
+    // 🧒 KIDS ALPHABET CARD
+    if (item.category === "kids") {
+      results.innerHTML += `
     <div class="card kids-card">
       <div class="kids-3d-box">
         <img src="${item.image}" alt="${item.title}">
@@ -346,8 +585,8 @@ if (item.category === "kids") {
       <h3>${item.title}</h3>
     </div>
   `;
-  return;
-}
+      return;
+    }
 
     // THEORY ANSWER
     // THEORY ANSWER
@@ -415,6 +654,7 @@ if (item.category === "kids") {
     }
 
     // CONTRACTOR / MATERIAL
+    const phoneClean = item.phone ? cleanPhone(item.phone) : "";
     results.innerHTML += `
        <div class="card">
          ${
@@ -437,11 +677,38 @@ if (item.category === "kids") {
         ${item.rating ? `<div class="rating">⭐ ${item.rating}</div>` : ""}
 
         <p>${item.state}, ${item.district}</p>
-        ${item.phone ? `<p>📞 ${item.phone}</p>` : ""}
+            <p>${item.description}</p>
+        ${
+      item.phone
+        ? `
+        <div class="contact-actions">
+  <a href="tel:${phoneClean}" class="btn call-btn">
+    <!-- Call Icon -->
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M6.6 10.8c1.5 3 3.6 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2
+      1 .3 2.1.5 3.2.5.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2
+      C10.1 21.2 2.8 13.9 2.8 4.4c0-.7.5-1.2 1.2-1.2h3.6
+      c.7 0 1.2.5 1.2 1.2 0 1.1.2 2.2.5 3.2.1.4 0 .9-.3 1.2L6.6 10.8z"/>
+    </svg>
+    Call
+  </a>
+
+  <a href="https://wa.me/${phoneClean}" target="_blank" class="btn whatsapp-btn">
+    <!-- WhatsApp Icon -->
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M20.5 3.5A11 11 0 0 0 3.6 17.8L2 22l4.3-1.6
+      A11 11 0 1 0 20.5 3.5z"/>
+    </svg>
+    WhatsApp
+  </a>
+</div>
+        `
+        : ""
+    }
+
     ${item.email ? `<p>✉️ ${item.email}</p>` : ""}
-        <p>${item.description}</p>
-       </div>
-       `;
+  </div>
+`;
   });
 }
 // debouncing function code to limit search frequency code.
@@ -458,31 +725,77 @@ function debounce(fn, delay = 500) {
 function applySearch() {
   showSearchLoader(); // 🔄 start loader
   setTimeout(() => {
-  const q = input.value.toLowerCase().trim();
-  const category = categoryFilter.value.toLowerCase();
-  const state = stateFilter.value.toLowerCase();
-  const district = districtFilter.value.toLowerCase();
-showSearchLoader(); // 🔄 start loader
-  if (!q && !category && !state && !district) {
-    results.innerHTML =
-      "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
-    return;
-  }
+    saveSearchState(); // 💾 SAVE BEFORE SEARCH
+    const q = input.value.toLowerCase().trim();
+    const category = categoryFilter.value.toLowerCase();
+    const state = stateFilter.value.toLowerCase();
+    const district = districtFilter.value.toLowerCase();
+    
+    const calcBox = document.getElementById("calcResult");
 
-  // 🔹 SEARCH DATA (ONLY ONCE)
- /* const dataResults = SEARCH_DATA.filter(
-    (item) =>
-      Object.values(item).join(" ").toLowerCase().includes(q) &&
-      (category === "" || item.category === category) &&
-      (state === "" || item.state === state) &&
-      (district === "" || item.district === district)
-  );*/
-  const dataResults = SEARCH_DATA.filter(item => {
-    const textMatch = Object.values(item)
-      .join(" ")
-      .toLowerCase()
-      .includes(q);
+    // 🧮 CALCULATOR MODE — FIRST & ONLY ONCE
+    if (isMathExpression(q)) {
+      const calc = safeCalculate(q);
 
+      if (calc) {
+        calcBox.innerHTML = `
+          🧮 Answer: <strong>${calc.result}</strong>
+          <div class="calc-steps">
+            ${calc.steps.map(s => `<div>➡ ${s}</div>`).join("")}
+          </div>
+        `;
+        calcBox.classList.remove("hidden");
+        results.innerHTML = ""; // ✅ CLEAR SEARCH RESULTS
+        hideSearchLoader();
+        return; // ⛔ EXIT applySearch COMPLETELY
+      }
+    }
+
+    // ❌ Not math → hide calculator
+    calcBox.classList.add("hidden");
+    // 🟡 EMPTY SEARCH STATE
+    if (!q && !category && !state && !district) {
+      results.innerHTML =
+        "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
+      hideSearchLoader(); // ✅ IMPORTANT
+      return;
+    }
+   const queryTokens = normalizeText(q)
+  .split(" ")
+  .filter(t => t.length >= 2);
+const dataResults = shuffleArray(
+  SEARCH_DATA.filter((item) => {
+    // 1. Build searchable text from item
+    const searchableText = normalizeText(
+      [
+        item.name,
+        item.type,
+        item.category,
+        item.state,
+        item.district,
+        item.city,
+        item.village,
+        item.description,
+      ]
+        .filter(Boolean)
+        .join(" ")
+    );
+
+    // 2. Token match (ALL tokens must match somewhere)
+    const tokenMatch = queryTokens.every((token) => {
+      if (searchableText.includes(token)) return true;
+
+      // spelling tolerance (only for longer words)
+      if (token.length >= 4) {
+        return searchableText
+          .split(" ")
+          .some((word) => levenshtein(word, token) <= 2);
+      }
+
+      return false;
+    });
+
+    // 3. Existing filters (unchanged)
     const categoryMatch =
       !category || item.category?.toLowerCase() === category;
 
@@ -492,37 +805,55 @@ showSearchLoader(); // 🔄 start loader
     const districtMatch =
       !district || item.district?.toLowerCase().includes(district);
 
-    return textMatch && categoryMatch && stateMatch && districtMatch;
-  });
-  // 🔹 OTHER DATA SOURCES
-  const theoryResults = q ? searchTheory(q) : [];
-  const designResults = q ? searchDesigns(q) : [];
-  const mediaResults = q ? searchMedia(q) : [];
-  const mathResults = q ? searchMathFormulas(q) : [];
-  const kidsResults = q ? searchKids(q) : [];
-  const QuizResults = q ? searchQuiz(q) : [];
-  // 🔹 MERGE WITHOUT DUPLICATES
-  render([
-    ...theoryResults,
-    ...designResults,
-    ...mediaResults,
-    ...dataResults,
-    ...mathResults,
-    ...kidsResults,
-    ...QuizResults,
-  ]);
-   hideSearchLoader(); // ✅ STOP LOADER AFTER RENDER
+    return tokenMatch && categoryMatch && stateMatch && districtMatch;
+  })
+).slice(0, 50); // ✅ LIMIT RESULTS;
+
+
+    // 🔹 OTHER DATA SOURCES
+    const theoryResults = q ? searchTheory(q) : [];
+    const designResults = q ? searchDesigns(q) : [];
+    const mediaResults = q ? searchMedia(q) : [];
+    const mathResults = q ? searchMathFormulas(q) : [];
+    const kidsResults = q ? searchKids(q) : [];
+    const QuizResults = q ? searchQuiz(q) : [];
+    // 🔹 MERGE WITHOUT DUPLICATES
+    render([
+      ...theoryResults,
+      ...designResults,
+      ...mediaResults,
+      ...dataResults,
+      ...mathResults,
+      ...kidsResults,
+      ...QuizResults,
+    ]);
+   
+    hideSearchLoader(); // ✅ STOP LOADER AFTER RENDER
   }, 300); // UX delay so loader is visible
 }
 
 /* ---------------- EVENTS ---------------- */
 const debouncedSearch = debounce(applySearch, 800);
-// Main search input: only on Enter
-input.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    applySearch();
+
+let isComposing = false;
+
+input.addEventListener("compositionstart", () => {
+  isComposing = true;
+});
+input.addEventListener("compositionend", () => {
+  isComposing = false;
+});
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !isComposing) {
+    e.preventDefault();        // stop form submit / keyboard close
+    debouncedSearch.cancel?.(); // safety
+    applySearch();    
+      toggleClearButton();         // ✅ ONLY trigger
   }
 });
+
+
 
 // Filters: still update instantly
 [categoryFilter, stateFilter, districtFilter].forEach((el) => {
@@ -531,17 +862,7 @@ input.addEventListener("keydown", function (e) {
 
 results.innerHTML =
   "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
-/**
- const debouncedSearch = debounce(applySearch, 800);
 
-[input, categoryFilter, stateFilter, districtFilter].forEach((el) =>
-  el.addEventListener("input", debouncedSearch)
-);
-
-results.innerHTML =
-  "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
-
- */
 /// 🎤 VOICE SEARCH
 const voiceBtn = document.getElementById("voiceBtn");
 const SpeechRecognition =
@@ -557,6 +878,7 @@ if (SpeechRecognition) {
 
   recognition.onresult = (event) => {
     input.value = event.results[0][0].transcript;
+     toggleClearButton(); // ✅ REQUIRED
     applySearch();
   };
 } else {
@@ -570,4 +892,12 @@ const filterBox = document.getElementById("filterBox");
 filterToggle.addEventListener("click", () => {
   filterBox.classList.toggle("show");
 });
+// 4️⃣ event bindings (LAST)
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("clearSearchBtn")
+    ?.addEventListener("click", clearSearchAll);
 
+  toggleClearButton(); // initial state
+});
+
+document.addEventListener("DOMContentLoaded", restoreSearchState);

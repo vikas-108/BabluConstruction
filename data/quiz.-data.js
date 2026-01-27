@@ -1,5 +1,6 @@
 const QUIZ_DATA = [
   {
+    id: 1,
     category: "kids",
     type: "quiz",
     question: "Which animal is the king of jungle?",
@@ -8,6 +9,7 @@ const QUIZ_DATA = [
     keywords: "animal quiz "
   },
   {
+    id: 2,
     category: "kids",
     type: "quiz",
     question: "Which fruit is red in color?",
@@ -15,7 +17,7 @@ const QUIZ_DATA = [
     correctAnswer: "Apple",
     keywords: "fruit quiz red color"
   },
-  {
+  {id: 3,
     category: "kids",
     type: "quiz",
     question: "How many months are there in a year?",
@@ -25,6 +27,7 @@ const QUIZ_DATA = [
   },
    // 🐶 ANIMALS
   {
+    id:4,
     category: "kids",
     type: "quiz",
     quizType: "animals",
@@ -34,6 +37,7 @@ const QUIZ_DATA = [
     keywords: "animal quiz "
   },
   {
+    id: 4,
     category: "kids",
     type: "quiz",
     quizType: "animals",
@@ -45,6 +49,7 @@ const QUIZ_DATA = [
 
   // 🍎 FRUITS & VEGETABLES
   {
+    id :5,
     category: "kids",
     type: "quiz",
     quizType: "food",
@@ -54,6 +59,7 @@ const QUIZ_DATA = [
     keywords: "fruit quiz yellow"
   },
   {
+    id:6,
     category: "kids",
     type: "quiz",
     quizType: "food",
@@ -65,6 +71,7 @@ const QUIZ_DATA = [
 
   // 🔤 ALPHABETS
   {
+    id: 7,
     category: "kids",
     type: "quiz",
     quizType: "alphabet",
@@ -74,6 +81,7 @@ const QUIZ_DATA = [
     keywords: "alphabet quiz a for"
   },
   {
+    id: 8,
     category: "kids",
     type: "quiz",
     quizType: "alphabet",
@@ -85,6 +93,7 @@ const QUIZ_DATA = [
 
   // 🔢 NUMBERS
   {
+    id: 9,
     category: "kids",
     type: "quiz",
     quizType: "numbers",
@@ -94,6 +103,7 @@ const QUIZ_DATA = [
     keywords: "numbers quiz dog legs"
   },
   {
+    id: 10,
     category: "kids",
     type: "quiz",
     quizType: "numbers",
@@ -105,6 +115,7 @@ const QUIZ_DATA = [
 
   // 📅 MONTHS & SEASONS
   {
+    id: 11,
     category: "kids",
     type: "quiz",
     quizType: "months",
@@ -114,6 +125,7 @@ const QUIZ_DATA = [
     keywords: "months quiz march after"
   },
   {
+    id: 12,
     category: "kids",
     type: "quiz",
     quizType: "months",
@@ -125,6 +137,7 @@ const QUIZ_DATA = [
 
   // 🧠 GENERAL KNOWLEDGE
   {
+    id: 13,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -134,6 +147,7 @@ const QUIZ_DATA = [
     keywords: "kids quiz fly sky"
   },
   {
+    id: 14,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -143,15 +157,18 @@ const QUIZ_DATA = [
     keywords: "kids quiz write"
   },
    {
+    id: 15,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
     question: "Which planet do we live on?",
     options: ["Mars", "Earth", "Moon", "Jupiter"],
     correctAnswer: "Earth",
+     hint: "It is called the Blue Planet",
     keywords: "gk planet earth world"
   },
   {
+    id: 16,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -163,6 +180,7 @@ const QUIZ_DATA = [
 
   // 🚗 TRANSPORT
   {
+    id: 17,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -174,6 +192,7 @@ const QUIZ_DATA = [
 
   // 🏫 SCHOOL & DAILY LIFE
   {
+    id: 18,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -183,6 +202,7 @@ const QUIZ_DATA = [
     keywords: "gk school write pen"
   },
   {
+    id: 19,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -194,6 +214,7 @@ const QUIZ_DATA = [
 
   // 🧍 BODY PARTS
   {
+    id: 20,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -205,6 +226,7 @@ const QUIZ_DATA = [
 
   // 🎨 COLORS & SHAPES
   {
+    id: 21,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -216,6 +238,7 @@ const QUIZ_DATA = [
 
   // 🧼 SAFETY & HYGIENE
   {
+    id: 22,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -227,6 +250,7 @@ const QUIZ_DATA = [
 
   // 🇮🇳 INDIA BASIC GK
   {
+    id: 23,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -236,6 +260,7 @@ const QUIZ_DATA = [
     keywords: "india gk capital"
   },
   {
+    id: 24,
     category: "kids",
     type: "quiz",
     quizType: "general quiz",
@@ -245,26 +270,29 @@ const QUIZ_DATA = [
     keywords: "india gk national animal"
   },
   {
-  category: "kids",
-  type: "quiz",
-  quizType: "general quiz",
-  question: "What should we do before eating food?",
-  options: ["Sleep", "Wash hands", "Run", "Cry"],
-  correctAnswer: "Wash hands",
-  keywords: "gk hygiene wash hands"
-},
-{
-  category: "kids",
-  type: "quiz",
-  quizType: "general quiz",
-  question: "Which planet is known as the Red Planet?",
-  options: ["Earth", "Mars", "Venus", "Jupiter"],
-  correctAnswer: "Mars",
-  keywords: "gk planets mars red planet"
-},
-{
-  category: "kids",
-  type: "quiz",
+    id: 25,
+    category: "kids",
+    type: "quiz",
+    quizType: "general quiz",
+    question: "What should we do before eating food?",
+    options: ["Sleep", "Wash hands", "Run", "Cry"],
+    correctAnswer: "Wash hands",
+    keywords: "gk hygiene wash hands"
+  },
+  {
+    id: 26,
+    category: "kids",
+    type: "quiz",
+    quizType: "general quiz",
+    question: "Which planet is known as the Red Planet?",
+    options: ["Earth", "Mars", "Venus", "Jupiter"],
+    correctAnswer: "Mars",
+    keywords: "gk planets mars red planet"
+  },
+  {
+    id: 27,
+    category: "kids",
+    type: "quiz",
   quizType: "general quiz",
   question: "How many days are there in a week?",
   options: ["5", "6", "7", "8"],
@@ -272,6 +300,7 @@ const QUIZ_DATA = [
   keywords: "gk week days seven"
 },
 {
+  id: 28,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -281,6 +310,7 @@ const QUIZ_DATA = [
   keywords: "gk animals lion king jungle"
 },
 {
+  id: 29,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -290,6 +320,7 @@ const QUIZ_DATA = [
   keywords: "gk oceans largest pacific"
 },
 {
+  id: 30,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -299,6 +330,7 @@ const QUIZ_DATA = [
   keywords: "gk bees honey"
 },
 {
+  id: 31,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -308,6 +340,7 @@ const QUIZ_DATA = [
   keywords: "gk shapes triangle three sides"
 },
 {
+  id: 32,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -317,6 +350,7 @@ const QUIZ_DATA = [
   keywords: "gk science oxygen breathing"
 },
 {
+  id: 33,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -326,6 +360,7 @@ const QUIZ_DATA = [
   keywords: "gk fruits mango king india"
 },
 {
+  id: 34,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -335,6 +370,7 @@ const QUIZ_DATA = [
   keywords: "gk birds dove peace"
 },
 {
+  id: 35,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -344,6 +380,7 @@ const QUIZ_DATA = [
   keywords: "gk animals cheetah fastest"
 },
 {
+  id: 36,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -353,6 +390,7 @@ const QUIZ_DATA = [
   keywords: "gk festivals diwali lights"
 },
 {
+  id: 37,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -362,6 +400,7 @@ const QUIZ_DATA = [
   keywords: "gk animals giraffe tallest"
 },
 {
+  id: 38,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -371,6 +410,7 @@ const QUIZ_DATA = [
   keywords: "gk india national flower lotus"
 },
 {
+  id: 39,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -380,6 +420,7 @@ const QUIZ_DATA = [
   keywords: "gk continents smallest australia"
 },
 {
+  id: 40,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -389,6 +430,7 @@ const QUIZ_DATA = [
   keywords: "gk human body heart blood pump"
 },
 {
+  id: 41,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -398,6 +440,7 @@ const QUIZ_DATA = [
   keywords: "gk india national animal tiger"
 },
 {
+  id: 42,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -407,6 +450,7 @@ const QUIZ_DATA = [
   keywords: "gk science thermometer temperature"
 },
 {
+  id: 43,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -416,6 +460,7 @@ const QUIZ_DATA = [
   keywords: "gk planets largest jupiter"
 },
 {
+  id: 44,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -425,6 +470,7 @@ const QUIZ_DATA = [
   keywords: "gk festivals holi colors"
 },
 {
+  id: 45,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -434,6 +480,7 @@ const QUIZ_DATA = [
   keywords: "gk india national bird peacock"
 },
 {
+  id: 46,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -443,6 +490,7 @@ const QUIZ_DATA = [
   keywords: "gk animals largest mammal blue whale"
 },
 {
+  id: 47,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -452,6 +500,7 @@ const QUIZ_DATA = [
   keywords: "gk countries japan rising sun"
 },
 {
+  id: 48,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -461,6 +510,7 @@ const QUIZ_DATA = [
   keywords: "gk human body smallest bone stapes"
 },
 {
+  id: 49,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -470,6 +520,7 @@ const QUIZ_DATA = [
   keywords: "gk india national sport hockey"
 },
 {
+  id: 50,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -479,6 +530,7 @@ const QUIZ_DATA = [
   keywords: "gk planets hottest venus"
 },
 {
+  id: 51,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -488,6 +540,7 @@ const QUIZ_DATA = [
   keywords: "gk festivals baisakhi harvest punjab"
 },
 {
+  id: 52,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -497,6 +550,7 @@ const QUIZ_DATA = [
   keywords: "gk health vitamin d sunlight"
 },
 {
+  id: 53,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -506,6 +560,7 @@ const QUIZ_DATA = [
   keywords: "gk india capital delhi"
 },
 {
+  id: 54,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -515,6 +570,7 @@ const QUIZ_DATA = [
   keywords: "gk deserts largest sahara"
 },
 {
+  id: 55,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -524,6 +580,7 @@ const QUIZ_DATA = [
   keywords: "gk japan currency yen"
 },
 {
+  id: 56,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -533,6 +590,7 @@ const QUIZ_DATA = [
   keywords: "gk mountains tallest everest"
 },
 {
+  id: 57,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -542,6 +600,7 @@ const QUIZ_DATA = [
   keywords: "gk india national river ganga"
 },
 {
+  id: 58,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -551,6 +610,7 @@ const QUIZ_DATA = [
   keywords: "gk india national tree banyan"
 },
 {
+  id: 59,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -560,6 +620,7 @@ const QUIZ_DATA = [
   keywords: "gk india national fruit mango"
 },
 {
+  id: 60,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -569,6 +630,7 @@ const QUIZ_DATA = [
   keywords: "gk india national song vande mataram"
 },
 {
+  id: 61,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -578,6 +640,7 @@ const QUIZ_DATA = [
   keywords: "gk india national anthem jana gana mana"
 },
 {
+  id: 62,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -587,6 +650,7 @@ const QUIZ_DATA = [
   keywords: "gk india national emblem lion capital"
 },
 {
+  id: 63,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -596,6 +660,7 @@ const QUIZ_DATA = [
   keywords: "gk india national aquatic animal dolphin"
 },
 {
+  id: 64,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -605,6 +670,7 @@ const QUIZ_DATA = [
   keywords: "gk india national reptile king cobra"
 },
 {
+  id: 65,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -614,6 +680,7 @@ const QUIZ_DATA = [
   keywords: "gk india national heritage animal elephant"
 },
 {
+  id: 66,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -623,6 +690,7 @@ const QUIZ_DATA = [
   keywords: "gk india national calendar saka"
 },
 {
+  id: 67,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -632,6 +700,7 @@ const QUIZ_DATA = [
   keywords: "gk india national language hindi"
 },
 {
+  id: 68,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -641,6 +710,7 @@ const QUIZ_DATA = [
   keywords: "gk india national flag tricolor"
 },
 {
+  id: 69,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -650,6 +720,7 @@ const QUIZ_DATA = [
   keywords: "gk india national currency rupee"
 },
 {
+  id: 70,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -659,6 +730,7 @@ const QUIZ_DATA = [
   keywords: "gk india national game hockey"
 },
 {
+  id: 71,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -668,6 +740,7 @@ const QUIZ_DATA = [
   keywords: "gk india national motto satyameva jayate"
 },
 {
+  id: 72,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -677,6 +750,7 @@ const QUIZ_DATA = [
   keywords: "gk india national symbol ashoka chakra"
 },
 {
+  id: 73,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -686,6 +760,7 @@ const QUIZ_DATA = [
   keywords: "gk india national vegetable pumpkin"
 },
 {
+  id: 74,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -695,6 +770,7 @@ const QUIZ_DATA = [
   keywords: "gk india national insect butterfly"
 },
 {
+  id: 75,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -704,6 +780,7 @@ const QUIZ_DATA = [
   keywords: "gk india national museum delhi"
 },
 {
+  id: 76,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -713,6 +790,7 @@ const QUIZ_DATA = [
   keywords: "gk india national institute space isro"
 },
 {
+  id: 77,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -722,6 +800,7 @@ const QUIZ_DATA = [
   keywords: "gk india national park jim corbett tiger"
 },
 {
+  id: 78,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -731,6 +810,7 @@ const QUIZ_DATA = [
   keywords: "gk india national aquatic bird kingfisher"
 },
 {
+  id: 79,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -740,6 +820,7 @@ const QUIZ_DATA = [
   keywords: "gk india national highway longest nh44"
 },
 {
+  id: 80,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -749,6 +830,7 @@ const QUIZ_DATA = [
   keywords: "gk india national dairy brand amul"
 },
 {
+  id: 81,
   category: "kids",
   type: "quiz",
   quizType: "general quiz",
@@ -758,6 +840,7 @@ const QUIZ_DATA = [
   keywords: "gk india national institute medical aiims"
 },
 {
+  id: 82,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -767,6 +850,7 @@ const QUIZ_DATA = [
   keywords: "science plants leaf photosynthesis"
 },
 {
+  id: 83,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -776,6 +860,7 @@ const QUIZ_DATA = [
   keywords: "science astronomy sun solar system"
 },
 {
+  id: 84,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -785,6 +870,7 @@ const QUIZ_DATA = [
   keywords: "science human body oxygen breathing"
 },
 {
+  id: 85,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -794,6 +880,7 @@ const QUIZ_DATA = [
   keywords: "science human body heart blood pump"
 },
 {
+  id: 86,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -803,6 +890,7 @@ const QUIZ_DATA = [
   keywords: "science planets earth blue planet"
 },
 {
+  id: 87,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -812,6 +900,7 @@ const QUIZ_DATA = [
   keywords: "science health vitamin d sunlight"
 },
 {
+  id: 88,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -821,6 +910,7 @@ const QUIZ_DATA = [
   keywords: "science chemistry h2o water"
 },
 {
+  id: 89,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -830,6 +920,7 @@ const QUIZ_DATA = [
   keywords: "science planets largest jupiter"
 },
 {
+  id: 90,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -839,6 +930,7 @@ const QUIZ_DATA = [
   keywords: "science human body brain control"
 },
 {
+  id: 91,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -848,6 +940,7 @@ const QUIZ_DATA = [
   keywords: "science animals cheetah fastest"
 },
 {
+  id: 92,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -857,6 +950,7 @@ const QUIZ_DATA = [
   keywords: "science plants photosynthesis oxygen"
 },
 {
+  id: 93,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -866,6 +960,7 @@ const QUIZ_DATA = [
   keywords: "science instruments thermometer temperature"
 },
 {
+  id: 94,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -875,6 +970,7 @@ const QUIZ_DATA = [
   keywords: "science minerals diamond hardest"
 },
 {
+  id: 95,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -884,6 +980,7 @@ const QUIZ_DATA = [
   keywords: "science planets mercury closest sun"
 },
 {
+  id: 96,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -893,6 +990,7 @@ const QUIZ_DATA = [
   keywords: "science human body white blood cells immunity"
 },
 {
+  id: 97,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -902,6 +1000,7 @@ const QUIZ_DATA = [
   keywords: "science human body skin largest organ"
 },
 {
+  id: 98,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -911,6 +1010,7 @@ const QUIZ_DATA = [
   keywords: "science planets saturn rings"
 },
 {
+  id: 99,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -920,6 +1020,7 @@ const QUIZ_DATA = [
   keywords: "science physics gravity earth"
 },
 {
+  id: 100,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -929,6 +1030,7 @@ const QUIZ_DATA = [
   keywords: "science plants root absorb water"
 },
 {
+  id: 101,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -938,6 +1040,7 @@ const QUIZ_DATA = [
   keywords: "science planets saturn large planet"
 },
 {
+  id: 102,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -947,6 +1050,7 @@ const QUIZ_DATA = [
   keywords: "science human body lungs breathing"
 },
 {
+  id: 103,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -956,6 +1060,7 @@ const QUIZ_DATA = [
   keywords: "science planets mercury smallest"
 },
 {
+  id: 104,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -965,6 +1070,7 @@ const QUIZ_DATA = [
   keywords: "science human body stomach digestion"
 },
 {
+  id: 105,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -974,6 +1080,7 @@ const QUIZ_DATA = [
   keywords: "science animals ostrich largest bird"
 },
 {
+  id: 106,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -983,6 +1090,7 @@ const QUIZ_DATA = [
   keywords: "science chemistry water boiling point"
 },
 {
+  id: 107,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -992,6 +1100,7 @@ const QUIZ_DATA = [
   keywords: "science planets saturn rings"
 },
 {
+  id: 108,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1001,6 +1110,7 @@ const QUIZ_DATA = [
   keywords: "science plants photosynthesis carbon dioxide"
 },
 {
+  id: 109,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1010,6 +1120,7 @@ const QUIZ_DATA = [
   keywords: "science human body red blood cells oxygen"
 },
 {
+  id: 110,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1019,6 +1130,7 @@ const QUIZ_DATA = [
   keywords: "science plants stem water transport"
 },
 {
+  id: 111,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1028,6 +1140,7 @@ const QUIZ_DATA = [
   keywords: "science human body liver largest organ"
 },
 {
+  id: 112,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1037,6 +1150,7 @@ const QUIZ_DATA = [
   keywords: "science planets neptune farthest sun"
 },
 {
+  id: 113,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1046,6 +1160,7 @@ const QUIZ_DATA = [
   keywords: "science chemistry gold symbol au"
 },
 {
+  id: 114,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1055,6 +1170,7 @@ const QUIZ_DATA = [
   keywords: "science chemistry helium balloons"
 },
 {
+  id: 115,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1064,6 +1180,7 @@ const QUIZ_DATA = [
   keywords: "science planets venus earth twin"
 },
 {
+  id: 116,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1073,6 +1190,7 @@ const QUIZ_DATA = [
   keywords: "science human body eye vision"
 },
 {
+  id: 117,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1082,6 +1200,7 @@ const QUIZ_DATA = [
   keywords: "science animals falcon fastest bird"
 },
 {
+  id: 118,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1091,6 +1210,7 @@ const QUIZ_DATA = [
   keywords: "science human body exhale carbon dioxide"
 },
 {
+  id: 119,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1100,6 +1220,7 @@ const QUIZ_DATA = [
   keywords: "science biology cell nucleus dna"
 },
 {
+  id: 120,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1109,6 +1230,7 @@ const QUIZ_DATA = [
   keywords: "science human body femur largest bone"
 },
 {
+  id: 121,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1118,6 +1240,7 @@ const QUIZ_DATA = [
   keywords: "science energy solar sun"
 },
 {
+  id: 122,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1127,6 +1250,7 @@ const QUIZ_DATA = [
   keywords: "science human body tooth enamel hardest"
 },
 {
+  id: 123,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1136,6 +1260,7 @@ const QUIZ_DATA = [
   keywords: "science planets venus morning star"
 },
 {
+  id: 124,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1145,6 +1270,7 @@ const QUIZ_DATA = [
   keywords: "science human body ear hearing"
 },
 {
+  id: 125,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1154,6 +1280,7 @@ const QUIZ_DATA = [
   keywords: "science energy sun earth source"
 },
 {
+  id: 126,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1163,6 +1290,7 @@ const QUIZ_DATA = [
   keywords: "science human body blood group universal donor"
 },
 {
+  id: 127,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1172,6 +1300,7 @@ const QUIZ_DATA = [
   keywords: "science human body blood group universal recipient"
 },
 {
+  id: 128,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1181,6 +1310,7 @@ const QUIZ_DATA = [
   keywords: "science planets jupiter largest"
 },
 {
+  id: 129,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1190,6 +1320,7 @@ const QUIZ_DATA = [
   keywords: "science human body nose smelling"
 },
 {
+  id: 130,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1199,6 +1330,7 @@ const QUIZ_DATA = [
   keywords: "science planets mars red planet"
 },
 {
+  id: 131,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1208,6 +1340,7 @@ const QUIZ_DATA = [
   keywords: "science chemistry water h2o"
 },
 {
+  id: 132,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1217,6 +1350,7 @@ const QUIZ_DATA = [
   keywords: "science human body tongue taste"
 },
 {
+  id: 133,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1226,6 +1360,7 @@ const QUIZ_DATA = [
   keywords: "science astronomy sun closest star"
 },
 {
+  id: 134,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1235,6 +1370,7 @@ const QUIZ_DATA = [
   keywords: "science chemistry fire extinguisher carbon dioxide"
 },
 {
+  id: 135,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1244,6 +1380,7 @@ const QUIZ_DATA = [
   keywords: "science human body lungs breathing"
 },
 {
+  id: 136,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1253,6 +1390,7 @@ const QUIZ_DATA = [
   keywords: "science planets mercury smallest"
 },
 {
+  id: 137,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1262,6 +1400,7 @@ const QUIZ_DATA = [
   keywords: "science plants flower seeds"
 },
 {
+  id: 138,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1271,6 +1410,7 @@ const QUIZ_DATA = [
   keywords: "science planets jupiter largest"
 },
 {
+  id: 139,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1280,6 +1420,7 @@ const QUIZ_DATA = [
   keywords: "science human body oxygen breathing"
 },
 {
+  id: 140,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1289,6 +1430,7 @@ const QUIZ_DATA = [
   keywords: "science human body nose smell"
 },
 {
+  id: 141,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1298,6 +1440,7 @@ const QUIZ_DATA = [
   keywords: "science planets venus morning star"
 },
 {
+  id: 142,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1307,6 +1450,7 @@ const QUIZ_DATA = [
   keywords: "science human body ear hearing"
 },
 {
+  id: 143,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1316,6 +1460,7 @@ const QUIZ_DATA = [
   keywords: "science minerals diamond hardest"
 },
 {
+  id: 144,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1325,6 +1470,7 @@ const QUIZ_DATA = [
   keywords: "science human body blood group universal donor"
 },
 {
+  id: 145,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1334,6 +1480,7 @@ const QUIZ_DATA = [
   keywords: "science human body blood group universal recipient"
 },
 {
+  id: 146,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1343,6 +1490,7 @@ const QUIZ_DATA = [
   keywords: "science plants root absorb water"
 },
 {
+  id: 147,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1352,6 +1500,7 @@ const QUIZ_DATA = [
   keywords: "science animals ostrich largest bird"
 },
 {
+  id: 148,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1361,6 +1510,7 @@ const QUIZ_DATA = [
   keywords: "science energy wind air"
 },
 {
+  id: 149,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1370,6 +1520,7 @@ const QUIZ_DATA = [
   keywords: "science energy hydro water"
 },
 {
+  id: 150,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1379,6 +1530,7 @@ const QUIZ_DATA = [
   keywords: "science energy solar sun"
 },
 {
+  id: 151,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1388,6 +1540,7 @@ const QUIZ_DATA = [
   keywords: "science human body femur largest bone"
 },
 {
+  id: 152,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1397,6 +1550,7 @@ const QUIZ_DATA = [
   keywords: "science human body eye vision"
 },
 {
+  id: 153,
   category: "kids",
   type: "quiz",
   quizType: "science quiz",
@@ -1406,6 +1560,7 @@ const QUIZ_DATA = [
   keywords: "science human body stomach digestion"
 },
 {
+  id: 154,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1415,6 +1570,7 @@ const QUIZ_DATA = [
   keywords: "biology plants root absorb water"
 },
 {
+  id: 155,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1424,6 +1580,7 @@ const QUIZ_DATA = [
   keywords: "biology cell mitochondria powerhouse"
 },
 {
+  id: 156,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1433,6 +1590,7 @@ const QUIZ_DATA = [
   keywords: "biology plants chlorophyll green pigment"
 },
 {
+  id: 157,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1442,6 +1600,7 @@ const QUIZ_DATA = [
   keywords: "biology respiration carbon dioxide exhale"
 },
 {
+  id: 158,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1451,6 +1610,7 @@ const QUIZ_DATA = [
   keywords: "biology human body white blood cells immunity"
 },
 {
+  id: 159,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1460,6 +1620,7 @@ const QUIZ_DATA = [
   keywords: "biology human body heart blood pump"
 },
 {
+  id: 160,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1469,6 +1630,7 @@ const QUIZ_DATA = [
   keywords: "biology human body lungs breathing"
 },
 {
+  id: 161,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1478,6 +1640,7 @@ const QUIZ_DATA = [
   keywords: "biology human body stomach digestion"
 },
 {
+  id: 162,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1487,6 +1650,7 @@ const QUIZ_DATA = [
   keywords: "biology human body eye vision"
 },
 {
+  id: 163,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1496,6 +1660,7 @@ const QUIZ_DATA = [
   keywords: "biology human body ear hearing"
 },
 {
+  id: 164,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1505,6 +1670,7 @@ const QUIZ_DATA = [
   keywords: "biology human body nose smell"
 },
 {
+  id: 165,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1514,6 +1680,7 @@ const QUIZ_DATA = [
   keywords: "biology human body tongue taste"
 },
 {
+  id: 166,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1523,6 +1690,7 @@ const QUIZ_DATA = [
   keywords: "biology human body skin touch sense"
 },
 {
+  id: 167,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1532,6 +1700,7 @@ const QUIZ_DATA = [
   keywords: "chemistry sodium symbol na"
 },
 {
+  id: 168,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1541,6 +1710,7 @@ const QUIZ_DATA = [
   keywords: "chemistry iron symbol fe"
 },
 {
+  id: 169,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1550,6 +1720,7 @@ const QUIZ_DATA = [
   keywords: "chemistry oxygen symbol o"
 },
 {
+  id: 170,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1559,6 +1730,7 @@ const QUIZ_DATA = [
   keywords: "chemistry hydrogen symbol h"
 },
 {
+  id: 171,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1568,6 +1740,7 @@ const QUIZ_DATA = [
   keywords: "chemistry carbon symbol c"
 },
 {
+  id: 172,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1577,6 +1750,7 @@ const QUIZ_DATA = [
   keywords: "chemistry calcium symbol ca"
 },
 {
+  id: 173,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1586,6 +1760,7 @@ const QUIZ_DATA = [
   keywords: "biology health vitamin d sunlight"
 },
 {
+  id: 174,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1595,6 +1770,7 @@ const QUIZ_DATA = [
   keywords: "biology human body gallbladder bile storage"
 },
 {
+  id: 175,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1604,6 +1780,7 @@ const QUIZ_DATA = [
   keywords: "biology human body pancreas insulin"
 },
 {
+  id: 176,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1613,6 +1790,7 @@ const QUIZ_DATA = [
   keywords: "biology human body kidney purify blood"
 },
 {
+  id: 177,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1622,24 +1800,7 @@ const QUIZ_DATA = [
   keywords: "biology human body liver detox chemicals"
 },
 {
-  category: "kids",
-  type: "quiz",
-  quizType: "science biology and chemical quiz",
-  question: "Which organ in the human body purifies blood?",
-  options: ["Heart", "Kidney", "Liver", "Lungs"],
-  correctAnswer: "Kidney",
-  keywords: "biology human body kidney purify blood"
-},
-{
-  category: "kids",
-  type: "quiz",
-  quizType: "science biology and chemical quiz",
-  question: "Which organ in the human body detoxifies chemicals?",
-  options: ["Heart", "Liver", "Kidney", "Pancreas"],
-  correctAnswer: "Liver",
-  keywords: "biology human body liver detox chemicals"
-},
-{
+  id: 178,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1649,6 +1810,7 @@ const QUIZ_DATA = [
   keywords: "biology human body liver bile"
 },
 {
+  id: 179,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1658,6 +1820,47 @@ const QUIZ_DATA = [
   keywords: "biology human body gallbladder bile storage"
 },
 {
+  id: 180,
+  category: "kids",
+  type: "quiz",
+  quizType: "science biology and chemical quiz",
+  question: "Which organ in the human body purifies blood?",
+  options: ["Heart", "Kidney", "Liver", "Lungs"],
+  correctAnswer: "Kidney",
+  keywords: "biology human body kidney purify blood"
+},
+{
+  id: 181,
+  category: "kids",
+  type: "quiz",
+  quizType: "science biology and chemical quiz",
+  question: "Which organ in the human body detoxifies chemicals?",
+  options: ["Heart", "Liver", "Kidney", "Pancreas"],
+  correctAnswer: "Liver",
+  keywords: "biology human body liver detox chemicals"
+},
+{
+  id: 182,
+  category: "kids",
+  type: "quiz",
+  quizType: "science biology and chemical quiz",
+  question: "Which organ produces bile?",
+  options: ["Pancreas", "Gallbladder", "Liver", "Kidney"],
+  correctAnswer: "Liver",
+  keywords: "biology human body liver bile"
+},
+{
+  id: 183,
+  category: "kids",
+  type: "quiz",
+  quizType: "science biology and chemical quiz",
+  question: "Which organ stores bile?",
+  options: ["Pancreas", "Gallbladder", "Liver", "Kidney"],
+  correctAnswer: "Gallbladder",
+  keywords: "biology human body gallbladder bile storage"
+},
+{
+  id: 184,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1667,6 +1870,7 @@ const QUIZ_DATA = [
   keywords: "biology human body pancreas insulin"
 },
 {
+  id: 185,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1676,6 +1880,7 @@ const QUIZ_DATA = [
   keywords: "biology human body lungs respiration"
 },
 {
+  id: 186,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1685,6 +1890,7 @@ const QUIZ_DATA = [
   keywords: "biology human body heart circulation"
 },
 {
+  id: 187,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1694,6 +1900,7 @@ const QUIZ_DATA = [
   keywords: "biology human body stomach digestion"
 },
 {
+  id: 188,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1703,6 +1910,7 @@ const QUIZ_DATA = [
   keywords: "biology human body kidney filter blood"
 },
 {
+  id: 189,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1712,6 +1920,7 @@ const QUIZ_DATA = [
   keywords: "biology human body brain control"
 },
 {
+  id: 190,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1721,6 +1930,7 @@ const QUIZ_DATA = [
   keywords: "chemistry potassium symbol k"
 },
 {
+  id: 191,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1730,6 +1940,7 @@ const QUIZ_DATA = [
   keywords: "chemistry silver symbol ag"
 },
 {
+  id: 192,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1739,6 +1950,7 @@ const QUIZ_DATA = [
   keywords: "chemistry copper symbol cu"
 },
 {
+  id: 193,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1748,6 +1960,7 @@ const QUIZ_DATA = [
   keywords: "chemistry lead symbol pb"
 },
 {
+  id: 194,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1757,6 +1970,7 @@ const QUIZ_DATA = [
   keywords: "chemistry zinc symbol zn"
 },
 {
+  id: 195,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1766,6 +1980,7 @@ const QUIZ_DATA = [
   keywords: "chemistry magnesium symbol mg"
 },
 {
+  id: 196,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1775,6 +1990,7 @@ const QUIZ_DATA = [
   keywords: "chemistry chlorine symbol cl"
 },
 {
+  id: 197,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1784,6 +2000,7 @@ const QUIZ_DATA = [
   keywords: "chemistry nitrogen symbol n"
 },
 {
+  id: 198,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1793,6 +2010,7 @@ const QUIZ_DATA = [
   keywords: "chemistry phosphorus symbol p"
 },
 {
+  id: 199,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1802,6 +2020,7 @@ const QUIZ_DATA = [
   keywords: "chemistry sulfur symbol s"
 },
 {
+  id: 200,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1811,6 +2030,7 @@ const QUIZ_DATA = [
   keywords: "chemistry neon symbol ne"
 },
 {
+  id: 201,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1820,6 +2040,7 @@ const QUIZ_DATA = [
   keywords: "chemistry helium symbol he"
 },
 {
+  id: 202,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1829,6 +2050,7 @@ const QUIZ_DATA = [
   keywords: "chemistry fluorine symbol f"
 },
 {
+  id: 203,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1838,6 +2060,7 @@ const QUIZ_DATA = [
   keywords: "chemistry mercury symbol hg"
 },
 {
+  id: 204,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1847,6 +2070,7 @@ const QUIZ_DATA = [
   keywords: "biology cell dna nucleus"
 },
 {
+  id: 205,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1856,6 +2080,7 @@ const QUIZ_DATA = [
   keywords: "biology human body platelets clotting"
 },
 {
+  id: 206,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1865,6 +2090,7 @@ const QUIZ_DATA = [
   keywords: "biology human body pancreas digestive enzymes"
 },
 {
+  id: 207,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1874,6 +2100,7 @@ const QUIZ_DATA = [
   keywords: "biology human body bone marrow red blood cells"
 },
 {
+  id: 208,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1883,6 +2110,7 @@ const QUIZ_DATA = [
   keywords: "biology vitamins vitamin k blood clotting"
 },
 {
+  id: 209,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1892,6 +2120,7 @@ const QUIZ_DATA = [
   keywords: "biology vitamins vitamin a eyesight"
 },
 {
+  id: 210,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1901,6 +2130,7 @@ const QUIZ_DATA = [
   keywords: "biology vitamins vitamin c citrus fruits"
 },
 {
+  id: 211,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1910,6 +2140,7 @@ const QUIZ_DATA = [
   keywords: "biology minerals calcium strong bones"
 },
 {
+  id: 212,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1919,6 +2150,7 @@ const QUIZ_DATA = [
   keywords: "biology minerals iron hemoglobin blood"
 },
 {
+  id: 213,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1928,6 +2160,7 @@ const QUIZ_DATA = [
   keywords: "chemistry chlorine disinfect water"
 },
 {
+  id: 214,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1937,6 +2170,7 @@ const QUIZ_DATA = [
   keywords: "chemistry sodium chloride table salt"
 },
 {
+  id: 215,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1946,6 +2180,7 @@ const QUIZ_DATA = [
   keywords: "chemistry lithium batteries"
 },
 {
+  id: 216,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1955,6 +2190,7 @@ const QUIZ_DATA = [
   keywords: "chemistry fluoride toothpaste cavities"
 },
 {
+  id: 217,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1964,6 +2200,7 @@ const QUIZ_DATA = [
   keywords: "chemistry nitrogen fertilizers"
 },
 {
+  id: 218,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1973,6 +2210,7 @@ const QUIZ_DATA = [
   keywords: "chemistry calcium hypochlorite bleaching powder"
 },
 {
+  id: 219,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1982,6 +2220,7 @@ const QUIZ_DATA = [
   keywords: "chemistry silica glass making"
 },
 {
+  id: 220,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -1991,6 +2230,7 @@ const QUIZ_DATA = [
   keywords: "chemistry limestone cement making"
 },
 {
+  id: 221,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -2000,6 +2240,7 @@ const QUIZ_DATA = [
   keywords: "chemistry phosphorus matchsticks"
 },
 {
+  id: 222,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -2009,6 +2250,7 @@ const QUIZ_DATA = [
   keywords: "chemistry fireworks sulfur phosphorus magnesium"
 },
 {
+  id: 223,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -2018,6 +2260,7 @@ const QUIZ_DATA = [
   keywords: "chemistry carbon dioxide soft drinks"
 },
 {
+  id: 224,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -2027,6 +2270,7 @@ const QUIZ_DATA = [
   keywords: "biology plants photosynthesis carbon dioxide"
 },
 {
+  id: 225,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -2036,6 +2280,7 @@ const QUIZ_DATA = [
   keywords: "biology respiration oxygen breathing"
 },
 {
+  id: 226,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -2045,6 +2290,7 @@ const QUIZ_DATA = [
   keywords: "biology proteins nitrogen building"
 },
 {
+  id: 227,
   category: "kids",
   type: "quiz",
   quizType: "science biology and chemical quiz",
@@ -2055,6 +2301,7 @@ const QUIZ_DATA = [
 },
 // human body questions 
 {
+  id: 228,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2064,6 +2311,7 @@ const QUIZ_DATA = [
   keywords: "human body heart blood pump"
 },
 {
+  id: 229,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2073,6 +2321,7 @@ const QUIZ_DATA = [
   keywords: "human body brain control"
 },
 {
+  id: 230,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2082,6 +2331,7 @@ const QUIZ_DATA = [
   keywords: "human body lungs breathing"
 },
 {
+  id: 231,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2091,6 +2341,7 @@ const QUIZ_DATA = [
   keywords: "human body stomach digestion"
 },
 {
+  id: 232,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2100,6 +2351,7 @@ const QUIZ_DATA = [
   keywords: "human body kidney purify blood"
 },
 {
+  id: 233,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2109,6 +2361,7 @@ const QUIZ_DATA = [
   keywords: "human body liver detox chemicals"
 },
 {
+  id: 234,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2118,6 +2371,7 @@ const QUIZ_DATA = [
   keywords: "human body pancreas insulin"
 },
 {
+  id: 235,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2127,6 +2381,7 @@ const QUIZ_DATA = [
   keywords: "human body gallbladder bile storage"
 },
 {
+  id: 236,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2136,6 +2391,7 @@ const QUIZ_DATA = [
   keywords: "human body eye vision"
 },
 {
+  id: 237,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2145,6 +2401,7 @@ const QUIZ_DATA = [
   keywords: "human body ear hearing"
 },
 {
+  id: 238,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2154,6 +2411,7 @@ const QUIZ_DATA = [
   keywords: "human body nose smell"
 },
 {
+  id: 239,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2163,6 +2421,7 @@ const QUIZ_DATA = [
   keywords: "human body tongue taste"
 },
 {
+  id: 240,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2172,6 +2431,7 @@ const QUIZ_DATA = [
   keywords: "human body skin touch sense"
 },
 {
+  id: 241,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2181,6 +2441,7 @@ const QUIZ_DATA = [
   keywords: "human body red blood cells oxygen"
 },
 {
+  id: 242,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2190,6 +2451,7 @@ const QUIZ_DATA = [
   keywords: "human body white blood cells immunity"
 },
 {
+  id: 243,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2199,6 +2461,7 @@ const QUIZ_DATA = [
   keywords: "human body platelets clotting"
 },
 {
+  id: 244,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2208,6 +2471,7 @@ const QUIZ_DATA = [
   keywords: "human body femur largest bone"
 },
 {
+  id: 245,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2217,6 +2481,7 @@ const QUIZ_DATA = [
   keywords: "human body stapes smallest bone ear"
 },
 {
+  id: 246,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2226,6 +2491,7 @@ const QUIZ_DATA = [
   keywords: "human body skin largest organ"
 },
 {
+  id: 247,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2235,6 +2501,7 @@ const QUIZ_DATA = [
   keywords: "human body tooth enamel hardest"
 },
 {
+  id: 248,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2244,6 +2511,7 @@ const QUIZ_DATA = [
   keywords: "human body ear balance"
 },
 {
+  id: 249,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2253,6 +2521,7 @@ const QUIZ_DATA = [
   keywords: "human body brain emotions control"
 },
 {
+  id: 250,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2262,6 +2531,7 @@ const QUIZ_DATA = [
   keywords: "human body liver filter toxins"
 },
 {
+  id: 251,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2271,6 +2541,7 @@ const QUIZ_DATA = [
   keywords: "human body kidney urine production"
 },
 {
+  id: 252,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2280,6 +2551,7 @@ const QUIZ_DATA = [
   keywords: "human body liver bile juice"
 },
 {
+  id: 253,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2289,6 +2561,7 @@ const QUIZ_DATA = [
   keywords: "human body gallbladder bile storage"
 },
 {
+  id: 254,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2298,6 +2571,7 @@ const QUIZ_DATA = [
   keywords: "human body pancreas digestive enzymes"
 },
 {
+  id: 255,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2307,6 +2581,7 @@ const QUIZ_DATA = [
   keywords: "human body bone marrow red blood cells"
 },
 {
+  id: 256,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2316,6 +2591,7 @@ const QUIZ_DATA = [
   keywords: "human body kidney urine production"
 },
 {
+  id: 257,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2325,6 +2601,7 @@ const QUIZ_DATA = [
   keywords: "human body endocrine glands hormones"
 },
 {
+  id: 258,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2334,6 +2611,7 @@ const QUIZ_DATA = [
   keywords: "human body ear balance"
 },
 {
+  id: 259,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2343,6 +2621,7 @@ const QUIZ_DATA = [
   keywords: "human body brain emotions control"
 },
 {
+  id: 260,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2352,6 +2631,7 @@ const QUIZ_DATA = [
   keywords: "human body liver filter toxins"
 },
 {
+  id: 261,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2361,6 +2641,7 @@ const QUIZ_DATA = [
   keywords: "human body lungs respiration"
 },
 {
+  id: 262,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2370,6 +2651,7 @@ const QUIZ_DATA = [
   keywords: "human body heart circulation"
 },
 {
+  id: 263,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2379,6 +2661,7 @@ const QUIZ_DATA = [
   keywords: "human body stomach digestion"
 },
 {
+  id: 264,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2388,6 +2671,7 @@ const QUIZ_DATA = [
   keywords: "human body kidney filter blood"
 },
 {
+  id: 265,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2397,6 +2681,7 @@ const QUIZ_DATA = [
   keywords: "human body brain control functions"
 },
 {
+  id: 266,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2406,6 +2691,7 @@ const QUIZ_DATA = [
   keywords: "human body skin sweat production"
 },
 {
+  id: 267,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2415,6 +2701,7 @@ const QUIZ_DATA = [
   keywords: "human body salivary glands saliva"
 },
 {
+  id: 268,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2424,6 +2711,7 @@ const QUIZ_DATA = [
   keywords: "human body eye tears production"
 },
 {
+  id: 269,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2433,6 +2721,7 @@ const QUIZ_DATA = [
   keywords: "human body voice box sound production"
 },
 {
+  id: 270,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2442,6 +2731,7 @@ const QUIZ_DATA = [
   keywords: "human body mammary glands milk production"
 },
 {
+  id: 271,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2451,6 +2741,7 @@ const QUIZ_DATA = [
   keywords: "human body bone marrow blood cells"
 },
 {
+  id: 272,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2460,6 +2751,7 @@ const QUIZ_DATA = [
   keywords: "human body mitochondria energy production"
 },
 {
+  id: 273,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2469,6 +2761,7 @@ const QUIZ_DATA = [
   keywords: "human body white blood cells antibodies"
 },
 {
+  id: 274,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2478,6 +2771,7 @@ const QUIZ_DATA = [
   keywords: "human body pancreas enzymes"
 },
 {
+  id: 275,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2487,6 +2781,7 @@ const QUIZ_DATA = [
   keywords: "human body endocrine glands hormones"
 },
 {
+  id: 276,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2496,6 +2791,7 @@ const QUIZ_DATA = [
   keywords: "human body brain memory storage"
 },
 {
+  id: 277,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2505,6 +2801,7 @@ const QUIZ_DATA = [
   keywords: "human body skin body temperature"
 },
 {
+  id: 278,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2514,6 +2811,7 @@ const QUIZ_DATA = [
   keywords: "human body bone marrow red blood cells"
 },
 {
+  id: 279,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2523,6 +2821,7 @@ const QUIZ_DATA = [
   keywords: "human body bone marrow white blood cells"
 },
 {
+  id: 280,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2532,6 +2831,7 @@ const QUIZ_DATA = [
   keywords: "human body white blood cells antibodies"
 },
 {
+  id: 281,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2541,6 +2841,7 @@ const QUIZ_DATA = [
   keywords: "human body mitochondria energy production"
 },
 {
+  id: 282,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2550,6 +2851,7 @@ const QUIZ_DATA = [
   keywords: "human body salivary glands saliva production"
 },
 {
+  id: 283,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2559,6 +2861,7 @@ const QUIZ_DATA = [
   keywords: "human body eye tears production"
 },
 {
+  id: 284,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2568,6 +2871,7 @@ const QUIZ_DATA = [
   keywords: "human body voice box sound production"
 },
 {
+  id: 285,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2577,6 +2881,7 @@ const QUIZ_DATA = [
   keywords: "human body mammary glands milk production"
 },
 {
+  id: 286,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2586,6 +2891,7 @@ const QUIZ_DATA = [
   keywords: "human body ear balance"
 },
 {
+  id: 287,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2595,6 +2901,7 @@ const QUIZ_DATA = [
   keywords: "human body brain emotions control"
 },
 {
+  id: 288,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2604,6 +2911,7 @@ const QUIZ_DATA = [
   keywords: "human body liver filter toxins"
 },
 {
+  id: 289,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2613,6 +2921,7 @@ const QUIZ_DATA = [
   keywords: "human body skin sweat production"
 },
 {
+  id: 290,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2622,6 +2931,7 @@ const QUIZ_DATA = [
   keywords: "human body pancreas digestive enzymes"
 },
 {
+  id: 291,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2631,6 +2941,7 @@ const QUIZ_DATA = [
   keywords: "human body liver bile production"
 },
 {
+  id: 292,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2640,6 +2951,7 @@ const QUIZ_DATA = [
   keywords: "human body gallbladder bile storage"
 },
 {
+  id: 293,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2649,6 +2961,7 @@ const QUIZ_DATA = [
   keywords: "human body kidney urine production"
 },
 {
+  id: 294,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2658,6 +2971,7 @@ const QUIZ_DATA = [
   keywords: "human body endocrine glands hormones"
 },
 {
+  id: 295,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2667,6 +2981,7 @@ const QUIZ_DATA = [
   keywords: "human body skin vitamin d sunlight"
 },
 {
+  id: 296,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2676,6 +2991,7 @@ const QUIZ_DATA = [
   keywords: "human body liver blood plasma"
 },
 {
+  id: 297,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2685,6 +3001,7 @@ const QUIZ_DATA = [
   keywords: "human body liver cholesterol production"
 },
 {
+  id: 298,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2694,6 +3011,7 @@ const QUIZ_DATA = [
   keywords: "human body stomach digestive acid"
 },
 {
+  id: 299 ,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2703,6 +3021,7 @@ const QUIZ_DATA = [
   keywords: "human body pancreas fat digestion enzymes"
 },
 {
+  id: 300,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2712,6 +3031,7 @@ const QUIZ_DATA = [
   keywords: "human body male reproductive testes sperm"
 },
 {
+  id: 301,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2721,6 +3041,7 @@ const QUIZ_DATA = [
   keywords: "human body female reproductive ovary eggs"
 },
 {
+  id: 302,
   category: "kids",
   type: "quiz",
   quizType: "human body quiz",
@@ -2730,774 +3051,860 @@ const QUIZ_DATA = [
   keywords: "human body female reproductive uterus baby growth"
 },
 {
+  id: 303,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ connects the baby to the mother for nutrition?",
   options: ["Placenta", "Kidney", "Pancreas", "Heart"],
   correctAnswer: "Placenta",
   keywords: "human body female reproductive placenta nutrition"
 },
 {
+  id: 304,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone controls male reproductive functions?",
   options: ["Estrogen", "Testosterone", "Insulin", "Adrenaline"],
   correctAnswer: "Testosterone",
   keywords: "human body male reproductive hormone testosterone"
 },
 {
+  id: 305,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone controls female reproductive functions?",
   options: ["Estrogen", "Testosterone", "Insulin", "Adrenaline"],
   correctAnswer: "Estrogen",
   keywords: "human body female reproductive hormone estrogen"
 },
 {
+  id: 306,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which system controls voluntary and involuntary actions of the body?",
   options: ["Digestive system", "Nervous system", "Circulatory system", "Respiratory system"],
   correctAnswer: "Nervous system",
   keywords: "human body nervous system actions control"
 },
 {
+  id: 307,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ is called the master gland?",
   options: ["Thyroid", "Pituitary gland", "Pancreas", "Adrenal gland"],
   correctAnswer: "Pituitary gland",
   keywords: "human body pituitary gland master gland"
 },
 {
+  id: 308,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ produces adrenaline?",
   options: ["Pancreas", "Adrenal glands", "Kidney", "Liver"],
   correctAnswer: "Adrenal glands",
   keywords: "human body adrenal glands adrenaline"
 },
 {
+  id: 309,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ produces thyroid hormone?",
   options: ["Thyroid gland", "Pituitary gland", "Pancreas", "Liver"],
   correctAnswer: "Thyroid gland",
   keywords: "human body thyroid gland hormone"
 },
 {
+  id: 310,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ connects the brain to the rest of the body?",
   options: ["Spinal cord", "Heart", "Kidney", "Liver"],
   correctAnswer: "Spinal cord",
   keywords: "human body spinal cord brain connection"
 },
 {
+  id: 311,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in pumping oxygen-rich blood?",
   options: ["Heart", "Lungs", "Kidney", "Liver"],
   correctAnswer: "Heart",
   keywords: "human body heart oxygen blood pump"
 },
 {
+  id: 312,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in exchanging oxygen and carbon dioxide?",
   options: ["Heart", "Lungs", "Kidney", "Liver"],
   correctAnswer: "Lungs",
   keywords: "human body lungs oxygen carbon dioxide exchange"
 },
 {
+  id: 313,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in absorbing nutrients?",
   options: ["Small intestine", "Large intestine", "Stomach", "Kidney"],
   correctAnswer: "Small intestine",
   keywords: "human body small intestine nutrient absorption"
 },
 {
+  id: 314,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in absorbing water?",
   options: ["Large intestine", "Small intestine", "Stomach", "Kidney"],
   correctAnswer: "Large intestine",
   keywords: "human body large intestine water absorption"
 },
 {
+  id: 315,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in filtering waste from blood?",
   options: ["Kidney", "Liver", "Pancreas", "Heart"],
   correctAnswer: "Kidney",
   keywords: "human body kidney filter waste blood"
 },
 {
+  id: 316,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in detoxifying harmful substances?",
   options: ["Liver", "Kidney", "Pancreas", "Heart"],
   correctAnswer: "Liver",
   keywords: "human body liver detox harmful substances"
 },
 {
+  id: 317,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing digestive acid?",
   options: ["Stomach", "Pancreas", "Liver", "Kidney"],
   correctAnswer: "Stomach",
   keywords: "human body stomach digestive acid"
 },
 {
+  id: 318,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing insulin?",
   options: ["Pancreas", "Liver", "Kidney", "Heart"],
   correctAnswer: "Pancreas",
   keywords: "human body pancreas insulin production"
 },
 {
+  id: 319,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing bile?",
   options: ["Liver", "Pancreas", "Kidney", "Heart"],
   correctAnswer: "Liver",
   keywords: "human body liver bile production"
 },
 {
+  id: 320,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in storing bile?",
   options: ["Gallbladder", "Pancreas", "Kidney", "Liver"],
   correctAnswer: "Gallbladder",
   keywords: "human body gallbladder bile storage"
 },
 {
+  id: 321,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing sweat?",
   options: ["Skin", "Liver", "Kidney", "Pancreas"],
   correctAnswer: "Skin",
   keywords: "human body skin sweat production"
 },
 {
+  id: 322,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing saliva?",
   options: ["Salivary glands", "Pancreas", "Liver", "Kidney"],
   correctAnswer: "Salivary glands",
   keywords: "human body salivary glands saliva production"
 },
 {
+  id: 323,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing tears?",
   options: ["Eye", "Ear", "Nose", "Skin"],
   correctAnswer: "Eye",
   keywords: "human body eye tears production"
 },
 {
+  id: 324,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing sound?",
   options: ["Voice box", "Lungs", "Tongue", "Ear"],
   correctAnswer: "Voice box",
   keywords: "human body voice box sound production"
 },
 {
+  id: 325,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing milk in mothers?",
   options: ["Mammary glands", "Pancreas", "Kidney", "Liver"],
   correctAnswer: "Mammary glands",
   keywords: "human body mammary glands milk production"
 },
 {
+  id: 326,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing vitamin D?",
   options: ["Skin", "Liver", "Kidney", "Pancreas"],
   correctAnswer: "Skin",
   keywords: "human body skin vitamin d sunlight"
 },
 {
+  id: 327,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing cholesterol?",
   options: ["Liver", "Kidney", "Pancreas", "Heart"],
   correctAnswer: "Liver",
   keywords: "human body liver cholesterol production"
 },
 {
+  id: 328,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing digestive enzymes for fat digestion?",
   options: ["Pancreas", "Liver", "Kidney", "Heart"],
   correctAnswer: "Pancreas",
   keywords: "human body pancreas fat digestion enzymes"
 },
 {
+  id: 329,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ helps in producing blood plasma?",
   options: ["Liver", "Kidney", "Pancreas", "Heart"],
   correctAnswer: "Liver",
   keywords: "human body liver blood plasma"
 },
 {
+  id: 330,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which part of the brain controls vision?",
   options: ["Frontal lobe", "Occipital lobe", "Parietal lobe", "Temporal lobe"],
   correctAnswer: "Occipital lobe",
   keywords: "human body brain occipital lobe vision"
 },
 {
+  id: 331,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which part of the brain controls hearing?",
   options: ["Frontal lobe", "Temporal lobe", "Parietal lobe", "Occipital lobe"],
   correctAnswer: "Temporal lobe",
   keywords: "human body brain temporal lobe hearing"
 },
 {
+  id: 332,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which part of the brain controls movement?",
   options: ["Frontal lobe", "Occipital lobe", "Parietal lobe", "Temporal lobe"],
   correctAnswer: "Frontal lobe",
   keywords: "human body brain frontal lobe movement"
 },
 {
+  id: 333,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which blood vessels carry blood away from the heart?",
   options: ["Veins", "Arteries", "Capillaries", "Nerves"],
   correctAnswer: "Arteries",
   keywords: "human body circulatory arteries blood away heart"
 },
 {
+  id: 334,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which blood vessels carry blood to the heart?",
   options: ["Arteries", "Veins", "Capillaries", "Nerves"],
   correctAnswer: "Veins",
   keywords: "human body circulatory veins blood to heart"
 },
 {
+  id: 335,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ is responsible for reflex actions?",
   options: ["Brain", "Spinal cord", "Heart", "Kidney"],
   correctAnswer: "Spinal cord",
   keywords: "human body nervous system spinal cord reflex"
 },
 {
+  id: 336,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which muscle is called the strongest muscle in the human body?",
   options: ["Biceps", "Tongue", "Quadriceps", "Jaw muscle"],
   correctAnswer: "Jaw muscle",
   keywords: "human body muscles jaw strongest"
 },
 {
+  id: 337,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which bone protects the brain?",
   options: ["Skull", "Rib cage", "Spine", "Pelvis"],
   correctAnswer: "Skull",
   keywords: "human body skeletal skull brain protection"
 },
 {
+  id: 338,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which bone protects the heart and lungs?",
   options: ["Skull", "Rib cage", "Spine", "Pelvis"],
   correctAnswer: "Rib cage",
   keywords: "human body skeletal rib cage heart lungs protection"
 },
 {
+  id: 339,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone regulates blood sugar?",
   options: ["Insulin", "Adrenaline", "Estrogen", "Thyroxine"],
   correctAnswer: "Insulin",
   keywords: "human body pancreas insulin blood sugar"
 },
 {
+  id: 340,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is the average length of a menstrual cycle?",
   options: ["10 days", "28 days", "40 days", "60 days"],
   correctAnswer: "28 days",
   keywords: "human body female menstrual cycle average length"
 },
 {
+  id: 341,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ releases eggs during the menstrual cycle?",
   options: ["Uterus", "Ovary", "Kidney", "Liver"],
   correctAnswer: "Ovary",
   keywords: "human body female ovary eggs menstrual cycle"
 },
 {
+  id: 342,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is the process of releasing an egg called?",
   options: ["Ovulation", "Menstruation", "Digestion", "Respiration"],
   correctAnswer: "Ovulation",
   keywords: "human body female ovulation egg release"
 },
 {
+  id: 343,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ sheds its lining during menstruation?",
   options: ["Ovary", "Uterus", "Kidney", "Pancreas"],
   correctAnswer: "Uterus",
   keywords: "human body female uterus menstruation lining shed"
 },
 {
+  id: 344,  
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone is mainly responsible for menstruation?",
   options: ["Insulin", "Estrogen", "Adrenaline", "Thyroxine"],
   correctAnswer: "Estrogen",
   keywords: "human body female hormone estrogen menstruation"
 },
 {
+  id: 345,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone prepares the uterus for pregnancy?",
   options: ["Progesterone", "Testosterone", "Insulin", "Adrenaline"],
   correctAnswer: "Progesterone",
   keywords: "human body female hormone progesterone uterus pregnancy"
 },
 {
+  id: 346,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is the first period in a girl’s life called?",
   options: ["Menopause", "Menarche", "Ovulation", "Puberty"],
   correctAnswer: "Menarche",
   keywords: "human body female menarche first period"
 },
 {
+  id: 347,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is the last period in a woman’s life called?",
   options: ["Menarche", "Menopause", "Ovulation", "Puberty"],
   correctAnswer: "Menopause",
   keywords: "human body female menopause last period"
 },
 {
+  id: 348,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which nutrient is important during menstruation?",
   options: ["Iron", "Calcium", "Vitamin C", "Protein"],
   correctAnswer: "Iron",
   keywords: "human body female nutrition iron menstruation"
 },
 {
+  id: 349,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is a common symptom during menstruation?",
   options: ["Headache", "Cramps", "Fever", "Cough"],
   correctAnswer: "Cramps",
   keywords: "human body female menstruation cramps symptom"
 },
 {
+  id: 350,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is menstruation?",
   options: ["Shedding of uterus lining", "Breathing process", "Digestion process", "Blood circulation"],
   correctAnswer: "Shedding of uterus lining",
   keywords: "human body female menstruation uterus lining"
 },
 {
+  id: 351,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "On average, how many days does menstruation last?",
   options: ["1-2 days", "3-7 days", "10-15 days", "20 days"],
   correctAnswer: "3-7 days",
   keywords: "human body female menstruation average duration"
 },
 {
+  id: 352,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone triggers ovulation?",
   options: ["LH (Luteinizing Hormone)", "Estrogen", "Progesterone", "Insulin"],
   correctAnswer: "LH (Luteinizing Hormone)",
   keywords: "human body female ovulation hormone LH"
 },
 {
+  id: 353,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone thickens the uterus lining?",
   options: ["Progesterone", "Estrogen", "Testosterone", "Adrenaline"],
   correctAnswer: "Progesterone",
   keywords: "human body female progesterone uterus lining"
 },
 {
+  id: 354,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is the first menstrual cycle called?",
   options: ["Menarche", "Menopause", "Ovulation", "Puberty"],
   correctAnswer: "Menarche",
   keywords: "human body female menarche first period"
 },
 {
+  id: 355,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "What is the last menstrual cycle called?",
   options: ["Menarche", "Menopause", "Ovulation", "Puberty"],
   correctAnswer: "Menopause",
   keywords: "human body female menopause last period"
 },
 {
+  id: 356,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which nutrient is most important during menstruation?",
   options: ["Iron", "Calcium", "Vitamin C", "Protein"],
   correctAnswer: "Iron",
   keywords: "human body female menstruation iron nutrient"
 },
 {
+  id: 357,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which common symptom occurs during menstruation?",
   options: ["Cramps", "Fever", "Cough", "Sneezing"],
   correctAnswer: "Cramps",
   keywords: "human body female menstruation cramps symptom"
 },
 {
+  id: 358,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone drops to start menstruation?",
   options: ["Progesterone", "Estrogen", "Insulin", "Adrenaline"],
   correctAnswer: "Progesterone",
   keywords: "human body female progesterone drop menstruation"
 },
 {
+  id: 359,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which cycle prepares the female body for pregnancy?",
   options: ["Menstrual cycle", "Respiratory cycle", "Digestive cycle", "Circulatory cycle"],
   correctAnswer: "Menstrual cycle",
   keywords: "human body female menstrual cycle pregnancy preparation"
 },
 {
+  id: 360,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ is mainly involved in menstruation?",
   options: ["Uterus", "Kidney", "Liver", "Pancreas"],
   correctAnswer: "Uterus",
   keywords: "human body female uterus menstruation"
 },
 {
+  id: 361,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which phase occurs before menstruation?",
   options: ["Luteal phase", "Follicular phase", "Ovulation", "Menopause"],
   correctAnswer: "Luteal phase",
   keywords: "human body female luteal phase menstruation"
 },
 {
+  id: 362,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which phase occurs after menstruation?",
   options: ["Follicular phase", "Luteal phase", "Menopause", "Puberty"],
   correctAnswer: "Follicular phase",
   keywords: "human body female follicular phase menstruation"
 },
 {
+  id: 363,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone rises during ovulation?",
   options: ["LH", "Estrogen", "Progesterone", "Insulin"],
   correctAnswer: "Estrogen",
   keywords: "human body female estrogen ovulation"
 },
 {
+  id: 364,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which cycle stops permanently at menopause?",
   options: ["Menstrual cycle", "Respiratory cycle", "Digestive cycle", "Circulatory cycle"],
   correctAnswer: "Menstrual cycle",
   keywords: "human body female menopause menstrual cycle stop"
 },
 {
+  id: 365,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone is measured in pregnancy tests?",
   options: ["hCG", "Estrogen", "Progesterone", "Insulin"],
   correctAnswer: "hCG",
   keywords: "human body female pregnancy test hormone hCG"
 },
 {
+  id: 366,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ releases eggs?",
   options: ["Ovary", "Uterus", "Kidney", "Liver"],
   correctAnswer: "Ovary",
   keywords: "human body female ovary egg release"
 },
 {
+  id: 367,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ sheds lining during menstruation?",
   options: ["Uterus", "Ovary", "Kidney", "Pancreas"],
   correctAnswer: "Uterus",
   keywords: "human body female uterus lining shed"
 },
 {
+  id: 368,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone maintains pregnancy?",
   options: ["Progesterone", "Estrogen", "Testosterone", "Adrenaline"],
   correctAnswer: "Progesterone",
   keywords: "human body female progesterone pregnancy"
 },
 {
+  id: 369,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone is responsible for female secondary sexual characteristics?",
   options: ["Estrogen", "Testosterone", "Insulin", "Adrenaline"],
   correctAnswer: "Estrogen",
   keywords: "human body female estrogen secondary sexual characteristics"
 },
 {
+  id: 370,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone is responsible for male secondary sexual characteristics?",
   options: ["Testosterone", "Estrogen", "Insulin", "Adrenaline"],
   correctAnswer: "Testosterone",
   keywords: "human body male testosterone secondary sexual characteristics"
 },
 {
+  id: 371,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which cycle is repeated monthly in women?",
   options: ["Menstrual cycle", "Respiratory cycle", "Digestive cycle", "Circulatory cycle"],
   correctAnswer: "Menstrual cycle",
   keywords: "human body female menstrual cycle monthly"
 },
 {
+  id: 372,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone level drops to cause menstruation?",
   options: ["Progesterone", "Estrogen", "Insulin", "Adrenaline"],
   correctAnswer: "Progesterone",
   keywords: "human body female progesterone drop menstruation"
 },
 {
+  id: 373,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ prepares lining for pregnancy?",
   options: ["Uterus", "Ovary", "Kidney", "Liver"],
   correctAnswer: "Uterus",
   keywords: "human body female uterus lining pregnancy"
 },
 {
+  id: 374,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which phase of the menstrual cycle involves egg release?",
   options: ["Follicular phase", "Ovulation", "Luteal phase", "Menstruation"],
   correctAnswer: "Ovulation",
   keywords: "human body female ovulation menstrual cycle"
 },
 {
+  id: 375,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone rises just before ovulation?",
   options: ["LH", "Estrogen", "Progesterone", "Insulin"],
   correctAnswer: "LH",
   keywords: "human body female hormone LH ovulation"
 },
 {
+  id: 376,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone helps in thickening the uterus lining?",
   options: ["Progesterone", "Estrogen", "Testosterone", "Adrenaline"],
   correctAnswer: "Estrogen",
   keywords: "human body female estrogen uterus lining"
 },
 {
+  id: 377,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which phase occurs after ovulation?",
   options: ["Follicular phase", "Luteal phase", "Menstruation", "Menopause"],
   correctAnswer: "Luteal phase",
   keywords: "human body female luteal phase menstrual cycle"
 },
 {
+  id: 378,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone maintains pregnancy if fertilization occurs?",
   options: ["Progesterone", "Estrogen", "Testosterone", "Adrenaline"],
   correctAnswer: "Progesterone",
   keywords: "human body female progesterone pregnancy maintenance"
 },
 {
+  id: 379,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone is tested to confirm pregnancy?",
   options: ["hCG", "Estrogen", "Progesterone", "Insulin"],
   correctAnswer: "hCG",
   keywords: "human body female pregnancy test hormone hCG"
 },
 {
+  id: 380,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which cycle stops permanently at menopause?",
   options: ["Menstrual cycle", "Respiratory cycle", "Digestive cycle", "Circulatory cycle"],
   correctAnswer: "Menstrual cycle",
   keywords: "human body female menopause menstrual cycle stop"
 },
 {
+  id: 381,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which age range usually marks the start of menstruation?",
   options: ["8-16 years", "18-25 years", "25-30 years", "30-40 years"],
   correctAnswer: "8-16 years",
   keywords: "human body female menarche age range"
 },
 {
+  id: 382,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which age range usually marks menopause?",
   options: ["20-30 years", "30-40 years", "45-55 years", "60-70 years"],
   correctAnswer: "45-55 years",
   keywords: "human body female menopause age range"
 },
 {
+  id: 383,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which common symptom occurs before menstruation?",
   options: ["PMS (Premenstrual Syndrome)", "Fever", "Cough", "Sneezing"],
   correctAnswer: "PMS (Premenstrual Syndrome)",
   keywords: "human body female PMS premenstrual syndrome"
 },
 {
+  id: 384,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which nutrient helps reduce fatigue during menstruation?",
   options: ["Iron", "Vitamin B12", "Calcium", "Vitamin D"],
   correctAnswer: "Vitamin B12",
   keywords: "human body female menstruation vitamin b12 fatigue"
 },
 {
+  id: 385,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which mineral helps reduce cramps during menstruation?",
   options: ["Magnesium", "Iron", "Calcium", "Zinc"],
   correctAnswer: "Magnesium",
   keywords: "human body female menstruation magnesium cramps relief"
 },
 {
+  id: 386,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone level drops to trigger menstruation?",
   options: ["Progesterone", "Estrogen", "Insulin", "Adrenaline"],
   correctAnswer: "Progesterone",
   keywords: "human body female progesterone drop menstruation trigger"
 },
 {
+  id: 387,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which organ prepares lining for pregnancy every cycle?",
   options: ["Uterus", "Ovary", "Kidney", "Liver"],
   correctAnswer: "Uterus",
   keywords: "human body female uterus lining pregnancy preparation"
 },
 {
+  id: 388,
   category: "kids",
   type: "quiz",
-  quizType: "human body quiz",
+  quizType: "biology quiz",
   question: "Which hormone is responsible for female secondary sexual characteristics?",
   options: ["Estrogen", "Testosterone", "Insulin", "Adrenaline"],
   correctAnswer: "Estrogen",
@@ -3505,6 +3912,7 @@ const QUIZ_DATA = [
 },
 // nature quizzess
 {
+  id: 389,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3514,6 +3922,7 @@ const QUIZ_DATA = [
   keywords: "nature desert antarctic largest"
 },
 {
+  id: 390,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3523,6 +3932,7 @@ const QUIZ_DATA = [
   keywords: "nature mountain mount everest tallest"
 },
 {
+  id: 391,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3532,6 +3942,7 @@ const QUIZ_DATA = [
   keywords: "nature animal blue whale largest"
 },
 {
+  id: 392,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3541,6 +3952,7 @@ const QUIZ_DATA = [
   keywords: "nature bird parrot mimic sounds"
 },
 {
+  id: 393,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3550,6 +3962,7 @@ const QUIZ_DATA = [
   keywords: "nature tree peepal sacred india"
 },
 {
+  id: 394,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3559,6 +3972,7 @@ const QUIZ_DATA = [
   keywords: "nature bird falcon fastest"
 },
 {
+  id: 395,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3568,6 +3982,7 @@ const QUIZ_DATA = [
   keywords: "nature flower rafflesia largest"
 },
 {
+  id: 396,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3577,6 +3992,7 @@ const QUIZ_DATA = [
   keywords: "nature oxygen survival humans"
 },
 {
+  id: 397,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3586,6 +4002,7 @@ const QUIZ_DATA = [
   keywords: "nature india national animal tiger"
 },
 {
+  id: 398,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3595,6 +4012,7 @@ const QUIZ_DATA = [
   keywords: "nature india national bird peacock"
 },
 {
+  id: 399,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3604,6 +4022,7 @@ const QUIZ_DATA = [
   keywords: "nature river nile largest"
 },
 {
+  id: 400,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3613,6 +4032,7 @@ const QUIZ_DATA = [
   keywords: "nature continent asia largest"
 },
 {
+  id: 401,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3622,6 +4042,7 @@ const QUIZ_DATA = [
   keywords: "nature continent australia smallest"
 },
 {
+  id: 402,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3631,6 +4052,7 @@ const QUIZ_DATA = [
   keywords: "nature island greenland largest"
 },
 {
+  id: 403,  
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3640,6 +4062,7 @@ const QUIZ_DATA = [
   keywords: "nature ocean mariana trench deepest"
 },
 {
+  id: 404,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3649,6 +4072,7 @@ const QUIZ_DATA = [
   keywords: "nature volcano mauna loa largest"
 },
 {
+  id: 405,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3658,6 +4082,7 @@ const QUIZ_DATA = [
   keywords: "nature coral reef great barrier largest"
 },
 {
+  id: 406,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3667,6 +4092,7 @@ const QUIZ_DATA = [
   keywords: "nature mammal elephant largest land"
 },
 {
+  id: 407,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3676,6 +4102,7 @@ const QUIZ_DATA = [
   keywords: "nature aquatic animal sailfish fastest"
 },
 {
+  id: 408,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3685,6 +4112,7 @@ const QUIZ_DATA = [
   keywords: "nature bird ostrich largest"
 },
 {
+  id: 409,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3694,6 +4122,7 @@ const QUIZ_DATA = [
   keywords: "nature india national tree banyan"
 },
 {
+  id: 410,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3703,6 +4132,7 @@ const QUIZ_DATA = [
   keywords: "nature india national flower lotus"
 },
 {
+  id: 411,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3712,6 +4142,7 @@ const QUIZ_DATA = [
   keywords: "nature glacier lambert largest"
 },
 {
+  id: 412,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3721,6 +4152,7 @@ const QUIZ_DATA = [
   keywords: "nature waterfall angel falls largest"
 },
 {
+  id: 413,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3730,6 +4162,7 @@ const QUIZ_DATA = [
   keywords: "nature lake caspian largest"
 },
 {
+  id: 414,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3739,6 +4172,7 @@ const QUIZ_DATA = [
   keywords: "nature ocean arctic smallest"
 },
 {
+  id: 415,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3748,6 +4182,7 @@ const QUIZ_DATA = [
   keywords: "nature animal camel desert ship"
 },
 {
+  id: 416,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3757,6 +4192,7 @@ const QUIZ_DATA = [
   keywords: "nature bird dove peace symbol"
 },
 {
+  id: 417,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3766,6 +4202,7 @@ const QUIZ_DATA = [
   keywords: "nature animal polar bear largest carnivore"
 },
 {
+  id: 418,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3775,6 +4212,7 @@ const QUIZ_DATA = [
   keywords: "nature india gir national park lions"
 },
 {
+  id: 419,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3784,6 +4222,7 @@ const QUIZ_DATA = [
   keywords: "nature biome taiga largest land"
 },
 {
+  id: 420,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3793,6 +4232,7 @@ const QUIZ_DATA = [
   keywords: "nature india national aquatic animal dolphin"
 },
 {
+  id: 421,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3802,6 +4242,7 @@ const QUIZ_DATA = [
   keywords: "nature reptile crocodile largest"
 },
 {
+  id: 422,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3811,6 +4252,7 @@ const QUIZ_DATA = [
   keywords: "nature marine mammal dolphin fastest"
 },
 {
+  id: 423,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3820,6 +4262,7 @@ const QUIZ_DATA = [
   keywords: "nature marine whale shark largest species"
 },
 {
+  id: 424,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3829,6 +4272,7 @@ const QUIZ_DATA = [
   keywords: "nature amphibian salamander largest"
 },
 {
+  id: 425,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3838,6 +4282,7 @@ const QUIZ_DATA = [
   keywords: "nature japan national flower cherry blossom"
 },
 {
+  id: 426,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3847,6 +4292,7 @@ const QUIZ_DATA = [
   keywords: "nature bird ostrich largest living"
 },
 {
+  id: 427,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3856,6 +4302,7 @@ const QUIZ_DATA = [
   keywords: "nature rodent capybara largest"
 },
 {
+  id: 428,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3865,6 +4312,7 @@ const QUIZ_DATA = [
   keywords: "nature bird emperor penguin largest species"
 },
 {
+  id: 429,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3874,6 +4322,7 @@ const QUIZ_DATA = [
   keywords: "nature marsupial kangaroo largest"
 },
 {
+  id: 430,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3883,6 +4332,7 @@ const QUIZ_DATA = [
   keywords: "nature primate gorilla largest"
 },
 {
+  id: 431,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3892,6 +4342,7 @@ const QUIZ_DATA = [
   keywords: "nature insect butterfly queen alexandra largest"
 },
 {
+  id: 432,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3901,6 +4352,7 @@ const QUIZ_DATA = [
   keywords: "nature rainforest amazon largest"
 },
 {
+  id: 433,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3910,6 +4362,7 @@ const QUIZ_DATA = [
   keywords: "nature river amazon largest volume"
 },
 {
+  id: 434,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3919,6 +4372,7 @@ const QUIZ_DATA = [
   keywords: "nature waterfall angel falls tallest"
 },
 {
+  id: 435,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3928,6 +4382,7 @@ const QUIZ_DATA = [
   keywords: "nature desert sahara largest hot"
 },
 {
+  id: 436,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3937,6 +4392,7 @@ const QUIZ_DATA = [
   keywords: "nature continent antarctica coldest"
 },
 {
+  id: 437,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3946,6 +4402,7 @@ const QUIZ_DATA = [
   keywords: "nature reptile crocodile largest living"
 },
 {
+  id: 438,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3955,6 +4412,7 @@ const QUIZ_DATA = [
   keywords: "nature animal polar bear largest species"
 },
 {
+  id: 439,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3964,6 +4422,7 @@ const QUIZ_DATA = [
   keywords: "nature animal moose largest deer"
 },
 {
+  id: 440,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3973,6 +4432,7 @@ const QUIZ_DATA = [
   keywords: "nature animal tiger largest cat"
 },
 {
+  id: 441,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3982,6 +4442,7 @@ const QUIZ_DATA = [
   keywords: "nature animal great dane largest dog"
 },
 {
+  id: 442,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -3991,6 +4452,7 @@ const QUIZ_DATA = [
   keywords: "nature fish whale shark largest"
 },
 {
+  id: 443,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4000,6 +4462,7 @@ const QUIZ_DATA = [
   keywords: "nature reptile leatherback turtle largest"
 },
 {
+  id: 444,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4009,6 +4472,7 @@ const QUIZ_DATA = [
   keywords: "nature amphibian goliath frog largest"
 },
 {
+  id: 445,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4018,6 +4482,7 @@ const QUIZ_DATA = [
   keywords: "nature insect butterfly queen alexandra largest"
 },
 {
+  id: 446,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4027,6 +4492,7 @@ const QUIZ_DATA = [
   keywords: "nature insect bee wallace giant largest"
 },
 {
+  id: 447,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4036,6 +4502,7 @@ const QUIZ_DATA = [
   keywords: "nature insect ant giant amazon largest"
 },
 {
+  id: 448,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4045,6 +4512,7 @@ const QUIZ_DATA = [
   keywords: "nature reptile anaconda largest snake"
 },
 {
+  id: 449,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4054,6 +4522,7 @@ const QUIZ_DATA = [
   keywords: "nature reptile komodo dragon largest lizard"
 },
 {
+  id: 450,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4063,6 +4532,7 @@ const QUIZ_DATA = [
   keywords: "nature bird emperor penguin largest"
 },
 {
+  id: 451,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4072,6 +4542,7 @@ const QUIZ_DATA = [
   keywords: "nature bird harpy eagle largest"
 },
 {
+  id: 452,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4081,6 +4552,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon earthquake richter scale"
 },
 {
+  id: 453,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4090,6 +4562,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon wind speed beaufort scale"
 },
 {
+  id: 454,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4099,6 +4572,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon cyclone saffir simpson scale"
 },
 {
+  id: 455,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4108,6 +4582,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon tornado fujita scale"
 },
 {
+  id: 456,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4117,6 +4592,7 @@ const QUIZ_DATA = [
   keywords: "nature forest sundarbans mangrove largest"
 },
 {
+  id: 457,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4126,6 +4602,7 @@ const QUIZ_DATA = [
   keywords: "nature national park northeast greenland largest"
 },
 {
+  id: 458,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4135,6 +4612,7 @@ const QUIZ_DATA = [
   keywords: "nature canyon yarlung tsangpo largest"
 },
 {
+  id: 459,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4144,6 +4622,7 @@ const QUIZ_DATA = [
   keywords: "nature plateau tibetan largest"
 },
 {
+  id: 460,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4153,6 +4632,7 @@ const QUIZ_DATA = [
   keywords: "nature bay bay of bengal largest"
 },
 {
+  id: 461,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4162,6 +4642,7 @@ const QUIZ_DATA = [
   keywords: "nature gulf gulf of mexico largest"
 },
 {
+  id: 462,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4171,6 +4652,7 @@ const QUIZ_DATA = [
   keywords: "nature delta ganga brahmaputra largest"
 },
 {
+  id: 463,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4180,6 +4662,7 @@ const QUIZ_DATA = [
   keywords: "nature lake baikal freshwater largest volume"
 },
 {
+  id: 464,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4189,6 +4672,7 @@ const QUIZ_DATA = [
   keywords: "nature lake caspian saltwater largest"
 },
 {
+  id: 465,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4198,6 +4682,7 @@ const QUIZ_DATA = [
   keywords: "nature hot spring frying pan largest"
 },
 {
+  id: 466,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4207,6 +4692,7 @@ const QUIZ_DATA = [
   keywords: "nature geyser steamboat largest"
 },
 {
+  id: 467,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4216,6 +4702,7 @@ const QUIZ_DATA = [
   keywords: "nature coral reef great barrier largest"
 },
 {
+  id: 468,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4225,6 +4712,7 @@ const QUIZ_DATA = [
   keywords: "nature glacier siachen himalayas largest"
 },
 {
+  id: 469,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4234,6 +4722,7 @@ const QUIZ_DATA = [
   keywords: "nature volcano mauna loa largest"
 },
 {
+  id: 470,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4243,6 +4732,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem ocean largest"
 },
 {
+  id: 471,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4252,6 +4742,7 @@ const QUIZ_DATA = [
   keywords: "nature organism armillaria fungus largest"
 },
 {
+  id: 472,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4261,6 +4752,7 @@ const QUIZ_DATA = [
   keywords: "nature plant nepenthes rajah largest carnivorous"
 },
 {
+  id: 473,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4270,6 +4762,7 @@ const QUIZ_DATA = [
   keywords: "nature plant giant bamboo largest species"
 },
 {
+  id: 474,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4279,6 +4772,7 @@ const QUIZ_DATA = [
   keywords: "nature plant quindio wax palm largest"
 },
 {
+  id: 475,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4288,6 +4782,7 @@ const QUIZ_DATA = [
   keywords: "nature disaster earthquake richter scale"
 },
 {
+  id: 476,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4297,6 +4792,7 @@ const QUIZ_DATA = [
   keywords: "nature disaster cyclone saffir simpson scale"
 },
 {
+  id: 477,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4306,6 +4802,7 @@ const QUIZ_DATA = [
   keywords: "nature disaster tornado fujita scale"
 },
 {
+  id: 478,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4315,6 +4812,7 @@ const QUIZ_DATA = [
   keywords: "nature disaster volcano explosivity index"
 },
 {
+  id: 479,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4324,6 +4822,7 @@ const QUIZ_DATA = [
   keywords: "nature disaster drought severity index"
 },
 {
+  id: 480,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4333,6 +4832,7 @@ const QUIZ_DATA = [
   keywords: "nature tree general sherman largest volume"
 },
 {
+  id: 481,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4342,6 +4842,7 @@ const QUIZ_DATA = [
   keywords: "nature tree hyperion tallest living"
 },
 {
+  id: 482,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4351,6 +4852,7 @@ const QUIZ_DATA = [
   keywords: "nature bird ostrich largest egg"
 },
 {
+  id: 483,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4360,6 +4862,7 @@ const QUIZ_DATA = [
   keywords: "nature marsupial kangaroo largest"
 },
 {
+  id: 484,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4369,6 +4872,7 @@ const QUIZ_DATA = [
   keywords: "nature primate gorilla largest"
 },
 {
+  id: 485,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4378,6 +4882,7 @@ const QUIZ_DATA = [
   keywords: "nature rodent capybara largest"
 },
 {
+  id: 486,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4387,6 +4892,7 @@ const QUIZ_DATA = [
   keywords: "nature insect giant weta largest"
 },
 {
+  id: 487,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4396,6 +4902,7 @@ const QUIZ_DATA = [
   keywords: "nature amphibian salamander largest"
 },
 {
+  id: 488,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4405,6 +4912,7 @@ const QUIZ_DATA = [
   keywords: "nature plant nepenthes rajah carnivorous largest"
 },
 {
+  id: 489,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4414,6 +4922,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon rainbow refraction light"
 },
 {
+  id: 490,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4423,6 +4932,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon aurora solar wind"
 },
 {
+  id: 491,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4432,6 +4942,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon tides moon gravity"
 },
 {
+  id: 492,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4441,6 +4952,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon earthquake tectonic plates"
 },
 {
+  id: 493,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4450,6 +4962,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon volcano magma eruption"
 },
 {
+  id: 494,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4459,6 +4972,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon tsunami earthquake sea"
 },
 {
+  id: 495,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4468,6 +4982,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon cyclone low pressure"
 },
 {
+  id: 496,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4477,6 +4992,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon flood heavy rainfall"
 },
 {
+  id: 497,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4486,6 +5002,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon drought lack rainfall"
 },
 {
+  id: 498,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4495,6 +5012,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon landslide heavy rain"
 },
 {
+  id: 499,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4504,6 +5022,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon avalanche snow movement"
 },
 {
+  id: 500,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4513,6 +5032,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon lightning electric discharge"
 },
 {
+  id: 501,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4522,6 +5042,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon thunder expansion air"
 },
 {
+  id: 502,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4531,6 +5052,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon eclipse shadow earth moon"
 },
 {
+  id: 503,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4540,6 +5062,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon seasons tilt earth axis"
 },
 {
+  id: 504,  
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4549,6 +5072,7 @@ const QUIZ_DATA = [
   keywords: "nature organism armillaria fungus largest"
 },
 {
+  id: 505,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4558,6 +5082,7 @@ const QUIZ_DATA = [
   keywords: "nature plant bamboo fastest growing"
 },
 {
+  id: 506,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4567,6 +5092,7 @@ const QUIZ_DATA = [
   keywords: "nature animal polar bear largest carnivore"
 },
 {
+  id: 507,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4576,6 +5102,7 @@ const QUIZ_DATA = [
   keywords: "nature animal elephant largest herbivore"
 },
 {
+  id: 508,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4585,6 +5112,7 @@ const QUIZ_DATA = [
   keywords: "nature fish whale shark largest living"
 },
 {
+  id: 509,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4594,6 +5122,7 @@ const QUIZ_DATA = [
   keywords: "nature bird ostrich largest living"
 },
 {
+  id: 510,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4603,6 +5132,7 @@ const QUIZ_DATA = [
   keywords: "nature mammal blue whale largest living"
 },
 {
+  id: 511,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4612,6 +5142,7 @@ const QUIZ_DATA = [
   keywords: "nature reptile crocodile largest living"
 },
 {
+  id: 512,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4621,6 +5152,7 @@ const QUIZ_DATA = [
   keywords: "nature amphibian salamander largest living"
 },
 {
+  id: 513,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4630,6 +5162,7 @@ const QUIZ_DATA = [
   keywords: "nature insect giant weta largest living"
 },
 {
+  id: 514,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4639,6 +5172,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon aurora solar wind"
 },
 {
+  id: 515,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4648,6 +5182,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon tides moon gravity"
 },
 {
+  id: 516,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4657,6 +5192,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon eclipse shadow earth moon"
 },
 {
+  id: 517,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4666,6 +5202,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon seasons tilt earth axis"
 },
 {
+  id: 518,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4675,6 +5212,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon rainbow refraction light"
 },
 {
+  id: 519,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4684,6 +5222,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon lightning electric discharge"
 },
 {
+  id: 520,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4693,6 +5232,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon thunder expansion air"
 },
 {
+  id: 521,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4702,6 +5242,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon avalanche snow movement"
 },
 {
+  id: 522,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4711,6 +5252,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon landslide heavy rain"
 },
 {
+  id: 523,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4720,6 +5262,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon drought lack rainfall"
 },
 {
+  id: 524,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4729,6 +5272,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon flood heavy rainfall"
 },
 {
+  id: 525,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4738,6 +5282,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon cyclone low pressure"
 },
 {
+  id: 526,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4747,6 +5292,7 @@ const QUIZ_DATA = [
   keywords: "nature phenomenon tsunami earthquake sea"
 },
 {
+  id: 527,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4756,6 +5302,7 @@ const QUIZ_DATA = [
   keywords: "nature climate global warming carbon dioxide"
 },
 {
+  id: 528,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4765,6 +5312,7 @@ const QUIZ_DATA = [
   keywords: "nature atmosphere ozone layer UV protection"
 },
 {
+  id: 529,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4774,6 +5322,7 @@ const QUIZ_DATA = [
   keywords: "nature renewable solar energy sunlight"
 },
 {
+  id: 530,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4783,6 +5332,7 @@ const QUIZ_DATA = [
   keywords: "nature renewable wind energy air movement"
 },
 {
+  id: 531,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4792,6 +5342,7 @@ const QUIZ_DATA = [
   keywords: "nature renewable hydropower water movement"
 },
 {
+  id: 532,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4801,6 +5352,7 @@ const QUIZ_DATA = [
   keywords: "nature renewable geothermal earth heat"
 },
 {
+  id: 533,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4810,6 +5362,7 @@ const QUIZ_DATA = [
   keywords: "nature india national aquatic animal dolphin"
 },
 {
+  id: 534,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4819,6 +5372,7 @@ const QUIZ_DATA = [
   keywords: "nature india national heritage animal elephant"
 },
 {
+  id: 535,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4828,6 +5382,7 @@ const QUIZ_DATA = [
   keywords: "nature bird dove peace symbol"
 },
 {
+  id: 536,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4837,6 +5392,7 @@ const QUIZ_DATA = [
   keywords: "nature animal elephant endangered ivory poaching"
 },
 {
+  id: 537,  
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4846,6 +5402,7 @@ const QUIZ_DATA = [
   keywords: "nature animal rhino endangered horn poaching"
 },
 {
+  id: 538,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4855,6 +5412,7 @@ const QUIZ_DATA = [
   keywords: "nature animal tiger endangered skin poaching"
 },
 {
+  id: 539,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4864,6 +5422,7 @@ const QUIZ_DATA = [
   keywords: "nature climate paris agreement greenhouse gases"
 },
 {
+  id: 540,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4873,6 +5432,7 @@ const QUIZ_DATA = [
   keywords: "nature climate montreal protocol ozone protection"
 },
 {
+  id: 541,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4882,6 +5442,7 @@ const QUIZ_DATA = [
   keywords: "nature climate kyoto protocol carbon emissions"
 },
 {
+  id: 542,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4891,6 +5452,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem rainforest lungs earth"
 },
 {
+  id: 543,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4900,6 +5462,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem ocean covers earth surface"
 },
 {
+  id: 544,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4909,6 +5472,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem rainforest biodiversity largest"
 },
 {
+  id: 545,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4918,6 +5482,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem desert cactus plants"
 },
 {
+  id: 546,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4927,6 +5492,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem arctic polar bears"
 },
 {
+  id: 547,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4936,6 +5502,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem grassland kangaroos"
 },
 {
+  id: 548,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4945,6 +5512,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem ocean coral reefs"
 },
 {
+  id: 549,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4954,6 +5522,7 @@ const QUIZ_DATA = [
   keywords: "nature ecosystem antarctica penguins"
 },
 {
+  id: 550,
   category: "kids",
   type: "quiz",
   quizType: "nature quiz",
@@ -4961,5 +5530,1403 @@ const QUIZ_DATA = [
   options: ["Rainforest", "Desert", "Ocean", "Savanna"],
   correctAnswer: "Savanna",
   keywords: "nature ecosystem savanna lions"
+},
+// 11th and 12th class enteries quiz qustions
+{
+  id: 551,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who was the first President of the Indian National Congress?",
+  options: ["Mahatma Gandhi", "W.C. Bonnerjee", "Jawaharlal Nehru", "Dadabhai Naoroji"],
+  correctAnswer: "W.C. Bonnerjee",
+  keywords: "history indian national congress first president",
+  hint: "He presided over the first session in 1885."
+},
+{
+  id: 552,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Fundamental Rights?",
+  options: ["Article 12-35", "Article 370", "Article 51", "Article 356"],
+  correctAnswer: "Article 12-35",
+  keywords: "political science indian constitution fundamental rights",
+  hint: "It covers six categories of rights including equality and freedom."
+},
+{
+  id: 553,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th geography quiz",
+  question: "Which is the largest plateau in the world?",
+  options: ["Deccan Plateau", "Tibetan Plateau", "Colorado Plateau", "Patagonian Plateau"],
+  correctAnswer: "Tibetan Plateau",
+  keywords: "geography tibetan plateau largest world",
+  hint: "It is often called the 'Roof of the World'."
+},
+{
+  id: 554,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th economics quiz",
+  question: "Who is known as the father of Economics?",
+  options: ["Karl Marx", "Adam Smith", "John Keynes", "Milton Friedman"],
+  correctAnswer: "Adam Smith",
+  keywords: "economics adam smith father of economics",
+  hint: "He wrote 'The Wealth of Nations' in 1776."
+},
+{
+  id: 555,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th sociology quiz",
+  question: "Who is considered the father of Sociology?",
+  options: ["Auguste Comte", "Max Weber", "Karl Marx", "Émile Durkheim"],
+  correctAnswer: "Auguste Comte",
+  keywords: "sociology auguste comte father",
+  hint: "He coined the term 'Sociology'."
+},
+{
+  id: 556,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th psychology quiz",
+  question: "Who developed the theory of psychoanalysis?",
+  options: ["Sigmund Freud", "Carl Jung", "B.F. Skinner", "Jean Piaget"],
+  correctAnswer: "Sigmund Freud",
+  keywords: "psychology sigmund freud psychoanalysis",
+  hint: "He emphasized the role of unconscious mind."
+},
+{
+  id: 557,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th philosophy quiz",
+  question: "Who is known as the father of Western Philosophy?",
+  options: ["Plato", "Aristotle", "Socrates", "Descartes"],
+  correctAnswer: "Socrates",
+  keywords: "philosophy socrates father western philosophy",
+  hint: "He is famous for the Socratic method of questioning."
+},
+{
+  id: 558,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th english literature quiz",
+  question: "Who wrote the play 'Macbeth'?",
+  options: ["William Wordsworth", "William Shakespeare", "John Milton", "Charles Dickens"],
+  correctAnswer: "William Shakespeare",
+  keywords: "english literature shakespeare macbeth",
+  hint: "He is also known as the Bard of Avon."
+},
+{
+  id: 559,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Fundamental Rights?",
+  options: ["Article 12-35", "Article 370", "Article 51", "Article 356"],
+  correctAnswer: "Article 12-35",
+  keywords: "political science indian constitution fundamental rights",
+  hint: "It covers six categories of rights including equality and freedom."
+},
+{
+  id: 560,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who was the founder of the Maurya Empire?",
+  options: ["Ashoka", "Chandragupta Maurya", "Bindusara", "Bimbisara"],
+  correctAnswer: "Chandragupta Maurya",
+  keywords: "history maurya empire founder",
+  hint: "He was guided by Chanakya in establishing the empire."
+},
+{
+  id: 561,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th geography quiz",
+  question: "Which is the largest plateau in the world?",
+  options: ["Deccan Plateau", "Tibetan Plateau", "Colorado Plateau", "Patagonian Plateau"],
+  correctAnswer: "Tibetan Plateau",
+  keywords: "geography tibetan plateau largest",
+  hint: "It is often called the 'Roof of the World'."
+},
+{
+  id: 562,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th economics quiz",
+  question: "Who is known as the father of Economics?",
+  options: ["Karl Marx", "Adam Smith", "John Keynes", "Milton Friedman"],
+  correctAnswer: "Adam Smith",
+  keywords: "economics adam smith father",
+  hint: "He wrote 'The Wealth of Nations' in 1776."
+},
+{ 
+  id: 563,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th sociology quiz",
+  question: "Who coined the term 'Sociology'?",
+  options: ["Karl Marx", "Max Weber", "Auguste Comte", "Émile Durkheim"],
+  correctAnswer: "Auguste Comte",
+  keywords: "sociology auguste comte coined term",
+  hint: "He is also called the father of Sociology."
+},
+{
+  id: 564,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th psychology quiz",
+  question: "Who developed the theory of psychoanalysis?",
+  options: ["Sigmund Freud", "Carl Jung", "B.F. Skinner", "Jean Piaget"],
+  correctAnswer: "Sigmund Freud",
+  keywords: "psychology sigmund freud psychoanalysis",
+  hint: "He emphasized the role of unconscious mind."
+},
+{
+  id: 565,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th philosophy quiz",
+  question: "Who is known as the father of Western Philosophy?",
+  options: ["Plato", "Aristotle", "Socrates", "Descartes"],
+  correctAnswer: "Socrates",
+  keywords: "philosophy socrates father western philosophy",
+  hint: "He is famous for the Socratic method of questioning."
+},
+{
+  id: 566,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th english literature quiz",
+  question: "Who wrote the play 'Macbeth'?",
+  options: ["William Wordsworth", "William Shakespeare", "John Milton", "Charles Dickens"],
+  correctAnswer: "William Shakespeare",
+  keywords: "english literature shakespeare macbeth",
+  hint: "He is also known as the Bard of Avon."
+},
+{
+  id: 567,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Fundamental Rights?",
+  options: ["Article 12-35", "Article 370", "Article 51", "Article 356"],
+  correctAnswer: "Article 12-35",
+  keywords: "political science indian constitution fundamental rights",
+  hint: "It covers six categories of rights including equality and freedom."
+},
+{
+  id: 568,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who is regarded as the father of Political Science?",
+  options: ["Plato", "Aristotle", "Socrates", "Machiavelli"],
+  correctAnswer: "Aristotle",
+  keywords: "political science aristotle father",
+  hint: "He wrote 'Politics' and studied constitutions of many states."
+},
+{
+  id: 569,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which part of the Indian Constitution is called the 'Soul of the Constitution'?",
+  options: ["Fundamental Rights", "Directive Principles", "Preamble", "Fundamental Duties"],
+  correctAnswer: "Preamble",
+  keywords: "political science indian constitution preamble soul",
+  hint: "It begins with 'We the People of India...'"
+},
+{
+  id: 570,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right to Equality?",
+  options: ["Article 14-18", "Article 19", "Article 21", "Article 32"],
+  correctAnswer: "Article 14-18",
+  keywords: "political science indian constitution right to equality",
+  hint: "It prohibits discrimination on grounds of religion, race, caste, sex or place of birth."
+},
+{
+  id: 571,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution guarantees the Right to Freedom?",
+  options: ["Article 19", "Article 21", "Article 32", "Article 51"],
+  correctAnswer: "Article 19",
+  keywords: "political science indian constitution right to freedom",
+  hint: "It includes freedom of speech, expression, assembly, association, movement, residence and profession."
+},
+{
+  id: 572,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution guarantees the Right to Constitutional Remedies?",
+  options: ["Article 32", "Article 21", "Article 19", "Article 51"],
+  correctAnswer: "Article 32",
+  keywords: "political science indian constitution right to constitutional remedies",
+  hint: "Dr. B.R. Ambedkar called it the 'Heart and Soul of the Constitution'."
+},
+{
+  id: 573,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which Directive Principle of State Policy promotes equal justice and free legal aid?",
+  options: ["Article 39A", "Article 40", "Article 41", "Article 42"],
+  correctAnswer: "Article 39A",
+  keywords: "political science indian constitution directive principle article 39A",
+  hint: "It ensures that justice is not denied to any citizen due to economic reasons."
+},
+{
+  id: 574,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right to Life and Personal Liberty?",
+  options: ["Article 21", "Article 19", "Article 32", "Article 51"],
+  correctAnswer: "Article 21",
+  keywords: "political science indian constitution right to life",
+  hint: "It states 'No person shall be deprived of his life or personal liberty except according to procedure established by law.'"
+},
+{
+  id: 575,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Emergency provisions?",
+  options: ["Article 352-360", "Article 12-35", "Article 51", "Article 370"],
+  correctAnswer: "Article 352-360",
+  keywords: "political science indian constitution emergency provisions",
+  hint: "It includes National Emergency, State Emergency and Financial Emergency."
+},
+{
+  id: 576,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Fundamental Duties?",
+  options: ["Article 51A", "Article 32", "Article 19", "Article 21"],
+  correctAnswer: "Article 51A",
+  keywords: "political science indian constitution fundamental duties",
+  hint: "It was added by the 42nd Amendment in 1976."
+},
+{
+  id: 577,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who is known as the architect of the Indian Constitution?",
+  options: ["Jawaharlal Nehru", "B.R. Ambedkar", "Mahatma Gandhi", "Sardar Patel"],
+  correctAnswer: "B.R. Ambedkar",
+  keywords: "political science indian constitution architect br ambedkar",
+  hint: "He was the Chairman of the Drafting Committee."
+},
+{
+  id: 578,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right to Education?",
+  options: ["Article 21A", "Article 19", "Article 32", "Article 51"],
+  correctAnswer: "Article 21A",
+  keywords: "political science indian constitution right to education",
+  hint: "It was added by the 86th Amendment Act in 2002."
+},
+{
+  id: 579,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the abolition of untouchability?",
+  options: ["Article 17", "Article 19", "Article 21", "Article 32"],
+  correctAnswer: "Article 17",
+  keywords: "political science indian constitution abolition of untouchability",
+  hint: "It declares untouchability as an offence punishable by law."
+},
+{
+  id: 580,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right against Exploitation?",
+  options: ["Article 23-24", "Article 19", "Article 21", "Article 32"],
+  correctAnswer: "Article 23-24",
+  keywords: "political science indian constitution right against exploitation",
+  hint: "It prohibits human trafficking and child labour."
+},
+{
+  id: 581,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right to Freedom of Religion?",
+  options: ["Article 25-28", "Article 19", "Article 21", "Article 32"],
+  correctAnswer: "Article 25-28",
+  keywords: "political science indian constitution right to freedom of religion",
+  hint: "It ensures secularism and religious freedom in India."
+},
+{
+  id: 582,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right to Property?",
+  options: ["Article 300A", "Article 19", "Article 21", "Article 32"],
+  correctAnswer: "Article 300A",
+  keywords: "political science indian constitution right to property",
+  hint: "It was removed from Fundamental Rights by the 44th Amendment Act."
+},
+{
+  id: 583,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right to Vote?",
+  options: ["Article 326", "Article 19", "Article 21", "Article 32"],
+  correctAnswer: "Article 326",
+  keywords: "political science indian constitution right to vote",
+  hint: "It provides for universal adult suffrage in India."
+},
+{
+  id: 584,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Right to Information?",
+  options: ["RTI Act 2005", "Article 19(1)(a)", "Article 32", "Article 51"],
+  correctAnswer: "Article 19(1)(a)",
+  keywords: "political science indian constitution right to information",
+  hint: "It is derived from the freedom of speech and expression."
+},
+{
+  id: 585,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Directive Principles of State Policy?",
+  options: ["Article 36-51", "Article 12-35", "Article 19", "Article 32"],
+  correctAnswer: "Article 36-51",
+  keywords: "political science indian constitution directive principles",
+  hint: "They are guidelines for governance but not enforceable in court."
+},
+{
+  id: 586,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the amendment procedure?",
+  options: ["Article 368", "Article 370", "Article 356", "Article 51"],
+  correctAnswer: "Article 368",
+  keywords: "political science indian constitution amendment procedure",
+  hint: "It provides for three types of amendments: simple majority, special majority, and ratification by states."
+},
+{
+  id: 587,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the President of India?",
+  options: ["Article 52", "Article 74", "Article 76", "Article 153"],
+  correctAnswer: "Article 52",
+  keywords: "political science indian constitution president india",
+  hint: "It states that there shall be a President of India."
+},
+{
+  id: 588,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Vice-President of India?",
+  options: ["Article 63", "Article 52", "Article 74", "Article 76"],
+  correctAnswer: "Article 63",
+  keywords: "political science indian constitution vice president india",
+  hint: "It states that there shall be a Vice-President of India."
+},
+{
+  id: 589,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Parliament of India?",
+  options: ["Article 79", "Article 52", "Article 63", "Article 74"],
+  correctAnswer: "Article 79",
+  keywords: "political science indian constitution parliament india",
+  hint: "It states that there shall be a Parliament consisting of the President and two Houses."
+},
+{
+  id: 590,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Rajya Sabha?",
+  options: ["Article 80", "Article 81", "Article 79", "Article 63"],
+  correctAnswer: "Article 80",
+  keywords: "political science indian constitution rajya sabha",
+  hint: "It defines the composition of the Council of States."
+},
+{
+  id: 591,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Lok Sabha?",
+  options: ["Article 81", "Article 80", "Article 79", "Article 63"],
+  correctAnswer: "Article 81",
+  keywords: "political science indian constitution lok sabha",
+  hint: "It defines the composition of the House of the People."
+},
+{
+  id: 592,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Territories?",
+  options: ["Article 239", "Article 243", "Article 356", "Article 352"],
+  correctAnswer: "Article 239",
+  keywords: "political science indian constitution union territories",
+  hint: "It provides for administration of Union Territories by the President."
+},
+{
+  id: 593,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Comptroller and Auditor General?",
+  options: ["Article 148", "Article 280", "Article 315", "Article 324"],
+  correctAnswer: "Article 148",
+  keywords: "political science indian constitution CAG",
+  hint: "He audits the accounts of the Union and the States."
+},
+{
+  id: 594,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union List?",
+  options: ["Article 246", "Article 248", "Article 249", "Article 250"],
+  correctAnswer: "Article 246",
+  keywords: "political science indian constitution union list",
+  hint: "It defines the distribution of legislative powers between Union and States."
+},
+{
+  id: 595,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the State List?",
+  options: ["Article 246", "Article 248", "Article 249", "Article 250"],
+  correctAnswer: "Article 246",
+  keywords: "political science indian constitution state list",
+  hint: "It gives states exclusive power to legislate on certain subjects."
+},
+{
+  id: 596,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Concurrent List?",
+  options: ["Article 246", "Article 248", "Article 249", "Article 250"],
+  correctAnswer: "Article 246",
+  keywords: "political science indian constitution concurrent list",
+  hint: "Both Union and States can legislate on these subjects."
+},
+{
+  id: 597,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with residuary powers?",
+  options: ["Article 248", "Article 246", "Article 249", "Article 250"],
+  correctAnswer: "Article 248",
+  keywords: "political science indian constitution residuary powers",
+  hint: "It gives Parliament exclusive power to make laws on matters not in Union, State or Concurrent List."
+},
+{
+  id: 598,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the official language of India?",
+  options: ["Article 343", "Article 344", "Article 345", "Article 346"],
+  correctAnswer: "Article 343",
+  keywords: "political science indian constitution official language",
+  hint: "It declares Hindi in Devanagari script as the official language."
+},
+{
+  id: 599,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the emergency provisions related to financial stability?",
+  options: ["Article 360", "Article 356", "Article 352", "Article 370"],
+  correctAnswer: "Article 360",
+  keywords: "political science indian constitution financial emergency",
+  hint: "It empowers the President to proclaim financial emergency."
+},
+{
+  id: 600,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the amendment of the Constitution?",
+  options: ["Article 368", "Article 370", "Article 356", "Article 352"],
+  correctAnswer: "Article 368",
+  keywords: "political science indian constitution amendment",
+  hint: "It provides the procedure for amending the Constitution."
+},
+{
+  id: 601,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the citizenship provisions?",
+  options: ["Article 5-11", "Article 12-35", "Article 36-51", "Article 52"],
+  correctAnswer: "Article 5-11",
+  keywords: "political science indian constitution citizenship provisions",
+  hint: "It defines who are citizens of India at the commencement of the Constitution."
+},
+{
+  id: 602,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Fundamental Duties?",
+  options: ["Article 51A", "Article 32", "Article 19", "Article 21"],
+  correctAnswer: "Article 51A",
+  keywords: "political science indian constitution fundamental duties",
+  hint: "It was added by the 42nd Amendment Act in 1976."
+},
+{
+  id: 603,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Directive Principles of State Policy?",
+  options: ["Article 36-51", "Article 12-35", "Article 19", "Article 32"],
+  correctAnswer: "Article 36-51",
+  keywords: "political science indian constitution directive principles",
+  hint: "They are guidelines for governance but not enforceable in court."
+},
+{
+  id: 604,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Council of Ministers?",
+  options: ["Article 74", "Article 76", "Article 153", "Article 280"],
+  correctAnswer: "Article 74",
+  keywords: "political science indian constitution union council of ministers",
+  hint: "It states that there shall be a Council of Ministers headed by the Prime Minister."
+},
+{
+  id: 605,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first President of the Constituent Assembly of India?",
+  options: ["Rajendra Prasad", "Jawaharlal Nehru", "B.R. Ambedkar", "Sardar Patel"],
+  correctAnswer: "Rajendra Prasad",
+  keywords: "political science constituent assembly first president",
+  hint: "He later became the first President of India."
+},
+{
+  id: 606,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the President’s Rule?",
+  options: ["Article 356", "Article 352", "Article 360", "Article 370"],
+  correctAnswer: "Article 356",
+  keywords: "political science indian constitution president rule",
+  hint: "It allows the Centre to take control of a state in case of failure of constitutional machinery."
+},
+{
+  id: 607,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Financial Emergency?",
+  options: ["Article 360", "Article 356", "Article 352", "Article 370"],
+  correctAnswer: "Article 360",
+  keywords: "political science indian constitution financial emergency",
+  hint: "It has never been used in India till date."
+},
+{
+  id: 608,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with National Emergency?",
+  options: ["Article 352", "Article 356", "Article 360", "Article 370"],
+  correctAnswer: "Article 352",
+  keywords: "political science indian constitution national emergency",
+  hint: "It can be declared in case of war, external aggression or armed rebellion."
+},
+{
+  id: 609,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution gave special status to Jammu & Kashmir?",
+  options: ["Article 370", "Article 356", "Article 352", "Article 360"],
+  correctAnswer: "Article 370",
+  keywords: "political science indian constitution jammu kashmir special status",
+  hint: "It was abrogated in 2019."
+},
+{
+  id: 610,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first Prime Minister of India?",
+  options: ["Jawaharlal Nehru", "Rajendra Prasad", "Sardar Patel", "Indira Gandhi"],
+  correctAnswer: "Jawaharlal Nehru",
+  keywords: "political science india first prime minister",
+  hint: "He served from 1947 to 1964."
+},
+{
+  id: 611,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Supreme Court?",
+  options: ["Article 124-147", "Article 356", "Article 352", "Article 370"],
+  correctAnswer: "Article 124-147",
+  keywords: "political science indian constitution supreme court",
+  hint: "It defines the composition, powers and jurisdiction of the Supreme Court."
+},
+{
+  id: 612,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the High Courts?",
+  options: ["Article 214-231", "Article 124-147", "Article 356", "Article 352"],
+  correctAnswer: "Article 214-231",
+  keywords: "political science indian constitution high courts",
+  hint: "It defines the composition and powers of High Courts in states."
+},
+{
+  id: 613,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Panchayati Raj?",
+  options: ["Article 243", "Article 356", "Article 352", "Article 370"],
+  correctAnswer: "Article 243",
+  keywords: "political science indian constitution panchayati raj",
+  hint: "It was added by the 73rd Amendment Act in 1992."
+},
+{
+  id: 614,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Municipalities?",
+  options: ["Article 243P-243ZG", "Article 243", "Article 356", "Article 352"],
+  correctAnswer: "Article 243P-243ZG",
+  keywords: "political science indian constitution municipalities",
+  hint: "It was added by the 74th Amendment Act in 1992."
+},
+{
+  id: 615,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first Speaker of the Lok Sabha?",
+  options: ["G.V. Mavalankar", "Balram Jakhar", "Somnath Chatterjee", "Meira Kumar"],
+  correctAnswer: "G.V. Mavalankar",
+  keywords: "political science india first lok sabha speaker",
+  hint: "He served from 1952 to 1956."
+},
+{
+  id: 616,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Election Commission?",
+  options: ["Article 324", "Article 356", "Article 352", "Article 370"],
+  correctAnswer: "Article 324",
+  keywords: "political science indian constitution election commission",
+  hint: "It supervises elections to Parliament and State Legislatures."
+},
+{
+  id: 617,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first Chief Election Commissioner of India?",
+  options: ["Sukumar Sen", "T.N. Seshan", "Sunil Arora", "Rajiv Kumar"],
+  correctAnswer: "Sukumar Sen",
+  keywords: "political science india first chief election commissioner",
+  hint: "He conducted the first general elections in 1951-52."
+},
+{
+  id: 618,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Public Service Commission?",
+  options: ["Article 315", "Article 324", "Article 356", "Article 352"],
+  correctAnswer: "Article 315",
+  keywords: "political science indian constitution UPSC",
+  hint: "It conducts examinations for recruitment to the services of the Union."
+},
+{
+  id: 619,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Finance Commission?",
+  options: ["Article 280", "Article 315", "Article 324", "Article 356"],
+  correctAnswer: "Article 280",
+  keywords: "political science indian constitution finance commission",
+  hint: "It is constituted every five years to recommend distribution of taxes."
+},
+{
+  id: 620,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Attorney General of India?",
+  options: ["Article 76", "Article 280", "Article 315", "Article 324"],
+  correctAnswer: "Article 76",
+  keywords: "political science indian constitution attorney general",
+  hint: "He is the highest law officer of India."
+},
+{
+  id: 621,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Governor of a State?",
+  options: ["Article 153", "Article 76", "Article 280", "Article 315"],
+  correctAnswer: "Article 153",
+  keywords: "political science indian constitution governor state",
+  hint: "It states that there shall be a Governor for each state."
+},
+{
+  id: 622,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Prime Minister and Council of Ministers?",
+  options: ["Article 74", "Article 76", "Article 153", "Article 280"],
+  correctAnswer: "Article 74",
+  keywords: "political science indian constitution prime minister council of ministers",
+  hint: "It states that there shall be a Council of Ministers headed by the Prime Minister."
+},
+{
+  id: 623,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first Law Minister of independent India?",
+  options: ["B.R. Ambedkar", "Jawaharlal Nehru", "Sardar Patel", "Rajendra Prasad"],
+  correctAnswer: "B.R. Ambedkar",
+  keywords: "political science india first law minister",
+  hint: "He also chaired the Drafting Committee of the Constitution."
+},
+{
+  id: 624,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Budget?",
+  options: ["Article 112", "Article 110", "Article 111", "Article 113"],
+  correctAnswer: "Article 112",
+  keywords: "political science indian constitution union budget",
+  hint: "It is also called the Annual Financial Statement."
+},
+{
+  id: 625,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with Money Bills?",
+  options: ["Article 110", "Article 112", "Article 111", "Article 113"],
+  correctAnswer: "Article 110",
+  keywords: "political science indian constitution money bill",
+  hint: "It defines what constitutes a Money Bill in Parliament."
+},
+{
+ id: 626,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the President’s assent to Bills?",
+  options: ["Article 111", "Article 110", "Article 112", "Article 113"],
+  correctAnswer: "Article 111",
+  keywords: "political science indian constitution president assent bills",
+  hint: "It states that no Bill becomes law without the President’s approval."
+},
+{
+  id: 627,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the impeachment of the President?",
+  options: ["Article 61", "Article 52", "Article 63", "Article 74"],
+  correctAnswer: "Article 61",
+  keywords: "political science indian constitution impeachment president",
+  hint: "It provides the procedure for removing the President for violation of the Constitution."
+},
+{
+  id: 628,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union List subjects?",
+  options: ["Article 246", "Article 248", "Article 249", "Article 250"],
+  correctAnswer: "Article 246",
+  keywords: "political science indian constitution union list subjects",
+  hint: "It gives Parliament exclusive power to legislate on Union subjects."
+},
+{
+  id: 629,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the State Legislature?",
+  options: ["Article 168", "Article 170", "Article 171", "Article 174"],
+  correctAnswer: "Article 168",
+  keywords: "political science indian constitution state legislature",
+  hint: "It states that every state shall have a Legislature."
+},
+{
+  id: 630,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Council of States?",
+  options: ["Article 80", "Article 81", "Article 79", "Article 63"],
+  correctAnswer: "Article 80",
+  keywords: "political science indian constitution council of states",
+  hint: "It defines the composition of Rajya Sabha."
+},
+{
+  id: 631,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the House of the People?",
+  options: ["Article 81", "Article 80", "Article 79", "Article 63"],
+  correctAnswer: "Article 81",
+  keywords: "political science indian constitution house of people",
+  hint: "It defines the composition of Lok Sabha."
+},
+{
+  id: 632,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Territories?",
+  options: ["Article 239", "Article 243", "Article 356", "Article 352"],
+  correctAnswer: "Article 239",
+  keywords: "political science indian constitution union territories",
+  hint: "It provides for administration of Union Territories by the President."
+},
+{
+  id: 633,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Official Language Commission?",
+  options: ["Article 344", "Article 343", "Article 345", "Article 346"],
+  correctAnswer: "Article 344",
+  keywords: "political science indian constitution official language commission",
+  hint: "It provides for a Commission and Committee of Parliament on official language."
+},
+{
+  id: 634,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Judiciary?",
+  options: ["Article 124", "Article 214", "Article 315", "Article 280"],
+  correctAnswer: "Article 124",
+  keywords: "political science indian constitution union judiciary",
+  hint: "It establishes the Supreme Court of India."
+},
+{
+  id: 635,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the State Judiciary?",
+  options: ["Article 214", "Article 124", "Article 315", "Article 280"],
+  correctAnswer: "Article 214",
+  keywords: "political science indian constitution state judiciary",
+  hint: "It establishes High Courts for each state."
+},
+{
+  id: 636,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Election Commission of India?",
+  options: ["Article 324", "Article 315", "Article 280", "Article 356"],
+  correctAnswer: "Article 324",
+  keywords: "political science indian constitution election commission",
+  hint: "It supervises elections to Parliament and State Legislatures."
+},
+{
+  id: 637,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Finance Commission?",
+  options: ["Article 280", "Article 315", "Article 324", "Article 356"],
+  correctAnswer: "Article 280",
+  keywords: "political science indian constitution finance commission",
+  hint: "It is constituted every five years to recommend distribution of taxes."
+},
+{
+  id: 638,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first Deputy Prime Minister of India?",
+  options: ["Sardar Patel", "Jawaharlal Nehru", "Rajendra Prasad", "B.R. Ambedkar"],
+  correctAnswer: "Sardar Patel",
+  keywords: "political science india first deputy prime minister",
+  hint: "He was also known as the Iron Man of India."
+},
+{
+  id: 639,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Cabinet?",
+  options: ["Article 75", "Article 74", "Article 76", "Article 153"],
+  correctAnswer: "Article 75",
+  keywords: "political science indian constitution union cabinet",
+  hint: "It states that Ministers hold office during the pleasure of the President."
+},
+{
+  id: 640,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Prime Minister?",
+  options: ["Article 74", "Article 75", "Article 76", "Article 153"],
+  correctAnswer: "Article 74",
+  keywords: "political science indian constitution prime minister",
+  hint: "It establishes the Council of Ministers headed by the Prime Minister."
+},
+{
+  id: 641,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Parliament sessions?",
+  options: ["Article 85", "Article 79", "Article 80", "Article 81"],
+  correctAnswer: "Article 85",
+  keywords: "political science indian constitution parliament sessions",
+  hint: "It empowers the President to summon and prorogue Parliament."
+},
+{
+  id: 642,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Speaker of Lok Sabha?",
+  options: ["Article 93", "Article 94", "Article 95", "Article 96"],
+  correctAnswer: "Article 93",
+  keywords: "political science indian constitution speaker lok sabha",
+  hint: "It provides for the election of Speaker and Deputy Speaker."
+},
+{
+  id: 643,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Council of Ministers in states?",
+  options: ["Article 163", "Article 153", "Article 74", "Article 75"],
+  correctAnswer: "Article 163",
+  keywords: "political science indian constitution council of ministers states",
+  hint: "It states that there shall be a Council of Ministers headed by the Chief Minister."
+},
+{
+  id: 644,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Chief Minister?",
+  options: ["Article 164", "Article 163", "Article 153", "Article 75"],
+  correctAnswer: "Article 164",
+  keywords: "political science indian constitution chief minister",
+  hint: "It provides for the appointment of the Chief Minister by the Governor."
+},
+{
+  id: 645,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the State Legislature sessions?",
+  options: ["Article 174", "Article 168", "Article 170", "Article 171"],
+  correctAnswer: "Article 174",
+  keywords: "political science indian constitution state legislature sessions",
+  hint: "It empowers the Governor to summon and prorogue the State Legislature."
+},
+{
+  id: 646,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Advocate General of a State?",
+  options: ["Article 165", "Article 153", "Article 163", "Article 164"],
+  correctAnswer: "Article 165",
+  keywords: "political science indian constitution advocate general state",
+  hint: "He is the highest law officer in a state."
+},
+{
+  id: 647,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the State Public Service Commission?",
+  options: ["Article 315", "Article 316", "Article 317", "Article 318"],
+  correctAnswer: "Article 315",
+  keywords: "political science indian constitution state public service commission",
+  hint: "It establishes Public Service Commissions for the Union and States."
+},
+{
+  id: 648,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Emergency provisions?",
+  options: ["Article 352-360", "Article 356", "Article 370", "Article 368"],
+  correctAnswer: "Article 352-360",
+  keywords: "political science indian constitution emergency provisions",
+  hint: "It includes National, State and Financial Emergencies."
+},
+{
+  id: 649,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first woman Prime Minister of India?",
+  options: ["Indira Gandhi", "Sarojini Naidu", "Pratibha Patil", "Sonia Gandhi"],
+  correctAnswer: "Indira Gandhi",
+  keywords: "political science india first woman prime minister",
+  hint: "She served from 1966 to 1977 and again from 1980 to 1984."
+},
+{
+  id: 650,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first woman President of India?",
+  options: ["Pratibha Patil", "Sarojini Naidu", "Indira Gandhi", "Sonia Gandhi"],
+  correctAnswer: "Pratibha Patil",
+  keywords: "political science india first woman president",
+  hint: "She served from 2007 to 2012."
+},
+{
+  id: 651,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first woman Speaker of Lok Sabha?",
+  options: ["Meira Kumar", "Sarojini Naidu", "Indira Gandhi", "Pratibha Patil"],
+  correctAnswer: "Meira Kumar",
+  keywords: "political science india first woman speaker lok sabha",
+  hint: "She served from 2009 to 2014."
+},
+{
+  id: 652,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first woman Governor of an Indian state?",
+  options: ["Sarojini Naidu", "Pratibha Patil", "Indira Gandhi", "Meira Kumar"],
+  correctAnswer: "Sarojini Naidu",
+  keywords: "political science india first woman governor",
+  hint: "She was appointed Governor of Uttar Pradesh in 1947."
+},
+{
+  id: 653,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first President of India?",
+  options: ["Rajendra Prasad", "Jawaharlal Nehru", "Sardar Patel", "B.R. Ambedkar"],
+  correctAnswer: "Rajendra Prasad",
+  keywords: "political science india first president",
+  hint: "He served as President from 1950 to 1962."
+},
+{
+  id: 654,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Union Territories?",
+  options: ["Article 239", "Article 243", "Article 356", "Article 352"],
+  correctAnswer: "Article 239",
+  keywords: "political science indian constitution union territories",
+  hint: "It provides for administration of Union Territories by the President."
+},
+{
+  id: 655,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the distribution of legislative powers?",
+  options: ["Article 246", "Article 248", "Article 249", "Article 250"],
+  correctAnswer: "Article 246",
+  keywords: "political science indian constitution legislative powers distribution",
+  hint: "It divides subjects into Union, State and Concurrent Lists."
+},
+{
+  id: 656,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the amendment procedure?",
+  options: ["Article 368", "Article 370", "Article 356", "Article 352"],
+  correctAnswer: "Article 368",
+  keywords: "political science indian constitution amendment procedure",
+  hint: "It provides three types of amendments: simple majority, special majority, and ratification by states."
+},
+{
+  id: 657,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first Chief Justice of India?",
+  options: ["H.J. Kania", "M. Patanjali Sastri", "B.K. Mukherjea", "S.R. Das"],
+  correctAnswer: "H.J. Kania",
+  keywords: "political science india first chief justice",
+  hint: "He served as Chief Justice from 1950 to 1951."
+},
+{
+  id: 658,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Supreme Court?",
+  options: ["Article 124", "Article 214", "Article 315", "Article 280"],
+  correctAnswer: "Article 124",
+  keywords: "political science indian constitution supreme court",
+  hint: "It establishes the Supreme Court of India."
+},
+{
+  id: 659,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the High Courts?",
+  options: ["Article 214", "Article 124", "Article 315", "Article 280"],
+  correctAnswer: "Article 214",
+  keywords: "political science indian constitution high courts",
+  hint: "It establishes High Courts for each state."
+},
+{
+  id: 660,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Election Commission?",
+  options: ["Article 324", "Article 315", "Article 280", "Article 356"],
+  correctAnswer: "Article 324",
+  keywords: "political science indian constitution election commission",
+  hint: "It supervises elections to Parliament and State Legislatures."
+},
+{
+  id: 661,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Who was the first woman Chief Minister in India?",
+  options: ["Sucheta Kriplani", "Indira Gandhi", "Sarojini Naidu", "Pratibha Patil"],
+  correctAnswer: "Sucheta Kriplani",
+  keywords: "political science india first woman chief minister",
+  hint: "She became Chief Minister of Uttar Pradesh in 1963."
+},
+{
+  id: 662,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Finance Commission?",
+  options: ["Article 280", "Article 315", "Article 324", "Article 356"],
+  correctAnswer: "Article 280",
+  keywords: "political science indian constitution finance commission",
+  hint: "It is constituted every five years to recommend distribution of taxes."
+},
+{
+  id: 663,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Attorney General of India?",
+  options: ["Article 76", "Article 280", "Article 315", "Article 324"],
+  correctAnswer: "Article 76",
+  keywords: "political science indian constitution attorney general",
+  hint: "He is the highest law officer of India."
+},
+{
+  id: 664,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Governor of a State?",
+  options: ["Article 153", "Article 74", "Article 76", "Article 280"],
+  correctAnswer: "Article 153",
+  keywords: "political science indian constitution governor state",
+  hint: "It states that there shall be a Governor for each state."
+},
+{
+  id: 665,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Council of Ministers in states?",
+  options: ["Article 163", "Article 153", "Article 74", "Article 75"],
+  correctAnswer: "Article 163",
+  keywords: "political science indian constitution council of ministers states",
+  hint: "It states that there shall be a Council of Ministers headed by the Chief Minister."
+},
+{
+    id: 666,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the Chief Minister?",
+  options: ["Article 164", "Article 163", "Article 153", "Article 75"],
+  correctAnswer: "Article 164",
+  keywords: "political science indian constitution chief minister",
+  hint: "It provides for the appointment of the Chief Minister by the Governor."
+},
+{
+  id: 667,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th political science quiz",
+  question: "Which article of the Indian Constitution deals with the State Legislature sessions?",
+  options: ["Article 174", "Article 168", "Article 170", "Article 171"],
+  correctAnswer: "Article 174",
+  keywords: "political science indian constitution state legislature sessions",
+  hint: "It empowers the Governor to summon and prorogue the State Legislature."
+},
+{
+  id: 668,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who was the founder of the Maurya Empire?",
+  options: ["Ashoka", "Chandragupta Maurya", "Bindusara", "Bimbisara"],
+  correctAnswer: "Chandragupta Maurya",
+  keywords: "history maurya empire founder",
+  hint: "He was guided by Chanakya in establishing the empire."
+},
+{
+  id: 669,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who wrote the Arthashastra?",
+  options: ["Chanakya", "Kalidasa", "Banabhatta", "Valmiki"],
+  correctAnswer: "Chanakya",
+  keywords: "history arthashastra chanakya",
+  hint: "It is an ancient treatise on statecraft, economics and military strategy."
+},
+{
+  id: 670,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Which Mughal emperor built the Taj Mahal?",
+  options: ["Akbar", "Shah Jahan", "Aurangzeb", "Humayun"],
+  correctAnswer: "Shah Jahan",
+  keywords: "history mughal taj mahal shah jahan",
+  hint: "He built it in memory of his wife Mumtaz Mahal."
+},
+{
+  id: 671,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who was the first Governor-General of India?",
+  options: ["Lord William Bentinck", "Warren Hastings", "Lord Dalhousie", "Lord Mountbatten"],
+  correctAnswer: "Warren Hastings",
+  keywords: "history first governor general india",
+  hint: "He served from 1773 to 1785."
+},
+{
+  id: 672,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Which battle marked the beginning of British rule in India?",
+  options: ["Battle of Plassey", "Battle of Panipat", "Battle of Buxar", "Battle of Talikota"],
+  correctAnswer: "Battle of Plassey",
+  keywords: "history battle plassey british rule india",
+  hint: "It was fought in 1757 between Siraj-ud-Daulah and the British East India Company."
+},
+{
+  id: 673,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who was the first President of the Indian National Congress?",
+  options: ["Dadabhai Naoroji", "W.C. Bonnerjee", "Gopal Krishna Gokhale", "Bal Gangadhar Tilak"],
+  correctAnswer: "W.C. Bonnerjee",
+  keywords: "history indian national congress first president",
+  hint: "He presided over the first session in 1885."
+},
+{
+  id: 674,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who gave the slogan 'Swaraj is my birthright and I shall have it'?",
+  options: ["Mahatma Gandhi", "Bal Gangadhar Tilak", "Jawaharlal Nehru", "Subhash Chandra Bose"],
+  correctAnswer: "Bal Gangadhar Tilak",
+  keywords: "history swaraj slogan tilak",
+  hint: "He was known as 'Lokmanya'."
+},
+{
+  id: 675,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who started the Non-Cooperation Movement in 1920?",
+  options: ["Jawaharlal Nehru", "Mahatma Gandhi", "Bal Gangadhar Tilak", "Subhash Chandra Bose"],
+  correctAnswer: "Mahatma Gandhi",
+  keywords: "history non cooperation movement gandhi",
+  hint: "It was launched against the Rowlatt Act and Jallianwala Bagh massacre."
+},
+{
+  id: 676,
+  category: "school",
+  type: "quiz",
+  quizType: "class 11th history quiz",
+  question: "Who was the last Governor-General of independent India?",
+  options: ["Lord Mountbatten", "C. Rajagopalachari", "Warren Hastings", "Lord Dalhousie"],
+  correctAnswer: "C. Rajagopalachari",
+  keywords: "history last governor general independent india",
+  hint: "He was the only Indian to hold the post."
+},
+{
+  id: 677,
+  category: "school",
+  type: "class 11th quiz",
+  quizType: "class 11th history quiz",
+  question: "Who was the first Emperor of the Mughal dynasty?",
+  options: ["Akbar", "Babur", "Humayun", "Shah Jahan"],
+  correctAnswer: "Babur",
+  keywords: "history mughal dynasty first emperor babur",
+  hint: "He defeated Ibrahim Lodi in the Battle of Panipat (1526)."
 }
 ];

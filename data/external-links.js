@@ -143,7 +143,31 @@ if (isValidURL(input.value.trim())) {
       (district === "" || item.district === district)
   );
   */
+ // 🔹 SEARCH DATA (ONLY ONCE)
+    /* const dataResults = SEARCH_DATA.filter(
+    (item) =>
+      Object.values(item).join(" ").toLowerCase().includes(q) &&
+      (category === "" || item.category === category) &&
+      (state === "" || item.state === state) &&
+      (district === "" || item.district === district)
+  );*/
+    /*const dataResults = SEARCH_DATA.filter(item => {
+    const textMatch = Object.values(item)
+      .join(" ")
+      .toLowerCase()
+      .includes(q);
 
+    const categoryMatch =
+      !category || item.category?.toLowerCase() === category;
+
+    const stateMatch =
+      !state || item.state?.toLowerCase() === state;
+
+    const districtMatch =
+      !district || item.district?.toLowerCase().includes(district);
+
+    return textMatch && categoryMatch && stateMatch && districtMatch;
+  });*/
 
 
 //this is also delete recently
@@ -185,3 +209,230 @@ input.addEventListener("keydown", function (e) {
 results.innerHTML =
   "<p style='text-align:center;color:#64748b;'>Press Enter after typing to see results.</p>";
  */
+// clear search buttton code delete recently
+  /**<button id="clearSearchBtn" class="clear-search-btn">
+  ✖ Clear
+</button>
+// css
+.clear-search-btn {
+  margin-left: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #fee2e2;
+  color: #991b1b;
+  cursor: pointer;
+  font-size: 14px;
+}
+// js
+function clearSearch() {
+  // 1️⃣ Clear inputs
+  input.value = "";
+
+  if (categoryFilter) categoryFilter.value = "";
+  if (stateFilter) stateFilter.value = "";
+  if (districtFilter) districtFilter.value = "";
+
+  // 2️⃣ Remove saved search state
+  localStorage.removeItem(SEARCH_STATE_KEY);
+
+  // 3️⃣ Reset results UI
+  results.innerHTML = `
+    <p style="text-align:center;color:#64748b;">
+      Start typing or use voice search to see results.
+    </p>
+  `;
+
+  // 4️⃣ Hide loader if visible
+  hideSearchLoader();
+}
+//CONNECT BUTTON TO LOGIC
+document
+  .getElementById("clearSearchBtn")
+  .addEventListener("click", clearSearch);
+ */
+/**
+ * // english-hindi toggle buttons
+document.addEventListener('DOMContentLoaded', function () {
+  var btnEn = document.getElementById('btn-en');
+  var btnHi = document.getElementById('btn-hi');
+
+  // Page does not have language toggle → exit safely
+  if (!btnEn || !btnHi) return;
+
+  btnEn.addEventListener('click', function () {
+    toggleLang('en');
+  });
+
+  btnHi.addEventListener('click', function () {
+    toggleLang('hi');
+  });
+});
+
+function toggleLang(lang) {
+  var en = document.getElementById('policy-en');
+  var hi = document.getElementById('policy-hi');
+
+  var btnEn = document.getElementById('btn-en');
+  var btnHi = document.getElementById('btn-hi');
+
+  // 🔒 HARD GUARD — prevents crashes on other pages
+  if (!en || !hi || !btnEn || !btnHi) return;
+
+  if (lang === 'en') {
+    en.style.display = 'block';
+    hi.style.display = 'none';
+    btnEn.classList.add('active');
+    btnHi.classList.remove('active');
+  } else {
+    hi.style.display = 'block';
+    en.style.display = 'none';
+    btnHi.classList.add('active');
+    btnEn.classList.remove('active');
+  }
+}
+
+ */
+// quiz total , attempted, correct and wrong detail logic .
+// <div id="quizSummary" class="quiz-summary hidden"></div> 
+//let currentQuizResults = [];
+//const QUIZ_STATE_KEY = "brg_quiz_state";
+// quiz functions attampted, correct , wrong functions
+/*function getQuizState() {
+  return JSON.parse(localStorage.getItem(QUIZ_STATE_KEY)) || {
+    score: 0,
+    attempted: {}
+  };
+}
+function calculateQuizStats(quizResults) {
+  const state = getQuizState();
+  const attemptedIds = state.attempted || {};
+
+  let attempted = 0;
+  let correct = 0;
+  let wrong = 0;
+
+  quizResults.forEach(q => {
+    if (attemptedIds[q.id]) {
+      attempted++;
+      attemptedIds[q.id].correct ? correct++ : wrong++;
+    }
+  });
+
+  return {
+    total: quizResults.length,
+    attempted,
+    correct,
+    wrong
+  };
+}
+function renderQuizSummary(quizResults) {
+  const summaryBox = document.getElementById("quizSummary");
+
+  if (!quizResults.length) {
+    summaryBox.classList.add("hidden");
+    return;
+  }
+
+  const stats = calculateQuizStats(quizResults);
+
+  summaryBox.innerHTML = `
+    <span>🧠 Total Quiz: <strong>${stats.total}</strong></span>
+    <span>✅ Attempted: <strong>${stats.attempted}</strong></span>
+    <span class="correct">🟢 Correct: <strong>${stats.correct}</strong></span>
+    <span class="wrong">🔴 Wrong: <strong>${stats.wrong}</strong></span>
+  `;
+
+  summaryBox.classList.remove("hidden");
+}
+function saveQuizAttempt(quizId, selected, correct) {
+  const state = getQuizState();
+
+  state.attempted[quizId] = { selected, correct };
+
+  if (correct) state.score += 108;
+
+  localStorage.setItem(QUIZ_STATE_KEY, JSON.stringify(state));
+}
+
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".quiz-option");
+  if (!btn) return;
+
+    const card = btn.closest(".quiz-card");
+  const quizId = card.dataset.quizId;
+
+  if (!quizId) {
+    console.error("Quiz ID missing");
+    return;
+  }
+  const selected = btn.dataset.answer;
+  const correctAnswer = btn.dataset.correct;
+
+  const isCorrect = selected === correctAnswer;
+
+  // 🔒 prevent double attempt
+  const saved = getQuizState();
+  if (saved.attempted[quizId]) return;
+
+  // 🎯 show feedback
+  const feedback = card.querySelector(".quiz-feedback");
+
+  if (isCorrect) {
+    feedback.innerHTML = `<span class="correct">108</span>`;
+  } else {
+    const emoji = SAD_EMOJIS[Math.floor(Math.random() * SAD_EMOJIS.length)];
+    feedback.innerHTML = `<span class="wrong">108 ${emoji}</span>`;
+  }
+
+  // 🔕 disable all options
+  card.querySelectorAll(".quiz-option").forEach(b => b.disabled = true);
+
+  // 💾 SAVE ATTEMPT
+  saveQuizAttempt(quizId, selected, isCorrect);
+
+  // 🔄 UPDATE SCORE UI
+  document.getElementById("scoreValue").innerText =
+    getQuizState().score;
+
+  // 🔄 UPDATE SUMMARY (THIS WAS MISSING)
+  if (currentQuizResults.length) {
+    renderQuizSummary(currentQuizResults);
+  }
+}); */
+
+
+    // kidsQuizResults already filtered + shuffled
+/*currentQuizResults = QuizResults;
+renderQuizSummary(currentQuizResults);
+if (currentQuizResults.length) {
+  renderQuizSummary(currentQuizResults);
+}*/
+/*.quiz-summary {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.quiz-summary span {
+  white-space: nowrap;
+}
+
+.quiz-summary .correct {
+  color: green;
+}
+
+.quiz-summary .wrong {
+  color: red;
+}
+
+.hidden {
+  display: none;
+}
+*/

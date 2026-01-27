@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -70,8 +70,8 @@
           </div>
 
           <button class="filter-toggle" id="filterToggle">🔍 Filters</button>
+          <button id="clearSearchBtn" class="clear-btn hidden">✖ </button>
         </div>
-
         <!-- FILTERS (HIDDEN BY DEFAULT) -->
         <div class="filter-box" id="filterBox">
           <select id="categoryFilter">
@@ -80,6 +80,7 @@
             <option value="material">Materials</option>
             <option value="technician">Technicians</option>
           </select>
+
           <div class="search-select">
             <input type="text" id="stateFilter" placeholder="Search State" />
             <ul id="stateList" class="options"></ul>
@@ -95,13 +96,12 @@
           </div>
         </div>
       </div>
-
+      <div id="calcResult" class="calc-result hidden"></div>
       <!-- RESULTS -->
       <div class="results" id="results"></div>
       <div id="searchLoader" class="search-loader hidden">
-  <div class="loader-108">108</div>
-</div>
-
+        <div class="loader-108">108</div>
+      </div>
     </div>
 
     <!-- ================= SERVICES ================= -->
@@ -383,10 +383,12 @@
           Contact BR & G today and experience professional execution with
           transparency.
         </p>
-        <a href="privacy.html" class="btn primary">Policy</a>
-        <a href="terms.html" class="btn primary">Terms</a>
-        <a href="contact.html" class="btn primary">Contact</a>
-        <a href="company-rules.html" class="btn primary">Rules</a>
+        <div class="cta-actions">
+          <a href="privacy.html" class="cta-btn">Policy</a>
+          <a href="terms.html" class="cta-btn">Terms</a>
+          <a href="contact.html" class="cta-btn">Contact</a>
+          <a href="company-rules.html" class="cta-btn">Rules</a>
+        </div>
       </div>
     </section>
     <!-- DESIGN MODAL full screen view -->
@@ -416,19 +418,19 @@
         <img id="modalImage" alt="Theory Image" />
       </div>
     </div>
-  <!----full screen view modal of media code -->
-  <div id="mediaModal" class="design-modal">
-  <span class="close-modal" onclick="closeDesignModal()">×</span>
-  <div class="modal-content">
-    <img id="mediaImage" style="display:none;">
-    <video id="mediaVideo" controls style="display:none;"></video>
-  </div>
-</div>
-<!-- FULL SCREEN IMAGE MODAL -->
-<div id="imageModal" class="image-modal">
-  <span class="modal-close" onclick="closeDesignModal()">×</span>
-  <img id="modalPhoto" alt="Preview">
-</div>
+    <!----full screen view modal of media code -->
+    <div id="mediaModal" class="design-modal">
+      <span class="close-modal" onclick="closeDesignModal()">×</span>
+      <div class="modal-content">
+        <img id="mediaImage" style="display: none" />
+        <video id="mediaVideo" controls style="display: none"></video>
+      </div>
+    </div>
+    <!-- FULL SCREEN IMAGE MODAL -->
+    <div id="imageModal" class="image-modal">
+      <span class="modal-close" onclick="closeDesignModal()">×</span>
+      <img id="modalPhoto" alt="Preview" />
+    </div>
 
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
@@ -446,6 +448,5 @@
     <script src="data/kids-data.js"></script>
     <script src="data/quiz.-data.js"></script>
     <script src="web.js"></script>
-
   </body>
 </html>
