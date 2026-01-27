@@ -304,6 +304,9 @@ function showSearchLoader() {
   document.getElementById("searchLoader").classList.remove("hidden");
 }
 
+//function hideSearchLoader() {
+//  document.getElementById("searchLoader").classList.add("hidden");
+//}
 function hideSearchLoader() {
   const loader = document.getElementById("searchLoader");
   if (!loader) return;
