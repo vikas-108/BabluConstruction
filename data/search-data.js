@@ -1,5 +1,6 @@
 const SEARCH_DATA = [
   {
+    id: "c001",
     category: "contractor",
     name: "Ramesh Kumar",
     type: "Mason",
@@ -12,6 +13,7 @@ const SEARCH_DATA = [
     description: "Experienced mason handling residential and commercial masonry work."
   },
   {
+    id: "c002",
     category: "contractor",
     name: "Suresh Singh",
     type: "Carpenter",
@@ -24,6 +26,7 @@ const SEARCH_DATA = [
     description: "Skilled carpenter specializing in furniture and wooden fittings."
   },
   {
+    id: "c003",
     category: "contractor",
     name: "Anil Mehta",
     type: "Electrician",
@@ -36,6 +39,7 @@ const SEARCH_DATA = [
     description: "Certified electrician with expertise in residential and commercial wiring."
   },
   {
+    id: "c004",
     category: "contractor",
     name: "Vijay Sharma",
     type: "Plumber",
@@ -48,6 +52,7 @@ const SEARCH_DATA = [
     description: "Reliable plumber handling water supply and drainage systems."
   },
   {
+    id: "c005",
     category: "contractor",
     name: "Rajesh Chauhan",
     type: "Painter",
@@ -60,6 +65,7 @@ const SEARCH_DATA = [
     description: "Professional painter with expertise in decorative and protective coatings."
   },
   {
+    id: "c006",
     category: "contractor",
     name: "Mohit Verma",
     type: "Welder",
@@ -72,6 +78,7 @@ const SEARCH_DATA = [
     description: "Experienced welder specializing in steel fabrication and repair."
   },
   {
+    id: "c007",
     category: "contractor",
     name: "Deepak Yadav",
     type: "Tile Setter",
@@ -84,6 +91,7 @@ const SEARCH_DATA = [
     description: "Expert in tile installation for floors, walls, and bathrooms."
   },
   {
+    id: "c008",
     category: "contractor",
     name: "Sunil Gupta",
     type: "Roofer",
@@ -96,6 +104,7 @@ const SEARCH_DATA = [
     description: "Specialist in roofing solutions including waterproofing and insulation."
   },
   {
+    id: "c009",
     category: "contractor",
     name: "Ashok Kumar",
     type: "Mason",
@@ -108,6 +117,7 @@ const SEARCH_DATA = [
     description: "Senior mason with extensive experience in RCC and stone masonry."
   },
   {
+    id: "010",
     category: "contractor",
     name: "Pradeep Singh",
     type: "Carpenter",
@@ -120,6 +130,7 @@ const SEARCH_DATA = [
     description: "Carpenter specializing in modular kitchens and custom furniture."
   },
   {
+    id: "c011",
     category: "contractor",
     name: "Karan Joshi",
     type: "Electrician",
@@ -132,6 +143,7 @@ const SEARCH_DATA = [
     description: "Electrician with expertise in solar panel installation and inverter systems."
   },
   {
+    id: "012",
     category: "contractor",
     name: "Manoj Kumar",
     type: "Plumber",
@@ -144,6 +156,7 @@ const SEARCH_DATA = [
     description: "Plumber experienced in water tank installation and fittings."
   },
   {
+    id: "c013",
     category: "contractor",
     name: "Ajay Sharma",
     type: "Painter",
@@ -156,6 +169,7 @@ const SEARCH_DATA = [
     description: "Painter specializing in wall textures and waterproofing solutions."
   },
   {
+    id: "c013",
     category: "contractor",
     name: "Harish Patel",
     type: "Welder",
@@ -168,6 +182,7 @@ const SEARCH_DATA = [
     description: "Welder with expertise in industrial pipelines and fabrication."
   },
   {
+    id: "c014",
     category: "contractor",
     name: "Ravi Kumar",
     type: "Tile Setter",
@@ -180,6 +195,7 @@ const SEARCH_DATA = [
     description: "Tile setter experienced in granite and marble flooring."
   },
   {
+    id: "c015",
     category: "contractor",
     name: "Naveen Singh",
     type: "Roofer",
@@ -192,6 +208,7 @@ const SEARCH_DATA = [
     description: "Roofer with expertise in tile roofing and insulation."
   },
   {
+    id: "c016",
     category: "contractor",
     name: "Amit Kumar",
     type: "Mason",
@@ -204,6 +221,7 @@ const SEARCH_DATA = [
     description: "Mason specializing in stone masonry and RCC structures."
   },
   {
+    id: "c017",
     category: "contractor",
     name: "Sanjay Verma",
     type: "Carpenter",
@@ -216,6 +234,7 @@ const SEARCH_DATA = [
     description: "Carpenter with long experience in furniture and wooden fittings."
   },
   {
+    id: "c018",
     category: "contractor",
     name: "Pawan Kumar",
     type: "Electrician",
@@ -228,6 +247,7 @@ const SEARCH_DATA = [
     description: "Electrician handling residential wiring and maintenance."
   },
   {
+    id: "c019",
     category: "contractor",
     name: "Lokesh Sharma",
     type: "Plumber",
@@ -240,6 +260,7 @@ const SEARCH_DATA = [
     description: "Plumber with expertise in bathroom and kitchen fittings."
   },
   {
+    id: "c020",
     category: "contractor",
     name: "Gopal Singh",
     type: "Carpenter",
@@ -252,6 +273,7 @@ const SEARCH_DATA = [
     description: "Carpenter skilled in custom furniture and cabinet making."
   },
   {
+    id: "c021",
     category: "contractor",
     name: "Hemant Kumar",
     type: "Electrician",
@@ -264,6 +286,7 @@ const SEARCH_DATA = [
     description: "Electrician with expertise in AC wiring and solar installations."
   },
   {
+    id: "c022",
     category: "contractor",
     name: "Inderjeet Singh",
     type: "Plumber",
@@ -276,6 +299,7 @@ const SEARCH_DATA = [
     description: "Plumber specializing in water supply and pipeline fittings."
   },
   {
+    id: "c023",
     category: "contractor",
     name: "Jitendra Sharma",
     type: "Painter",
@@ -288,6 +312,7 @@ const SEARCH_DATA = [
     description: "Painter experienced in wall textures and waterproofing."
   },
   {
+    id: "c024",
     category: "contractor",
     name: "Kishore Patel",
     type: "Welder",
@@ -300,6 +325,7 @@ const SEARCH_DATA = [
     description: "Welder specializing in industrial fabrication and pipelines."
   },
   {
+    id: "c025",
     category: "contractor",
     name: "Lalit Verma",
     type: "Tile Setter",
@@ -312,6 +338,7 @@ const SEARCH_DATA = [
     description: "Tile setter with expertise in marble and granite flooring."
   },
   {
+    id: "c026",
     category: "contractor",
     name: "Manish Kumar",
     type: "Roofer",
@@ -324,6 +351,7 @@ const SEARCH_DATA = [
     description: "Roofer experienced in sheet roofing and insulation."
   },
   {
+    id: "c027",
     category: "contractor",
     name: "Nikhil Sharma",
     type: "Mason",
@@ -336,6 +364,7 @@ const SEARCH_DATA = [
     description: "Mason specializing in RCC and stone masonry."
   },
   {
+    id: "c028",
     category: "contractor",
     name: "Om Prakash",
     type: "Carpenter",
@@ -348,6 +377,7 @@ const SEARCH_DATA = [
     description: "Carpenter with expertise in doors, windows, and furniture."
   },
   {
+    id: "c029",
     category: "contractor",
     name: "Pankaj Yadav",
     type: "Electrician",
@@ -360,6 +390,7 @@ const SEARCH_DATA = [
     description: "Electrician handling inverter systems and residential wiring."
   },
   {
+    id: "c030",
     category: "contractor",
     name: "Qasim Ali",
     type: "Plumber",
@@ -372,6 +403,7 @@ const SEARCH_DATA = [
     description: "Plumber with expertise in bathroom and kitchen fittings."
   },
   {
+    id: "c031",
     category: "contractor",
     name: "Rohit Kumar",
     type: "Painter",
@@ -384,6 +416,7 @@ const SEARCH_DATA = [
     description: "Painter specializing in wall polish and waterproofing."
   },
   {
+    id: "c032",
     category: "contractor",
     name: "Sandeep Singh",
     type: "Welder",
@@ -396,6 +429,7 @@ const SEARCH_DATA = [
     description: "Welder experienced in gates, grills, and fabrication."
   },
   {
+    id: "c033",
     category: "contractor",
     name: "Tarun Mehta",
     type: "Tile Setter",
@@ -408,6 +442,7 @@ const SEARCH_DATA = [
     description: "Tile setter with expertise in bathroom and kitchen flooring."
   },
   {
+    id: "c034",
     category: "contractor",
     name: "Umesh Kumar",
     type: "Roofer",
@@ -420,6 +455,7 @@ const SEARCH_DATA = [
     description: "Roofer specializing in tile roofing and waterproofing."
   },
   {
+    id: "c035",
     category: "contractor",
     name: "Vikas Sharma",
     type: "Mason",
@@ -432,6 +468,7 @@ const SEARCH_DATA = [
     description: "Mason with expertise in RCC and stone masonry."
   },
   {
+    id: "c036",
     category: "contractor",
     name: "Wasim Khan",
     type: "Carpenter",
@@ -444,6 +481,7 @@ const SEARCH_DATA = [
     description: "Carpenter specializing in cabinets and furniture making."
   },
   {
+    id: "c037",
     category: "contractor",
     name: "Xavier D'Souza",
     type: "Electrician",
@@ -456,6 +494,7 @@ const SEARCH_DATA = [
     description: "Electrician experienced in lighting and residential wiring."
   },
   {
+    id: "c038",
     category: "contractor",
     name: "Yogesh Kumar",
     type: "Plumber",
@@ -468,6 +507,7 @@ const SEARCH_DATA = [
     description: "Plumber specializing in water supply and fittings."
   },
   {
+    id: "c039",
     category: "contractor",
     name: "Arun Kumar",
     type: "Painter",
@@ -480,6 +520,7 @@ const SEARCH_DATA = [
     description: "Painter with expertise in interior and exterior decorative finishes."
   },
   {
+    id: "c040",
     category: "contractor",
     name: "Bhupendra Singh",
     type: "Welder",
@@ -491,7 +532,7 @@ const SEARCH_DATA = [
     keywords: "welder fabrication pipelines gates grills",
     description: "Welder specializing in industrial fabrication and repair services."
   },
-  {
+  {id: "c041",
     category: "contractor",
     name: "Chandan Yadav",
     type: "Tile Setter",
@@ -504,6 +545,7 @@ const SEARCH_DATA = [
     description: "Tile setter with expertise in marble and granite flooring."
   },
   {
+    id: "c042",
     category: "contractor",
     name: "Devendra Kumar",
     type: "Roofer",
@@ -516,6 +558,7 @@ const SEARCH_DATA = [
     description: "Roofer experienced in sheet roofing and waterproofing solutions."
   },
   {
+    id: "c043",
     category: "contractor",
     name: "Eshan Sharma",
     type: "Mason",
@@ -528,6 +571,7 @@ const SEARCH_DATA = [
     description: "Mason with strong expertise in RCC and stone masonry for large projects."
   },
   {
+    id: "c044",
     category: "contractor",
     name: "Amit Singh",
     type: "Shuttering",
@@ -540,6 +584,7 @@ const SEARCH_DATA = [
     description: "Specialist in RCC slab shuttering and structural formwork."
   },
    {
+    id: "c045",
     category: "contractor",
     name: "noor ",
     type: "Glass",
@@ -552,6 +597,7 @@ const SEARCH_DATA = [
     description: "Specialist in window, almira, glass or mirror worker."
   },
   {
+    id: "c046",
     category: "material",
     name: "ACC Cement Supplier",
     type: "Cement",
@@ -562,6 +608,7 @@ const SEARCH_DATA = [
     description: "High quality ACC cement supply for all construction needs."
   },
   {
+    id: "c047",
     category: "material",
     name: "River Sand Supply",
     type: "Sand",
@@ -572,6 +619,7 @@ const SEARCH_DATA = [
     description: "Clean river sand for RCC and plaster work."
   },
   {
+    id: "c048",
     category: "technician",
     name: "Vishal singh",
     type: "Electrician",
@@ -584,6 +632,7 @@ const SEARCH_DATA = [
   },
   // more entries of technicians
   {
+    id: "c049",
     category: "technician",
     name: "Vishal Singh",
     type: "Electrician",
@@ -595,6 +644,7 @@ const SEARCH_DATA = [
     description: "Experienced electrician for wiring, repairs, and fitting etc."
   },
   {
+    id: "c050",
     category: "technician",
     name: "Amit Sharma",
     type: "Plumber",
@@ -606,6 +656,7 @@ const SEARCH_DATA = [
     description: "Reliable plumber for bathroom and kitchen fittings, water supply and repair."
   },
   {
+    id: "c051",
     category: "technician",
     name: "Sandeep Kumar",
     type: "Carpenter",
@@ -617,6 +668,7 @@ const SEARCH_DATA = [
     description: "Skilled carpenter specializing in furniture making and wooden fittings."
   },
   {
+    id: "c052",
     category: "technician",
     name: "Rohit Verma",
     type: "Painter",
@@ -628,6 +680,7 @@ const SEARCH_DATA = [
     description: "Professional painter with expertise in wall textures and waterproofing."
   },
   {
+    id: "c052",
     category: "technician",
     name: "Manoj Yadav",
     type: "Welder",
@@ -639,6 +692,7 @@ const SEARCH_DATA = [
     description: "Experienced welder specializing in steel fabrication and repair."
   },
   {
+    id: "c053",
     category: "technician",
     name: "Sunil Gupta",
     type: "Tile Setter",
@@ -650,6 +704,7 @@ const SEARCH_DATA = [
     description: "Expert in tile installation for floors, walls, and bathrooms."
   },
   {
+    id: "c054",
     category: "technician",
     name: "Rajesh Chauhan",
     type: "Roofer",
@@ -661,6 +716,7 @@ const SEARCH_DATA = [
     description: "Specialist in roofing solutions including waterproofing and insulation."
   },
   {
+    id: "c055",
     category: "technician",
     name: "Deepak Mehta",
     type: "Electrician",
@@ -672,6 +728,7 @@ const SEARCH_DATA = [
     description: "Certified electrician with expertise in solar panel installation and inverter systems."
   },
   {
+    id: "c056",
     category: "technician",
     name: "Anil Joshi",
     type: "Plumber",
@@ -683,6 +740,7 @@ const SEARCH_DATA = [
     description: "Plumber experienced in water tank installation and fittings."
   },
   {
+    id: "c057",
     category: "technician",
     name: "Karan Patel",
     type: "Carpenter",
@@ -694,6 +752,7 @@ const SEARCH_DATA = [
     description: "Carpenter specializing in modular kitchens and custom furniture."
   },
   {
+    id: "c058",
     category: "technician",
     name: "Zahid Khan",
     type: "Electrician",
@@ -705,6 +764,7 @@ const SEARCH_DATA = [
     description: "Certified electrician with expertise in wiring, inverter, and solar installations."
   },
   {
+    id: "c059",
     category: "technician",
     name: "Arjun Mehta",
     type: "Plumber",
@@ -716,6 +776,7 @@ const SEARCH_DATA = [
     description: "Reliable plumber for bathroom fittings, kitchen pipelines, and water supply systems."
   },
   {
+    id: "c060",
     category: "technician",
     name: "Bhavesh Patel",
     type: "Carpenter",
@@ -727,6 +788,7 @@ const SEARCH_DATA = [
     description: "Carpenter specializing in furniture making and wooden fittings."
   },
   {
+    id: "c061",
     category: "technician",
     name: "Chirag Sharma",
     type: "Painter",
@@ -738,6 +800,7 @@ const SEARCH_DATA = [
     description: "Painter experienced in wall textures, polish, and waterproofing solutions."
   },
   {
+    id: "c062",
     category: "technician",
     name: "Dinesh Kumar",
     type: "Welder",
@@ -749,6 +812,7 @@ const SEARCH_DATA = [
     description: "Welder specializing in steel fabrication and industrial repair."
   },
   {
+    id: "c063",
     category: "technician",
     name: "Eklavya Singh",
     type: "Tile Setter",
@@ -760,6 +824,7 @@ const SEARCH_DATA = [
     description: "Expert in tile installation for floors, walls, and bathrooms."
   },
   {
+    id: "c064",
     category: "technician",
     name: "Farhan Ali",
     type: "Roofer",
@@ -771,6 +836,7 @@ const SEARCH_DATA = [
     description: "Specialist in roofing solutions including waterproofing and insulation."
   },
   {
+    id: "c065",
     category: "technician",
     name: "Gaurav Yadav",
     type: "Electrician",
@@ -782,6 +848,7 @@ const SEARCH_DATA = [
     description: "Experienced electrician for wiring, inverter systems, and solar installations."
   },
   {
+    id: "c066",
     category: "technician",
     name: "Harish Chauhan",
     type: "Plumber",
@@ -793,6 +860,7 @@ const SEARCH_DATA = [
     description: "Plumber specializing in bathroom fittings and water tank installations."
   },
   {
+    id: "c067",
     category: "technician",
     name: "Ishaan Gupta",
     type: "Carpenter",
@@ -804,6 +872,7 @@ const SEARCH_DATA = [
     description: "Carpenter specializing in modular kitchens and custom furniture."
   },
   {
+    id: "c068",
     category: "technician",
     name: "Javed Khan",
     type: "Painter",
@@ -815,6 +884,7 @@ const SEARCH_DATA = [
     description: "Painter with expertise in wall polish and waterproofing."
   },
   {
+    id: "c069",
     category: "technician",
     name: "Kunal Singh",
     type: "Welder",
@@ -826,6 +896,7 @@ const SEARCH_DATA = [
     description: "Welder experienced in gates, grills, and industrial fabrication."
   },
   {
+    id: "c070",
     category: "technician",
     name: "Lakshman Joshi",
     type: "Tile Setter",
@@ -837,6 +908,7 @@ const SEARCH_DATA = [
     description: "Tile setter with expertise in marble and granite flooring."
   },
   {
+    id: "c071",
     category: "technician",
     name: "Manish Verma",
     type: "Roofer",
@@ -848,6 +920,7 @@ const SEARCH_DATA = [
     description: "Roofer specializing in sheet roofing and waterproofing."
   },
   {
+    id: "c072",
     category: "technician",
     name: "Naveen Kumar",
     type: "Electrician",
@@ -859,6 +932,7 @@ const SEARCH_DATA = [
     description: "Electrician with expertise in wiring, fittings, and solar installations."
   },
   {
+    id: "c073",
     category: "technician",
     name: "Omkar Sharma",
     type: "Plumber",
@@ -870,6 +944,7 @@ const SEARCH_DATA = [
     description: "Plumber experienced in bathroom and kitchen fittings."
   },
   {
+    id: "c074",
     category: "technician",
     name: "Prakash Singh",
     type: "Carpenter",
@@ -881,6 +956,7 @@ const SEARCH_DATA = [
     description: "Carpenter specializing in doors, windows, and furniture making."
   },
   {
+    id: "c075",
     category: "technician",
     name: "Qadir Hussain",
     type: "Painter",
@@ -892,6 +968,7 @@ const SEARCH_DATA = [
     description: "Painter with expertise in interior and exterior decorative finishes."
   },
   {
+    id: "c076",
     category: "technician",
     name: "Ravi Kumar",
     type: "Welder",

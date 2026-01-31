@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login • CB 108</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="login-container">
+
+  <!-- LOGO + 108 -->
+  <div class="logo-box">
+    <img src="images/hero.jpg" alt="CB Logo" class="logo" />
+    <div class="anim-108">108</div>
+  </div>
+
+  <!-- WELCOME (AFTER LOGIN) -->
+  <div id="welcomeBox" class="hidden">
+    <h2>Welcome 👋</h2>
+    <p id="usernameDisplay"></p>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <form id="loginForm">
+    <div class="input-group">
+      <input type="tel" id="phone" placeholder="Phone Number" />
+    </div>
+
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Unique Username" />
+      <small>Must contain letters, numbers & special characters</small>
+    </div>
+
+    <button type="submit" id="submitLogin">Login</button>
+  </form>
+
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>

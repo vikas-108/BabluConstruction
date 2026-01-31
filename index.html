@@ -16,18 +16,38 @@
   </head>
   <body>
     <!-- ================= HEADER ================= -->
-    <header class="header">
-      <div class="container header-flex">
-        <h1 class="logo">BR & G <span>Construction</span></h1>
+  <header class="header">
+  <div class="container header-bar">
 
-        <nav class="nav">
-          <a href="#" class="active">Home</a>
-          <a href="contractor.html">Contractors</a>
-          <a href="services.html">Services</a>
-          <a href="projects-reports.html">Projects</a>
-        </nav>
+    <!-- LEFT : LOGO -->
+    <div class="header-left">
+      <div class="brand-logo">K0</div>
+    </div>
+
+    <!-- CENTER : APP NAME -->
+    <div class="header-center">
+      <h1 class="brand-name">Konnect<span>108</span></h1>
+    </div>
+
+    <!-- RIGHT : AUTH -->
+    <div class="header-right">
+      <button id="authBtn" class="auth-btn">Login / Sign Up</button>
+
+      <div id="userMenu" class="user-menu hidden">
+        <span id="userName"></span>
+        <div class="dropdown">
+          <a href="account.html">Manage Account</a>
+          <a href="settings.html">Settings</a>
+          <a href="create-profile.html">Create & Post Profile</a>
+          <hr />
+          <button id="logoutBtn">Logout</button>
+        </div>
       </div>
-    </header>
+    </div>
+
+  </div>
+</header>
+
 
     <!-- ================= HERO ================= -->
     <section class="hero">
@@ -447,6 +467,7 @@
     <script src="data/math-formulas.js"></script>
     <script src="data/kids-data.js"></script>
     <script src="data/quiz.-data.js"></script>
+    <script src="login.js"></script>
     <script src="web.js"></script>
   </body>
 </html>
