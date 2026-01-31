@@ -142,23 +142,33 @@ body {
 
 
 /* ---------------- RESPONSIVE ---------------- */
-
+/* MOBILE FIX – KEEP HEADER IN ONE LINE */
 @media (max-width: 640px) {
   .header-bar {
-    grid-template-columns: 1fr;
-    text-align: center;
+    grid-template-columns: auto 1fr auto; /* ✅ still 3 columns */
+    gap: 8px;
   }
 
-  .header-left,
-  .header-right {
-    justify-content: center;
+  .brand-name {
+    font-size: 16px; /* slightly smaller */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .dropdown {
-    right: 50%;
-    transform: translateX(50%);
+  .auth-btn,
+  .user-menu span {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 }
+
 
 
 /* Login container */
