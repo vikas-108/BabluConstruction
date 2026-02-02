@@ -3,6 +3,10 @@ const results = document.getElementById("results");
 const categoryFilter = document.getElementById("categoryFilter");
 const stateFilter = document.getElementById("stateFilter");
 const districtFilter = document.getElementById("districtFilter");
+const PAGE_SIZE = 20;
+let currentPage = 1;
+let lastSearchResults = [];
+
 const states = [
   "Haryana",
   "Punjab",
@@ -508,6 +512,57 @@ function toggleClearButton() {
     clearBtn.classList.add("hidden");
   }
 }
+function renderPage() {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+
+  const pageItems = lastSearchResults.slice(start, end);
+
+  if (!pageItems.length) {
+    results.innerHTML =
+      "<p style='text-align:center;color:#64748b;'>No results found</p>";
+    return;
+  }
+
+  render(pageItems);
+  renderPagination();
+}
+function renderPagination() {
+  const pagination = document.getElementById("pagination");
+  const totalPages = Math.ceil(lastSearchResults.length / PAGE_SIZE);
+
+  if (totalPages <= 1) {
+    pagination.classList.add("hidden");
+    return;
+  }
+
+  pagination.classList.remove("hidden");
+  pagination.innerHTML = `
+    <button ${currentPage === 1 ? "disabled" : ""} onclick="prevPage()">⬅ Prev</button>
+    <span> ${currentPage} of ${totalPages}</span>
+    <button ${currentPage === totalPages ? "disabled" : ""} onclick="nextPage()">Next ➡</button>
+  `;
+}
+function resetPagination() {
+  lastSearchResults = [];
+  currentPage = 1;
+
+  const pagination = document.getElementById("pagination");
+  if (pagination) {
+    pagination.classList.add("hidden");
+    pagination.innerHTML = "";
+  }
+}
+
+function nextPage() {
+  currentPage++;
+  renderPage();
+}
+
+function prevPage() {
+  currentPage--;
+  renderPage();
+}
 
 function render(items) {
   results.innerHTML = "";
@@ -741,6 +796,7 @@ function applySearch() {
       const calc = safeCalculate(q);
 
       if (calc) {
+        resetPagination(); // ✅ IMPORTANT
         calcBox.innerHTML = `
           🧮 Answer: <strong>${calc.result}</strong>
           <div class="calc-steps">
@@ -756,8 +812,16 @@ function applySearch() {
 
     // ❌ Not math → hide calculator
     calcBox.classList.add("hidden");
+    // 🚫 Prevent heavy search for very short input
+if (q.length === 1 && !isMathExpression(q)) {
+  results.innerHTML =
+    "<p style='text-align:center;color:#94a3b8;'>Type at least 2 characters to search</p>";
+  hideSearchLoader();
+  return;
+}
     // 🟡 EMPTY SEARCH STATE
     if (!q && !category && !state && !district) {
+      resetPagination(); // ✅ IMPORTANT
       results.innerHTML =
         "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
       hideSearchLoader(); // ✅ IMPORTANT
@@ -821,17 +885,25 @@ const dataResults = shuffleArray(
     const kidsResults = q ? searchKids(q) : [];
     const QuizResults = q ? searchQuiz(q) : [];
     // 🔹 MERGE WITHOUT DUPLICATES
-    render([
-      ...theoryResults,
-      ...designResults,
-      ...mediaResults,
-      ...dataResults,
-      ...mathResults,
-      ...kidsResults,
-      ...QuizResults,
-    ]);
-   
-    hideSearchLoader(); // ✅ STOP LOADER AFTER RENDER
+   // 🔹 MERGE RESULTS (NO RENDER YET)
+lastSearchResults = [
+  ...theoryResults,
+  ...designResults,
+  ...mediaResults,
+  ...dataResults,
+  ...mathResults,
+  ...kidsResults,
+  ...QuizResults,
+];
+
+// 🔁 RESET TO FIRST PAGE
+currentPage = 1;
+
+// 📄 RENDER FIRST PAGE ONLY
+renderPage();
+
+hideSearchLoader();
+
   }, 300); // UX delay so loader is visible
 }
 

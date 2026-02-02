@@ -142,23 +142,33 @@ body {
 
 
 /* ---------------- RESPONSIVE ---------------- */
-
+/* MOBILE FIX – KEEP HEADER IN ONE LINE */
 @media (max-width: 640px) {
   .header-bar {
-    grid-template-columns: 1fr;
-    text-align: center;
+    grid-template-columns: auto 1fr auto; /* ✅ still 3 columns */
+    gap: 8px;
   }
 
-  .header-left,
-  .header-right {
-    justify-content: center;
+  .brand-name {
+    font-size: 16px; /* slightly smaller */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .dropdown {
-    right: 50%;
-    transform: translateX(50%);
+  .auth-btn,
+  .user-menu span {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 }
+
 
 
 /* Login container */
@@ -2304,4 +2314,23 @@ cursor: pointer;
   background: #fee2e2;
   color: #991b1b;
   cursor: pointer;
+}
+/* pagination code css here for infinte scroll*/
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
