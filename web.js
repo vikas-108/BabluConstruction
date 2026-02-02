@@ -513,36 +513,52 @@ function toggleClearButton() {
   }
 }
 function renderPage() {
+  const pagination = document.getElementById("pagination");
+
+  // 🚫 NO RESULTS
+  if (!lastSearchResults.length) {
+    results.innerHTML =
+      "<p style='text-align:center;color:#64748b;'>No results found</p>";
+    pagination?.classList.add("hidden");
+    return;
+  }
+
+  const totalPages = Math.ceil(lastSearchResults.length / PAGE_SIZE);
+
+  // 🚫 ONLY ONE PAGE → HIDE PAGINATION
+  if (totalPages <= 1) {
+    pagination?.classList.add("hidden");
+  }
+
+  // 🚫 PAGE OUT OF RANGE (from old search)
+  if (currentPage > totalPages) {
+    currentPage = 1;
+  }
+
   const start = (currentPage - 1) * PAGE_SIZE;
   const end = start + PAGE_SIZE;
 
   const pageItems = lastSearchResults.slice(start, end);
 
-  if (!pageItems.length) {
-    results.innerHTML =
-      "<p style='text-align:center;color:#64748b;'>No results found</p>";
-    return;
-  }
-
   render(pageItems);
-  renderPagination();
-}
-function renderPagination() {
-  const pagination = document.getElementById("pagination");
-  const totalPages = Math.ceil(lastSearchResults.length / PAGE_SIZE);
 
-  if (totalPages <= 1) {
-    pagination.classList.add("hidden");
-    return;
+  // ✅ SHOW PAGINATION ONLY IF NEEDED
+  if (totalPages > 1) {
+    renderPagination(totalPages);
   }
+}
+
+function renderPagination(totalPages) {
+  const pagination = document.getElementById("pagination");
 
   pagination.classList.remove("hidden");
   pagination.innerHTML = `
     <button ${currentPage === 1 ? "disabled" : ""} onclick="prevPage()">⬅ Prev</button>
-    <span> ${currentPage} of ${totalPages}</span>
+    <span>Page ${currentPage} of ${totalPages}</span>
     <button ${currentPage === totalPages ? "disabled" : ""} onclick="nextPage()">Next ➡</button>
   `;
 }
+
 function resetPagination() {
   lastSearchResults = [];
   currentPage = 1;
@@ -555,14 +571,20 @@ function resetPagination() {
 }
 
 function nextPage() {
-  currentPage++;
-  renderPage();
+  const totalPages = Math.ceil(lastSearchResults.length / PAGE_SIZE);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderPage();
+  }
 }
 
 function prevPage() {
-  currentPage--;
-  renderPage();
+  if (currentPage > 1) {
+    currentPage--;
+    renderPage();
+  }
 }
+
 
 function render(items) {
   results.innerHTML = "";
@@ -884,6 +906,8 @@ const dataResults = shuffleArray(
     const mathResults = q ? searchMathFormulas(q) : [];
     const kidsResults = q ? searchKids(q) : [];
     const QuizResults = q ? searchQuiz(q) : [];
+    // 🔴 IMPORTANT: clear old pagination EVERY TIME
+resetPagination();
     // 🔹 MERGE WITHOUT DUPLICATES
    // 🔹 MERGE RESULTS (NO RENDER YET)
 lastSearchResults = [
