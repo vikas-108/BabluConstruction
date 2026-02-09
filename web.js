@@ -75,6 +75,7 @@ const districts = [
   "Nashik",
 ];
 const SEARCH_STATE_KEY = "brg_search_state";
+
 function saveSearchState() {
   const state = {
     query: input.value,
@@ -369,7 +370,7 @@ function closeDesignModal() {
 function cleanPhone(phone) {
   return phone.replace(/[^0-9]/g, "");
 }
-function tokenize(expr) {
+/*function tokenize(expr) {
   return expr
     .replace(/\s+/g, "")
     .match(/(sqrt|pow|\d+\.?\d*|\+|\-|\*|\/|\%|\^|\(|\)|,)/g);
@@ -475,7 +476,7 @@ function safeCalculate(input) {
     return null;
   }
   return null;
-}
+}*/
 function isMathExpression(input) {
   return /^[0-9+\-*/().%\s^,a-zA-Z]+$/.test(input) &&
          /[\d]/.test(input); // must contain at least one number
@@ -512,37 +513,54 @@ function toggleClearButton() {
     clearBtn.classList.add("hidden");
   }
 }
+// below is pagination code of which show how manges with data
 function renderPage() {
+  const pagination = document.getElementById("pagination");
+
+  // 🚫 NO RESULTS
+  if (!lastSearchResults.length) {
+    results.innerHTML =
+      "<p style='text-align:center;color:#64748b;'>No results found</p>";
+    pagination?.classList.add("hidden");
+    return;
+  }
+
+  const totalPages = Math.ceil(lastSearchResults.length / PAGE_SIZE);
+
+  // 🚫 ONLY ONE PAGE → HIDE PAGINATION
+  if (totalPages <= 1) {
+    pagination?.classList.add("hidden");
+  }
+
+  // 🚫 PAGE OUT OF RANGE (from old search)
+  if (currentPage > totalPages) {
+    currentPage = 1;
+  }
+
   const start = (currentPage - 1) * PAGE_SIZE;
   const end = start + PAGE_SIZE;
 
   const pageItems = lastSearchResults.slice(start, end);
 
-  if (!pageItems.length) {
-    results.innerHTML =
-      "<p style='text-align:center;color:#64748b;'>No results found</p>";
-    return;
-  }
-
   render(pageItems);
-  renderPagination();
-}
-function renderPagination() {
-  const pagination = document.getElementById("pagination");
-  const totalPages = Math.ceil(lastSearchResults.length / PAGE_SIZE);
 
-  if (totalPages <= 1) {
-    pagination.classList.add("hidden");
-    return;
+  // ✅ SHOW PAGINATION ONLY IF NEEDED
+  if (totalPages > 1) {
+    renderPagination(totalPages);
   }
+}
+
+function renderPagination(totalPages) {
+  const pagination = document.getElementById("pagination");
 
   pagination.classList.remove("hidden");
   pagination.innerHTML = `
     <button ${currentPage === 1 ? "disabled" : ""} onclick="prevPage()">⬅ Prev</button>
-    <span> ${currentPage} of ${totalPages}</span>
+    <span>Page ${currentPage} of ${totalPages}</span>
     <button ${currentPage === totalPages ? "disabled" : ""} onclick="nextPage()">Next ➡</button>
   `;
 }
+
 function resetPagination() {
   lastSearchResults = [];
   currentPage = 1;
@@ -555,15 +573,21 @@ function resetPagination() {
 }
 
 function nextPage() {
-  currentPage++;
-  renderPage();
+  const totalPages = Math.ceil(lastSearchResults.length / PAGE_SIZE);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderPage();
+  }
 }
 
 function prevPage() {
-  currentPage--;
-  renderPage();
+  if (currentPage > 1) {
+    currentPage--;
+    renderPage();
+  }
 }
 
+// all card code if all type of data set render code ui from below code 
 function render(items) {
   results.innerHTML = "";
   if (!items.length) {
@@ -789,7 +813,7 @@ function applySearch() {
     const state = stateFilter.value.toLowerCase();
     const district = districtFilter.value.toLowerCase();
     
-    const calcBox = document.getElementById("calcResult");
+    /*const calcBox = document.getElementById("calcResult");
 
     // 🧮 CALCULATOR MODE — FIRST & ONLY ONCE
     if (isMathExpression(q)) {
@@ -811,7 +835,7 @@ function applySearch() {
     }
 
     // ❌ Not math → hide calculator
-    calcBox.classList.add("hidden");
+    calcBox.classList.add("hidden");*/
     // 🚫 Prevent heavy search for very short input
 if (q.length === 1 && !isMathExpression(q)) {
   results.innerHTML =
@@ -884,6 +908,8 @@ const dataResults = shuffleArray(
     const mathResults = q ? searchMathFormulas(q) : [];
     const kidsResults = q ? searchKids(q) : [];
     const QuizResults = q ? searchQuiz(q) : [];
+    // 🔴 IMPORTANT: clear old pagination EVERY TIME
+resetPagination();
     // 🔹 MERGE WITHOUT DUPLICATES
    // 🔹 MERGE RESULTS (NO RENDER YET)
 lastSearchResults = [
@@ -967,6 +993,7 @@ const filterBox = document.getElementById("filterBox");
 filterToggle.addEventListener("click", () => {
   filterBox.classList.toggle("show");
 });
+
 // 4️⃣ event bindings (LAST)
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("clearSearchBtn")

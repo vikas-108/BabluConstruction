@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manage Account</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<main class="account-page login-required" style="display:none;">
+  
+  <!-- PROFILE HEADER -->
+<header class="profile-header">
+  <div class="profile-photo-wrapper">
+    <img id="profilePhoto" src="images/golo.png" alt="Profile photo" />
+
+    <!-- Upload & Camera Buttons -->
+    <div class="photo-actions">
+      <label for="uploadPhoto" class="photo-btn">📁 Upload</label>
+      <input type="file" id="uploadPhoto" accept="image/*" style="display:none" onchange="previewPhoto(event)" />
+
+      <label for="cameraPhoto" class="photo-btn">📷 Camera</label>
+      <input type="file" id="cameraPhoto" accept="image/*" capture="user" style="display:none" onchange="previewPhoto(event)" />
+    </div>
+  </div>
+
+  <button type="button" class="edit-btn" onclick="openEditProfile()" aria-label="Edit Profile">✏️</button>
+
+  <h2 id="profileName">Your Name</h2>
+  <p id="profileRole">Contractor</p>
+  <p id="profileExp">Experience: —</p>
+  <p id="profilePhone"></p>
+</header>
+
+  <!-- DETAILS -->
+  <section class="account-cards">
+    <article class="account-card">
+      <h3>Bio details</h3>
+      <p id="profileBio">No details added</p>
+    </article>
+
+    <article class="account-card">
+      <h3>History</h3>
+      <p>callogs and otherlogs will coming soon </p>
+    </article>
+<article class="account-card">
+      <h3>Activity</h3>
+      <p>logins device details coming soon</p>
+    </article>
+    <article class="account-card danger">
+      <h3>Danger Zone</h3>
+      <button type="button" onclick="deleteAccount()">Delete My Account</button>
+    </article>
+  </section>
+
+</main>
+
+<!-- EDIT PROFILE MODAL -->
+<div id="editModal" class="account-modal hidden" role="dialog" inert>
+  <div class="account-modal-box">
+    <h3>Edit Profile</h3>
+
+    <input id="editName" placeholder="Full Name" />
+   <div class="form-group">
+  <label for="editRole">Role 🛠</label>
+  <select id="editRole">
+    <option value="Contractor">Contractor</option>
+    <option value="Supplier">Supplier</option>
+    <option value="Technician">Technician</option>
+    <option value="Client">Client</option>
+  </select>
+</div>
+    <input id="editExp" placeholder="Experience (years)" />
+    <textarea id="editBio" placeholder="About your work"></textarea>
+
+    <!--<div class="password-field">
+      <input id="editPassword" type="password" placeholder="Password" />
+      <button type="button" onclick="togglePassword()" aria-label="Toggle Password Visibility">👁</button>
+    </div>-->
+
+    <button type="button" onclick="saveProfile()">Save</button>
+    <button type="button" class="second" onclick="closeEdit()">Cancel</button>
+  </div>
+</div>
+<script src="login.js"></script>
+<script src="js/manage.js"></script>
+</body>
+</html>

@@ -37,7 +37,7 @@
         <span id="userName"></span>
         <div class="dropdown">
           <a href="account.html">Manage Account</a>
-          <a href="settings.html">Settings</a>
+          <!--<a href="settings.html">Settings</a>-->
           <a href="create-profile.html">Create & Post Profile</a>
           <hr />
           <button id="logoutBtn">Logout</button>
@@ -63,7 +63,7 @@
           shuttering, soil filling, technician supply, and labour services with
           quality and transparency.
         </p>
-        <div class="hero-buttons">
+       <div class="hero-buttons hidden" id="heroButtons">
           <a href="contractor.html" class="btn primary">Contractors</a>
           <a href="services.html" class="btn primary">Services</a>
           <a href="projects-reports.html" class="btn secondary">Project</a>
@@ -89,7 +89,7 @@
             </button>
           </div>
 
-          <button class="filter-toggle" id="filterToggle">🔍 Filters</button>
+          <button class="filter-toggle hidden" id="filterToggle">🔍 Filters</button>
           <button id="clearSearchBtn" class="clear-btn hidden">✖ </button>
         </div>
         <!-- FILTERS (HIDDEN BY DEFAULT) -->
@@ -116,7 +116,7 @@
           </div>
         </div>
       </div>
-      <div id="calcResult" class="calc-result hidden"></div>
+      <!--<div id="calcResult" class="calc-result hidden"></div>-->
       <!-- RESULTS -->
       <div class="results" id="results"></div>
       <div id="pagination" class="pagination hidden"></div>
@@ -127,7 +127,7 @@
     </div>
 
     <!-- ================= SERVICES ================= -->
-    <section class="services">
+    <section class="services hidden" id="servicesSection">
       <div class="container">
         <h2 class="section-title">Our Core Construction Services</h2>
         <p class="section-subtitle">
@@ -201,7 +201,7 @@
         </div>
       </div>
     </section> -->
-    <section class="plans">
+   <section class="plans hidden" id="plansSection">
       <div class="container">
         <h2 class="section-title">Engagement & Support Plans</h2>
         <p class="section-subtitle">
@@ -258,7 +258,7 @@
       </div>
     </section>
     <!-- ================= SUBSCRIPTION PLANS ================= -->
-    <section class="subscription-section">
+    <section class="subscription-section hidden" id="subscriptionSection">
       <div class="container">
         <div class="subscription-header">
           <h2>Subscription & Engagement Plans</h2>
