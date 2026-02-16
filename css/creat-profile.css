@@ -1,0 +1,152 @@
+/*css of manage/profile work profile form file code*/
+body {
+  font-family: system-ui, sans-serif;
+  background: #d4f079;
+}
+.create-profile {
+  max-width: 700px;
+  margin: auto;
+  padding: 16px;
+}
+
+form {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+input, select, textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5f5;
+  font-size: 16px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: black;
+  cursor: pointer;
+}
+
+.profile-card {
+  margin-top: 20px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+}
+
+.profile-media {
+  height: 200px;
+  background: black;
+}
+
+.profile-media img,
+.profile-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-body {
+  padding: 14px;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.profile-actions button {
+  background: #e5e7eb;
+  color: #111;
+}
+
+.hidden {
+  display: none;
+}
+/* Card container must be relative */
+.profile-card-item {
+  position: relative;
+  overflow: hidden;
+}
+
+/* RIGHT SIDE FLOAT ACTION BAR */
+.profile-actions-float {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 5;
+}
+
+/* BUTTON STYLE */
+.action-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 20px;
+  background: white;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  transition: 0.3s ease;
+}
+
+/* CALL BUTTON */
+.action-btn.call {
+  background: #2563eb;
+  color: white;
+}
+
+/* WHATSAPP BUTTON */
+.action-btn.whatsapp {
+  background: #25d366;
+  color: white;
+}
+
+/* HOVER EFFECT */
+.action-btn:hover {
+  transform: scale(1.12);
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  .profile-actions-float {
+    right: 6px;
+  }
+
+  .action-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+  }
+}
+.toggle-form-btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:#fff;
+  font-size:16px;
+  margin-bottom:12px;
+  cursor:pointer;
+}
+
+#formWrapper{
+  transition:0.3s ease;
+}
+
+

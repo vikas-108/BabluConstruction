@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Manage Account</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/manage-account.css" />
 </head>
 <body>
 
@@ -31,6 +31,7 @@
   <p id="profileRole">Contractor</p>
   <p id="profileExp">Experience: —</p>
   <p id="profilePhone"></p>
+  <p id="profileEmail">Email: </p>
 </header>
 
   <!-- DETAILS -->
@@ -61,7 +62,8 @@
   <div class="account-modal-box">
     <h3>Edit Profile</h3>
 
-    <input id="editName" placeholder="Full Name" />
+    <input id="editName" placeholder="Full Name" required />
+    <input id ="editEmail" placeholder="Enter email" required/>
    <div class="form-group">
   <label for="editRole">Role 🛠</label>
   <select id="editRole">

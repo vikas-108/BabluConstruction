@@ -1,5 +1,9 @@
 // Constants
-const PROFILE_KEY = "cb_user_profile";
+const PROFILE_KEY_BASE = "cb_user_profile";
+
+function getProfileKey(phone) {
+  return `${PROFILE_KEY_BASE}_${phone}`;
+}
 
 const DEFAULT_PROFILE = {
   name: "",
@@ -8,6 +12,7 @@ const DEFAULT_PROFILE = {
   bio: "",
   photo: "",
   phone: "",
+  email: "",
   passwordHash: ""
 };
 
@@ -18,32 +23,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelector(".login-required").style.display = "block";
 
-  let profile = JSON.parse(localStorage.getItem(PROFILE_KEY)) || DEFAULT_PROFILE;
+  const key = getProfileKey(login.phone);
+  let profile = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
   profile.phone = login.phone;
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  localStorage.setItem(key, JSON.stringify(profile));
   renderProfile(profile);
 });
 
 // Render profile data into DOM
 function renderProfile(profile) {
   document.getElementById("profileName").textContent = profile.name || "Your Name";
-  document.getElementById("profileRole").textContent = profile.role || "select a role";
+  document.getElementById("profileRole").textContent = profile.role || "Contractor";
   document.getElementById("profileExp").textContent =
     profile.experience ? `Experience: ${profile.experience}` : "Experience: —";
   document.getElementById("profilePhone").textContent = profile.phone;
+  document.getElementById("profileEmail").textContent = profile.email ? ` ${profile.email}` : "Email: —";
   document.getElementById("profileBio").textContent = profile.bio || "No details added";
-   // Show saved photo if available
+
+  // Show saved photo if available
   if (profile.photo) {
-  document.getElementById("profilePhoto").src = profile.photo;
-} else {
-  // Generate initials avatar if no photo
-  const initials = (profile.name || "U N")
-    .split(" ")
-    .map(n => n[0].toUpperCase())
-    .join("");
-  document.getElementById("profilePhoto").src =
-    `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
-}
+    document.getElementById("profilePhoto").src = profile.photo;
+  } else {
+    // Generate initials avatar if no photo
+    const initials = (profile.name || "U N")
+      .split(" ")
+      .map(n => n[0].toUpperCase())
+      .join("");
+    document.getElementById("profilePhoto").src =
+      `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
+  }
 }
 
 // Open modal with existing profile data
@@ -51,28 +59,30 @@ function openEditProfile() {
   const modal = document.getElementById("editModal");
   if (!modal) return;
 
-  const p = JSON.parse(localStorage.getItem(PROFILE_KEY)) || DEFAULT_PROFILE;
+  const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
+  if (!login) return;
+
+  const key = getProfileKey(login.phone);
+  const p = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
+
   document.getElementById("editName").value = p.name || "";
-  document.getElementById("editRole").value = p.role || "";
+  document.getElementById("editRole").value = p.role || "Contractor";
   document.getElementById("editExp").value = p.experience || "";
   document.getElementById("editBio").value = p.bio || "";
-
+ document.getElementById("editEmail").value = p.email || "";
   modal.classList.remove("hidden");
   modal.removeAttribute("inert");
-  modal.querySelector("input, textarea, button").focus();
-
+  document.getElementById("editName").focus();
 }
 
 // Close modal
 function closeEdit() {
   const modal = document.getElementById("editModal");
   if (!modal) return;
-modal.classList.add("hidden");
+  modal.classList.add("hidden");
   modal.setAttribute("inert", "");
-  // Return focus to the edit button
   document.querySelector(".edit-btn").focus();
 }
-
 
 // Close modal when clicking outside modal-box
 document.getElementById("editModal")?.addEventListener("click", e => {
@@ -80,7 +90,8 @@ document.getElementById("editModal")?.addEventListener("click", e => {
     closeEdit();
   }
 });
-// preview selected images
+
+// Preview selected images
 function previewPhoto(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -88,63 +99,70 @@ function previewPhoto(event) {
   const reader = new FileReader();
   reader.onload = e => {
     document.getElementById("profilePhoto").src = e.target.result;
+
+    const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
+    if (!login) return;
+
+    const key = getProfileKey(login.phone);
+    let profile = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
+    profile.photo = e.target.result;
+    localStorage.setItem(key, JSON.stringify(profile));
   };
   reader.readAsDataURL(file);
-
-  // Optionally save to profile
-  let profile = JSON.parse(localStorage.getItem(PROFILE_KEY)) || DEFAULT_PROFILE;
-  profile.photo = file.name; // or store base64 if needed
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
 }
-// Save profile changes
-async function saveProfile() {
-  let p = JSON.parse(localStorage.getItem(PROFILE_KEY)) || DEFAULT_PROFILE;
 
+// Save profile changes
+function saveProfile() {
+  const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
+  if (!login) return;
+
+  const key = getProfileKey(login.phone);
+  let p = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
+
+  /*const nameVal = document.getElementById("editName").value.trim();
+  const roleVal = document.getElementById("editRole").value;
+  const expVal = document.getElementById("editExp").value.trim();
+  const bioVal = document.getElementById("editBio").value.trim();
+
+  if (nameVal) p.name = nameVal;
+  if (roleVal) p.role = roleVal;
+  if (expVal) p.experience = expVal;
+  if (bioVal) p.bio = bioVal;
+
+  // Always preserve phone
+  p.phone = login.phone;*/
   p.name = document.getElementById("editName").value.trim();
-  p.role = document.getElementById("editRole").value.trim();
+  p.role = document.getElementById("editRole").value;
   p.experience = document.getElementById("editExp").value.trim();
   p.bio = document.getElementById("editBio").value.trim();
+  p.email = document.getElementById("editEmail").value.trim();
+  p.phone = login.phone; // always tie to current user
 
-  //const password = document.getElementById("editPassword").value.trim();
-  //if (password) {
-  //  p.passwordHash = await hashPassword(password);
- // }
+  // Always preserve photo if already set
+  const photoSrc = document.getElementById("profilePhoto").src;
+  if (photoSrc && !photoSrc.includes("default-user.png")) {
+    p.photo = photoSrc;
+  }
 
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
+  localStorage.setItem(key, JSON.stringify(p));
   renderProfile(p);
   closeEdit();
 }
 
-// Toggle password visibility
-//function togglePassword() {
- // const pwd = document.getElementById("editPassword");
-  //pwd.type = pwd.type === "password" ? "text" : "password";
-//}
-
-// Hash password securely (with fallback)
-//async function hashPassword(text) {
- // if (window.crypto && crypto.subtle) {
-  //  const enc = new TextEncoder().encode(text);
-  //  const buf = await crypto.subtle.digest("SHA-256", enc);
-  //  return [...new Uint8Array(buf)]
-  //    .map(b => b.toString(16).padStart(2, "0"))
-  //    .join("");
- // } else {
-    // Fallback (not secure, but prevents breakage in old browsers)
- //   return btoa(text);
- // }
-//}
-
 // Delete account
 function deleteAccount() {
   if (!confirm("Delete your account permanently?")) return;
-  localStorage.removeItem(LOGIN_KEY); // LOGIN_KEY from login.js
-  localStorage.removeItem(PROFILE_KEY);
+  const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
+  if (login) {
+    const key = getProfileKey(login.phone);
+    localStorage.removeItem(key);
+  }
+  localStorage.removeItem(LOGIN_KEY);
   location.href = "index.html";
 }
 
 // Logout
 function logout() {
-  localStorage.removeItem(LOGIN_KEY); // LOGIN_KEY from login.js
+  localStorage.removeItem(LOGIN_KEY);
   location.href = "index.html";
 }
