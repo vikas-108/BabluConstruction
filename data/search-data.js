@@ -627,7 +627,7 @@ const SEARCH_DATA = [
     district: "Karnal",
     image: "media/photos/son.jpg",
     keywords: "any work electrician wiring, repair, fitting any type of electrician work",
-    phone: "9897969569",
+    phone: "989796954569",
     description: "Experienced electrician for wiring, repairs, and fitting etc."
   },
   // more entries of technicians
@@ -640,7 +640,7 @@ const SEARCH_DATA = [
     district: "Karnal",
     image: "media/photos/son.jpg",
     keywords: "any work electrician wiring, repair, fitting any type of electrician work",
-    phone: "9897969569",
+    phone: "98979569569",
     description: "Experienced electrician for wiring, repairs, and fitting etc."
   },
   {
@@ -652,7 +652,7 @@ const SEARCH_DATA = [
     district: "South Delhi",
     image: "media/photos/amit.jpg",
     keywords: "plumber water supply, fittings, repair, bathroom, kitchen",
-    phone: "9876543210",
+    phone: "98765545443210",
     description: "Reliable plumber for bathroom and kitchen fittings, water supply and repair."
   },
   {
@@ -664,7 +664,7 @@ const SEARCH_DATA = [
     district: "Ludhiana",
     image: "media/photos/sandeep.jpg",
     keywords: "carpenter furniture, doors, windows, cabinets, polish",
-    phone: "9812345678",
+    phone: "981234545678",
     description: "Skilled carpenter specializing in furniture making and wooden fittings."
   },
   {
@@ -676,7 +676,7 @@ const SEARCH_DATA = [
     district: "Noida",
     image: "media/photos/rohit.jpg",
     keywords: "painter wall polish, texture, waterproofing, interior, exterior",
-    phone: "9823456789",
+    phone: "982344556789",
     description: "Professional painter with expertise in wall textures and waterproofing."
   },
   {
@@ -688,7 +688,7 @@ const SEARCH_DATA = [
     district: "Jaipur",
     image: "media/photos/manoj.jpg",
     keywords: "welder fabrication, pipelines, gates, grills, repair",
-    phone: "9834567890",
+    phone: "983456457890",
     description: "Experienced welder specializing in steel fabrication and repair."
   },
   {
@@ -700,7 +700,7 @@ const SEARCH_DATA = [
     district: "Indore",
     image: "media/photos/sunil.jpg",
     keywords: "tiles flooring, marble, granite, bathroom, kitchen",
-    phone: "9845678901",
+    phone: "984567458901",
     description: "Expert in tile installation for floors, walls, and bathrooms."
   },
   {
@@ -712,7 +712,7 @@ const SEARCH_DATA = [
     district: "Kolkata",
     image: "media/photos/rajesh.jpg",
     keywords: "roofing sheets, waterproofing, insulation, tile roofing",
-    phone: "9856789012",
+    phone: "985678549012",
     description: "Specialist in roofing solutions including waterproofing and insulation."
   },
   {
@@ -724,7 +724,7 @@ const SEARCH_DATA = [
     district: "Panipat",
     image: "media/photos/deepak.jpg",
     keywords: "electrician wiring, inverter, solar installation, repair",
-    phone: "9867890123",
+    phone: "986789450123",
     description: "Certified electrician with expertise in solar panel installation and inverter systems."
   },
   {
@@ -736,7 +736,7 @@ const SEARCH_DATA = [
     district: "East Delhi",
     image: "media/photos/anil.jpg",
     keywords: "plumber fittings, pipelines, water tank, bathroom, kitchen",
-    phone: "9878901234",
+    phone: "987890541234",
     description: "Plumber experienced in water tank installation and fittings."
   },
   {
@@ -748,7 +748,7 @@ const SEARCH_DATA = [
     district: "Ahmedabad",
     image: "media/photos/karan.jpg",
     keywords: "carpenter modular kitchen, cabinets, furniture, polish",
-    phone: "9889012345",
+    phone: "988901452345",
     description: "Carpenter specializing in modular kitchens and custom furniture."
   },
   {
@@ -760,7 +760,7 @@ const SEARCH_DATA = [
     district: "North Delhi",
     image: "media/photos/zahid.jpg",
     keywords: "electrician wiring, repair, fitting, inverter, solar",
-    phone: "9897000001",
+    phone: "98970400001",
     description: "Certified electrician with expertise in wiring, inverter, and solar installations."
   },
   {
@@ -772,7 +772,7 @@ const SEARCH_DATA = [
     district: "Panipat",
     image: "media/photos/arjun.jpg",
     keywords: "plumber water supply, fittings, bathroom, kitchen, pipelines",
-    phone: "9897000002",
+    phone: "989704500002",
     description: "Reliable plumber for bathroom fittings, kitchen pipelines, and water supply systems."
   },
   {
@@ -784,7 +784,7 @@ const SEARCH_DATA = [
     district: "Surat",
     image: "media/photos/bhavesh.jpg",
     keywords: "carpenter furniture, doors, windows, cabinets, polish",
-    phone: "9897000003",
+    phone: "989700450003",
     description: "Carpenter specializing in furniture making and wooden fittings."
   },
   {
@@ -796,7 +796,7 @@ const SEARCH_DATA = [
     district: "Jaipur",
     image: "media/photos/chirag.jpg",
     keywords: "painter wall polish, texture, waterproofing, interior, exterior",
-    phone: "9897000004",
+    phone: "989700540004",
     description: "Painter experienced in wall textures, polish, and waterproofing solutions."
   },
   {
@@ -808,7 +808,7 @@ const SEARCH_DATA = [
     district: "Amritsar",
     image: "media/photos/dinesh.jpg",
     keywords: "welder fabrication, pipelines, gates, grills, repair",
-    phone: "9897000005",
+    phone: "989703400005",
     description: "Welder specializing in steel fabrication and industrial repair."
   },
   {
@@ -820,7 +820,7 @@ const SEARCH_DATA = [
     district: "Lucknow",
     image: "media/photos/eklavya.jpg",
     keywords: "tiles flooring, marble, granite, bathroom, kitchen",
-    phone: "9897000006",
+    phone: "989704300006",
     description: "Expert in tile installation for floors, walls, and bathrooms."
   },
   {
@@ -832,7 +832,7 @@ const SEARCH_DATA = [
     district: "East Delhi",
     image: "media/photos/farhan.jpg",
     keywords: "roofing sheets, waterproofing, insulation, tile roofing",
-    phone: "9897000007",
+    phone: "98970040007",
     description: "Specialist in roofing solutions including waterproofing and insulation."
   },
   {
@@ -844,7 +844,7 @@ const SEARCH_DATA = [
     district: "Indore",
     image: "media/photos/gaurav.jpg",
     keywords: "electrician wiring, repair, inverter, solar installation",
-    phone: "9897000008",
+    phone: "989703400008",
     description: "Experienced electrician for wiring, inverter systems, and solar installations."
   },
   {
@@ -856,7 +856,7 @@ const SEARCH_DATA = [
     district: "Kolkata",
     image: "media/photos/harish.jpg",
     keywords: "plumber fittings, pipelines, bathroom, kitchen, water tank",
-    phone: "9897000009",
+    phone: "989700430009",
     description: "Plumber specializing in bathroom fittings and water tank installations."
   },
   {
@@ -868,7 +868,7 @@ const SEARCH_DATA = [
     district: "South Delhi",
     image: "media/photos/ishaan.jpg",
     keywords: "carpenter modular kitchen, cabinets, furniture, polish",
-    phone: "9897000010",
+    phone: "989702100010",
     description: "Carpenter specializing in modular kitchens and custom furniture."
   },
   {
@@ -880,7 +880,7 @@ const SEARCH_DATA = [
     district: "Sonipat",
     image: "media/photos/javed.jpg",
     keywords: "painter wall polish, waterproofing, texture, interior",
-    phone: "9897000011",
+    phone: "989721000011",
     description: "Painter with expertise in wall polish and waterproofing."
   },
   {
@@ -892,7 +892,7 @@ const SEARCH_DATA = [
     district: "Patiala",
     image: "media/photos/kunal.jpg",
     keywords: "welder fabrication, gates, grills, pipelines, repair",
-    phone: "9897000012",
+    phone: "989701200012",
     description: "Welder experienced in gates, grills, and industrial fabrication."
   },
   {
@@ -904,7 +904,7 @@ const SEARCH_DATA = [
     district: "Varanasi",
     image: "media/photos/lakshman.jpg",
     keywords: "tiles flooring, marble, granite, bathroom, kitchen",
-    phone: "9897000013",
+    phone: "989700120013",
     description: "Tile setter with expertise in marble and granite flooring."
   },
   {
@@ -916,7 +916,7 @@ const SEARCH_DATA = [
     district: "West Delhi",
     image: "media/photos/manish.jpg",
     keywords: "roofing sheets, waterproofing, insulation, tile roofing",
-    phone: "9897000014",
+    phone: "989700210014",
     description: "Roofer specializing in sheet roofing and waterproofing."
   },
   {
@@ -928,7 +928,7 @@ const SEARCH_DATA = [
     district: "Ambala",
     image: "media/photos/naveen.jpg",
     keywords: "electrician wiring, repair, fitting, solar installation",
-    phone: "9897000015",
+    phone: "989700023015",
     description: "Electrician with expertise in wiring, fittings, and solar installations."
   },
   {
@@ -940,7 +940,7 @@ const SEARCH_DATA = [
     district: "Bathinda",
     image: "media/photos/omkar.jpg",
     keywords: "plumber fittings, pipelines, bathroom, kitchen, repair",
-    phone: "9897000016",
+    phone: "989700023016",
     description: "Plumber experienced in bathroom and kitchen fittings."
   },
   {
@@ -952,7 +952,7 @@ const SEARCH_DATA = [
     district: "Ghaziabad",
     image: "media/photos/prakash.jpg",
     keywords: "carpenter furniture, doors, windows, cabinets, polish",
-    phone: "9897000017",
+    phone: "989700012017",
     description: "Carpenter specializing in doors, windows, and furniture making."
   },
   {
@@ -964,7 +964,7 @@ const SEARCH_DATA = [
     district: "Central Delhi",
     image: "media/photos/qadir.jpg",
     keywords: "painter wall polish, waterproofing, texture, interior, exterior",
-    phone: "9897000018",
+    phone: "98970000218",
     description: "Painter with expertise in interior and exterior decorative finishes."
   },
   {
@@ -976,7 +976,7 @@ const SEARCH_DATA = [
     district: "Pune",
     image: "media/photos/ravi.jpg",
     keywords: "welder fabrication, pipelines, gates, grills, repair",
-    phone: "9897000019",
+    phone: "98970000219",
     description: "Welder specializing in pipelines and industrial fabrication."
   }
 
