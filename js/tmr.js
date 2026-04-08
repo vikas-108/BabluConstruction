@@ -10,8 +10,8 @@ let accumulatedTime = 0; // total time before pause
 let totalHoursWorked = 0;
 let totalEarningsToday = 0;
 let sessionId = null;
-const API_BASE = "http://localhost:5000/api/work"; // change if using domain
-const SERVER_BASE = "http://localhost:5000";
+const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
+const SERVER_BASE = "https://api.buildskil.com";
 function authHeaders(isFormData = false) {
 
   const headers = {
