@@ -346,7 +346,8 @@ async function startCamera() {
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject = stream;
-
+    video.muted = true; // 🔥 FIX
+    video.playsInline = true; // mobile fix
     // ✅ Explicit play call required on mobile
     await video.play();
 
