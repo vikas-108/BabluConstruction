@@ -598,7 +598,7 @@ const SEARCH_DATA = [
   },
   {
     id: "c046",
-    category: "material",
+    category: "supplier",
     name: "ACC Cement Supplier",
     type: "Cement",
     state: "Punjab",
@@ -609,7 +609,7 @@ const SEARCH_DATA = [
   },
   {
     id: "c047",
-    category: "material",
+    category: "supplier",
     name: "River Sand Supply",
     type: "Sand",
     state: "Maharashtra",
@@ -618,6 +618,9 @@ const SEARCH_DATA = [
     keywords: "sand soil filling foundation",
     description: "Clean river sand for RCC and plaster work."
   },
+
+
+   // more entries of technicians
   {
     id: "c048",
     category: "technician",
@@ -630,7 +633,6 @@ const SEARCH_DATA = [
     phone: "9897969569",
     description: "Experienced electrician for wiring, repairs, and fitting etc."
   },
-  // more entries of technicians
   {
     id: "c049",
     category: "technician",
@@ -958,6 +960,7 @@ const SEARCH_DATA = [
   {
     id: "c075",
     category: "technician",
+    role: "electrician",
     name: "Qadir Hussain",
     type: "Painter",
     state: "Delhi",

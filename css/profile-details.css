@@ -1,0 +1,265 @@
+/* ===== BASE ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f1f5f9;
+  color: #333;
+}
+
+#profileContainer {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ===== HERO SECTION ===== */
+.profile-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+
+.hero-media {
+  flex: 1 1 420px;
+  min-height: 260px;
+}
+
+.hero-media img,
+.hero-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-info {
+  flex: 1 1 300px;
+  padding: 24px;
+}
+
+.hero-info h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: #111;
+}
+
+.verify-badge {
+  color: #16a34a;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.badge {
+  display: inline-block;
+  background: #0ea5e9;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.meta {
+  color: #64748b;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 14px;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.call { background: #2563eb; }
+.call:hover { background: #1e40af; }
+
+.whatsapp { background: #16a34a; }
+.whatsapp:hover { background: #15803d; }
+
+/* ===== DETAILS SECTION ===== */
+/* Make profile-details a horizontal scroll row */
+.profile-details {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;          /* ✅ keep items in one row */
+  overflow-x: auto;           /* ✅ enable horizontal scroll */
+  scroll-behavior: smooth;    /* ✅ smooth scrolling */
+  -webkit-overflow-scrolling: touch; /* ✅ momentum scroll on iOS */
+  margin-top: 12px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+/* Hide scrollbar for a cleaner look */
+.profile-details::-webkit-scrollbar {
+  height: 6px;
+}
+.profile-details::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.profile-details::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Each subsection inside profile-details */
+.profile-details > div,
+.profile-details > p {
+  flex: 0 0 150px;            /* ✅ fixed width so they stay side-by-side */
+  background: #bdd5ec;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.profile-details > div:hover,
+.profile-details > p:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .profile-details > div,
+  .profile-details > p {
+    flex: 0 0 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-details > div,
+  .profile-details > p {
+    flex: 0 0 180px;
+    font-size: 13px;
+  }
+}
+
+/* Headings inside subsections */
+.profile-details h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #111;
+}
+
+
+/* ===== SKILLS TAGS ===== */
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skills span {
+  background: #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+
+.skills span:hover {
+  background: #cbd5e1;
+}
+
+/* ===== GALLERY ===== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .hero-info h1 { font-size: 24px; }
+}
+
+@media (max-width: 768px) {
+  .profile-hero { flex-direction: column; }
+  .hero-info { padding: 18px; }
+  .hero-info h1 { font-size: 22px; }
+}
+
+@media (max-width: 480px) {
+  .btn { flex: 1; text-align: center; }
+  .profile-actions { flex-direction: column; }
+}
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .profile-details > div,
+  .profile-details > p {
+    flex: 0 0 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-details > div,
+  .profile-details > p {
+    flex: 0 0 180px;
+    font-size: 13px;
+  }
+}
+/* Lightbox styles */
+.lightbox {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 6px;
+}
+.lightbox .nav {
+  position: absolute;
+  top: 50%;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+.lightbox .prev { left: 20px; }
+.lightbox .next { right: 20px; }

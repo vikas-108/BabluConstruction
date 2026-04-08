@@ -3,34 +3,67 @@ body {
   font-family: system-ui, sans-serif;
   background: #d4f079;
 }
+/* Ensure consistent sizing across browsers */
+* {
+  box-sizing: border-box;
+}
+
+/* Form container */
 .create-profile {
   max-width: 700px;
   margin: auto;
   padding: 16px;
+  width: 100%;
 }
 
+/* Responsive form layout */
 form {
   background: white;
   padding: 16px;
   border-radius: 12px;
   display: grid;
   gap: 12px;
+  width: 100%;
 }
 
+/* Inputs, selects, textarea */
 input, select, textarea {
+  width: 100%;              /* Full width on all devices */
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #cbd5f5;
   font-size: 16px;
+  max-width: 100%;          /* Prevent overflow */
 }
 
+/* Buttons */
 button {
   padding: 12px;
   border: none;
   border-radius: 8px;
   background: #2563eb;
-  color: black;
+  color: #fff;
   cursor: pointer;
+  font-size: 16px;
+  width: 100%;              /* Full width for consistency */
+}
+
+/* Textarea should resize nicely */
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .create-profile {
+    padding: 12px;
+  }
+
+  input, select, textarea, button {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
 
 .profile-card {
@@ -57,17 +90,62 @@ button {
   padding: 14px;
 }
 
+/* Profile actions container */
 .profile-actions {
   display: flex;
+  flex-wrap: wrap;              /* allows wrapping on small screens */
   justify-content: space-between;
+  gap: 10px;                    /* consistent spacing between buttons */
   margin-top: 10px;
 }
 
-.profile-actions button {
-  background: #e5e7eb;
+/* Secondary button (yellow variant) */
+.vtn {
+  background: #e5cd76;
   color: #111;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14=6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.vtn:hover {
+  background: #efce4b;
+  transform: translateY(-2px);
+}
+
+/* Primary button (red variant) */
+.btn {
+  background-color: #dc3545; /* Bootstrap-style red */
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #a71d2a; /* darker red on hover */
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .profile-actions {
+    flex-direction: column;     /* stack buttons vertically */
+    align-items: stretch;
+  }
+  .btn, .vtn {
+    width: 100%;                /* full width buttons on mobile */
+    text-align: center;
+  }
+}
 .hidden {
   display: none;
 }

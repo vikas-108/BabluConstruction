@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects & Reports | BUILDSKIL Contractor Construction Service</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/projects-ui.css">
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<section class="project-table-section">
+  <div class="container">
+    <h2 class="section-title">Projects & Reports</h2>
+    <p class="section-subtitle">Transparent execution, documented progress, and proven results</p>
+
+    <!-- Project Actions -->
+    <div class="actions-wrapper">
+      <button class="add-btn" id="addbtn" onclick="showAddForm()">➕ Add Project</button>
+      <button class="upload-btn" id="uploadbtn" onclick="showUploadForm()">⬆ Upload Files</button>
+    </div>
+    <div id="uploadForm" class="upload-form" style="display:none;">
+  <label for="projectSelect">Select Project:</label>
+  <select id="projectSelect"></select>
+
+  <input type="file" id="fileInput" accept="image/*,video/*" multiple />
+  
+  <button class="save-btn" onclick="saveUpload()">Save</button>
+  <button class="cancel-btn" onclick="hideUploadForm()">Cancel</button>
+</div>
+
+     <!-- Hidden form for new project -->
+<div id="addForm" class="add-form" >
+  <input type="text" id="clientName" placeholder="Client Name" required/>
+  <input type="text" id="projectName" placeholder="Project Name" required/>
+  <input 
+  type="tel" 
+  id="clientPhone" 
+  inputmode="numeric" 
+  pattern="[0-9]{10}" 
+  maxlength="10" 
+  placeholder="user1 Number" 
+  required
+/>
+<input 
+  type="tel" 
+  id="clientPhone2" 
+  inputmode="numeric" 
+  pattern="[0-9]{10}" 
+  maxlength="10" 
+  placeholder="user2 Number" 
+/>
+  <button class="create-btn" onclick="createProject()">Create</button>
+  <button class="cancel-btn" onclick="hideAddForm()">Cancel</button>
+</div>
+
+    <!-- Search bar -->
+    <div class="table-search">
+      <input
+        type="text"
+        id="projectSearch"
+        placeholder="Search by Client Name, Project Name, or Project ID"
+        onkeyup="filterProjects()"
+      />
+    </div>
+
+    <!-- Project Records Table -->
+    <div class="table-wrapper">
+      <table class="project-table">
+        <thead>
+          <tr>
+            <th>Client Name</th>
+            <th>Project Name</th>
+            <th>Project ID</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="projectTableBody">
+         
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- IMAGE MODAL -->
+<!-- IMAGE MODAL WITH SLIDER -->
+<div id="imageModal" class="modal" onclick="overlayClose(event)">
+  <div class="modal-content slider-modal" onclick="event.stopPropagation()">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+
+    <h3>Project Images</h3>
+
+    <div class="slider-container">
+      <button class="nav-btn prev" onclick="prevImage()">❮</button>
+      <img id="sliderImage" src="" alt="Project Image" />
+       <video id="sliderVideo" controls >
+    <source id="videoSource" src="" type="video/mp4">
+  </video>
+      <button class="nav-btn next" onclick="nextImage()">❯</button>
+    </div>
+
+    <div class="image-count" id="imageCount"></div>
+     <span id="uploadInfo" style="font-size:12px; color:#666;"></span>
+  </div>
+</div>
+<div id="toastContainer"></div>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 BUILDSKIL108 Contractor Construction Service."सर्वाधिकार सुरक्षिताः"</p>
+  </div>
+</footer>
+<script src="../js/projects-ui.js"></script>
+
+</body>
+</html>

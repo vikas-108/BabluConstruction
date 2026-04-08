@@ -1,60 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login • CB 108</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login • BUILDSKIL108</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- LOGO + 108 -->
+      <div class="logo-box">
+        <img src="images/hero.jpg" alt="CB Logo" class="logo" />
+        <div class="anim-108">108</div>
+      </div>
 
-<div class="login-container">
+      <!-- WELCOME (AFTER LOGIN) -->
+      <div id="welcomeBox" class="hidden">
+        <h2>Welcome 👋</h2>
+        <a href="./index.html"><p id="usernameDisplay"></p></a>
+      </div>
 
-  <!-- LOGO + 108 -->
-  <div class="logo-box">
-    <img src="images/hero.jpg" alt="CB Logo" class="logo" />
-    <div class="anim-108">108</div>
-  </div>
+      <!-- LOGIN FORM -->
+      <form id="loginForm">
+        <div class="input-group phone-group">
+          <select id="countryCode">
+            <option value="+91" data-country="IN">🇮🇳 +91</option>
+            <option value="+1" data-country="US">🇺🇸 +1</option>
+            <option value="+44" data-country="GB">🇬🇧 +44</option>
+            <option value="+61" data-country="AU">🇦🇺 +61</option>
+            <option value="+971" data-country="AE">🇦🇪 +971</option>
+            <option value="+81" data-country="JP">🇯🇵 +81</option>
+            <option value="+49" data-country="DE">🇩🇪 +49</option>
+            <option value="+33" data-country="FR">🇫🇷 +33</option>
+          </select>
 
-  <!-- WELCOME (AFTER LOGIN) -->
-  <div id="welcomeBox" class="hidden">
-    <h2>Welcome 👋</h2>
-    <p id="usernameDisplay"></p>
-    <button onclick="logout()">Logout</button>
-  </div>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="10 digit mobile number"
+            inputmode="numeric"
+          />
+        </div>
 
-  <!-- LOGIN FORM -->
-  <form id="loginForm">
-    <div class="input-group phone-group">
-  <select id="countryCode">
-   <option value="+91" data-country="IN">🇮🇳 +91</option>
-    <option value="+1" data-country="US">🇺🇸 +1</option>
-    <option value="+44" data-country="GB">🇬🇧 +44</option>
-    <option value="+61" data-country="AU">🇦🇺 +61</option>
-    <option value="+971" data-country="AE">🇦🇪 +971</option>
-    <option value="+81" data-country="JP">🇯🇵 +81</option>
-    <option value="+49" data-country="DE">🇩🇪 +49</option>
-    <option value="+33" data-country="FR">🇫🇷 +33</option>
-  </select>
+        <div class="input-group">
+          <input type="text" id="username" placeholder="Unique Username" />
+          <small>Must contain letters, numbers & special characters</small>
+        </div>
 
-  <input
-    type="tel"
-    id="phone"
-    placeholder="10 digit mobile number"
-    inputmode="numeric"
-  />
-</div>
+        <button type="submit" id="submitLogin">Login</button>
+        <!-- Forgot Username -->
+        <div id="forgotBox" style="display: none; margin-top: 10px">
+          <button type="button" id="forgotBtn">
+            Forgot Username?
+          </button>
+        </div>
 
-    <div class="input-group">
-      <input type="text" id="username" placeholder="Unique Username" />
-      <small>Must contain letters, numbers & special characters</small>
+        <!-- OTP Verification -->
+        <div id="otpBox" style="display: none; margin-top: 15px">
+          <input type="text" id="otpInput" placeholder="Enter OTP from email" />
+          <button type="button" id="verifyOtpBtn">Verify OTP</button>
+        </div>
+
+        <!-- Reset Password -->
+        <div id="resetBox" style="display: none; margin-top: 15px">
+          <input
+            type="text"
+            id="newusername"
+            placeholder="Create new username"
+          />
+            <small>Must contain letters, numbers & special characters</small>
+          <button type="button" id="saveUsernameBtn">Update New Username</button>
+        </div>
+      </form>
     </div>
 
-    <button type="submit" id="submitLogin">Login</button>
-  </form>
-
-</div>
-
-<script src="login.js"></script>
-</body>
+    <script src="login.js"></script>
+  </body>
 </html>

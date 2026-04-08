@@ -1,8 +1,12 @@
-// Constants
-const PROFILE_KEY_BASE = "cb_user_profile";
-
-function getProfileKey(phone) {
-  return `${PROFILE_KEY_BASE}_${phone}`;
+let CURRENT_PROFILE = null;
+let NEW_PHOTO_FILE = null;
+const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
+const SERVER_BASE = "https://api.buildskil.com";
+function authHeaders() {
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
+  };
 }
 
 const DEFAULT_PROFILE = {
@@ -13,82 +17,183 @@ const DEFAULT_PROFILE = {
   photo: "",
   phone: "",
   email: "",
-  passwordHash: ""
+  // passwordHash: ""
 };
-
 // Initialize on page load
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const login = JSON.parse(localStorage.getItem(LOGIN_KEY)); // LOGIN_KEY comes from login.js
   if (!login) return;
 
   document.querySelector(".login-required").style.display = "block";
+  document.querySelector(".login-required").style.display = "block";
 
-  const key = getProfileKey(login.phone);
-  let profile = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
-  profile.phone = login.phone;
-  localStorage.setItem(key, JSON.stringify(profile));
+  const res = await fetch(`${ACCOUNT_BASE}/me`, {
+    headers: authHeaders(),
+  });
+
+  const profile = await res.json();
+
   renderProfile(profile);
+  const membershipButton = document.getElementById("membershipButton");
+  const subscriptionSection = document.getElementById("subscriptionSection");
+  const closeDrawer = document.getElementById("closeDrawer");
+  const verifyBtn = document.getElementById("verifyEmailBtn");
+  const otpBox = document.getElementById("emailVerifyBox");
+  const badge = document.getElementById("emailBadge");
+
+  if (profile.emailVerified) {
+    badge?.classList.remove("hidden");
+    verifyBtn?.classList.add("hidden");
+    otpBox?.classList.add("hidden");
+  } else {
+    badge?.classList.add("hidden");
+    verifyBtn?.classList.remove("hidden");
+  }
+  // Open drawer
+  membershipButton.addEventListener("click", () => {
+    subscriptionSection.classList.add("active");
+  });
+
+  // Close drawer
+  closeDrawer.addEventListener("click", () => {
+    subscriptionSection.classList.remove("active");
+  });
+
+  // Optional: close drawer when clicking outside
+  document.addEventListener("click", (e) => {
+    if (
+      subscriptionSection.classList.contains("active") &&
+      !subscriptionSection.contains(e.target) &&
+      e.target !== membershipButton
+    ) {
+      subscriptionSection.classList.remove("active");
+    }
+  });
+
+  document
+  .getElementById("verifyEmailBtn")
+  ?.addEventListener("click", async () => {
+    const res = await fetch(`${ACCOUNT_BASE}/send-email-otp`, {
+      method: "POST",
+      headers: authHeaders(),
+    });
+
+    if (res.ok) {
+      alert("OTP sent to your email");
+
+      verifyEmailBtn.classList.add("hidden"); // 👈 hide verify button
+      emailVerifyBox.classList.remove("hidden"); // 👈 show input
+    }
+  });
+  document
+  .getElementById("submitEmailOtp")
+  ?.addEventListener("click", async () => {
+    const otp = document.getElementById("emailOtpInput").value;
+
+    const res = await fetch(`${ACCOUNT_BASE}/verify-email-otp`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ otp }),
+    });
+    const profile = await res.json(); // ✅ ONLY ONCE
+
+    if (res.ok) {
+      renderProfile(profile); // 🔥 this updates badge + UI
+      alert("Email verified ✅");
+    } else {
+      alert(profile.message);
+    }
+  });
 });
 
 // Render profile data into DOM
 function renderProfile(profile) {
-  document.getElementById("profileName").textContent = profile.name || "Your Name";
-  document.getElementById("profileRole").textContent = profile.role || "Contractor";
-  document.getElementById("profileExp").textContent =
-    profile.experience ? `Experience: ${profile.experience}` : "Experience: —";
+  CURRENT_PROFILE = profile; // 🔥 important
+  document.getElementById("profileName").textContent =
+    profile.name || "Your Name";
+  document.getElementById("profileRole").textContent =
+    profile.role || "Contractor";
+  document.getElementById("profileExp").textContent = profile.experience
+    ? `Experience: ${profile.experience}`
+    : "Experience: —";
   document.getElementById("profilePhone").textContent = profile.phone;
-  document.getElementById("profileEmail").textContent = profile.email ? ` ${profile.email}` : "Email: —";
-  document.getElementById("profileBio").textContent = profile.bio || "No details added";
+  document.getElementById("profileEmail").textContent = profile.email
+    ? ` ${profile.email}`
+    : "Email: —";
+  document.getElementById("profileBio").textContent =
+    profile.bio || "No details added";
 
   // Show saved photo if available
   if (profile.photo) {
-    document.getElementById("profilePhoto").src = profile.photo;
+    document.getElementById("profilePhoto").src = profile.photo.startsWith(
+      "http",
+    )
+      ? profile.photo
+      : SERVER_BASE + profile.photo+ "?v=" + Date.now();;
   } else {
     // Generate initials avatar if no photo
     const initials = (profile.name || "U N")
       .split(" ")
-      .map(n => n[0].toUpperCase())
+      .map((n) => n[0].toUpperCase())
       .join("");
     document.getElementById("profilePhoto").src =
       `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
   }
+  // 🔐 LOCK EMAIL IF VERIFIED
+const editEmailInput = document.getElementById("editEmail");
+
+if(profile.emailVerified){
+  editEmailInput?.setAttribute("disabled", true);
+  editEmailInput?.classList.add("locked");
+}else{
+  editEmailInput?.removeAttribute("disabled");
+  editEmailInput?.classList.remove("locked");
+}
 }
 
-// Open modal with existing profile data
+const editName = document.getElementById("editName");
+const editRole = document.getElementById("editRole");
+const editExp = document.getElementById("editExp");
+const editBio = document.getElementById("editBio");
+const editEmail = document.getElementById("editEmail");
+
 function openEditProfile() {
   const modal = document.getElementById("editModal");
-  if (!modal) return;
+  if (!modal || !CURRENT_PROFILE) return;
 
-  const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
-  if (!login) return;
+  const p = CURRENT_PROFILE;
+  editName.value = p.name || "";
+  editRole.value = p.role || "Contractor";
+  editExp.value = p.experience || "";
+  editBio.value = p.bio || "";
+  editEmail.value = p.email || "";
 
-  const key = getProfileKey(login.phone);
-  const p = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
-
-  document.getElementById("editName").value = p.name || "";
-  document.getElementById("editRole").value = p.role || "Contractor";
-  document.getElementById("editExp").value = p.experience || "";
-  document.getElementById("editBio").value = p.bio || "";
- document.getElementById("editEmail").value = p.email || "";
-  modal.classList.remove("hidden");
+  modal.classList.add("show");       // show modal
   modal.removeAttribute("inert");
-  document.getElementById("editName").focus();
+  editName.focus();
 }
 
-// Close modal
 function closeEdit() {
   const modal = document.getElementById("editModal");
   if (!modal) return;
-  modal.classList.add("hidden");
+  modal.classList.remove("show");    // hide modal
   modal.setAttribute("inert", "");
-  document.querySelector(".edit-btn").focus();
+  document.getElementById("editIconBtn")?.focus();
 }
 
-// Close modal when clicking outside modal-box
-document.getElementById("editModal")?.addEventListener("click", e => {
+// open modal when clicking edit icon
+document.getElementById("editIconBtn").addEventListener("click", openEditProfile);
+
+// close modal when clicking backdrop
+document.getElementById("editModal").addEventListener("click", (e) => {
   if (e.target.id === "editModal") {
     closeEdit();
   }
+});
+
+// close on Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeEdit();
 });
 
 // Preview selected images
@@ -96,73 +201,85 @@ function previewPhoto(event) {
   const file = event.target.files[0];
   if (!file) return;
 
+  NEW_PHOTO_FILE = file;
+
   const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById("profilePhoto").src = e.target.result;
-
-    const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
-    if (!login) return;
-
-    const key = getProfileKey(login.phone);
-    let profile = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
-    profile.photo = e.target.result;
-    localStorage.setItem(key, JSON.stringify(profile));
+  reader.onload = (e) => {
+    profilePhoto.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
+async function saveProfile() {
+  try {
 
-// Save profile changes
-function saveProfile() {
-  const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
-  if (!login) return;
+    const formData = new FormData();
 
-  const key = getProfileKey(login.phone);
-  let p = JSON.parse(localStorage.getItem(key)) || Object.assign({}, DEFAULT_PROFILE);
+    formData.append("name", editName.value.trim());
+    formData.append("role", editRole.value);
+    formData.append("experience", editExp.value.trim());
+    formData.append("bio", editBio.value.trim());
+    formData.append("email", editEmail.value.trim());
 
-  /*const nameVal = document.getElementById("editName").value.trim();
-  const roleVal = document.getElementById("editRole").value;
-  const expVal = document.getElementById("editExp").value.trim();
-  const bioVal = document.getElementById("editBio").value.trim();
+    // ✅ attach file ONLY if changed
+    if (NEW_PHOTO_FILE) {
+      formData.append("photo", NEW_PHOTO_FILE);
+    }
 
-  if (nameVal) p.name = nameVal;
-  if (roleVal) p.role = roleVal;
-  if (expVal) p.experience = expVal;
-  if (bioVal) p.bio = bioVal;
+    const res = await fetch(`${ACCOUNT_BASE}/update`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("cb_token")}`
+      },
+      body: formData
+    });
 
-  // Always preserve phone
-  p.phone = login.phone;*/
-  p.name = document.getElementById("editName").value.trim();
-  p.role = document.getElementById("editRole").value;
-  p.experience = document.getElementById("editExp").value.trim();
-  p.bio = document.getElementById("editBio").value.trim();
-  p.email = document.getElementById("editEmail").value.trim();
-  p.phone = login.phone; // always tie to current user
+    if (!res.ok) {
+      const err = await res.json();
+      alert(err.message || "Update failed");
+      return;
+    }
 
-  // Always preserve photo if already set
-  const photoSrc = document.getElementById("profilePhoto").src;
-  if (photoSrc && !photoSrc.includes("default-user.png")) {
-    p.photo = photoSrc;
+    const profile = await res.json();
+
+    renderProfile(profile);
+    closeEdit();
+
+  } catch (err) {
+    console.error(err);
+    alert("Server connection error");
+  }
+}
+async function deleteAccount() {
+  if (!confirm("Delete your account permanently?")) return;
+
+  const res = await fetch(`${ACCOUNT_BASE}/delete`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+
+  if (!res.ok) {
+    alert("Delete failed");
+    return;
   }
 
-  localStorage.setItem(key, JSON.stringify(p));
-  renderProfile(p);
-  closeEdit();
+  // 🔥 CLEAR ALL LOGIN DATA
+  localStorage.removeItem("cb_token");
+  localStorage.removeItem("cb_login_user");
+
+  window.location.href = "index.html";
 }
 
 // Delete account
-function deleteAccount() {
-  if (!confirm("Delete your account permanently?")) return;
-  const login = JSON.parse(localStorage.getItem(LOGIN_KEY));
-  if (login) {
-    const key = getProfileKey(login.phone);
-    localStorage.removeItem(key);
-  }
-  localStorage.removeItem(LOGIN_KEY);
-  location.href = "index.html";
-}
+/*async function deleteAccount() {
+  if (!confirm("Delete account permanently?")) return;
 
-// Logout
-function logout() {
+  await fetch(`${ACCOUNT_BASE}/delete`, {
+    method: "DELETE",
+    headers: authHeaders()
+  });
+
+  localStorage.removeItem("cb_token");
   localStorage.removeItem(LOGIN_KEY);
+
   location.href = "index.html";
-}
+}*/

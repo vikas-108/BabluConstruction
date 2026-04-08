@@ -6,7 +6,9 @@ const districtFilter = document.getElementById("districtFilter");
 const PAGE_SIZE = 20;
 let currentPage = 1;
 let lastSearchResults = [];
-
+const SERVER_BASE = "https://api.buildskil.com";
+const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
+let API_PROFILES_CACHE = [];
 const states = [
   "Haryana",
   "Punjab",
@@ -38,56 +40,224 @@ const states = [
   "Nagaland",
   "Sikkim",
   "Tripura",
+  "Lakshadweep",
+  "Puducherry",
+  "Ladakh",
+  "Andaman & Nicobar", "Dadra & Nagar Haveli and Daman & Diu",
 ];
 const districts = [
-  "Panipat",
-  "Sonipat",
-  "Patiala",
-  "Pune",
+  // Haryana (22)
+  "Ambala","Bhiwani","Charkhi Dadri","Faridabad","Fatehabad","Gurugram","Hisar",
+  "Jhajjar","Jind","Kaithal","Karnal","Kurukshetra","Mahendragarh","Nuh","Palwal",
+  "Panchkula","Panipat","Rewari","Rohtak","Sirsa","Sonipat","Yamunanagar",
+  // Uttar Pradesh (75)
+  "Agra","Aligarh","Ambedkar Nagar","Amethi","Amroha","Auraiya","Ayodhya","Azamgarh",
+  "Baghpat","Bahraich","Ballia","Balrampur","Banda","Barabanki","Bareilly","Basti",
+  "Bhadohi","Bijnor","Budaun","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah",
+  "Etawah","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad",
+  "Ghazipur","Gonda","Gorakhpur","Hamirpur","Hapur","Hardoi","Hathras","Jalaun",
+  "Jaunpur","Jhansi","Kannauj","Kanpur Dehat","Kanpur Nagar","Kasganj","Kaushambi",
+  "Kushinagar","Lakhimpur Kheri","Lalitpur","Lucknow","Maharajganj","Mahoba","Mainpuri",
+  "Mathura","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh",
+  "Prayagraj","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur",
+  "Shamli","Shravasti","Siddharth Nagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi",
+
+  // Delhi (11)
+  "Central Delhi","East Delhi","New Delhi","North Delhi","North East Delhi",
+  "North West Delhi","Shahdara","South Delhi","South East Delhi","South West Delhi","West Delhi",
+
+  // Bihar (38)
+  "Araria","Arwal","Aurangabad","Banka","Begusarai","Bhagalpur","Bhojpur","Buxar","Darbhanga",
+  "East Champaran","Gaya","Gopalganj","Jamui","Jehanabad","Kaimur","Katihar","Khagaria","Kishanganj",
+  "Lakhisarai","Madhepura","Madhubani","Munger","Muzaffarpur","Nalanda","Nawada","Patna","Purnia",
+  "Rohtas","Saharsa","Samastipur","Saran","Sheikhpura","Sheohar","Sitamarhi","Siwan","Supaul",
+  "Vaishali","West Champaran",
+
+  // Odisha (30)
+  "Angul","Balangir","Balasore","Bargarh","Bhadrak","Boudh","Cuttack","Deogarh","Dhenkanal",
+  "Gajapati","Ganjam","Jagatsinghpur","Jajpur","Jharsuguda","Kalahandi","Kandhamal","Kendrapara",
+  "Kendujhar","Khordha","Koraput","Malkangiri","Mayurbhanj","Nabarangpur","Nayagarh","Nuapada",
+  "Puri","Rayagada","Sambalpur","Subarnapur","Sundargarh",
+
+  // Chandigarh (1)
   "Chandigarh",
-  "Jaipur",
-  "Lucknow",
-  "Patna",
-  "Mumbai",
-  "Bengaluru",
-  "Chennai",
-  "Kolkata",
-  "Bhopal",
-  "Raipur",
-  "Dispur",
-  "Ranchi",
-  "Shimala",
-  "Srinagar",
-  "Dehradum",
-  "Panaji",
-  "Kurukshtra",
-  "Ambala",
-  "Ludhiana",
-  "Surat",
-  "Indore",
-  "Jind",
-  "Hisar",
-  "Faridabad",
-  "Gurugram",
-  "Yamunanagar",
-  "Karnal",
-  "Jalgaon",
-  "Nashik",
+
+  // Punjab (23)
+  "Amritsar","Barnala","Bathinda","Faridkot","Fatehgarh Sahib","Fazilka","Ferozepur","Gurdaspur",
+  "Hoshiarpur","Jalandhar","Kapurthala","Ludhiana","Mansa","Moga","Mohali","Muktsar","Pathankot",
+  "Patiala","Rupnagar","Sangrur","Shaheed Bhagat Singh Nagar","Tarn Taran",
+
+  // Gujarat (33)
+  "Ahmedabad","Amreli","Anand","Aravalli","Banaskantha","Bharuch","Bhavnagar","Botad","Chhota Udaipur",
+  "Dahod","Dang","Devbhoomi Dwarka","Gandhinagar","Gir Somnath","Jamnagar","Junagadh","Kheda","Kutch",
+  "Mahisagar","Mehsana","Morbi","Narmada","Navsari","Panchmahal","Patan","Porbandar","Rajkot","Sabarkantha",
+  "Surat","Surendranagar","Tapi","Vadodara","Valsad",
+  // Rajasthan (50)
+  "Ajmer","Alwar","Anupgarh","Balotra","Banswara","Baran","Barmer","Beawar","Bharatpur",
+  "Bhilwara","Bikaner","Bundi","Chittorgarh","Churu","Dausa","Deeg","Dholpur","Didwana-Kuchaman",
+  "Dungarpur","Gangapur City","Hanumangarh","Jaipur","Jaipur Rural","Jaisalmer","Jalore","Jhalawar",
+  "Jhunjhunu","Jodhpur","Jodhpur Rural","Karauli","Kekri","Khairthal-Tijara","Kota","Kotputli-Behror",
+  "Nagaur","Neem Ka Thana","Pali","Phalodi","Pratapgarh","Rajsamand","Salumbar","Sanchore",
+  "Sawai Madhopur","Shahpura","Sikar","Sirohi","Sri Ganganagar","Tonk","Udaipur",
+
+  // Madhya Pradesh (55)
+  "Agar Malwa","Alirajpur","Anuppur","Ashoknagar","Balaghat","Barwani","Betul","Bhind",
+  "Bhopal","Burhanpur","Chhatarpur","Chhindwara","Damoh","Datia","Dewas","Dhar","Dindori",
+  "Guna","Gwalior","Harda","Indore","Jabalpur","Jhabua","Katni","Khandwa","Khargone",
+  "Maihar","Mandla","Mandsaur","Morena","Narsinghpur","Neemuch","Niwari","Panna","Raisen",
+  "Rajgarh","Ratlam","Rewa","Sagar","Satna","Sehore","Seoni","Shahdol","Shajapur",
+  "Sheopur","Shivpuri","Sidhi","Singrauli","Tikamgarh","Ujjain","Umaria","Vidisha",
+
+  // Maharashtra (36)
+  "Ahmednagar","Akola","Amravati","Aurangabad","Beed","Bhandara","Buldhana","Chandrapur",
+  "Dhule","Gadchiroli","Gondia","Hingoli","Jalgaon","Jalna","Kolhapur","Latur","Mumbai City",
+  "Mumbai Suburban","Nagpur","Nanded","Nandurbar","Nashik","Osmanabad","Palghar","Parbhani",
+  "Pune","Raigad","Ratnagiri","Sangli","Satara","Sindhudurg","Solapur","Thane","Wardha","Washim","Yavatmal",
+
+  // Karnataka (31)
+  "Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban","Bidar","Chamarajanagar",
+  "Chikkaballapur","Chikkamagaluru","Chitradurga","Dakshina Kannada","Davanagere","Dharwad",
+  "Gadag","Hassan","Haveri","Kalaburagi","Kodagu","Kolar","Koppal","Mandya","Mysuru",
+  "Raichur","Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada","Vijayanagara",
+  "Vijayapura","Yadgir",
+
+  // Tamil Nadu (38)
+  "Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul",
+  "Erode","Kallakurichi","Kancheepuram","Karur","Krishnagiri","Madurai","Mayiladuthurai",
+  "Nagapattinam","Namakkal","Nilgiris","Perambalur","Pudukkottai","Ramanathapuram",
+  "Ranipet","Salem","Sivaganga","Tenkasi","Thanjavur","Theni","Thoothukudi","Tiruchirappalli",
+  "Tirunelveli","Tirupathur","Tiruppur","Tiruvallur","Tiruvannamalai","Tiruvarur",
+  "Vellore","Viluppuram","Virudhunagar",
+
+  // West Bengal (23)
+  "Alipurduar","Bankura","Birbhum","Cooch Behar","Dakshin Dinajpur","Darjeeling",
+  "Hooghly","Howrah","Jalpaiguri","Jhargram","Kalimpong","Kolkata","Malda",
+  "Murshidabad","Nadia","North 24 Parganas","Paschim Bardhaman","Paschim Medinipur",
+  "Purba Bardhaman","Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur",
+
+  // Andhra Pradesh (26)
+  "Alluri Sitharama Raju","Anakapalli","Anantapur","Annamayya","Bapatla","Chittoor",
+  "East Godavari","Eluru","Guntur","Kakinada","Konaseema","Krishna","Kurnool",
+  "Nandyal","NTR","Palnadu","Parvathipuram Manyam","Prakasam","SPSR Nellore",
+  "Srikakulam","Sri Sathya Sai","Tirupati","Visakhapatnam","Vizianagaram","West Godavari","YSR Kadapa",
+
+  // Telangana (33)
+  "Adilabad","Bhadradri Kothagudem","Hanamkonda","Hyderabad","Jagtial","Jangaon",
+  "Jayashankar Bhupalpally","Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam",
+  "Kumuram Bheem","Mahabubabad","Mahabubnagar","Mancherial","Medak","Medchal–Malkajgiri",
+  "Mulugu","Nagarkurnool","Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli",
+  "Rajanna Sircilla","Rangareddy","Sangareddy","Siddipet","Suryapet","Vikarabad",
+  "Wanaparthy","Warangal","Yadadri Bhuvanagiri",
+  // Kerala (14)
+  "Alappuzha","Ernakulam","Idukki","Kannur","Kasaragod","Kollam","Kottayam",
+  "Kozhikode","Malappuram","Palakkad","Pathanamthitta","Thiruvananthapuram",
+  "Thrissur","Wayanad",
+
+  // Himachal Pradesh (12)
+  "Bilaspur","Chamba","Hamirpur","Kangra","Kinnaur","Kullu","Lahaul and Spiti",
+  "Mandi","Shimla","Sirmaur","Solan","Una",
+
+  // Uttarakhand (13)
+  "Almora","Bageshwar","Chamoli","Champawat","Dehradun","Haridwar","Nainital",
+  "Pauri Garhwal","Pithoragarh","Rudraprayag","Tehri Garhwal","Udham Singh Nagar","Uttarkashi",
+
+  // Jharkhand (24)
+  "Bokaro","Chatra","Deoghar","Dhanbad","Dumka","East Singhbhum","Garhwa",
+  "Giridih","Godda","Gumla","Hazaribagh","Jamtara","Khunti","Koderma","Latehar",
+  "Lohardaga","Pakur","Palamu","Ramgarh","Ranchi","Sahebganj","Seraikela Kharsawan","Simdega","West Singhbhum",
+
+  // Chhattisgarh (33)
+  "Balod","Baloda Bazar","Balrampur","Bastar","Bemetara","Bijapur","Bilaspur",
+  "Dantewada","Dhamtari","Durg","Gariaband","Gaurela-Pendra-Marwahi","Janjgir-Champa",
+  "Jashpur","Kabirdham","Kanker","Kondagaon","Korba","Koriya","Mahasamund",
+  "Manendragarh-Chirmiri-Bharatpur","Mohla-Manpur-Ambagarh Chowki","Mungeli",
+  "Narayanpur","Raigarh","Raipur","Rajnandgaon","Sakti","Sarangarh-Bilaigarh",
+  "Sukma","Surajpur","Surguja",
+
+  // Assam (35)
+  "Baksa","Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang",
+  "Darrang","Dhemaji","Dhubri","Dibrugarh","Dima Hasao","Goalpara","Golaghat",
+  "Hailakandi","Hojai","Jorhat","Kamrup","Kamrup Metropolitan","Karbi Anglong",
+  "Karimganj","Kokrajhar","Lakhimpur","Majuli","Morigaon","Nagaon","Nalbari",
+  "Sivasagar","Sonitpur","South Salmara-Mankachar","Tinsukia","Udalguri","West Karbi Anglong",
+
+  // Arunachal Pradesh (26)
+  "Anjaw","Changlang","Dibang Valley","East Kameng","East Siang","Kamle",
+  "Kra Daadi","Kurung Kumey","Leparada","Lohit","Longding","Lower Dibang Valley",
+  "Lower Siang","Lower Subansiri","Namsai","Pakke Kessang","Papum Pare",
+  "Shi Yomi","Siang","Tawang","Tirap","Upper Siang","Upper Subansiri",
+  "West Kameng","West Siang","Keyi Panyor",
+
+  // Nagaland (16)
+  "Chümoukedima","Dimapur","Kiphire","Kohima","Longleng","Mokokchung",
+  "Mon","Niuland","Noklak","Peren","Phek","Shamator","Tseminyü","Tuensang","Wokha","Zunheboto",
+
+  // Manipur (16)
+  "Bishnupur","Chandel","Churachandpur","Imphal East","Imphal West","Jiribam",
+  "Kakching","Kamjong","Kangpokpi","Noney","Pherzawl","Senapati","Tamenglong",
+  "Tengnoupal","Thoubal","Ukhrul",
+
+  // Meghalaya (12)
+  "East Garo Hills","East Jaintia Hills","East Khasi Hills","Mairang",
+  "North Garo Hills","Ri Bhoi","South Garo Hills","South West Garo Hills",
+  "South West Khasi Hills","West Garo Hills","West Jaintia Hills","West Khasi Hills",
+
+  // Mizoram (11)
+  "Aizawl","Champhai","Hnahthial","Khawzawl","Kolasib","Lawngtlai",
+  "Lunglei","Mamit","Saiha","Saitual","Serchhip",
+
+  // Tripura (8)
+  "Dhalai","Gomati","Khowai","North Tripura","Sepahijala","South Tripura",
+  "Unakoti","West Tripura",
+
+  // Goa (2)
+  "North Goa","South Goa",
+
+  // Sikkim (6)
+  "Gangtok","Gyalshing","Mangan","Namchi","Pakyong","Soreng",
+
+  // Jammu & Kashmir (20)
+  "Anantnag","Bandipora","Baramulla","Budgam","Doda","Ganderbal","Jammu",
+  "Kathua","Kishtwar","Kulgam","Kupwara","Poonch","Pulwama","Rajouri",
+  "Ramban","Reasi","Samba","Shopian","Srinagar","Udhampur",
+
+  // Ladakh (2)
+  "Kargil","Leh",
+
+  // Andaman & Nicobar (3)
+  "Nicobar","North and Middle Andaman","South Andaman",
+
+  // Dadra & Nagar Haveli and Daman & Diu (3)
+  "Dadra and Nagar Haveli","Daman","Diu",
+
+  // Lakshadweep (1)
+  "Lakshadweep",
+
+  // Puducherry (4)
+  "Karaikal","Mahe","Puducherry","Yanam",
 ];
-const SEARCH_STATE_KEY = "brg_search_state";
+function getSearchStateKey() {
+  const user = JSON.parse(localStorage.getItem("cb_login_user"));
+
+  // guest mode
+  if (!user) return "brg_search_state_guest";
+
+  // per-user search state
+  return `brg_search_state_${user.phone}`;
+}
 
 function saveSearchState() {
   const state = {
-    query: input.value,
+    query: input?.value,
     category: categoryFilter?.value || "",
     state: stateFilter?.value || "",
     district: districtFilter?.value || "",
   };
 
-  localStorage.setItem(SEARCH_STATE_KEY, JSON.stringify(state));
+  localStorage.setItem(getSearchStateKey(), JSON.stringify(state));
 }
 function restoreSearchState() {
-  const saved = localStorage.getItem(SEARCH_STATE_KEY);
+  const saved = localStorage.getItem(getSearchStateKey());
   if (!saved) return;
 
   const state = JSON.parse(saved);
@@ -100,7 +270,10 @@ function restoreSearchState() {
   // Trigger search after restoring
   setTimeout(() => {
     applySearch();
-  }, 100);
+  }, 10);
+  
+setupSearchableSelect("stateFilter", "stateList", states);
+setupSearchableSelect("districtFilter", "districtList", districts);
 }
 
 function setupSearchableSelect(inputId, listId, data) {
@@ -118,7 +291,7 @@ function setupSearchableSelect(inputId, listId, data) {
       return;
     }
     const filtered = data.filter((item) => item.toLowerCase().includes(value));
-
+   console.log("Filtered:", filtered);
     if (!filtered.length) {
       list.style.display = "none";
       return;
@@ -136,7 +309,7 @@ function setupSearchableSelect(inputId, listId, data) {
       };
       list.appendChild(li);
     });
-
+  console.log("List children:", list.children.length);
     list.style.display = filtered.length ? "block" : "none";
   });
 
@@ -160,18 +333,15 @@ function speakText(text) {
   window.speechSynthesis.cancel(); // stop previous
   window.speechSynthesis.speak(utterance);
 }
-
-setupSearchableSelect("stateFilter", "stateList", states);
-setupSearchableSelect("districtFilter", "districtList", districts);
 function normalizeText(text) {
   if (!text) return "";
 
   return text
     .toString()
     .toLowerCase()
-    .normalize("NFKD")                // ✅ mobile unicode fix
-    .replace(/[\u0300-\u036f]/g, "")  // remove accents
-    .replace(/\u00A0/g, " ")          // non-breaking space
+    .normalize("NFKD") // ✅ mobile unicode fix
+    .replace(/[\u0300-\u036f]/g, "") // remove accents
+    .replace(/\u00A0/g, " ") // non-breaking space
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -198,7 +368,22 @@ function levenshtein(a, b) {
   }
   return dp[a.length][b.length];
 }
+// notification updates (could come from API or JSON file)
+const updates = [
+  "🚀 New feature launched: search engine",
+  "📢 Scheduled maintenance on March 1st",
+  "🎨 Updated design guidelines available",
+  "🔧 full Profile click comming",
+];
 
+const notificationList = document.getElementById("notificationList");
+
+// Inject updates dynamically
+updates.forEach((update) => {
+  const li = document.createElement("li");
+  li.textContent = update;
+  notificationList.appendChild(li);
+});
 /* ---------------- SEARCH FUNCTIONS ---------------- */
 function searchTheory(query) {
   return THEORY_DATA.filter((item) =>
@@ -370,120 +555,17 @@ function closeDesignModal() {
 function cleanPhone(phone) {
   return phone.replace(/[^0-9]/g, "");
 }
-/*function tokenize(expr) {
-  return expr
-    .replace(/\s+/g, "")
-    .match(/(sqrt|pow|\d+\.?\d*|\+|\-|\*|\/|\%|\^|\(|\)|,)/g);
+function openProfile(id) {
+  window.location.href = `profile-details.html?id=${id}`;
 }
-const PRECEDENCE = {
-  "+": 1,
-  "-": 1,
-  "*": 2,
-  "/": 2,
-  "%": 2,
-  "^": 3
-};
-function toPostfix(tokens) {
-  const output = [];
-  const ops = [];
-
-  tokens.forEach(token => {
-    if (!isNaN(token)) {
-      output.push(Number(token));
-    } else if (token === "sqrt" || token === "pow") {
-      ops.push(token);
-    } else if (token === "(") {
-      ops.push(token);
-    } else if (token === ")") {
-      while (ops.length && ops[ops.length - 1] !== "(") {
-        output.push(ops.pop());
-      }
-      ops.pop(); // remove "("
-
-      // function handling
-      if (ops.length && (ops[ops.length - 1] === "sqrt" || ops[ops.length - 1] === "pow")) {
-        output.push(ops.pop());
-      }
-    } else if (token === ",") {
-      while (ops.length && ops[ops.length - 1] !== "(") {
-        output.push(ops.pop());
-      }
-    } else {
-      while (
-        ops.length &&
-        PRECEDENCE[ops[ops.length - 1]] >= PRECEDENCE[token]
-      ) {
-        output.push(ops.pop());
-      }
-      ops.push(token);
-    }
-  });
-
-  while (ops.length) output.push(ops.pop());
-
-  return output;
-}
-function evaluatePostfix(postfix, steps = []) {
-  const stack = [];
-
-  postfix.forEach(token => {
-    if (typeof token === "number") {
-      stack.push(token);
-    } else if (token === "sqrt") {
-      const a = stack.pop();
-      const r = Math.sqrt(a);
-      steps.push(`√${a} = ${r}`);
-      stack.push(r);
-    } else if (token === "pow" || token === "^") {
-      const b = stack.pop();
-      const a = stack.pop();
-      const r = Math.pow(a, b);
-      steps.push(`${a} ^ ${b} = ${r}`);
-      stack.push(r);
-    } else {
-      const b = stack.pop();
-      const a = stack.pop();
-      let r;
-
-      switch (token) {
-        case "+": r = a + b; break;
-        case "-": r = a - b; break;
-        case "*": r = a * b; break;
-        case "/": r = b !== 0 ? a / b : NaN; break;
-        case "%": r = a % b; break;
-      }
-
-      steps.push(`${a} ${token} ${b} = ${r}`);
-      stack.push(r);
-    }
-  });
-
-  return stack.pop();
-}
-function safeCalculate(input) {
-  try {
-    const tokens = tokenize(input);
-    if (!tokens) return null;
-
-    const postfix = toPostfix(tokens);
-    const steps = [];
-    const result = evaluatePostfix(postfix, steps);
-
-    if (typeof result === "number" && isFinite(result)) {
-      return { result, steps };
-    }
-  } catch (e) {
-    return null;
-  }
-  return null;
-}*/
 function isMathExpression(input) {
-  return /^[0-9+\-*/().%\s^,a-zA-Z]+$/.test(input) &&
-         /[\d]/.test(input); // must contain at least one number
+  return /^[0-9+\-*/().%\s^,a-zA-Z]+$/.test(input) && /[\d]/.test(input); // must contain at least one number
 }
 function clearSearchAll() {
   if (window.recognition) {
-    try { recognition.abort(); } catch (e) {}
+    try {
+      recognition.abort();
+    } catch (e) {}
   }
 
   input.value = "";
@@ -496,7 +578,7 @@ function clearSearchAll() {
   results.innerHTML =
     "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
 
-  localStorage.removeItem(SEARCH_STATE_KEY);
+  localStorage.removeItem(getSearchStateKey());
 
   hideSearchLoader();
   toggleClearButton(); // ✅ HIDE CLEAR BUTTON
@@ -586,8 +668,38 @@ function prevPage() {
     renderPage();
   }
 }
+async function fetchPublishedProfiles() {
+  try {
+    const res = await fetch(PROFILE_API);
+    const data = await res.json();
 
-// all card code if all type of data set render code ui from below code 
+    // 🔥 NORMALIZE DATA TO MATCH YOUR CURRENT RENDER FORMAT api cards
+    API_PROFILES_CACHE = data.map((p) => ({
+      id: p._id,
+      profileUrl: `profile-details.html?id=${p._id}`,
+      name: p.name,
+      role: p.role,
+      rating: p.rating,
+      experience: p.experience,
+      category: p.category || "contractor",
+      image: p.mediaType === "image" ? SERVER_BASE + p.media : "",
+
+      video: p.mediaType === "video" ? SERVER_BASE + p.media : "",
+      languages: p.languages,
+      phone: p.phone,
+      description: p.description,
+      location: p.location,
+      state: p.state,
+      district: p.district,
+
+      source: "api",
+    }));
+  } catch (e) {
+    console.error("Profile API error", e);
+  }
+}
+//fetchPublishedProfiles();
+// all card code if all type of data set render code ui from below code
 function render(items) {
   results.innerHTML = "";
   if (!items.length) {
@@ -738,31 +850,37 @@ function render(items) {
     // CONTRACTOR / MATERIAL
     const phoneClean = item.phone ? cleanPhone(item.phone) : "";
     results.innerHTML += `
+     <div class="card" onclick="openProfile('${item._id || item.id}')">
        <div class="card">
          ${
-           item.image
+           item.image || item.video
              ? `
-        <div class="card-header">
-          <img src="${item.image}" alt="${item.name}">
-          <div>
-            <h3>${item.name}</h3>
-            <p>${item.type}</p>
-          </div>
-         </div>`
+<div class="card-header">
+  ${
+    item.video
+      ? `<video src="${item.video}" muted loop autoplay playsinline></video>`
+      : `<img src="${item.image}" alt="${item.name}">`
+  }
+  <div>
+    <h3>${item.name}</h3>
+    <p>${item.role || item.type}</p>
+  </div>
+</div>`
              : ""
          }
 
         <div class="badge ${item.category}">
-          ${item.category.toUpperCase()}
+          ${item.category.toUpperCase()}, ${item.role ? `(${item.role})` : ""}  ${item.type ? `(${item.type})` : ""}
+          
         </div>
 
         ${item.rating ? `<div class="rating">⭐ ${item.rating}</div>` : ""}
-
-        <p>${item.state}, ${item.district}</p>
+        ${item.experience ? `<div class="experience">${item.experience} years</div>` : ""}
+        <p>${item.state}, ${item.district}, ${item.location}</p>
             <p>${item.description}</p>
         ${
-      item.phone
-        ? `
+          item.phone
+            ? `
         <div class="contact-actions">
   <a href="tel:${phoneClean}" class="btn call-btn">
     <!-- Call Icon -->
@@ -785,8 +903,8 @@ function render(items) {
   </a>
 </div>
         `
-        : ""
-    }
+            : ""
+        }
 
     ${item.email ? `<p>✉️ ${item.email}</p>` : ""}
   </div>
@@ -803,7 +921,25 @@ function debounce(fn, delay = 500) {
     }, delay);
   };
 }
+// backend common filter code .
+function applyCommonFilters(item, q, category, state, district) {
+  // 🔎 TEXT TOKEN MATCH
+  const searchableText = Object.values(item).join(" ").toLowerCase();
 
+  const tokenMatch = !q || searchableText.includes(q);
+
+  // 🎯 CATEGORY FILTER
+  const categoryMatch = !category || item.category?.toLowerCase() === category;
+
+  // 📍 STATE FILTER
+  const stateMatch = !state || item.state?.toLowerCase() === state;
+
+  // 📍 DISTRICT FILTER
+  const districtMatch =
+    !district || item.district?.toLowerCase().includes(district);
+
+  return tokenMatch && categoryMatch && stateMatch && districtMatch;
+}
 function applySearch() {
   showSearchLoader(); // 🔄 start loader
   setTimeout(() => {
@@ -812,125 +948,118 @@ function applySearch() {
     const category = categoryFilter.value.toLowerCase();
     const state = stateFilter.value.toLowerCase();
     const district = districtFilter.value.toLowerCase();
-    
-    /*const calcBox = document.getElementById("calcResult");
 
-    // 🧮 CALCULATOR MODE — FIRST & ONLY ONCE
-    if (isMathExpression(q)) {
-      const calc = safeCalculate(q);
-
-      if (calc) {
-        resetPagination(); // ✅ IMPORTANT
-        calcBox.innerHTML = `
-          🧮 Answer: <strong>${calc.result}</strong>
-          <div class="calc-steps">
-            ${calc.steps.map(s => `<div>➡ ${s}</div>`).join("")}
-          </div>
-        `;
-        calcBox.classList.remove("hidden");
-        results.innerHTML = ""; // ✅ CLEAR SEARCH RESULTS
-        hideSearchLoader();
-        return; // ⛔ EXIT applySearch COMPLETELY
-      }
-    }
-
-    // ❌ Not math → hide calculator
-    calcBox.classList.add("hidden");*/
     // 🚫 Prevent heavy search for very short input
-if (q.length === 1 && !isMathExpression(q)) {
-  results.innerHTML =
-    "<p style='text-align:center;color:#94a3b8;'>Type at least 2 characters to search</p>";
-  hideSearchLoader();
-  return;
-}
-    // 🟡 EMPTY SEARCH STATE
-    if (!q && !category && !state && !district) {
-      resetPagination(); // ✅ IMPORTANT
+    if (q.length === 1 && !isMathExpression(q)) {
       results.innerHTML =
-        "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
-      hideSearchLoader(); // ✅ IMPORTANT
+        "<p style='text-align:center;color:#94a3b8;'>Type at least 2 characters to search</p>";
+      hideSearchLoader();
       return;
     }
-   const queryTokens = normalizeText(q)
-  .split(" ")
-  .filter(t => t.length >= 2);
-const dataResults = shuffleArray(
-  SEARCH_DATA.filter((item) => {
-    // 1. Build searchable text from item
-    const searchableText = normalizeText(
-      [
-        item.name,
-        item.type,
-        item.category,
-        item.state,
-        item.district,
-        item.city,
-        item.village,
-        item.description,
-      ]
-        .filter(Boolean)
-        .join(" ")
-    );
 
-    // 2. Token match (ALL tokens must match somewhere)
-    const tokenMatch = queryTokens.every((token) => {
-      if (searchableText.includes(token)) return true;
+    // 🟡 EMPTY SEARCH STATE
+    if (!q && !category && !state && !district) {
+      resetPagination();
+      results.innerHTML =
+        "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
+      hideSearchLoader();
+      return;
+    }
 
-      // spelling tolerance (only for longer words)
-      if (token.length >= 4) {
-        return searchableText
-          .split(" ")
-          .some((word) => levenshtein(word, token) <= 2);
-      }
+    const queryTokens = normalizeText(q)
+      .split(" ")
+      .filter((t) => t.length >= 2);
 
-      return false;
-    });
+    // 🔹 Unified search function
+    function searchProfiles(queryTokens, category, state, district) {
+      const combinedData = [...SEARCH_DATA, ...API_PROFILES_CACHE];
 
-    // 3. Existing filters (unchanged)
-    const categoryMatch =
-      !category || item.category?.toLowerCase() === category;
+      const dataResults = shuffleArray(
+        combinedData.filter((item) => {
+          // Apply common filters first
+          if (!applyCommonFilters(item, q, category, state, district)) {
+            return false;
+          }
+          // Build searchable text
+          const searchableText = normalizeText(
+            [
+              item.name,
+              item.type,
+              item.category,
+              item.role,
+              item.state,
+              item.district,
+              item.location,
+              item.city,
+              item.village,
+              item.description,
+            ]
+              .filter(Boolean)
+              .join(" "),
+          );
 
-    const stateMatch =
-      !state || item.state?.toLowerCase() === state;
+          // Token match with typo tolerance
+          const tokenMatch = queryTokens.every((token) => {
+            if (searchableText.includes(token)) return true;
 
-    const districtMatch =
-      !district || item.district?.toLowerCase().includes(district);
+            if (token.length >= 4) {
+              return searchableText.split(" ").some((word) => {
+                const dist = levenshtein(word, token);
+                if (word.length > 8) return dist <= 3;
+                return dist <= 2;
+              });
+            }
 
-    return tokenMatch && categoryMatch && stateMatch && districtMatch;
-  })
-).slice(0, 50); // ✅ LIMIT RESULTS;
+            return false;
+          });
 
+          // Filters
+          const categoryMatch =
+            !category || item.category?.toLowerCase() === category;
+          const stateMatch = !state || item.state?.toLowerCase() === state;
+          const districtMatch =
+            !district || item.district?.toLowerCase().includes(district);
 
-    // 🔹 OTHER DATA SOURCES
+          return tokenMatch && categoryMatch && stateMatch && districtMatch;
+        }),
+      ).slice(0, 50);
+
+      return dataResults;
+    }
+
+    // 🔹 Run search
+    const dataResults = searchProfiles(queryTokens, category, state, district);
+
+    // 🔹 Other data sources
     const theoryResults = q ? searchTheory(q) : [];
     const designResults = q ? searchDesigns(q) : [];
     const mediaResults = q ? searchMedia(q) : [];
     const mathResults = q ? searchMathFormulas(q) : [];
     const kidsResults = q ? searchKids(q) : [];
     const QuizResults = q ? searchQuiz(q) : [];
-    // 🔴 IMPORTANT: clear old pagination EVERY TIME
-resetPagination();
-    // 🔹 MERGE WITHOUT DUPLICATES
-   // 🔹 MERGE RESULTS (NO RENDER YET)
-lastSearchResults = [
-  ...theoryResults,
-  ...designResults,
-  ...mediaResults,
-  ...dataResults,
-  ...mathResults,
-  ...kidsResults,
-  ...QuizResults,
-];
 
-// 🔁 RESET TO FIRST PAGE
-currentPage = 1;
+    // 🔴 Clear old pagination
+    resetPagination();
 
-// 📄 RENDER FIRST PAGE ONLY
-renderPage();
+    // 🔹 Merge results
+    lastSearchResults = [
+      ...theoryResults,
+      ...designResults,
+      ...mediaResults,
+      ...dataResults,
+      ...mathResults,
+      ...kidsResults,
+      ...QuizResults,
+    ];
 
-hideSearchLoader();
+    // 🔁 Reset to first page
+    currentPage = 1;
 
-  }, 300); // UX delay so loader is visible
+    // 📄 Render first page
+    renderPage();
+
+    hideSearchLoader();
+  }, 300);
 }
 
 /* ---------------- EVENTS ---------------- */
@@ -947,14 +1076,13 @@ input.addEventListener("compositionend", () => {
 
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !isComposing) {
-    e.preventDefault();        // stop form submit / keyboard close
+    e.preventDefault(); // stop form submit / keyboard close
     debouncedSearch.cancel?.(); // safety
-    applySearch();    
-      toggleClearButton();         // ✅ ONLY trigger
+    applySearch();
+    fetchPublishedProfiles();
+    toggleClearButton(); // ✅ ONLY trigger
   }
 });
-
-
 
 // Filters: still update instantly
 [categoryFilter, stateFilter, districtFilter].forEach((el) => {
@@ -979,7 +1107,7 @@ if (SpeechRecognition) {
 
   recognition.onresult = (event) => {
     input.value = event.results[0][0].transcript;
-     toggleClearButton(); // ✅ REQUIRED
+    toggleClearButton(); // ✅ REQUIRED
     applySearch();
   };
 } else {
@@ -996,10 +1124,17 @@ filterToggle.addEventListener("click", () => {
 
 // 4️⃣ event bindings (LAST)
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("clearSearchBtn")
+  document
+    .getElementById("clearSearchBtn")
     ?.addEventListener("click", clearSearchAll);
 
   toggleClearButton(); // initial state
 });
 
-document.addEventListener("DOMContentLoaded", restoreSearchState);
+document.addEventListener("DOMContentLoaded", async () => {
+  // 1️⃣ load profiles first
+  await fetchPublishedProfiles();
+
+  // 2️⃣ restore previous search
+  restoreSearchState();
+});

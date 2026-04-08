@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manage Account</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="../css/manage-account.css" />
+</head>
+<body>
+
+<main class="account-page login-required" style="display:none;">
+  
+  <!-- PROFILE HEADER -->
+<header class="profile-header">
+  <div class="profile-photo-wrapper">
+    <img id="profilePhoto" src="" alt="Profile photo" />
+
+    <!-- Upload & Camera Buttons -->
+    <div class="photo-actions">
+      <label for="uploadPhoto" class="photo-btn">📁 Upload</label>
+      <input type="file" id="uploadPhoto" accept="image/*" style="display:none" onchange="previewPhoto(event)" />
+
+      <label for="cameraPhoto" class="photo-btn">📷 Camera</label>
+      <input type="file" id="cameraPhoto" accept="image/*" capture="user" style="display:none" onchange="previewPhoto(event)" />
+    </div>
+  </div>
+
+  <button type="button" id="editIconBtn" class="edit-btn" onclick="openEditProfile()" aria-label="Edit Profile">✏️</button>
+
+  <h2 id="profileName">Your Name</h2>
+  <p id="profileRole">Contractor</p>
+  <p id="profileExp">Experience: —</p>
+  <p id="profilePhone"></p>
+  <p id="profileEmail"></p>
+   <div id="emailVerifySection">
+
+    <button id="verifyEmailBtn">Verify Email</button>
+
+    <div id="emailVerifyBox" class="hidden">
+     <input type="text" id="emailOtpInput" placeholder="Enter OTP">
+     <button id="submitEmailOtp">Submit</button>
+    </div>
+
+    <span id="emailBadge" class="badge hidden">✅ Verified</span>
+
+   </div> 
+</header>
+
+  <!-- DETAILS -->
+  <section class="account-cards">
+    <article class="account-card">
+      <h3>Bio details</h3>
+      <p id="profileBio">No details added</p>
+    </article>
+
+    <article class="account-card">
+      <h3>History</h3>
+      <p>callogs and otherlogs will coming soon </p>
+    </article>
+    <article class="account-card">
+      <h3>Activity</h3>
+      <p>logins device details coming soon</p>
+    </article>
+   <article class="account-card" id="membershipButton">
+  <h3>Active membership</h3>
+  <p>Plan details coming soon</p>
+</article>
+
+
+<!-- Drawer Section -->
+<section class="subscription-section" id="subscriptionSection">
+  <div class="drawer-content">
+    <button class="close-drawer" id="closeDrawer">&times;</button>
+    <div class="subscription-header">
+      <h2>Subscription & Engagement Plans</h2>
+      <p>
+        Flexible manpower and supervision plans designed for clients,
+        builders, and contractors based on daily project requirements.
+      </p>
+    </div>
+
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="subscription-table">
+          <thead>
+            <tr>
+              <th>Plan</th>
+              <th>Duration</th>
+              <th>Pricing</th>
+              <th>Best For</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="plan-name">Free Trial <span class="plan-tag free">Trial</span></div></td>
+              <td><span class="duration-pill">1 Day</span></td>
+              <td><span class="price-pill free">₹0</span></td>
+              <td>Initial consultation & inquiry</td>
+              <td>No manpower included</td>
+            </tr>
+           
+                <!-- STARTER -->
+                <tr>
+                  <td>
+                    <div class="plan-name">
+                      Starter
+                      <span class="plan-tag">Popular</span>
+                    </div>
+                  </td>
+                  <td><span class="duration-pill">Per Day</span></td>
+                  <td><span class="price-pill">Based on manpower</span></td>
+                  <td>Small daily work requirements</td>
+                  <td>Technicians & labour as needed</td>
+                </tr>
+                 <!-- PROFESSIONAL -->
+                <tr class="highlight-row">
+                  <td>
+                    <div class="plan-name">
+                      Professional
+                      <span class="plan-tag pro">Best Value</span>
+                    </div>
+                  </td>
+                  <td><span class="duration-pill">Per Day</span></td>
+                  <td><span class="price-pill pro">₹3,299</span></td>
+                  <td>
+                    2 Technicians + 1 Labour
+                    <br />+ 1 Hour Supervisor
+                  </td>
+                  <td>Most selected plan</td>
+                </tr>
+                <!-- BUSINESS -->
+                <tr>
+                  <td>
+                    <div class="plan-name">Business</div>
+                  </td>
+                  <td><span class="duration-pill">Per Day</span></td>
+                  <td><span class="price-pill">₹4,499</span></td>
+                  <td>
+                    2 Technicians + 2 Labour
+                    <br />+ Supervisor + 1 Hour Manager
+                  </td>
+                  <td>Medium-size sites</td>
+                </tr>
+
+                <!-- CONTRACTOR LITE -->
+                <tr>
+                  <td>
+                    <div class="plan-name">Contractor Lite</div>
+                  </td>
+                  <td><span class="duration-pill">Per Day</span></td>
+                  <td><span class="price-pill">₹5,599</span></td>
+                  <td>
+                    3 Technicians + 2 Labour
+                    <br />+ Supervisor + Contractor/Manager
+                  </td>
+                  <td>Running project support</td>
+                </tr>
+
+                <!-- CONTRACTOR PRO -->
+                <tr>
+                  <td>
+                    <div class="plan-name">
+                      Contractor Pro
+                      <span class="plan-tag pro">Premium</span>
+                    </div>
+                  </td>
+                  <td><span class="duration-pill">Per Day</span></td>
+                  <td><span class="price-pill pro">₹6,699</span></td>
+                  <td>
+                    4 Technicians + 3 Labour
+                    <br />+ Supervisor + Full Management
+                  </td>
+                  <td>Large & critical projects</td>
+                </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+    <article class="account-card danger">
+      <h3>Danger Zone</h3>
+      <button type="button" onclick="deleteAccount()">Delete My Account</button>
+    </article>
+  </section>
+
+</main>
+
+<!-- EDIT PROFILE MODAL -->
+<div id="editModal" class="account-modal" role="dialog" inert>
+  <div class="account-modal-box">
+    <h3>Edit Profile</h3>
+
+    <input id="editName" placeholder="Full Name" required />
+    <input id ="editEmail" placeholder="Enter email" required/>
+   <div class="form-group">
+  <label for="editRole">Role 🛠</label>
+  <select id="editRole">
+    <option value="Contractor">Contractor</option>
+    <option value="Supplier">Supplier</option>
+    <option value="Technician">Technician</option>
+    <option value="Client">Client</option>
+    <option value="Architecture">Architecture</option>
+    <option value="Mechanic">Mechanic</option>
+  </select>
+</div>
+    <input id="editExp" placeholder="Experience (years)" />
+    <textarea id="editBio" placeholder="About your work"></textarea>
+    <button type="button" onclick="saveProfile()">Save</button>
+    <button type="button" class="second" onclick="closeEdit()">Cancel</button>
+  </div>
+</div>
+<script src="../login.js"></script>
+<script src="../js/manage.js"></script>
+</body>
+</html>

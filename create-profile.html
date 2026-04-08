@@ -1,88 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Create Profile</title>
-  <link rel="stylesheet" href="css/creat-profile.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create Profile</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="css/creat-profile.css" />
+  </head>
+  <body>
+    <section class="create-profile login-required">
+      <h2>Create Your Work Profile</h2>
+      <button id="toggleFormBtn" class="toggle-form-btn">➕ Add Profile</button>
+      <!-- FORM -->
+      <div id="formWrapper" class="hidden">
+        <form id="profileForm">
+          <input id="name" placeholder="Full Name" required />
+          <!-- Role dropdown -->
+          <label for="category">Select Category:</label>
+          <select id="category" required>
+            <option value="">-- Select Category --</option>
+            <option value="contractor">Contractor</option>
+            <option value="technician">Technician</option>
+            <option value="supplier">Supplier</option>
+            <option value="architecture">Architecture</option>
+             <option value="mechanic">Mechanic</option>
+             <option value="client">Client works</option>
+          </select>
 
-<section class="create-profile login-required">
+          <!-- Category dropdown -->
+          <label for="role">Select Role:</label>
+          <select id="role" required>
+            <option value="">-- Select Role --</option>
+          </select>
 
-  <h2>Create Your Work Profile</h2>
- <button id="toggleFormBtn" class="toggle-form-btn">
-  ➕ Add Profile
-</button>
-  <!-- FORM -->
-<div id="formWrapper" class="hidden">
-  
-  <form id="profileForm">
+          <input id="experience" placeholder="Experience (years)" required />
+          <input id="location" placeholder="City / village" required />
+          <select id="state" required>
+            <option value="">select state</option>
+            <option>Andhra Pradesh</option>
+            <option>Arunachal Pradesh</option>
+            <option>Assam</option>
+            <option>Bihar</option>
+            <option>Chhattisgarh</option>
+            <option>Goa</option>
+            <option>Gujarat</option>
+            <option>Haryana</option>
+            <option>Himachal Pradesh</option>
+            <option>Jharkhand</option>
+            <option>Karnataka</option>
+            <option>Kerala</option>
+            <option>Madhya Pradesh</option>
+            <option>Maharashtra</option>
+            <option>Manipur</option>
+            <option>Meghalaya</option>
+            <option>Mizoram</option>
+            <option>Nagaland</option>
+            <option>Odisha</option>
+            <option>Punjab</option>
+            <option>Rajasthan</option>
+            <option>Sikkim</option>
+            <option>Tamil Nadu</option>
+            <option>Telangana</option>
+            <option>Tripura</option>
+            <option>Uttar Pradesh</option>
+            <option>Uttarakhand</option>
+            <option>West Bengal</option>
+          </select>
 
-    <input id="name" placeholder="Full Name" required />
-    <!-- Role dropdown -->
-  <label for="role">Select Role:</label>
-  <select id="role" required>
-    <option value="">-- Select Role --</option>
-    <option value="contractor">Contractor</option>
-    <option value="technician">Technician</option>
-    <option value="supplier"> Supplier</option>
-  </select>
+          <input id="district" placeholder="district" required />
+          <input id="skills" placeholder="Skills (comma separated)" />
+          <input id="teamSize" placeholder="Team Size" />
+          <input id="projectsDone" placeholder="Projects Done" />
+          <input id="price" placeholder="Starting Price" />
+          <input id="languages" placeholder="Languages" />
+          <textarea
+            id="description"
+            placeholder="Describe your work"
+            required
+          ></textarea>
 
-  <!-- Category dropdown -->
-  <label for="category">Select Category:</label>
-  <select id="category" required>
-    <option value="">-- Select Category --</option>
-  </select>
+          <!-- ✅ Main media input -->
+          <input type="file" id="media" name="media" accept="image/*,video/*" />
 
+          <!-- ✅ Album input field -->
+          <label for="album">Upload Work Gallery:</label>
+          <input
+            type="file"
+            id="album"
+            name="album"
+            accept="image/*"
+            multiple
+          />
+          <div id="albumPreview"></div>
 
-    <input id="experience" placeholder="Experience (years)" required/>
-    <input id="location" placeholder="City / village" required />
-    <select id="state" required>
-        <option value=""> select state</option>
-        <option>Andhra Pradesh</option>
-        <option>Arunachal Pradesh</option>
-        <option>Assam</option>
-        <option>Bihar</option>
-        <option>Chhattisgarh</option>
-        <option>Goa</option>
-        <option>Gujarat</option>
-        <option>Haryana</option>
-        <option>Himachal Pradesh</option>
-        <option>Jharkhand</option>
-        <option>Karnataka</option>
-        <option>Kerala</option>
-        <option>Madhya Pradesh</option>
-        <option>Maharashtra</option>
-        <option>Manipur</option>
-        <option>Meghalaya</option>
-        <option>Mizoram</option>
-        <option>Nagaland</option>
-        <option>Odisha</option>
-        <option>Punjab</option>
-        <option>Rajasthan</option>
-        <option>Sikkim</option>
-        <option>Tamil Nadu</option>
-        <option>Telangana</option>
-        <option>Tripura</option>
-        <option>Uttar Pradesh</option>
-        <option>Uttarakhand</option>
-        <option>West Bengal</option>
-        </select>
+          <button type="submit">Create Profile</button>
+        </form>
+      </div>
+      <!-- PROFILE CARD -->
+      <div id="profileCard" class="profile-card hidden"></div>
+    </section>
 
-    <input id = "district" placeholder="district" required />
-    <textarea id="description" placeholder="Describe your work" required></textarea>
-
-    <input type="file" id="media" accept="image/*,video/*" required />
-
-    <button type="submit">Create Profile</button>
-  </form>
-</div>
-  <!-- PROFILE CARD -->
-  <div id="profileCard" class="profile-card hidden"></div>
-
-</section>
-
-<script src="js/create-profile.js"></script>
-</body>
+    <script src="js/create-profile.js"></script>
+  </body>
 </html>

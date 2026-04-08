@@ -1,0 +1,240 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+h2 {
+  text-align: center;
+}
+
+input, button {
+  padding: 10px;
+  margin: 5px;
+  font-size: 1rem;
+  border-radius: 2px;
+  border-color: #007bff;
+  border-width: 2px;
+}
+
+.table-block {
+  margin-top: 20px;
+  border: 2px solid #007bff;;
+  background: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+  font-size: 18px;
+}
+
+.table-title {
+  background: #d7d6d6;
+  color: #080404;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-title span {
+  flex-grow: 1;
+}
+
+.table-content {
+  display: none;
+  padding: 10px;
+}
+
+/* Scroll wrapper for horizontal scrolling */
+.table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 600px; /* ensures scroll when many columns */
+}
+
+th, td {
+  border: 1px solid #bcb0b0;
+  padding: 10px;
+  vertical-align: top;
+  min-width: 120px;
+}
+
+td {
+  cursor: text;
+}
+
+.controls {
+  margin-top: 10px;
+  text-align: center;
+}
+.phone-input {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.phone-input input {
+  padding: 8px;
+  margin-right: 5px;
+}
+/* Horizontal scroll for buttons */
+/* Horizontal scroll for buttons */
+.button-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 2px;
+  padding: 5px 7px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.button-bar button,
+.button-bar input {
+  flex: 0 0 auto;
+  border-width: 2px;
+  border-color: #007bff;
+  background: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Icon colors */
+.save-icon { color: green; }
+.edit-icon { color: blue; }
+.delete-icon { color: red; }
+.allow-icon { color: #28a745; }
+.add-icon { color: #007bff; }
+
+/* Hover effects (desktop) */
+.button-bar button:hover .save-icon { color: #0f0; transform: scale(1.2); }
+.button-bar button:hover .edit-icon { color: #3399ff; transform: scale(1.2); }
+.button-bar button:hover .delete-icon { color: #ff3333; transform: scale(1.2); }
+.button-bar button:hover .allow-icon { color: #33cc33; transform: scale(1.2); }
+.button-bar button:hover .add-icon { color: #3399ff; transform: scale(1.2); }
+
+/* Touch effects (mobile) */
+.button-bar button:active .save-icon,
+.button-bar button:active .edit-icon,
+.button-bar button:active .delete-icon,
+.button-bar button:active .allow-icon,
+.button-bar button:active .add-icon {
+  transform: scale(1.3);
+  opacity: 0.8;
+}
+
+/* Scrollbar styling for Chrome/Edge/Safari */
+.button-bar::-webkit-scrollbar {
+  height: 8px;
+}
+.button-bar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+.button-bar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+.button-bar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+/* Tooltip container */
+.button-bar button {
+  position: relative;
+}
+
+/* Custom tooltip */
+.button-bar button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -30px; /* show below the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Show tooltip on hover (desktop) */
+.button-bar button:hover::after {
+  opacity: 1;
+}
+
+/* Show tooltip on active/touch (mobile) */
+.button-bar button:active::after {
+  opacity: 1;
+}
+#toastContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast {
+  min-width: 200px;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #007bff; }
+.table-limit {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.limit-ok {
+  color: green;
+}
+
+.limit-full {
+  color: red;
+}
+/* Responsive */
+@media (max-width: 768px) {
+  th, td {
+    font-size: 0.9rem;
+    padding: 8px;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  th, td {
+    font-size: 0.8rem;
+    padding: 6px;
+    min-width: 80px;
+  }
+}

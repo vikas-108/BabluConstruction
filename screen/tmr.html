@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Rupees Earns</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="../css/tmr.css" />
+  </head>
+  <body>
+    <div class="dashboard-summary">
+      <div class="summary-card">
+        <h3>Total Hours Worked Today</h3>
+        <p id="totalHours">0h 0m</p>
+      </div>
+      <div class="summary-card">
+        <h3>Total Earnings Today</h3>
+        <p id="totalEarnings">₹0</p>
+      </div>
+    </div>
+    <div class="time-rupees-container">
+      <h2>⏰ Time Rupees Earns</h2>
+          <div id="toastField"></div>
+      <div class="camera-wrapper">
+        <video id="cameraStream" autoplay playsinline></video>
+        <canvas id="snapshotCanvas" style="display:none;"></canvas>
+        <audio id="backgroundAudio" autoplay loop></audio>
+        <div id="overlay"></div>
+        <!-- Controls in top-right corner -->
+        <div class="video-controls" id="videoControls">
+          <button id="muteBtn" style="display: none">🔊</button>
+          <input
+            id="volumeSlider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
+            value="0.5"
+            style="display: none"
+          />
+        </div>
+      </div>
+      <audio id="backgroundAudio" autoplay loop></audio>
+
+      <div class="controls">
+        <select id="role">
+          <option data-rate="">Select role</option>
+          <option data-rate="150">Helper (₹100/hr)</option>
+          <option data-rate="200">Supervisor (₹150/hr)</option>
+          <option data-rate="250">Technician (₹200/hr)</option>
+          <option data-rate="275">Mechanic (₹250/hr)</option>
+          <option data-rate="400">Manager (₹400/hr)</option>
+
+        </select>
+        <button id="startBtn" class="btn green">Start</button>
+        <button id="stopBtn" class="btn blue" style="display: none">Stop</button>
+        <button id="finishBtn" class="btn red" style="display: none">
+          Finish
+        </button>
+        <button id="captureBtn" class="btn blue" style="display: none">
+          📸 Capture
+        </button>
+      </div>
+
+      <div class="status-card">
+        <span id="timerDisplay">00:00:00</span>
+        <span id="earningsDisplay">₹0</span>
+      </div>
+
+      <div id="warnings"></div>
+      <div id="snapshotHistory" style="margin-top:20px;"></div>
+      <button onclick="showSnapshots()">Show Snapshots</button>
+      <button id="addMemberBtn" style="display: none">➕ Add Member</button>
+
+      <div id="permissionSection" >
+        <input
+          type="text"
+          id="memberPhone"
+          placeholder="Enter phone number"
+          maxlength="10"
+          pattern="\d{10}"
+          inputmode="numeric"
+        />
+        <button id="permissionBtn">Give Permission</button>
+      </div>
+
+      <!-- History table already has Permissioned Users column -->
+      <table id="historyTable">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Role</th>
+      <th>Duration</th>
+      <th>Date & Time</th>
+      <th>Earnings</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody id="historyBody">
+    <!-- new rows will go here -->
+  </tbody>
+</table>
+    </div>
+    <!-- Footer -->
+<footer class="app-footer">
+  <p>&RightTee; 2026 BR & G Contractor Construction Service. — "सर्वाधिकार सुरक्षिताः".</p>
+</footer>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="../js/tmr.js"></script>
+  </body>
+</html>

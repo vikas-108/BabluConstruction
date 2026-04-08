@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BR & G Contractor Construction Service</title>
+    <title>BUILDSKIL Contractor Construction Service</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
 
     <!-- Google Font -->
     <link
@@ -16,57 +17,60 @@
   </head>
   <body>
     <!-- ================= HEADER ================= -->
-  <header class="header">
-  <div class="container header-bar">
+    <header class="header">
+      <div class="container header-bar">
+        <!-- LEFT : LOGO -->
+        <div class="header-left">
+          <div class="brand-logo">108</div>
+        </div>
 
-    <!-- LEFT : LOGO -->
-    <div class="header-left">
-      <div class="brand-logo">108</div>
-    </div>
+        <!-- CENTER : APP NAME -->
+        <div class="header-center">
+          <h1 class="brand-name">BUILDSKIL<span>108</span></h1>
+        </div>
 
-    <!-- CENTER : APP NAME -->
-    <div class="header-center">
-      <h1 class="brand-name">Savvy<span>108</span></h1>
-    </div>
+        <!-- RIGHT : AUTH -->
+        <div class="header-right">
+          <button id="authBtn" class="auth-btn">Login / Sign Up</button>
 
-    <!-- RIGHT : AUTH -->
-    <div class="header-right">
-      <button id="authBtn" class="auth-btn">Login / Sign Up</button>
-
-      <div id="userMenu" class="user-menu hidden">
-        <span id="userName"></span>
-        <div class="dropdown">
-          <a href="account.html">Manage Account</a>
-          <!--<a href="settings.html">Settings</a>-->
-          <a href="create-profile.html">Create & Post Profile</a>
-          <hr />
-          <button id="logoutBtn">Logout</button>
+          <div id="userMenu" class="user-menu ">
+            <span id="userName"></span>
+            <div class="dropdown">
+              <a href="./screen/account.html">Manage Account</a>
+              <a href="./screen/createpad.html">Create pad</a>
+              <a href="create-profile.html">Create & Post Profile</a>
+              <hr />
+              <button id="logoutBtn">Logout</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-
-  </div>
-</header>
-
+    </header>
 
     <!-- ================= HERO ================= -->
     <section class="hero">
       <div class="container hero-content">
         <div class="brand-slogan">
-          <span class="slogan-en">YOUR FAITH, WE BUILD POWER</span>
+          <span class="slogan-en">YOUR FAITH, OUR BUILD POWER</span>
           <span class="slogan-hi">आपका विश्वास, हमारी निर्माण शक्ति</span>
         </div>
 
         <h2>Reliable Construction & Skilled Workforce</h2>
         <p>
-          BR & G Contractor Construction Service delivers professional slab
+          BUILDSKIL Contractor Construction Service delivers professional slab
           shuttering, soil filling, technician supply, and labour services with
           quality and transparency.
         </p>
-       <div class="hero-buttons hidden" id="heroButtons">
-          <a href="contractor.html" class="btn primary">Contractors</a>
-          <a href="services.html" class="btn primary">Services</a>
-          <a href="projects-reports.html" class="btn secondary">Project</a>
+        <div class="hero-buttons" id="heroButtons">
+          <a href="./screen/bhūgolapaṭa.html" class="btn primary"
+            >deśa‑chitra</a
+          >
+          <a href="./screen/table.html" class="btn primary">T.D.</a>
+          <!--<a href="contractor.html" class="btn primary">Contractors</a> -->
+          <a href="./screen/tmr.html" class="btn primary">TER</a>
+          <a href="./screen/projects-reports.html" class="btn secondary"
+            >Project</a
+          >
         </div>
       </div>
     </section>
@@ -89,16 +93,21 @@
             </button>
           </div>
 
-          <button class="filter-toggle hidden" id="filterToggle">🔍 Filters</button>
-          <button id="clearSearchBtn" class="clear-btn hidden">✖ </button>
+          <button class="filter-toggle hidden" id="filterToggle">
+            🔍 Filters
+          </button>
+          <button id="clearSearchBtn" class="clear-btn hidden">✖</button>
         </div>
         <!-- FILTERS (HIDDEN BY DEFAULT) -->
         <div class="filter-box" id="filterBox">
           <select id="categoryFilter">
             <option value="">All Categories</option>
             <option value="contractor">Contractors</option>
-            <option value="material">Materials</option>
+            <option value="supplier">supplier</option>
             <option value="technician">Technicians</option>
+            <option value="architecture">Architecture</option>
+            <option value="mechanic">Mechanic</option>
+            <option value="client">Client works</option>
           </select>
 
           <div class="search-select">
@@ -122,86 +131,39 @@
       <div id="pagination" class="pagination hidden"></div>
       <div id="searchLoader" class="search-loader hidden">
         <div class="loader-108">108</div>
-
       </div>
     </div>
 
-    <!-- ================= SERVICES ================= -->
-    <section class="services hidden" id="servicesSection">
+    <section class="notifications" id="notification">
       <div class="container">
-        <h2 class="section-title">Our Core Construction Services</h2>
-        <p class="section-subtitle">
-          We handle both new and existing construction projects with
-          professional execution, skilled manpower, and transparent workflow.
-        </p>
+        <h2 class="section-title">Latest Updates</h2>
+        <ul class="notification-list" id="notificationList">
+          <!-- Updates will be injected here -->
+        </ul>
+      </div>
+    </section>
+    <!-- WHO CAN  -->
+    <section class="workflow">
+      <div class="container">
+        <h2 class="section-title">It's Your Turn</h2>
 
-        <div class="service-grid">
-          <div class="service-card">
-            <h3>New Construction Projects</h3>
-            <p>
-              End-to-end execution of new residential, commercial, and
-              industrial projects including manpower, shuttering, and site
-              coordination.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <h3>Old Project Continuation</h3>
-            <p>
-              We take over incomplete or delayed projects and bring them back on
-              track with proper planning, skilled teams, and quality control.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <h3>Renovation & Repair Work</h3>
-            <p>
-              Structural repairs, slab modifications, strengthening work, and
-              renovation services for homes, buildings, and commercial sites.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <h3>Slab Shuttering</h3>
-            <p>
-              Strong and accurate shuttering work using high-quality materials
-              and experienced shuttering technicians for RCC structures.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <h3>Soil Filling & Foundation Work</h3>
-            <p>
-              Professional soil filling, leveling, and compaction to ensure a
-              strong base for long-lasting construction.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <h3>Technician & Labour Supply</h3>
-            <p>
-              Skilled masons, carpenters, electricians, plumbers, supervisors,
-              and trained labour supplied on contract or project basis.
-            </p>
-          </div>
+        <div class="workflow-steps">
+          <div class="step">Masons</div>
+          <div class="step">Structural</div>
+          <div class="step">Carpenters</div>
+          <div class="step">Electricians</div>
+          <div class="step">Plumbers</div>
+          <div class="step">Material Supplier</div>
+          <div class="step">Painter</div>
+          <div class="step">HVAC</div>
+          <div class="step">All Technician</div>
+          <div class="step">Architect</div>
+          <div class="step">Marble & Tile</div>
         </div>
       </div>
     </section>
 
-    <!-- ================= WORK FLOW ================= -->
-    <!-- <section class="workflow">
-      <div class="container">
-        <h2 class="section-title">How We Work</h2>
-
-        <div class="workflow-steps">
-          <div class="step">Inquiry & Requirement</div>
-          <div class="step">Site Visit & Planning</div>
-          <div class="step">Execution</div>
-          <div class="step">Completion & Report</div>
-        </div>
-      </div>
-    </section> -->
-   <section class="plans hidden" id="plansSection">
+    <!--<section class="plans hidden" id="plansSection">
       <div class="container">
         <h2 class="section-title">Engagement & Support Plans</h2>
         <p class="section-subtitle">
@@ -257,148 +219,9 @@
         </div>
       </div>
     </section>
-    <!-- ================= SUBSCRIPTION PLANS ================= -->
-    <section class="subscription-section hidden" id="subscriptionSection">
-      <div class="container">
-        <div class="subscription-header">
-          <h2>Subscription & Engagement Plans</h2>
-          <p>
-            Flexible manpower and supervision plans designed for clients,
-            builders, and contractors based on daily project requirements.
-          </p>
-        </div>
-
-        <div class="table-card">
-          <div class="table-responsive">
-            <table class="subscription-table">
-              <thead>
-                <tr>
-                  <th>Plan</th>
-                  <th>Duration</th>
-                  <th>Pricing</th>
-                  <th>Best For</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- FREE -->
-                <tr>
-                  <td>
-                    <div class="plan-name">
-                      Free Trial
-                      <span class="plan-tag free">Trial</span>
-                    </div>
-                  </td>
-                  <td><span class="duration-pill">1 Day</span></td>
-                  <td><span class="price-pill free">₹0</span></td>
-                  <td>Initial consultation & inquiry</td>
-                  <td>No manpower included</td>
-                </tr>
-
-                <!-- STARTER -->
-                <tr>
-                  <td>
-                    <div class="plan-name">
-                      Starter
-                      <span class="plan-tag">Popular</span>
-                    </div>
-                  </td>
-                  <td><span class="duration-pill">Per Day</span></td>
-                  <td><span class="price-pill">Based on manpower</span></td>
-                  <td>Small daily work requirements</td>
-                  <td>Technicians & labour as needed</td>
-                </tr>
-
-                <!-- PROFESSIONAL -->
-                <tr class="highlight-row">
-                  <td>
-                    <div class="plan-name">
-                      Professional
-                      <span class="plan-tag pro">Best Value</span>
-                    </div>
-                  </td>
-                  <td><span class="duration-pill">Per Day</span></td>
-                  <td><span class="price-pill pro">₹3,299</span></td>
-                  <td>
-                    2 Technicians + 1 Labour
-                    <br />+ 1 Hour Supervisor
-                  </td>
-                  <td>Most selected plan</td>
-                </tr>
-
-                <!-- BUSINESS -->
-                <tr>
-                  <td>
-                    <div class="plan-name">Business</div>
-                  </td>
-                  <td><span class="duration-pill">Per Day</span></td>
-                  <td><span class="price-pill">₹4,499</span></td>
-                  <td>
-                    2 Technicians + 2 Labour
-                    <br />+ Supervisor + 1 Hour Manager
-                  </td>
-                  <td>Medium-size sites</td>
-                </tr>
-
-                <!-- CONTRACTOR LITE -->
-                <tr>
-                  <td>
-                    <div class="plan-name">Contractor Lite</div>
-                  </td>
-                  <td><span class="duration-pill">Per Day</span></td>
-                  <td><span class="price-pill">₹5,599</span></td>
-                  <td>
-                    3 Technicians + 2 Labour
-                    <br />+ Supervisor + Contractor/Manager
-                  </td>
-                  <td>Running project support</td>
-                </tr>
-
-                <!-- CONTRACTOR PRO -->
-                <tr>
-                  <td>
-                    <div class="plan-name">
-                      Contractor Pro
-                      <span class="plan-tag pro">Premium</span>
-                    </div>
-                  </td>
-                  <td><span class="duration-pill">Per Day</span></td>
-                  <td><span class="price-pill pro">₹6,699</span></td>
-                  <td>
-                    4 Technicians + 3 Labour
-                    <br />+ Supervisor + Full Management
-                  </td>
-                  <td>Large & critical projects</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!--<div class="subscription-note">
-          <h3>Important Operational Notes</h3>
-          <p>
-            Large-scale construction activities such as <strong>slab filling, lantern work,
-           and raw material stacking, beams</strong> are not included in standard
-            charges and will be billed separately based on actual work
-            requirements. Rental materials and heavy equipment are also excluded
-            from any subscription or fixed plan. Charges for these items will be
-            calculated based on the project area, duration of equipment usage,
-            and volume of materials handled.
-          </p>
-          <p>
-            All major construction-related costs—including <strong>raw material filling,
-            rental material usage, labor uplift charges, and loading or
-            unloading logistics</strong>—will be evaluated by the site manager
-            . Pricing will be finalized according to on-site
-            conditions and actual execution needs, ensuring transparency and
-            accuracy in billing with Rate. <strong>CAWR (charge according to work rates).</strong>
-          </p>
-        </div>-->
-      </div>
-    </section>
-
+    --->
     <!-- ================= CTA ================= -->
-    <section class="cta">
+    <section class="cta" id="ctta">
       <div class="container">
         <h2>Looking for Trusted Construction Services?</h2>
         <p>

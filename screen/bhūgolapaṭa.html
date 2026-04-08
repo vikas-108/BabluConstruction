@@ -1,0 +1,94 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Map</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/map.css" />
+  </head>
+
+  <body>
+    <div id="toaster" class="toaster"></div>
+    <header>Project Location Map</header>
+
+    <!-- Top Overlay -->
+    <div class="top-bar">
+      <input type="text" id="searchBox" placeholder="Search location..." />
+    </div>
+
+    <div class="container">
+      <div class="sidebar" id="sidebar">
+        <h3 id="toggleFormLink" style="cursor: pointer; color: #007bff">
+          Add Project
+        </h3>
+        <div id="projectForm">
+        <div class="form-group">
+          <input type="text" id="projectName" placeholder="Project Name" />
+        </div>
+        <div class="form-group">
+          <input type="text" id="lat" placeholder="Latitude" readonly />
+        </div>
+        <div class="form-group">
+          <input type="text" id="lng" placeholder="Longitude" readonly />
+        </div>
+        <div class="form-group">
+          <textarea id="description" placeholder="Description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <select id="visibility">
+            <option value="">select preference</option>
+            <option value="private">Private</option>
+            <option value="public">Public</option>
+          </select>
+        </div>
+        <label for="projectType">Project Type:</label>
+        <select class="form-group" id="projectType">
+          <option value="">select one</option>
+          <option value="office">Office</option>
+          <option value="school">School</option>
+          <option value="hospital">Hospital</option>
+          <option value="home">Home</option>
+          <option value="building">Building</option>
+        </select>
+        <div class="form-group">
+          <input
+            type="text"
+            id="phones"
+            placeholder="Allowed Phones (comma separated)"
+             maxlength="10"
+          pattern="\d{10}"
+          inputmode="numeric"
+          />
+        </div>
+
+        <button id="saveBtn">Save Location</button>
+        </div>
+        <hr />
+
+        <p><strong>Tip:</strong> Click on map to select location</p>
+        <hr />
+        <h3>Project History</h3>
+        <ul id="projectHistory" class="history-list"></ul>
+      </div>
+
+      <div id="map"></div>
+
+      <!-- Floating Buttons -->
+      <button class="fab location-btn" id="myLocationBtn">📍</button>
+      <button class="fab add-btn" id="toggleSidebarBtn">➕</button>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="../js/map.js"></script>
+  </body>
+</html>
