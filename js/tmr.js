@@ -1,8 +1,6 @@
-
-
 let timerInterval, startTime, pausedTime = 0;
 let isPaused = false;
-let currentRate = 150; // default helper rate
+let currentRate = 50; // default helper rate
 let warnings = 0;
 let lastPresenceTime = Date.now();
 let genuineEarnings = 0;
@@ -14,12 +12,6 @@ let totalEarningsToday = 0;
 let sessionId = null;
 const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
 const SERVER_BASE = "https://api.buildskil.com";
-const socket = io("https://api.buildskil.com");
-let isLiveStarted = false;
-let localStream = null;
-let activeStreams = [];
-let peerConnection;
-const loggedInUser = JSON.parse(localStorage.getItem("cb_login_user"));
 function authHeaders(isFormData = false) {
 
   const headers = {
@@ -66,7 +58,7 @@ document.getElementById("startBtn").addEventListener("click", async () => {
     console.log("Session Started:", sessionId);
 
     // Existing logic
-    await startCamera(); // 🔴 IMPORTANT
+    startCamera();
     startTimer();
     startMotionDetection();
     startAudioCapture();
@@ -113,21 +105,9 @@ document.getElementById("stopBtn").addEventListener("click", async () => {
 
 });
 document.getElementById("finishBtn").addEventListener("click", async () => {
-  stopAllMedia();
+  stopCamera();
   stopAudioCapture();
    stopTimer();
-   // 🔴 stop WebRTC properly
-  if (peerConnection) {
-
-    peerConnection.getSenders().forEach(sender => {
-      if (sender.track) sender.track.stop();
-    });
-
-    peerConnection.close();
-    peerConnection = null;
-  }
-
-  isLiveStarted = false;
    // ✅ Reset role dropdown
     const roleSelect = document.getElementById("role");
     roleSelect.selectedIndex = 0;   // go back to "Select role"
@@ -141,10 +121,18 @@ document.getElementById("finishBtn").addEventListener("click", async () => {
 
     const data = await res.json();
     console.log("Session stopped:", data);
+
     // ✅ Update history with backend session data
     logHistory(data);
+
     // ✅ Show earnings/duration
-    alert(`Session ended. Earnings: ₹${data.earnings.toFixed(2)} for ${data.duration.toFixed(2)} hours`);
+    //alert(`Session ended. Earnings: ₹${data.earnings.toFixed(2)} for ${data.duration.toFixed(2)} hours`);
+    if (data.earnings && data.duration) {
+  alert(`Session ended. Earnings: ₹${data.earnings.toFixed(2)} for ${data.duration.toFixed(2)} hours`);
+} else {
+  console.error("Invalid session data:", data);
+  alert("Error: Session data incomplete.");
+}
   } catch (err) {
     console.error("Finish API error:", err);
     alert("Error: Could not stop session.");
@@ -226,30 +214,10 @@ document.getElementById("permissionBtn").addEventListener("click", async () => {
   }
 
    showToast("Permission granted");
-     document.getElementById("addMemberBtn").style.display = "none";
-  document.getElementById("permissionSection").style.display = "none";
-  console.log(document.getElementById("permissionSection"));
-if (!isLiveStarted) {
-
-  // 🔴 try to recover automatically
-  if (!localStream) {
-
-    console.log("Camera not ready → starting now");
-
-    await startCamera(); // auto start
-
-  }
-
-  if (!localStream) {
-    showToast("Camera permission required");
-    return;
-  }
-
-  startLiveBroadcast(loggedInUser.id);
-  isLiveStarted = true;
-}
-  console.log("localStream:", localStream);
   // hide permission UI
+  document.getElementById("addMemberBtn").style.display = "none";
+  document.getElementById("permissionSection").style.display = "none";
+
 });
 function showToast(message) {
 const container = document.getElementById("toastField");
@@ -305,7 +273,7 @@ async function loadMyPermissions() {
     showSnapshots(p.ownerId);
   });
     row.querySelector(".viewLiveBtn").addEventListener("click", () => {
-     handleLiveClick(p.ownerId);
+      startLiveStreamForUser(p.ownerId);
     });
 
   });
@@ -362,206 +330,47 @@ async function showWorkForUser(ownerId) {
   });
 
 }
-async function handleLiveClick(ownerId) {
-
-  try {
-
-    const res = await fetch(`${API_BASE}/live-status?owner=${ownerId}`, {
-      headers: authHeaders()
-    });
-
-    const data = await res.json();
-
-    // 🟢 If live → start watching
-    if (data.isLive) {
-      watchLive(ownerId);
-      return;
-    }
-
-    // 🔴 If not live → show message
-    if (data.endedAt) {
-
-      const date = new Date(data.endedAt).toLocaleString();
-
-      showToast(`Session ended at ${date}`);
-
-    } else {
-      showToast("No active session");
-    }
-
-  } catch (err) {
-    console.error(err);
-    showToast("Error checking live status");
-  }
-
+function startLiveStreamForUser(){
+  alert("Live camera feature will be implemented next");
 }
-function startLiveBroadcast(ownerId) {
-
-  const roomId = ownerId;
-
-  socket.emit("join-room", roomId);
-
-  peerConnection = new RTCPeerConnection();
-
-  localStream.getTracks().forEach(track => {
-    peerConnection.addTrack(track, localStream);
-  });
-
-  // ICE
-  peerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
-      socket.emit("ice-candidate", {
-        roomId,
-        candidate: event.candidate
-      });
-    }
-  };
-
-  // 🔴 IMPORTANT (missing earlier)
-  socket.on("answer", async (answer) => {
-    await peerConnection.setRemoteDescription(answer);
-  });
-
-  peerConnection.createOffer()
-    .then(offer => {
-      peerConnection.setLocalDescription(offer);
-      socket.emit("offer", { roomId, offer });
-    });
-
-}
-async function startLiveStreamForUser(ownerId) {
-
-  const roomId = ownerId;
-
-  socket.emit("join-room", roomId);
-
-  localStream = await navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: false
-  });
-
-  document.getElementById("cameraStream").srcObject = localStream;
-
-  peerConnection = new RTCPeerConnection();
-
-  localStream.getTracks().forEach(track => {
-    peerConnection.addTrack(track, localStream);
-  });
-
-  const offer = await peerConnection.createOffer();
-  await peerConnection.setLocalDescription(offer);
-
-  socket.emit("offer", { roomId, offer });
-
-}
-
-function watchLive(ownerId) {
-
-  const video = document.getElementById("cameraStream"); // 👈 SAME ID
-
-  const roomId = ownerId;
-
-  socket.emit("join-room", roomId);
-
-  peerConnection = new RTCPeerConnection();
-
-  peerConnection.ontrack = (event) => {
-
-    video.srcObject = event.streams[0]; // 👈 replace with live stream
-
-  };
-
-  socket.on("offer", async (offer) => {
-
-    await peerConnection.setRemoteDescription(offer);
-
-    const answer = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answer);
-
-    socket.emit("answer", { roomId, answer });
-
-  });
-
-  socket.on("ice-candidate", (candidate) => {
-    peerConnection.addIceCandidate(candidate);
-  });
-
+function isMobileDevice() {
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 async function startCamera() {
-
   const video = document.getElementById("cameraStream");
 
-  // stop old streams first
-  activeStreams.forEach(stream => {
-    stream.getTracks().forEach(t => t.stop());
-  });
-  activeStreams = [];
+  try {
+    const constraints = isMobileDevice()
+      ? { video: { facingMode: "user" }, audio: true } // ✅ front camera, no audio
+      : { video: true, audio: true };
 
-  localStream = await navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: false
-  });
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = stream;
+    video.muted = true; // 🔥 FIX
+    video.playsInline = true; // mobile fix
+    // ✅ Explicit play call required on mobile
+    await video.play();
 
-  activeStreams.push(localStream);
+    if (isMobileDevice()) {
+      showToast("Camera started — tap again if video doesn’t autoplay.");
+    }
 
-  video.srcObject = localStream;
-
+    console.log("Camera started successfully");
+  } catch (err) {
+    console.error("Camera access error:", err);
+    showToast("Unable to access camera: " + err.message);
+  }
 }
-function stopAllMedia() {
 
-  console.log("Stopping ALL media...");
 
-  // 🔴 stop all tracked streams
-  activeStreams.forEach(stream => {
-    stream.getTracks().forEach(track => track.stop());
-  });
-
-  activeStreams = [];
-
-  // 🔴 stop localStream
-  if (localStream) {
-    localStream.getTracks().forEach(track => track.stop());
-    localStream = null;
-  }
-
-  // 🔴 stop video element
-  const video = document.getElementById("cameraStream");
-  if (video && video.srcObject) {
-    video.srcObject.getTracks().forEach(track => track.stop());
-    video.srcObject = null;
-  }
-
-  // 🔴 stop WebRTC senders (MOST IMPORTANT)
-  if (peerConnection) {
-    peerConnection.getSenders().forEach(sender => {
-      if (sender.track) {
-        sender.track.stop();
-      }
-    });
-
-    peerConnection.close();
-    peerConnection = null;
-  }
-
-  console.log("All media stopped ✅");
-}
 function stopCamera() {
-
   const video = document.getElementById("cameraStream");
-
-  // ✅ Stop video element stream
-  if (video.srcObject) {
-    video.srcObject.getTracks().forEach(track => track.stop());
+  const stream = video.srcObject;
+  if (stream) {
+    const tracks = stream.getTracks();
+    tracks.forEach(track => track.stop());
     video.srcObject = null;
   }
-
-  // ✅ Stop global stream (VERY IMPORTANT)
-  if (localStream) {
-    localStream.getTracks().forEach(track => track.stop());
-    localStream = null;
-  }
-
-  console.log("Camera fully stopped");
 }
 
 // Toggle buttons visibility
@@ -832,7 +641,7 @@ document.getElementById("volumeSlider").addEventListener("input", (e) => {
 
 }
 // Capture every 8 minutes (480,000 ms)
-setInterval(captureSnapshot, 120000);
+setInterval(captureSnapshot, 480000);
 // Warning logic
 function giveWarning(msg) {
   warnings++;
