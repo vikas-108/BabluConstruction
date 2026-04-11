@@ -257,11 +257,18 @@ async function loadMyPermissions() {
 
     row.innerHTML = `
       <td colspan="5">
-        ${p.name} shared work access
-        <button class="viewWorkBtn">📂 Work</button>
-         <button class="viewSnapshotsBtn">📷 Snapshots</button>
-        <button class="viewLiveBtn">🔴  Live</button>
-      </td>
+  <div class="permission-row">
+    <div class="permission-text">
+      ${p.name} shared work access
+    </div>
+
+    <div class="permission-actions">
+      <button class="viewWorkBtn">📂 Work</button>
+      <button class="viewSnapshotsBtn">📷 Snapshots</button>
+      <button class="viewLiveBtn">🔴 Live</button>
+    </div>
+  </div>
+</td>
     `;
 
     table.appendChild(row);
