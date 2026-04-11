@@ -1,0 +1,63 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: #f9fafb;
+  color: #333;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  background: #e0f2fe;
+}
+
+.brand-name {
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+.tagline {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.cta-btn {
+  padding: 14px 28px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.cta-btn:hover {
+  background: #1e40af;
+}
+
+.benefits {
+  text-align: center;
+  padding: 40px 20px;
+}
+.benefit-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.testimonials {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f1f5f9;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: #e5e7eb;
+}

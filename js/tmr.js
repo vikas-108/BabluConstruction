@@ -226,8 +226,8 @@ const container = document.getElementById("toastField");
   toast.textContent = message;
 
   toast.style.position = "fixed";
-  toast.style.bottom = "20px";
-  toast.style.right = "20px";
+  toast.style.top = "20px";
+  toast.style.right = "30px";
   toast.style.background = "#333";
   toast.style.color = "#fff";
   toast.style.padding = "10px 15px";
@@ -257,18 +257,11 @@ async function loadMyPermissions() {
 
     row.innerHTML = `
       <td colspan="5">
-  <div class="permission-row">
-    <div class="permission-text">
-      ${p.name} shared work access
-    </div>
-
-    <div class="permission-actions">
-      <button class="viewWorkBtn">📂 Work</button>
-      <button class="viewSnapshotsBtn">📷 Snapshots</button>
-      <button class="viewLiveBtn">🔴 Live</button>
-    </div>
-  </div>
-</td>
+        ${p.name} shared work access
+        <button class="viewWorkBtn">📂 Work</button>
+         <button class="viewSnapshotsBtn">📷 Snapshots</button>
+        <button class="viewLiveBtn">🔴  Live</button>
+      </td>
     `;
 
     table.appendChild(row);
@@ -850,3 +843,31 @@ document.getElementById("captureBtn").addEventListener("click", () => {
   // Save to local storage
   localStorage.setItem("snapshot", imageData);
 });
+// Common function to deter screenshots
+function preventScreenshots() {
+  // Detect PrintScreen key
+  document.addEventListener("keyup", (e) => {
+    if (e.key === "PrintScreen") {
+      // Blur the entire page
+      document.body.style.filter = "blur(15px)";
+        showToast("Screenshots are disabled on this page.");
+
+      // Restore after a few seconds
+      setTimeout(() => {
+        document.body.style.filter = "none";
+      }, 3000);
+    }
+  });
+
+  // Detect copy attempts (Ctrl+C)
+  document.addEventListener("copy", (e) => {
+    e.preventDefault();
+    showToast("Copying content is restricted on this page.");
+  });
+
+  // Disable right-click context menu
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
+}
+
+// Call once when page loads
+preventScreenshots();
