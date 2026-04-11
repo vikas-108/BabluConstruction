@@ -399,33 +399,46 @@ body {
   }
 }
 /* Toast notifications */
+/* ================= TOAST ================= */
 #toastField {
   position: fixed;
   top: 20px;
   right: 20px;
+  left: auto;
   z-index: 9999;
+
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  max-width: calc(100% - 20px); /* prevent overflow */
 }
 
+/* Toast */
 .toast {
   min-width: 220px;
   max-width: 320px;
+  width: auto;
+
   padding: 12px 16px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: clamp(13px, 2.5vw, 14px);
+
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
   animation: slideIn 0.3s ease;
+  word-wrap: break-word;
 }
 
+/* ================= SNAPSHOT GRID ================= */
 #snapshotHistory {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
 }
 
+/* ================= BUTTON ROW ================= */
 .buttonRow {
   display: flex;
   gap: 8px;
@@ -433,32 +446,157 @@ body {
   margin-top: 6px;
 }
 
+/* Buttons */
 .buttonRow button {
-  flex: 1;
-  min-width: 100px;
+  flex: 1 1 auto;
+  min-width: 110px;
   padding: 10px;
+
   border: none;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
+
+  font-size: clamp(13px, 2.5vw, 14px);
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
-.viewWorkBtn { background: #4CAF50; color: #fff; }
-.viewSnapshotsBtn { background: #2196F3; color: #fff; }
-.viewLiveBtn { background: #f44336; color: #fff; }
+/* Hover (desktop only feel) */
+.buttonRow button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.permission-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* 🔥 allows wrapping on small screens */
+  gap: 10px;
+}
+
+.permission-text {
+  font-size: 14px;
+  flex: 1 1 200px; /* flexible width */
+}
+
+.permission-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap; /* 🔥 buttons wrap nicely */
+}
+
+.permission-actions button {
+  padding: 6px 10px;
+  font-size: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Button colors (optional but better UX) */
+.viewWorkBtn {
+  background: #4CAF50;
+  color: white;
+}
+
+.viewSnapshotsBtn {
+  background: #2196F3;
+  color: white;
+}
+
+.viewLiveBtn {
+  background: #f44336;
+  color: white;
+}
+
+/* 🔴 MOBILE OPTIMIZATION */
+@media (max-width: 600px) {
+  .permission-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .permission-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .permission-actions button {
+    flex: 1; /* 🔥 equal width buttons */
+    text-align: center;
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+/* ================= TABLET ================= */
 @media (max-width: 992px) {
-  .dashboard-summary { flex-direction: column; gap: 15px; }
-  .summary-card { width: 100%; }
+  .dashboard-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .summary-card {
+    width: 100%;
+  }
 }
 
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
-  .controls { flex-direction: column; align-items: stretch; }
-  #historyTable { display: block; overflow-x: auto; white-space: nowrap; }
+
+  /* Toast center for better UX */
+  #toastField {
+    top: 10px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    align-items: center;
+  }
+
+  .toast {
+    width: 90%;
+    max-width: 95%;
+    text-align: center;
+  }
+
+  /* Grid tighter */
+  #snapshotHistory {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  /* Buttons stack better */
+  .buttonRow {
+    flex-direction: column;
+  }
+
+  .buttonRow button {
+    width: 100%;
+  }
+
+  /* Table scroll fix */
+  #historyTable {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }
 
+/* ================= SMALL MOBILE ================= */
 @media (max-width: 480px) {
-  .btn { width: 100%; font-size: 16px; padding: 14px; }
-  .controls select { width: 100%; }
+
+  .btn {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .controls select {
+    width: 100%;
+  }
+
+  #snapshotHistory {
+    grid-template-columns: repeat(2, 1fr); /* clean 2-column layout */
+  }
 }
 .app-footer {
   width: 100%;

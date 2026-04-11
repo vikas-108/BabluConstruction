@@ -10,8 +10,8 @@ let accumulatedTime = 0; // total time before pause
 let totalHoursWorked = 0;
 let totalEarningsToday = 0;
 let sessionId = null;
-const API_BASE = "http://localhost:5000/api/work"; // change if using domain
-const SERVER_BASE = "http://localhost:5000";
+const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
+const SERVER_BASE = "https://api.buildskil.com";
 function authHeaders(isFormData = false) {
 
   const headers = {
@@ -257,11 +257,18 @@ async function loadMyPermissions() {
 
     row.innerHTML = `
       <td colspan="5">
-        ${p.name} shared work access
-        <button class="viewWorkBtn">📂 Work</button>
-         <button class="viewSnapshotsBtn">📷 Snapshots</button>
-        <button class="viewLiveBtn">🔴  Live</button>
-      </td>
+  <div class="permission-row">
+    <div class="permission-text">
+      ${p.name} shared work access
+    </div>
+
+    <div class="permission-actions">
+      <button class="viewWorkBtn">📂 Work</button>
+      <button class="viewSnapshotsBtn">📷 Snapshots</button>
+      <button class="viewLiveBtn">🔴 Live</button>
+    </div>
+  </div>
+</td>
     `;
 
     table.appendChild(row);
@@ -333,18 +340,35 @@ async function showWorkForUser(ownerId) {
 function startLiveStreamForUser(){
   alert("Live camera feature will be implemented next");
 }
-function startCamera() {
-  const video = document.getElementById("cameraStream");
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-      video.play();
-    })
-    .catch(err => {
-      console.error("Camera access error:", err);
-      alert("Unable to access camera.");
-    });
+function isMobileDevice() {
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
+async function startCamera() {
+  const video = document.getElementById("cameraStream");
+
+  try {
+    const constraints = isMobileDevice()
+      ? { video: { facingMode: "user" }, audio: true } // ✅ front camera, no audio
+      : { video: true, audio: true };
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = stream;
+    video.muted = true; // 🔥 FIX
+    video.playsInline = true; // mobile fix
+    // ✅ Explicit play call required on mobile
+    await video.play();
+
+    if (isMobileDevice()) {
+      showToast("Camera started — tap again if video doesn’t autoplay.");
+    }
+
+    console.log("Camera started successfully");
+  } catch (err) {
+    console.error("Camera access error:", err);
+    showToast("Unable to access camera: " + err.message);
+  }
+}
+
 
 function stopCamera() {
   const video = document.getElementById("cameraStream");
