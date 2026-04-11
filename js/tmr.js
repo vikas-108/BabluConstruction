@@ -256,7 +256,7 @@ async function loadMyPermissions() {
     const row = document.createElement("tr");
 
     row.innerHTML = `
-      <td colspan="5">
+     <td colspan="5">
         ${p.name} shared work access
         <button class="viewWorkBtn">📂 Work</button>
          <button class="viewSnapshotsBtn">📷 Snapshots</button>

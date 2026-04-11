@@ -459,19 +459,28 @@ body {
   cursor: pointer;
   transition: 0.2s ease;
 }
+<<<<<<< HEAD
 
 /* Hover (desktop only feel) */
+=======
+>>>>>>> 2362d211bbff6812b969de6de2a4fa8cd7953acb
 .buttonRow button:hover {
   transform: translateY(-2px);
   opacity: 0.9;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2362d211bbff6812b969de6de2a4fa8cd7953acb
 /* Colors */
 .viewWorkBtn { background: #4CAF50; color: #fff; }
 .viewSnapshotsBtn { background: #2196F3; color: #fff; }
 .viewLiveBtn { background: #f44336; color: #fff; }
 
+<<<<<<< HEAD
 /* ================= TABLET ================= */
+=======
+>>>>>>> 2362d211bbff6812b969de6de2a4fa8cd7953acb
 @media (max-width: 992px) {
   .dashboard-summary {
     flex-direction: column;
