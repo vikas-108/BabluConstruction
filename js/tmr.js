@@ -843,7 +843,7 @@ document.getElementById("captureBtn").addEventListener("click", () => {
   // Save to local storage
   localStorage.setItem("snapshot", imageData);
 });
-// Common function to deter screenshots
+/* Common function to deter screenshots
 function preventScreenshots() {
   // Detect PrintScreen key
   document.addEventListener("keyup", (e) => {
@@ -871,3 +871,4 @@ function preventScreenshots() {
 
 // Call once when page loads
 preventScreenshots();
+*/

@@ -1,6 +1,7 @@
 const input = document.getElementById("searchInput");
 const results = document.getElementById("results");
 const categoryFilter = document.getElementById("categoryFilter");
+const roleFilter = document.getElementById("role");
 const stateFilter = document.getElementById("stateFilter");
 const districtFilter = document.getElementById("districtFilter");
 const PAGE_SIZE = 20;
@@ -250,6 +251,7 @@ function saveSearchState() {
   const state = {
     query: input?.value,
     category: categoryFilter?.value || "",
+    role: roleFilter?.value || "",
     state: stateFilter?.value || "",
     district: districtFilter?.value || "",
   };
@@ -264,6 +266,7 @@ function restoreSearchState() {
 
   if (state.query) input.value = state.query;
   if (categoryFilter && state.category) categoryFilter.value = state.category;
+  if (roleFilter && state.role) roleFilter.value = state.role;
   if (stateFilter && state.state) stateFilter.value = state.state;
   if (districtFilter && state.district) districtFilter.value = state.district;
 
@@ -319,6 +322,96 @@ function setupSearchableSelect(inputId, listId, data) {
     }
   });
 }
+// Define categories for each role
+  const categories = {
+    contractor: [
+      "Plumbing",
+      "Electrician",
+      "Carpentry",
+      "Masonry",
+      "Painting",
+      "Roofing",
+      "Flooring",
+      "HVAC",
+      "Landscaping",
+      "Demolition",
+      "Structural",
+      "Marble & Tiles",
+      "POP",
+      "Glass",
+    ],
+    technician: [
+      "Electrical Technician",
+      "Plumbing Technician",
+      "HVAC Technician",
+      "Carpentry Technician",
+      "Raj Mistry",
+      "Marble",
+      "Painter",
+      "POP",
+      "weilding",
+      "Glass",
+    ],
+    supplier: [
+      "Cement Supplier",
+      "Steel Supplier",
+      "Sand Supplier",
+      "Equipment Supplier",
+      "Tiles Supplier",
+    ],
+    architecture: [
+      "Interior",
+      "Exterior ",
+      "Exterior & Interior",
+      "Landscape Architecture",
+      "Urban Architecture",
+      "Naval Architecture",
+      "Sustainable Architecture",
+    ],
+    mechanic: [
+      "General Car Mechanic",
+      "Engine Specialist",
+      "Transmission Mechanic",
+      "Brake Specialist",
+      "Tyre/Wheel Mechanic",
+      "Auto Electrician",
+      "AC Mechanic",
+      "Motorcycle Mechanic",
+      "Diesel Mechanic",
+      "Heavy Equipment Mechanic",
+      "Marine Mechanic",
+      "Aircraft Mechanic",
+      "Industrial Mechanic",
+    ],
+    client:[
+      "require Painter",
+      "PLumber",
+      "Havc",
+      "Raj Mistry",
+      "Technician",
+      "Machanic",
+      "Carpenter",
+      "renovation",
+      "Marble&Tiles",
+      "Electrician",
+      "Glass",
+    ]
+  };
+
+  // Update category dropdown when role changes
+  categoryFilter.addEventListener("change", () => {
+    const category = categoryFilter.value;
+    roleFilter.innerHTML = '<option value="">-- Select Role --</option>';
+
+    if (categories[category]) {
+      categories[category].forEach((cat) => {
+        const option = document.createElement("option");
+        option.value = cat.toLowerCase().replace(/\s+/g, "-");
+        option.textContent = cat;
+        roleFilter.appendChild(option);
+      });
+    }
+  });
 function speakText(text) {
   if (!window.speechSynthesis) {
     alert("Voice not supported on this device");
@@ -570,6 +663,7 @@ function clearSearchAll() {
 
   input.value = "";
   categoryFilter.value = "";
+  roleFilter.value = "";
   stateFilter.value = "";
   districtFilter.value = "";
 
@@ -922,7 +1016,7 @@ function debounce(fn, delay = 500) {
   };
 }
 // backend common filter code .
-function applyCommonFilters(item, q, category, state, district) {
+function applyCommonFilters(item, q, category, role, state, district) {
   // 🔎 TEXT TOKEN MATCH
   const searchableText = Object.values(item).join(" ").toLowerCase();
 
@@ -931,6 +1025,9 @@ function applyCommonFilters(item, q, category, state, district) {
   // 🎯 CATEGORY FILTER
   const categoryMatch = !category || item.category?.toLowerCase() === category;
 
+  // 📍 ROLE FILTER
+  const roleMatch = !role || item.role?.toLowerCase() === role;
+
   // 📍 STATE FILTER
   const stateMatch = !state || item.state?.toLowerCase() === state;
 
@@ -938,7 +1035,7 @@ function applyCommonFilters(item, q, category, state, district) {
   const districtMatch =
     !district || item.district?.toLowerCase().includes(district);
 
-  return tokenMatch && categoryMatch && stateMatch && districtMatch;
+  return tokenMatch && categoryMatch && roleMatch && stateMatch && districtMatch;
 }
 function applySearch() {
   showSearchLoader(); // 🔄 start loader
@@ -946,6 +1043,7 @@ function applySearch() {
     saveSearchState(); // 💾 SAVE BEFORE SEARCH
     const q = input.value.toLowerCase().trim();
     const category = categoryFilter.value.toLowerCase();
+    const role = roleFilter.value.toLowerCase();
     const state = stateFilter.value.toLowerCase();
     const district = districtFilter.value.toLowerCase();
 
@@ -958,7 +1056,7 @@ function applySearch() {
     }
 
     // 🟡 EMPTY SEARCH STATE
-    if (!q && !category && !state && !district) {
+    if (!q && !category && !role && !state && !district) {
       resetPagination();
       results.innerHTML =
         "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
@@ -971,13 +1069,13 @@ function applySearch() {
       .filter((t) => t.length >= 2);
 
     // 🔹 Unified search function
-    function searchProfiles(queryTokens, category, state, district) {
+    function searchProfiles(queryTokens, category, role, state, district) {
       const combinedData = [...SEARCH_DATA, ...API_PROFILES_CACHE];
 
       const dataResults = shuffleArray(
         combinedData.filter((item) => {
           // Apply common filters first
-          if (!applyCommonFilters(item, q, category, state, district)) {
+          if (!applyCommonFilters(item, q, category, role, state, district)) {
             return false;
           }
           // Build searchable text
@@ -1016,11 +1114,12 @@ function applySearch() {
           // Filters
           const categoryMatch =
             !category || item.category?.toLowerCase() === category;
+          const roleMatch = !role || item.role?.toLowerCase() === role;
           const stateMatch = !state || item.state?.toLowerCase() === state;
           const districtMatch =
             !district || item.district?.toLowerCase().includes(district);
 
-          return tokenMatch && categoryMatch && stateMatch && districtMatch;
+          return tokenMatch && categoryMatch && roleMatch && stateMatch && districtMatch;
         }),
       ).slice(0, 50);
 
@@ -1028,7 +1127,7 @@ function applySearch() {
     }
 
     // 🔹 Run search
-    const dataResults = searchProfiles(queryTokens, category, state, district);
+    const dataResults = searchProfiles(queryTokens, category, role, state, district);
 
     // 🔹 Other data sources
     const theoryResults = q ? searchTheory(q) : [];
@@ -1085,7 +1184,7 @@ input.addEventListener("keydown", (e) => {
 });
 
 // Filters: still update instantly
-[categoryFilter, stateFilter, districtFilter].forEach((el) => {
+[categoryFilter,roleFilter, stateFilter, districtFilter].forEach((el) => {
   el.addEventListener("input", debounce(applySearch, 800));
 });
 

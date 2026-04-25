@@ -150,6 +150,23 @@ if(profile.emailVerified){
   editEmailInput?.classList.remove("locked");
 }
 }
+/**
+ *   // 🔐 LOCK EMAIL + ROLE IF VERIFIED
+  const editEmailInput = document.getElementById("editEmail");
+  const editRoleInput  = document.getElementById("editRole");
+
+  [editEmailInput, editRoleInput].forEach((input) => {
+    if (!input) return;
+    if (profile.emailVerified) {
+      input.setAttribute("disabled", true);
+      input.classList.add("locked");
+    } else {
+      input.removeAttribute("disabled");
+      input.classList.remove("locked");
+    }
+  });
+}
+ */
 
 const editName = document.getElementById("editName");
 const editRole = document.getElementById("editRole");

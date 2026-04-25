@@ -43,7 +43,7 @@
     });
 
     // Desktop + Mobile: disable right-click / long-press menu
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
+    //document.addEventListener("contextmenu", (e) => e.preventDefault());
 
     // Mobile: detect long-press gesture
     document.addEventListener("touchstart", () => {

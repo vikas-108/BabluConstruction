@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Progress Channel</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="../css/progress.css" />
+</head>
+<body>
+
+<div class="page">
+<!-- Toast -->
+<div id="toast"></div>
+  <!-- Entry Screen -->
+  <div id="homeScreen" class="screen active">
+    <h1>Progress Channel</h1>
+    <p>Select your role</p>
+
+    <div class="homeButtons">
+      <button id="goCreator">Create Channel</button>
+      <button id="goClient">Client View</button>
+    </div>
+  </div>
+
+  <!-- Creator Screen -->
+ <div id="creatorScreen" class="screen">
+  <button class="backBtn" id="backFromCreator">← Back</button>
+
+  <!-- Create Form -->
+  <div class="card">
+    <h2>Create Channel</h2>
+
+    <label>Role</label>
+    <select id="createRole">
+      <option value="">Select</option>
+      <option value="contractor">Contractor</option>
+      <option value="plumber">Plumber</option>
+      <option value="carpenter">Carpenter</option>
+    </select>
+
+    <label>Client Phone</label>
+    <input id="clientPhoneCreate" placeholder="client's phone"/>
+
+    <label>Updater Phone</label>
+    <input id="updaterPhoneCreate" placeholder="your phone"/>
+
+    <button id="createChannelBtn">Create Channel</button>
+  </div>
+
+  <!-- Channels List -->
+  <div id="channelsContainer"></div>
+</div>
+
+  <!-- Client Screen -->
+  <div id="clientScreen" class="screen">
+  <button class="backBtn" id="backFromClient">← Back</button>
+
+  <div class="card">
+    <h2>Client Progress</h2>
+
+    <input id="clientPhoneView" placeholder="Your phone" />
+    <button id="clientViewBtn">View</button>
+
+    <div id="clientChannelsContainer"></div>
+  </div>
+</div>
+
+</div>
+
+<script src="../js/progress.js"></script>
+</body>
+</html>

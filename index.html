@@ -38,6 +38,7 @@
             <div class="dropdown">
               <a href="./screen/account.html">Manage Account</a>
               <a href="./screen/createpad.html">Create pad</a>
+              <a href="./screen/progrss.html">Stages</a>
               <a href="create-profile.html">Create & Post Profile</a>
               <hr />
               <button id="logoutBtn">Logout</button>
@@ -166,14 +167,16 @@
         <div class="filter-box" id="filterBox">
           <select id="categoryFilter">
             <option value="">All Categories</option>
-            <option value="contractor">Contractors</option>
-            <option value="supplier">supplier</option>
-            <option value="technician">Technicians</option>
+            <option value="contractor">Contractor</option>
+            <option value="supplier">Supplier</option>
+            <option value="technician">Technician</option>
             <option value="architecture">Architecture</option>
             <option value="mechanic">Mechanic</option>
             <option value="client">Client works</option>
           </select>
-
+            <select id="role" >
+            <option value="">-- Select Role --</option>
+          </select>
           <div class="search-select">
             <input type="text" id="stateFilter" placeholder="Search State" />
             <ul id="stateList" class="options"></ul>
@@ -377,6 +380,11 @@
     <script src="data/kids-data.js"></script>
     <script src="data/quiz.-data.js"></script>
     <script src="login.js"></script>
+    <script src="./js/screenshotProtector.js"></script>
+<script>
+  // One single line to activate
+  initScreenshotProtector();
+</script>
     <script src="web.js"></script>
   </body>
 </html>
