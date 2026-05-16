@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Invoice Generator</title>
+    <!-- PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="../css/invoice.css">
+     <!-- Prevents unauthenticated users from seeing a flash of content -->
+  <script>document.documentElement.style.visibility = 'hidden';</script>
+  
+  <!-- Your common auth guard -->
+  <script src="/js/auth-guard.js"></script>
+</head>
+<body>
+
+<div class="main-container">
+    
+    <!-- LEFT: CONTROLS -->
+    <div class="panel form-panel">
+        <div style="display:flex; align-items:center; margin-bottom:10px;">
+            <h2 style="margin:0; border:none;">Invoice Generator</h2>
+            <button class="btn-refresh" onclick="generateRandomID()">↻ New #</button>
+        </div>
+
+        <!-- 1. Template -->
+        <label>Template Style</label>
+        <select id="templateSelect" onchange="changeTemplate()">
+             <option value="theme-classic">Classic Clean</option>
+            <option value="theme-modern">Modern Corporate (Blue)</option>
+            <option value="theme-bold">Bold & High Contrast (Red)</option>
+            <option value="theme-elegant">Elegant Serif (Formal)</option>
+            <option value="theme-creative">Creative Agency (Teal)</option>
+            <option value="theme-tech">Tech Grid (Monospace)</option>
+        </select>
+
+        <!-- 2. Issuer (From) -->
+        <h4>Issued By</h4>
+        <input type="text" id="fromName" placeholder="Your Business Name" oninput="updatePreview()">
+        <div class="row">
+            <input type="text" class="col" id="fromPhone" placeholder="Your Phone" oninput="updatePreview()">
+        </div>
+
+        <!-- 3. Client (To) -->
+        <h4>Bill To</h4>
+        <input type="text" id="toName" placeholder="Client Name" oninput="updatePreview()">
+        <div class="row">
+            <input type="text" class="col" id="toPhone" placeholder="Client Phone" oninput="updatePreview()">
+            <input type="date" class="col" id="billDate" oninput="updatePreview()">
+        </div>
+        <input type="text" id="invoiceNum" readonly style="background:#f9f9f9; font-weight:bold; color:#666; margin-top:5px;">
+
+        <!-- 4. Calculation Mode -->
+        <h4>Charges</h4>
+        <div>
+            <input type="text" id="product" placeholder="Enter product name" oninput="updatePreview()">
+        </div>
+        <div class="mode-selector">
+            <label><input type="radio" name="mode" value="daily" checked onchange="toggleMode()"> Daily Rate</label>
+            <label><input type="radio" name="mode" value="lump" onchange="toggleMode()"> Fixed Amount</label>
+        </div>
+
+        <!-- Dynamic Inputs -->
+        <div id="dailyInputs" class="row">
+            <input type="number" class="col" id="rate" placeholder="Rate (₹)" oninput="updatePreview()">
+            <input type="number" class="col" id="days" placeholder="Days" value="1" oninput="updatePreview()">
+        </div>
+        <div id="lumpInputs" style="display:none;">
+            <input type="number" id="fixedAmount" placeholder="Total Amount (₹)" oninput="updatePreview()">
+        </div>
+
+        <!-- 5. Discount & GST -->
+        <label>Discount (%)</label>
+        <input type="number" id="discount" placeholder="0" max="100" oninput="updatePreview()">
+
+        <div class="gst-wrapper">
+            <div class="switch-row">
+                <span style="font-weight:600; font-size:0.9rem;">Add GST (18%)</span>
+                <label class="switch">
+                    <input type="checkbox" id="gstToggle" onchange="toggleGST()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <!-- Hidden GSTIN Input -->
+            <div id="gstDetails">
+                <label>Your GSTIN Number</label>
+                <input type="text" id="gstin" placeholder="Ex: 22ABCDE1234F1Z5" maxlength="15" 
+                       style="text-transform:uppercase; font-family:monospace; letter-spacing:1px;" 
+                       oninput="validateGST()">
+                <div id="gstError" class="error-msg">Invalid GSTIN Format</div>
+            </div>
+        </div>
+
+        <button class="btn-download" onclick="downloadPDF()">
+            <span>⬇</span> Generate & Download PDF
+        </button>
+    </div>
+
+    <!-- RIGHT: PREVIEW AREA -->
+    <div class="preview-wrapper">
+        <div id="invoice-preview" class="theme-classic">
+            
+            <!-- Header -->
+            <div class="inv-header">
+                <div class="header-left">
+                    <h3 style="margin:0; color:#888; font-size:0.9rem;">INVOICE FROM:</h3>
+                    <h2 id="prev-from-name" style="margin:5px 0; border:none;">Your Business</h2>
+                    <div style="font-size:0.9rem; color:#555;">
+                        <div id="prev-from-phone">Phone: ---</div>
+                        <div id="prev-gstin" style="display:none; font-weight:bold; margin-top:4px;">GSTIN: ---</div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <h1>INVOICE</h1>
+                    <p># <span id="prev-inv-num">---</span></p>
+                    <p>Date: <span id="prev-date">---</span></p>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="inv-body">
+                <div class="bill-to" style="margin-bottom:30px;">
+                    <h3 style="margin:0 0 5px; color:#888; font-size:0.9rem;">BILL TO:</h3>
+                    <div id="prev-to-name" style="font-size:1.2rem; font-weight:bold;">Client Name</div>
+                    <div id="prev-to-phone" style="color:#555;">Phone: ---</div>
+                    <div id="prev-product" style="color:#555; margin-top:4px;">Product/Service name:-</div>
+                </div>
+
+                <table class="inv-table">
+                    <thead>
+                        <tr>
+                            <th width="50%">Description</th>
+                            <th id="th-rate">Rate</th>
+                            <th id="th-qty">Qty/Days</th>
+                            <th style="text-align:right">Amount</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="prev-desc">Professional Services</td>
+                            <td id="prev-rate">₹0</td>
+                            <td id="prev-qty">0</td>
+                            <td id="prev-amt" style="text-align:right; font-weight:bold;">₹0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="inv-totals">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="out-sub">₹0.00</span>
+                    </div>
+                    <div class="total-row" id="row-disc" style="color:var(--danger); display:none;">
+                        <span>Discount (<span id="out-disc-rate">0</span>%):</span>
+                        <span id="out-disc-val">-₹0.00</span>
+                    </div>
+                    <div class="total-row" id="row-gst" style="display:none;">
+                        <span>GST (18%):</span>
+                        <span id="out-gst">₹0.00</span>
+                    </div>
+                    <div class="grand-total">
+                        <span>TOTAL</span>
+                        <span id="out-total">₹0.00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- BOTTOM: HISTORY -->
+<div class="history-container">
+    <h3 style="margin-top:0;">Generated History</h3>
+    <table class="history-table">
+        <thead>
+            <tr>
+                <th>Invoice #</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="historyList">
+            <!-- JS will add rows here -->
+        </tbody>
+    </table>
+</div>
+<!-- FEATURE INFO SECTION (NEW) -->
+<div class="info-container">
+    <h2>🚀 Why use this Generator?</h2>
+    <p style="color:#666; max-width:600px; margin:0 auto;">Create valid, professional invoices directly in your browser. No signup, no data upload, and completely free.</p>
+    
+    <div class="info-grid">
+        <div class="feature-card">
+            <h3>🎨 6 Premium Styles</h3>
+            <p>Switch instantly between Classic, Corporate, Bold, Elegant, Creative, and Technical layouts to match your brand identity.</p>
+        </div>
+        <div class="feature-card" style="border-color: var(--success);">
+            <h3>⚡ Smart Calculations</h3>
+            <p>Add unlimited items, apply discounts, and toggle GST (18%) with automatic total updates. Includes GSTIN format validation.</p>
+        </div>
+        <div class="feature-card" style="border-color: var(--danger);">
+            <h3>📄 Instant PDF Export</h3>
+            <p>High-fidelity rendering captures your invoice exactly as seen on screen. Downloads directly using client-side technology.</p>
+        </div>
+         <div class="feature-card" style="border-color: #6f42c1;">
+            <h3>📝 Custom Context</h3>
+            <p>Add specific project titles, bank details, payment terms, or "Thank You" notes in the dedicated footer section.</p>
+        </div>
+    </div>
+</div>
+
+<script src="../js/invoice.js"></script>
+<script src="../js/screenshotProtector.js"></script>
+<script>
+  // One single line to activate
+  initScreenshotProtector();
+</script>
+</body>
+</html>

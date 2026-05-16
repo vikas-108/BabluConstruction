@@ -6,6 +6,11 @@
     <title>Time Rupees Earns</title>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="../css/tmr.css" />
+     <!-- Prevents unauthenticated users from seeing a flash of content -->
+  <script>document.documentElement.style.visibility = 'hidden';</script>
+  
+  <!-- Your common auth guard -->
+  <script src="/js/auth-guard.js"></script>
   </head>
   <body>
     <div class="dashboard-summary">
@@ -45,11 +50,11 @@
       <div class="controls">
         <select id="role">
           <option data-rate="">Select role</option>
-          <option data-rate="150">Helper (₹100/hr)</option>
-          <option data-rate="200">Supervisor (₹150/hr)</option>
-          <option data-rate="250">Technician (₹200/hr)</option>
-          <option data-rate="275">Mechanic (₹250/hr)</option>
-          <option data-rate="400">Manager (₹400/hr)</option>
+          <option data-rate="100">Helper (₹100/hr)</option>
+          <option data-rate="120">Supervisor (₹120/hr)</option>
+          <option data-rate="150">Technician (₹150/hr)</option>
+          <option data-rate="130">Mechanic (₹130/hr)</option>
+          <option data-rate="220">Manager (₹220/hr)</option>
 
         </select>
         <button id="startBtn" class="btn green">Start</button>

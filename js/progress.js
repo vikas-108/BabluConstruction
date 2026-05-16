@@ -353,17 +353,16 @@ document.getElementById("clientViewBtn").onclick = async () => {
     showToast("Error loading");
   }
 };
-/*async function init(){
+async function init(){
   await fetchMyAccount();
 
   if(CURRENT_ROLE !== "client"){
     fetchMyChannels();
   }
 }
-*/
-//init();
-fetchMyChannels();
-fetchMyAccount();
+init();
+//fetchMyChannels();
+//fetchMyAccount();
 
 /****
  * 
