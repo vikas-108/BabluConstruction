@@ -351,6 +351,7 @@ function setupSearchableSelect(inputId, listId, data) {
       "POP",
       "weilding",
       "Glass",
+      "Structural", "Renovation","Solar Technician","Demolition Technician",
     ],
     supplier: [
       "Cement Supplier",

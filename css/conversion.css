@@ -1,0 +1,446 @@
+/* =========================================
+   1. GLOBAL RESET & VARIABLES
+   ========================================= */
+:root {
+    --primary: #2563EB;
+    --bg: #F3F4F6;
+    --card: #FFFFFF;
+    --text: #1F2937;
+    --border: #D1D5DB;
+    
+    /* Calculator Theme */
+    --calc-bg: #0f172a;      /* Dark Slate */
+    --calc-keys-bg: #1e293b; 
+    --btn-num: #334155;      
+    --btn-op: #f59e0b;       
+    --btn-func: #475569;     
+    --btn-sci: #64748b;      
+    --text-white: #F9FAFB;
+}
+
+/* Universal Box Sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%; /* Ensure full height for centering */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    /* Flex Layout for Smart Centering */
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   2. MAIN LAYOUT CONTAINER
+   ========================================= */
+.main-wrapper {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    /* margin: auto centers it vertically/horizontally, 
+       but allows scroll if screen is too small */
+    margin: auto; 
+    padding-bottom: 120px; /* Space for FAB */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* =========================================
+   3. CONVERTER CARD
+   ========================================= */
+.converter-card {
+    background: var(--card);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+h2 {
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+    color: var(--primary);
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Inputs & Selects */
+select, input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 16px; /* Prevents iOS zoom */
+    background-color: #fff;
+    transition: all 0.2s ease;
+    appearance: none;
+    color: var(--text);
+}
+
+/* Custom Arrow */
+select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    cursor: pointer;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.conversion-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.input-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+.input-wrapper select {
+    margin-top: 10px;
+    background-color: #F9FAFB;
+}
+
+.swap-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    background: #EFF6FF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, background-color 0.2s;
+}
+
+.swap-icon:hover {
+    background-color: #DBEAFE;
+    transform: rotate(180deg);
+}
+
+.swap-icon:active {
+    transform: scale(0.9);
+}
+
+/* =========================================
+   4. FEATURE LIST
+   ========================================= */
+.features-list {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    font-size: 0.95rem;
+    color: #4B5563;
+}
+
+.features-list h3 {
+    margin-top: 0;
+    color: var(--text);
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.features-list ul {
+    padding-left: 1.25rem;
+    margin-bottom: 0;
+}
+
+.features-list li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+/* =========================================
+   5. FLOATING ACTION BUTTON (FAB)
+   ========================================= */
+.calc-trigger {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--calc-bg);
+    color: white;
+    border: none;
+    padding: 16px 28px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calc-trigger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.5);
+}
+
+.calc-trigger:active {
+    transform: translateY(1px);
+}
+
+/* =========================================
+   6. SCIENTIFIC CALCULATOR DRAWER
+   ========================================= */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px); /* Glassmorphism effect */
+    z-index: 2001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.calc-drawer {
+    position: fixed;
+    bottom: 0;
+    z-index: 2002;
+    background: var(--calc-bg);
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Smooth iOS-style spring */
+    
+    /* Desktop Default: Centered Sheet */
+    left: 50%;
+    width: 100%;
+    max-width: 500px; /* Prevent full width on Desktop */
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    
+    /* Hidden State (Off screen bottom + Centered X) */
+    transform: translate(-50%, 110%);
+    
+    /* iPhone Safe Area */
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+.calc-drawer.open {
+    /* Visible State (On screen bottom + Centered X) */
+    transform: translate(-50%, 0);
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-white);
+}
+
+.close-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #94a3b8;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.close-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.calculator {
+    padding: 10px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+#calcDisplay {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-white);
+    text-align: right;
+    font-size: 2.75rem;
+    padding: 0 4px 20px 4px;
+    font-weight: 300;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    white-space: nowrap;
+    overflow-x: auto; /* Scroll long numbers */
+}
+
+/* 5-Column Grid Layout */
+.calc-keys {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 12px;
+}
+
+.calc-keys button {
+    aspect-ratio: 1.15; 
+    border: none;
+    border-radius: 16px;
+    background: var(--btn-num);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    transition: all 0.1s;
+}
+
+.calc-keys button:active {
+    transform: translateY(2px);
+    box-shadow: none;
+    filter: brightness(1.2);
+}
+
+/* Button Variants */
+.key-op { background: var(--btn-op) !important; font-weight: 700; color: #fff !important; }
+.key-func { background: var(--btn-func) !important; font-size: 1.1rem !important; }
+.key-sci { background: var(--btn-sci) !important; font-size: 0.95rem !important; font-weight: 600; }
+.key-clear { background: var(--btn-func) !important; color: #fca5a5 !important; }
+
+/* Complex Keys */
+.key-equals { 
+    grid-row: span 2; 
+    aspect-ratio: auto !important; 
+    background: #22c55e !important; 
+}
+
+.key-zero { 
+    grid-column: span 2; 
+    aspect-ratio: auto !important; 
+}
+
+
+/* =========================================
+   7. RESPONSIVE BREAKPOINTS
+   ========================================= */
+
+/* Tablet & Mobile (Below 768px) */
+@media (max-width: 768px) {
+    .main-wrapper {
+        padding: 16px;
+        padding-bottom: 100px;
+    }
+    
+    .converter-card {
+        padding: 1.5rem;
+    }
+
+    .conversion-row {
+        flex-direction: column;
+    }
+    
+    .swap-icon {
+        transform: rotate(90deg);
+        margin: 0;
+    }
+    
+    .swap-icon:hover {
+        transform: rotate(270deg); /* Spin on hover for mobile interaction feedback */
+    }
+    
+    /* Center FAB on mobile */
+    .calc-trigger {
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        bottom: 24px;
+        width: auto;
+        white-space: nowrap;
+        padding: 14px 24px;
+    }
+    .calc-trigger:hover { transform: translateX(-50%) translateY(-2px); }
+    .calc-trigger:active { transform: translateX(-50%) translateY(1px); }
+}
+
+/* Mobile Drawer Behavior (Full Width) */
+@media (max-width: 550px) {
+    .calc-drawer {
+        max-width: 100%; /* Full width on small phones */
+        border-radius: 24px 24px 0 0;
+    }
+    
+    .calculator {
+        padding: 12px;
+    }
+    
+    .calc-keys {
+        gap: 6px;
+    }
+    
+    .calc-keys button {
+        border-radius: 10px;
+        font-size: 1.1rem;
+    }
+    
+    #calcDisplay {
+        font-size: 2.2rem;
+    }
+}
+
+/* Small Phones (iPhone SE, etc.) */
+@media (max-width: 360px) {
+    .calc-keys { gap: 6px; }
+    .calc-keys button { font-size: 0.9rem; border-radius: 8px; }
+    .key-sci { font-size: 0.8rem !important; }
+    #calcDisplay { font-size: 2rem; }
+}

@@ -2,7 +2,7 @@ const socket = io("https://api.buildskil.com");
 let userTables = []; // ✅ add this at top
 const actionHistory = [];
 let count = 0;
-const max = 30;
+const max = 70;
 function authHeaders(isFormData = false) {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
   createBtn.addEventListener("click", createTable);
 
   function createTable() {
-    if (userTables.length >= 30) {
-      showToast("You can create only 30 tables", "error");
+    if (userTables.length >= 70) {
+      showToast("You can create only 70 tables", "error");
       return;
     }
     if (count >= max) {
@@ -941,7 +941,7 @@ permissionSelect.appendChild(optionView);
       const limitDiv = document.getElementById("tableLimitInfo");
 
       const count = userTables.length;
-      const max = 30;
+      const max = 70;
 
       limitDiv.innerText = `Tables: ${count}/${max} used`;
 

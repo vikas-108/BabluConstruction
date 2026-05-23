@@ -37,10 +37,8 @@
             <span id="userName"></span>
             <div class="dropdown">
               <a href="./screen/account.html">Manage Account</a>
-              <a href="./screen/createpad.html">Create pad</a>
-              <a href="./screen/progrss.html">Stages</a>
               <a href="create-profile.html">Create & Post Profile</a>
-              <a href="./screen/invoice.html">Invoice Generator</a>
+              <a href="./screen/notebook.html">Notebook</a>
               <hr />
               <button id="logoutBtn">Logout</button>
             </div>
@@ -139,17 +137,17 @@
   </div>
 
 
-    <div id="appContent" >
-    <!---search code here and voice code -->
-    <div class="search-container">
-      <!-- <h2>Search Contractors & Materials</h2>-->
+    <section id="appContent" >
+             <!---search code here and voice code -->
+       <div class="search-container">
+          <!-- <h2>Search Contractors & Materials</h2>-->
 
-      <!-- SEARCH + VOICE -->
-      <div class="search-panel">
-        <!-- SEARCH ROW -->
-        <div class="search-top">
-          <div class="search-input-wrapper">
-            <input
+            <!-- SEARCH + VOICE -->
+        <div class="search-panel">
+          <!-- SEARCH ROW -->
+          <div class="search-top">
+             <div class="search-input-wrapper">
+              <input
               type="text"
               id="searchInput"
               placeholder="Search mason, cement, Haryana, Panipat..."
@@ -204,23 +202,59 @@
     
           <div class="button-box">
 
-  <!-- Header -->
-  <div class="button-box-header">
-    🚀 Tap Actions
-  </div>
+                           <!-- Header -->
+                   <div class="button-box-header">
+                      🚀 Tap Actions
+                 </div>
 
-  <!-- Content -->
-  <div class="button-box-content">
-    <div class="hero-buttons" id="heroButtons">
-      <a href="./screen/bhūgolapaṭa.html" class="btn primary">deśa-chitra</a>
-      <a href="./screen/table.html" class="btn primary">T.D.</a>
-      <a href="./screen/tmr.html" class="btn primary">TER</a>
-      <a href="./screen/projects-reports.html" class="btn secondary">Project</a>
-    </div>
-  </div>
+                    <!-- Content -->
+                  <div class="button-box-content">
+                    <div class="hero-buttons" id="heroButtons">
+                     <a href="./screen/bhūgolapaṭa.html" class="btn primary">deśa-chitra</a>
+                     <a href="./screen/table.html" class="btn primary">T.D.</a>
+                     <a href="./screen/tmr.html" class="btn primary">TER</a>
+                     <a href="./screen/projects-reports.html" class="btn secondary">Project</a>
+                    </div>
+                 </div>
+    
+          </div>
 
+         <div class="button-bvox">
+
+            <!-- Header -->
+            <div class="button-box-leader">
+                🚀 Use TABS
+            </div>
+          <div class="button-box-contsent">
+           <div class="zero-buttons" id="zeroButtons">
+               <a href="./screen/invoice.html" class="btn tertiary">Invoice</a>
+              <a href="./screen/conversion.html" class="btn tertiary">U.C.</a>
+              <a href="./screen/progrss.html" class="btn tertiary">Stages</a>
+              <a href="./screen/createpad.html" class="btn tertiary">DESIGN</a>
+           </div>
+          </div>
+        </div>
+        <!-- Chat Widget Container -->
+<div id="chat-widget">
+  <div id="chat-header">
+    <span>Chat Support</span>
+    <button id="close-chat">&times;</button>
+  </div>
+  
+  <div id="chat-log">
+    <!-- Messages appear here -->
+    <div class="bot-msg">Hi! Ask me about <b>costs</b>, <b>timelines</b>, or <b>services</b>.</div>
+  </div>
+  
+  <div id="chat-input-area">
+    <input type="text" id="user-input" placeholder="Type your question..." />
+    <button id="send-btn">Send</button>
+  </div>
 </div>
-</div>
+
+<!-- Toggle Button (Floating) -->
+<button id="chat-toggle">💬 Chat</button>
+  </section>
     <section class="notifications" id="notification">
       <div class="container">
         <h2 class="section-title">Latest Updates</h2>
@@ -381,6 +415,7 @@
     <script src="data/kids-data.js"></script>
     <script src="data/quiz.-data.js"></script>
     <script src="login.js"></script>
+    <script src="data/aidata.js"></script>
     <script src="./js/screenshotProtector.js"></script>
 <script>
   // One single line to activate
