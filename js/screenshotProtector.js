@@ -4,7 +4,7 @@
     document.body.style.filter = "blur(15px)";
     setTimeout(() => {
       document.body.style.filter = "none";
-    }, 5000); // restore after 5 seconds
+    }, 3000); // restore after 5 seconds
   }
 
   function showToast(msg) {
@@ -50,7 +50,7 @@
       this.touchTimer = setTimeout(() => {
         blurScreen();
         showToast("Screenshots are disabled on this page.");
-      }, 3000); // if finger held >1s
+      }, 8000); // if finger held >8s
     });
     document.addEventListener("touchend", () => clearTimeout(this.touchTimer));
   }
