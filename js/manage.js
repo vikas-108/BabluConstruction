@@ -1,7 +1,9 @@
 let CURRENT_PROFILE = null;
 let NEW_PHOTO_FILE = null;
-const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
-const SERVER_BASE = "https://api.buildskil.com";
+//const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
+//const SERVER_BASE = "https://api.buildskil.com";
+const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
+const SERVER_BASE = "http://localhost:5000"; // change if using domain
 function authHeaders() {
   return {
     "Content-Type": "application/json",

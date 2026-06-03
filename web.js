@@ -7,8 +7,10 @@ const districtFilter = document.getElementById("districtFilter");
 const PAGE_SIZE = 20;
 let currentPage = 1;
 let lastSearchResults = [];
-const SERVER_BASE = "https://api.buildskil.com";
-const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
+//const SERVER_BASE = "https://api.buildskil.com";
+//const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
+const SERVER_BASE = "http://localhost:5000";
+const PROFILE_API = "http://localhost:5000/api/profiles/public";
 let API_PROFILES_CACHE = [];
 const states = [
   "Haryana",
@@ -359,6 +361,10 @@ function setupSearchableSelect(inputId, listId, data) {
       "Sand Supplier",
       "Equipment Supplier",
       "Tiles Supplier",
+      "Shuttering Supplier",
+      "Bricks Supplier",
+      "Paint Supplier",
+      "Wood Supplier",
     ],
     architecture: [
       "Interior",
@@ -465,9 +471,9 @@ function levenshtein(a, b) {
 // notification updates (could come from API or JSON file)
 const updates = [
   "🚀 New feature launched: search engine",
-  "📢 Scheduled maintenance on March 1st",
-  "🎨 Updated design guidelines available",
-  "🔧 full Profile click comming",
+  "📢 Scheduled maintenance on 29 August",
+  "🎨 Updated design and notebook guidelines available",
+  "🔧 chat bot improvement on going ",
 ];
 
 const notificationList = document.getElementById("notificationList");

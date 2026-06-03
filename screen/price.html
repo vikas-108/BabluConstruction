@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upgrade Membership</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+      color:white;
+    }
+
+    .container{
+      width:100%;
+      max-width:1200px;
+    }
+
+    .top-section{
+      text-align:center;
+      margin-bottom:50px;
+    }
+
+    .top-section h1{
+      font-size:52px;
+      margin-bottom:15px;
+    }
+
+    .top-section p{
+      color:#cbd5e1;
+      font-size:18px;
+      line-height:1.7;
+    }
+
+    .plans{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:30px;
+    }
+
+    .card{
+      background:#1e293b;
+      border-radius:25px;
+      padding:35px;
+      position:relative;
+      overflow:hidden;
+      transition:0.4s;
+      border:2px solid transparent;
+    }
+
+    .card:hover{
+      transform:translateY(-10px);
+      border-color:#3b82f6;
+      box-shadow:0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .active-plan{
+      border:2px solid #22c55e;
+    }
+
+    .popular{
+      border:2px solid #3b82f6;
+      transform:scale(1.03);
+    }
+
+    .popular-tag{
+      position:absolute;
+      top:20px;
+      right:-35px;
+      background:#3b82f6;
+      color:white;
+      padding:8px 40px;
+      transform:rotate(45deg);
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    .plan-name{
+      font-size:32px;
+      font-weight:bold;
+      margin-bottom:10px;
+    }
+
+    .price{
+      margin:30px 0;
+    }
+
+    .price h2{
+      font-size:55px;
+    }
+
+    .price span{
+      color:#94a3b8;
+      font-size:18px;
+    }
+
+    .feature-list{
+      list-style:none;
+      margin-top:20px;
+    }
+
+    .feature-list li{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+      font-size:17px;
+      color:#e2e8f0;
+    }
+
+    .check{
+      color:#22c55e;
+      font-size:20px;
+      font-weight:bold;
+    }
+
+    .btn{
+      width:100%;
+      margin-top:35px;
+      padding:16px;
+      border:none;
+      border-radius:14px;
+      font-size:17px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .free-btn{
+      background:#475569;
+      color:white;
+    }
+
+    .small-btn{
+      background:#3b82f6;
+      color:white;
+    }
+
+    .small-btn:hover{
+      background:#2563eb;
+    }
+
+    .big-btn{
+      background:#22c55e;
+      color:white;
+    }
+
+    .big-btn:hover{
+      background:#16a34a;
+    }
+
+    .locked-box{
+      margin-top:50px;
+      background:#1e293b;
+      border-radius:25px;
+      padding:35px;
+      text-align:center;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+
+    .locked-box h2{
+      font-size:32px;
+      margin-bottom:15px;
+    }
+
+    .locked-box p{
+      color:#cbd5e1;
+      line-height:1.8;
+      margin-bottom:25px;
+    }
+
+    .upgrade-btn{
+      padding:15px 30px;
+      border:none;
+      border-radius:14px;
+      background:#f59e0b;
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .upgrade-btn:hover{
+      background:#d97706;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.7);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+      z-index:999;
+    }
+
+    .modal-content{
+      background:#1e293b;
+      width:100%;
+      max-width:450px;
+      border-radius:25px;
+      padding:35px;
+      text-align:center;
+      animation:popup 0.3s ease;
+    }
+
+    @keyframes popup{
+      from{
+        transform:scale(0.8);
+        opacity:0;
+      }
+      to{
+        transform:scale(1);
+        opacity:1;
+      }
+    }
+
+    .modal-content h2{
+      font-size:30px;
+      margin-bottom:15px;
+    }
+
+    .modal-content p{
+      color:#cbd5e1;
+      line-height:1.8;
+      margin-bottom:25px;
+    }
+
+    .modal-buttons{
+      display:flex;
+      gap:15px;
+    }
+
+    .modal-buttons button{
+      flex:1;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .cancel-btn{
+      background:#475569;
+      color:white;
+    }
+
+    .continue-btn{
+      background:#3b82f6;
+      color:white;
+    }
+
+    @media(max-width:768px){
+
+      .top-section h1{
+        font-size:38px;
+      }
+
+      .card{
+        padding:25px;
+      }
+
+      .price h2{
+        font-size:45px;
+      }
+
+      .modal-buttons{
+        flex-direction:column;
+      }
+
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="top-section">
+      <h1>Upgrade Your Membership</h1>
+      <p>
+        Unlock premium tools, chatbot access, unlimited features,
+        advanced dashboard, AI tools and full website access.
+      </p>
+    </div>
+
+    <div class="plans">
+
+      <!-- FREE -->
+      <div class="card active-plan">
+
+        <div class="plan-name">Free</div>
+
+        <div class="price">
+          <h2>₹0</h2>
+          <span>/month</span>
+        </div>
+
+        <ul class="feature-list">
+          <li><span class="check">✓</span> 4 Screen Access</li>
+          <li><span class="check">✓</span> Basic Features</li>
+          <li><span class="check">✓</span> Limited Usage</li>
+          <li><span class="check">✓</span> Community Support</li>
+        </ul>
+
+        <button class="btn free-btn">
+          Current Plan
+        </button>
+
+      </div>
+
+      <!-- SMALL -->
+      <div class="card popular">
+
+        <div class="popular-tag">POPULAR</div>
+
+        <div class="plan-name">Small</div>
+
+        <div class="price">
+          <h2>₹499</h2>
+          <span>/month</span>
+        </div>
+
+        <ul class="feature-list">
+          <li><span class="check">✓</span> 8 Screen Access</li>
+          <li><span class="check">✓</span> Chatbot Access</li>
+          <li><span class="check">✓</span> Premium Dashboard</li>
+          <li><span class="check">✓</span> More Storage</li>
+          <li><span class="check">✓</span> Faster Support</li>
+        </ul>
+
+        <button class="btn small-btn" onclick="buyPlan('small')">
+          Upgrade Now
+        </button>
+
+      </div>
+
+      <!-- BIG -->
+      <div class="card">
+
+        <div class="plan-name">Big</div>
+
+        <div class="price">
+          <h2>₹1499</h2>
+          <span>/month</span>
+        </div>
+
+        <ul class="feature-list">
+          <li><span class="check">✓</span> Full Website Access</li>
+          <li><span class="check">✓</span> Unlimited Features</li>
+          <li><span class="check">✓</span> AI Features</li>
+          <li><span class="check">✓</span> Premium Tools</li>
+          <li><span class="check">✓</span> Unlimited Usage</li>
+          <li><span class="check">✓</span> Dedicated Support</li>
+        </ul>
+
+        <button class="btn big-btn" onclick="buyPlan('big')">
+          Get Premium
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- LOCKED SECTION -->
+
+    <div class="locked-box">
+      <h2>Premium Feature Locked 🔒</h2>
+
+      <p>
+        Upgrade your membership plan to unlock chatbot,
+        AI tools, premium dashboard and full website features.
+      </p>
+
+      <button class="upgrade-btn" onclick="openModal()">
+        Upgrade Membership
+      </button>
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+
+  <div class="modal" id="upgradeModal">
+
+    <div class="modal-content">
+
+      <h2>Upgrade Required</h2>
+
+      <p>
+        This feature is only available for premium members.
+        Upgrade your plan to continue.
+      </p>
+
+      <div class="modal-buttons">
+        <button class="cancel-btn" onclick="closeModal()">
+          Cancel
+        </button>
+
+        <button class="continue-btn" onclick="goToPricing()">
+          View Plans
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const userPlan = localStorage.getItem("userPlan") || "free";
+
+    function buyPlan(plan){
+
+      console.log("Selected Plan:", plan);
+
+      // Razorpay Integration Later
+
+      if(plan === "small"){
+        alert("Redirecting to Small Plan Payment");
+      }
+
+      if(plan === "big"){
+        alert("Redirecting to Big Plan Payment");
+      }
+
+    }
+
+    function openModal(){
+      document.getElementById("upgradeModal").style.display = "flex";
+    }
+
+    function closeModal(){
+      document.getElementById("upgradeModal").style.display = "none";
+    }
+
+    function goToPricing(){
+      window.location.href = "price.html";
+    }
+
+
+    // Example Feature Protection
+
+    function checkChatbotAccess(){
+
+      if(userPlan === "free"){
+        openModal();
+        return false;
+      }
+
+      return true;
+    }
+
+
+    // Example Button Click
+
+    // if(checkChatbotAccess()){
+    //    window.location.href = "chatbot.html";
+    // }
+
+  </script>
+
+</body>
+</html>

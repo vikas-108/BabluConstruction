@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="../css/weather.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon.png" />
+</head>
+  <div class="weather-app">
+        <!-- Search Section -->
+        <div class="search-container">
+            <input type="text" id="city-input" placeholder="Enter City (e.g. Pune, IN)" autocomplete="off">
+            <button onclick="getWeather()">🔍</button>
+            <button onclick="getGeoLocation()" title="Use My Current Location">📍</button>
+        </div>
+
+        <!-- Quick Select for Indian Metros -->
+        <div class="city-chips">
+            <button onclick="fetchData('New Delhi,IN')">Delhi</button>
+            <button onclick="fetchData('Mumbai,IN')">Mumbai</button>
+            <button onclick="fetchData('Bengaluru,IN')">Bengaluru</button>
+            <button onclick="fetchData('Chennai,IN')">Chennai</button>
+            <button onclick="fetchData('Karnal,IN')">Karnal</button>
+        </div>
+
+        <!-- Main Display -->
+        <div class="main-info">
+            <div class="weather-icon-container">
+                <img id="weather-icon" src="" alt="Icon">
+            </div>
+            <h1 id="temp">--°</h1>
+            <p id="condition">--</p>
+            <p id="location">--</p>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="details-grid">
+            <div class="glass-card">
+                <span class="label">Humidity</span>
+                <span class="value" id="humidity">--%</span>
+            </div>
+            <div class="glass-card">
+                <span class="label">Wind</span>
+                <span class="value" id="wind">-- km/h</span>
+            </div>
+            <!-- AQI is critical for India, so we give it a specific ID for coloring -->
+            <div class="glass-card" id="aqi-card">
+                <span class="label">Air Quality (AQI)</span>
+                <span class="value" id="aqi">--</span>
+            </div>
+            <div class="glass-card">
+                <span class="label">Sunrise</span>
+                <span class="value" id="sunrise">--:--</span>
+            </div>
+            <div class="glass-card">
+                <span class="label">Sunset</span>
+                <span class="value" id="sunset">--:--</span>
+        </div>
+    </div>
+
+
+<script src="../js/weather.js"></script>
+</body>
+</html>

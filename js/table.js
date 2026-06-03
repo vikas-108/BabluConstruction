@@ -1,4 +1,7 @@
-const socket = io("https://api.buildskil.com");
+//const socket = io("https://api.buildskil.com");
+const socket = io("http://localhost:5000");
+//const TABLE_API = "https://api.buildskil.com/api/tables"; // change if using domain
+const TABLE_API = "http://localhost:5000/api/tables"; // change if using domain
 let userTables = []; // ✅ add this at top
 const actionHistory = [];
 let count = 0;
@@ -97,14 +100,14 @@ permissionSelect.appendChild(optionView);
         // ================= SAVE TABLE =================
         if (tableId) {
           // UPDATE
-          await fetch(`https://api.buildskil.com/api/tables/${tableId}`, {
+          await fetch(`${TABLE_API}/${tableId}`, {
             method: "PUT",
             headers: authHeaders(),
             body: JSON.stringify(payload),
           });
         } else {
           // CREATE
-          const res = await fetch("https://api.buildskil.com/api/tables", {
+          const res = await fetch(`${TABLE_API}`, {
             method: "POST",
             headers: authHeaders(),
             body: JSON.stringify(payload),
@@ -116,7 +119,7 @@ permissionSelect.appendChild(optionView);
         }
         // ================= SHARE TABLE =================
         if (phone) {
-          const res = await fetch("https://api.buildskil.com/api/tables/share", {
+          const res = await fetch(`${TABLE_API}/share`, {
             method: "POST",
             headers: authHeaders(),
             body: JSON.stringify({
@@ -163,7 +166,7 @@ permissionSelect.appendChild(optionView);
       try {
         if (block.dataset.id) {
           // ✅ UPDATE
-          await fetch(`https://api.buildskil.com/api/tables/${block.dataset.id}`, {
+          await fetch(`${TABLE_API}/${block.dataset.id}`, {
             method: "PUT",
             headers: authHeaders(),
             body: JSON.stringify(payload),
@@ -172,7 +175,7 @@ permissionSelect.appendChild(optionView);
           showToast("Updated!");
         } else {
           // ✅ CREATE
-          const res = await fetch("https://api.buildskil.com/api/tables", {
+          const res = await fetch(`${TABLE_API}`, {
             method: "POST",
             headers: authHeaders(),
             body: JSON.stringify(payload),
@@ -201,7 +204,7 @@ permissionSelect.appendChild(optionView);
         return;
       }
 
-      await fetch(`https://api.buildskil.com/api/tables/${block.dataset.id}`, {
+      await fetch(`${TABLE_API}/${block.dataset.id}`, {
         method: "DELETE",
         headers: authHeaders(),
       });
@@ -693,7 +696,7 @@ permissionSelect.appendChild(optionView);
 
       try {
         const res = await fetch(
-          `https://api.buildskil.com/api/tables/${tableData._id}`,
+          `${TABLE_API}/${tableData._id}`,
           {
             method: "PUT",
             headers: authHeaders(),
@@ -731,7 +734,7 @@ permissionSelect.appendChild(optionView);
 
       try {
         const res = await fetch(
-          `https://api.buildskil.com/api/tables/${tableData._id}`,
+          `${TABLE_API}/${tableData._id}`,
           {
             method: "DELETE",
             headers: authHeaders(),
@@ -931,7 +934,7 @@ permissionSelect.appendChild(optionView);
 
   async function loadTables() {
     try {
-      const res = await fetch("https://api.buildskil.com/api/tables", {
+      const res = await fetch(`${TABLE_API}`, {
         headers: authHeaders(),
       });
 

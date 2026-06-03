@@ -14,10 +14,12 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css" />
+    
   </head>
   <body>
     <!-- ================= HEADER ================= -->
     <header class="header">
+      <div id="toastContainer"></div>
       <div class="container header-bar">
         <!-- LEFT : LOGO -->
         <div class="header-left">
@@ -39,6 +41,7 @@
               <a href="./screen/account.html">Manage Account</a>
               <a href="create-profile.html">Create & Post Profile</a>
               <a href="./screen/notebook.html">Notebook</a>
+              <a href="./screen/weather.html">Weather</a>
               <hr />
               <button id="logoutBtn">Logout</button>
             </div>
@@ -244,6 +247,7 @@
   <div id="chat-log">
     <!-- Messages appear here -->
     <div class="bot-msg">Hi! Ask me about <b>costs</b>, <b>timelines</b>, or <b>services</b>.</div>
+    <h4>chat bot can make mistakes. please verify important information.</h4>
   </div>
   
   <div id="chat-input-area">
@@ -252,8 +256,19 @@
   </div>
 </div>
 
-<!-- Toggle Button (Floating) -->
+<!-- Toggle Button (Floating) aidata.js -->
 <button id="chat-toggle">💬 Chat</button>
+
+<!-- Add the activation button and status bar anywhere on the page voice assistant.js -->
+<div id="voice-activation-area"  >
+    <button id="start-voice-btn" class="voibtn" onclick="initializeVoiceSystem()" >
+        🎤 Enable 
+    </button>
+</div>
+
+<div id="voice-status-bar" style="position: fixed; bottom: 15px; left: 20px; background: #222; color: #fff; padding: 5px; border-radius: 20px; display: none; z-index: 9999;">
+    <span id="voice-text">System Standby...</span>
+</div>
   </section>
     <section class="notifications" id="notification">
       <div class="container">
@@ -263,85 +278,7 @@
         </ul>
       </div>
     </section>
-    <!-- WHO CAN  
-    <section class="workflow">
-      <div class="container">
-        <h2 class="section-title">It's Your Turn</h2>
-
-        <div class="workflow-steps">
-          <div class="step">Masons</div>
-          <div class="step">Structural</div>
-          <div class="step">Carpenters</div>
-          <div class="step">Electricians</div>
-          <div class="step">Plumbers</div>
-          <div class="step">Material Supplier</div>
-          <div class="step">Painter</div>
-          <div class="step">HVAC</div>
-          <div class="step">All Technician</div>
-          <div class="step">Architect</div>
-          <div class="step">Marble & Tile</div>
-        </div>
-      </div>
-    </section> 
-    -->
-
-    <!--<section class="plans hidden" id="plansSection">
-      <div class="container">
-        <h2 class="section-title">Engagement & Support Plans</h2>
-        <p class="section-subtitle">
-          Choose a flexible engagement model based on your project size,
-          duration, and manpower requirements.
-        </p>
-
-        <div class="plan-grid">
-          <div class="plan-card">
-            <h3>Project-Based</h3>
-            <p class="plan-desc">
-              Suitable for individual slab work, renovation, or short-term
-              construction needs.
-            </p>
-            <ul>
-              <li>✔ One-time project execution</li>
-              <li>✔ Skilled manpower</li>
-              <li>✔ Quality supervision</li>
-              <li>✔ Completion report</li>
-            </ul>
-            <span class="plan-note">Pricing based on project scope</span>
-          </div>
-
-          <div class="plan-card featured">
-            <h3>Monthly Support</h3>
-            <p class="plan-desc">
-              Ideal for running sites requiring continuous labour and technical
-              support.
-            </p>
-            <ul>
-              <li>✔ Monthly manpower supply</li>
-              <li>✔ Site supervision</li>
-              <li>✔ Work progress tracking</li>
-              <li>✔ Priority support</li>
-            </ul>
-            <span class="plan-note">Flexible monthly billing</span>
-          </div>
-
-          <div class="plan-card">
-            <h3>Enterprise Contract</h3>
-            <p class="plan-desc">
-              Best for builders, developers, and long-term construction
-              partnerships.
-            </p>
-            <ul>
-              <li>✔ Dedicated project team</li>
-              <li>✔ Long-term contract</li>
-              <li>✔ Structured reporting</li>
-              <li>✔ Cost optimization</li>
-            </ul>
-            <span class="plan-note">Custom agreement</span>
-          </div>
-        </div>
-      </div>
-    </section>
-    --->
+ 
     <!-- ================= CTA ================= -->
     <section class="cta" id="ctta">
       <div class="container">
@@ -416,6 +353,8 @@
     <script src="data/quiz.-data.js"></script>
     <script src="login.js"></script>
     <script src="data/aidata.js"></script>
+<!----    <script src="data/voiceai.js"></script>-->
+    <script src="data/voice-assistant.js"></script>
     <script src="./js/screenshotProtector.js"></script>
 <script>
   // One single line to activate

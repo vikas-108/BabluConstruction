@@ -4,6 +4,8 @@ let activePage = 1;
 let allNotebooks = {};
 let selectedColor = "#2c3e50"; 
 let saveTimeout = null; // Used to control saving animation states
+// API Config Base URL
+const NOTEBOOK_API = 'http://localhost:5000/api/notebooks'; // Update with your actual server URL
 
 // DOM References
 const dashboardView = document.getElementById('dashboard-view');
@@ -29,21 +31,30 @@ const pageNumDisplay = document.getElementById('page-number');
 const colorDots = document.querySelectorAll('.color-dot');
 const counterStats = document.getElementById('counter-stats');
 const fontSelect = document.getElementById('font-select');
-
+// Helper to provide headers along with JWT token
+function getAuthHeaders() {
+    const token = localStorage.getItem("cb_token"); // Make sure your user login API saves this token
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
 // Initialize Boot Configuration Block
-window.addEventListener('DOMContentLoaded', () => {
-    const savedData = localStorage.getItem('global_notebook_system');
-    if (savedData) {
-        allNotebooks = JSON.parse(savedData);
-    }
+window.addEventListener('DOMContentLoaded', async() => {
+   // const savedData = localStorage.getItem('global_notebook_system');
+    //if (savedData) {
+    //    allNotebooks = JSON.parse(savedData);
+    //}
      // Load Saved Dark Theme State
     const savedTheme = localStorage.getItem('notebook_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     themeToggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
-    renderDashboardList();
+    //renderDashboardList();
     setupColorPicker();
     setupLiveListeners();
+     // Fetch fresh database contents via API instead of localstorage
+    await fetchAndRenderNotebooks();
 });
 
 // Programmatically assign palette hex colors to preview selectors via JavaScript
@@ -69,16 +80,28 @@ function setupLiveListeners() {
     });
     
     searchBar.addEventListener('input', () => {
-        renderDashboardList(searchBar.value.trim().toLowerCase());
+        //renderDashboardList(searchBar.value.trim().toLowerCase());
+         // Trigger live search against database index using values from inputs
+        fetchAndRenderNotebooks(searchBar.value.trim().toLowerCase());
     });
 
-    fontSelect.addEventListener('change', () => {
+    fontSelect.addEventListener('change', async () => {
         if (!activeNotebookId) return;
         noteContent.classList.remove('font-handwriting', 'font-typewriter');
         const chosenFont = fontSelect.value;
         noteContent.classList.add(chosenFont);
         allNotebooks[activeNotebookId].preferredFont = chosenFont;
         triggerAutoSave();
+    // Immediate network update for structural preference switches
+        try {
+            await fetch(`${NOTEBOOK_API}/${activeNotebookId}`, {
+                method: 'PUT',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ preferredFont: chosenFont })
+            });
+        } catch (err) {
+            console.error("Error saving font preference:", err);
+        }
     });
 
     /* NEW LISTENER: Native print dialog pipeline
@@ -92,7 +115,7 @@ function setupLiveListeners() {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('notebook_theme', newTheme);
+        //localStorage.setItem('notebook_theme', newTheme);
         themeToggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
     });
 }
@@ -102,6 +125,34 @@ function calculateMetrics() {
     const totalWords = currentText === "" ? 0 : currentText.split(/\s+/).length;
     const totalChars = noteContent.value.length;
     counterStats.textContent = `Words: ${totalWords} | Chars: ${totalChars}`;
+}
+// Fetch all database records for the logged-in user and build dashboard UI
+async function fetchAndRenderNotebooks(searchTerm = "") {
+    try {
+        let url = NOTEBOOK_API;
+        if (searchTerm) {
+            url += `?search=${encodeURIComponent(searchTerm)}`;
+        }
+
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: getAuthHeaders()
+        });
+        const result = await res.json();
+
+        if (!res.ok) throw new Error(result.message || "Failed to load notebooks");
+
+        // Restructure array into matching dynamic front-end state format object
+        allNotebooks = {};
+        result.data.forEach(book => {
+            allNotebooks[book._id] = book;
+        });
+
+        renderDashboardList(searchTerm);
+    } catch (err) {
+        console.error("Fetch Error:", err);
+        notebooksList.innerHTML = `<div class="empty-list-text" style="color: red;">Failed to load notebooks. Please log in again.</div>`;
+    }
 }
 
 // Build and display filtered/unfiltered notebook list items
@@ -132,9 +183,9 @@ function renderDashboardList(filterTerm = "") {
 
     filteredKeys.forEach(id => {
         const book = allNotebooks[id];
-        const pageCount = Object.keys(book.pages).length;
+        //const pageCount = Object.keys(book.pages).length;
+       const pageCount = book.pages ? Object.keys(book.pages).length : 0;
         const coverColor = book.color || "#2c3e50";
-
         const item = document.createElement('div');
         item.className = "notebook-item animate-fade";
         
@@ -174,46 +225,102 @@ function triggerAutoSave() {
     allNotebooks[activeNotebookId].title = noteTitle.value;
     allNotebooks[activeNotebookId].pages[activePage] = noteContent.value;
     
-    // Debounce actual disk writing events to preserve local browser performance
+    // Debounce background server writes
     clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(() => {
-        localStorage.setItem('global_notebook_system', JSON.stringify(allNotebooks));
-        saveStatus.textContent = "Saved";
-        saveStatus.style.color = "#2ecc71";
-    }, 400); // Saves exactly 400ms after typing halts safely
+    saveTimeout = setTimeout(async () => {
+        try {
+            const payload = {
+                title: noteTitle.value,
+                pages: {
+                    [activePage]: noteContent.value
+                }
+            };
+
+            const res = await fetch(`${NOTEBOOK_API}/${activeNotebookId}`, {
+                method: 'PUT',
+                headers: getAuthHeaders(),
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                saveStatus.textContent = "Saved to Cloud";
+                saveStatus.style.color = "#2ecc71";
+            } else {
+                throw new Error("Server write failed");
+            }
+        } catch (err) {
+            saveStatus.textContent = "Connection Error";
+            saveStatus.style.color = "#e74c3c";
+            console.error("Auto-save sync error:", err);
+        }
+    }, 400); 
 }
 
-function deleteNotebook(id) {
+
+// Remote API Delete Call
+async function deleteNotebook(id) {
     if (confirm(`Are you completely sure you want to delete "${allNotebooks[id].title}"? This cannot be undone.`)) {
-        delete allNotebooks[id];
-        localStorage.setItem('global_notebook_system', JSON.stringify(allNotebooks));
-        renderDashboardList(searchBar.value.trim().toLowerCase());
+        try {
+            const res = await fetch(`${NOTEBOOK_API}/${id}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders()
+            });
+            
+            if (!res.ok) throw new Error("Could not delete from server");
+
+            delete allNotebooks[id];
+            renderDashboardList(searchBar.value.trim().toLowerCase());
+        } catch (err) {
+            alert("Error deleting notebook: " + err.message);
+        }
     }
 }
 
-addNotebookBtn.addEventListener('click', () => {
-    const newId = "nb_" + Date.now();
-    allNotebooks[newId] = {
-        title: "My Notebook",
-        color: selectedColor,
-        preferredFont: "font-handwriting",
-        pages: { 1: "" }
-    };
-    localStorage.setItem('global_notebook_system', JSON.stringify(allNotebooks));
-    loadNotebook(newId);
+// Remote API Post Call
+addNotebookBtn.addEventListener('click', async () => {
+    try {
+        const payload = {
+            title: "My Notebook",
+            color: selectedColor,
+            preferredFont: "font-handwriting"
+        };
+
+        const res = await fetch(NOTEBOOK_API, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+        });
+         const result = await res.json();
+        if (!res.ok) throw new Error(result.message || "Could not create notebook resource");
+
+        const newNotebook = result.data;
+        allNotebooks[newNotebook._id] = newNotebook;
+        loadNotebook(newNotebook._id);
+    } catch (err) {
+        alert("Error creating notebook: " + err.message);
+    }
 });
 
 function loadNotebook(id) {
     activeNotebookId = id;
     activePage = 1;
-    
-    notebookSpine.style.borderLeftColor = allNotebooks[id].color || "#2c3e50";
-    
+    const book = allNotebooks[id];
+    notebookSpine.style.borderLeftColor = book.color || "#2c3e50";
+    //map backend response attribute to active window text xones
+    noteTitle.value = book.title || "Unititled Notebook";
+    noteContent.value = (book.pages && book.pages[activePage]) ? book.pages[activePage] : "";
+    //syb font setting
+    noteContent.classList.remove('font-handwriting', 'font-typewriter', 'font-standard');
+    const chosenFont = book.preferredFont || "font-handwriting";
+    noteContent.classList.add(chosenFont);
+    fontSelect.value = chosenFont;
+    //ui screen swap toggle
     dashboardView.classList.add('hidden');
     notebookView.classList.remove('hidden');
-    controlsRow.classList.remove('hidden');
-    
-    renderPage();
+    if(controlsRow)controlsRow.classList.remove('hidden');
+    calculateMetrics();
+    saveStatus.textContent = "CloudSynchronized";
+    saveStatus.style.color = "#2ecc71";
 }
 
 function renderPage() {

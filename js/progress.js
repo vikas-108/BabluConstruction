@@ -1,5 +1,8 @@
 
-const API_BASE = "https://api.buildskil.com/api/progress"; // change if deployed
+//const API_BASE = "https://api.buildskil.com/api/progress"; // change if deployed
+const API_BASE = "http://localhost:5000/api/progress"; // change if using domain
+//const ACCOUNT_API = "https://api.buildskil.com/api/account/me";
+const ACCOUNT_API = "http://localhost:5000"; // change if using domain
 let CURRENT_ROLE = null;
 let CURRENT_PHONE = null;
 function authHeaders(isFormData = false) {
@@ -133,7 +136,7 @@ async function fetchMyChannels(){
 }
 async function fetchMyAccount(){ 
   try{
-    const res = await fetch("https://api.buildskil.com/api/account/me", {
+    const res = await fetch(`${ACCOUNT_API}/api/account/me`, {
       headers: authHeaders()
     });
 

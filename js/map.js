@@ -1,4 +1,5 @@
-const API_BASE = "https://api.buildskil.com/api/location"; // change if deployed
+//const API_BASE = "https://api.buildskil.com/api/location"; // change if deployed
+const API_BASE = "http://localhost:5000/api/location"; // change if using domain
 let editingProjectId = null;
 function authHeaders(isFormData = false) {
   const headers = {

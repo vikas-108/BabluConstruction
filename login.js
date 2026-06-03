@@ -1,6 +1,7 @@
 const LOGIN_KEY = "cb_login_user";
 const USERS_KEY = "cb_users";
-const LOGIN_API = "https://api.buildskil.com/api/auth/";
+//const LOGIN_API = "https://api.buildskil.com/api/auth/";
+const LOGIN_API = "http://localhost:5000/api/auth/";
 // change if needed
 const COUNTRY_PHONE_RULES = {
   IN: {

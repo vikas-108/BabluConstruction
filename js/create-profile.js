@@ -1,5 +1,7 @@
-const API_BASE = "https://api.buildskil.com/api/profiles";
-const SERVER_BASE = "https://api.buildskil.com";
+//const API_BASE = "https://api.buildskil.com/api/profiles";
+//const SERVER_BASE = "https://api.buildskil.com";
+const API_BASE = "http://localhost:5000/api/profiles"; // change if using domain
+const SERVER_BASE = "http://localhost:5000"; // change if using domain
 let EDIT_PROFILE_ID = null;
 let ORIGINAL_MEDIA = null;
 function authHeaders() {
@@ -343,6 +345,10 @@ document.addEventListener("DOMContentLoaded", () => {
       "Sand Supplier",
       "Equipment Supplier",
       "Tiles Supplier",
+      "Shuttering Supplier",
+      "Bricks Supplier",
+      "Paint Supplier",
+      "Wood Supplier",
     ],
     architecture: [
       "Interior",
