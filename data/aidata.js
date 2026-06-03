@@ -428,6 +428,9 @@ function addMessage(html, className, save = true) {
 
   return div;
 }
+// ==========================================
+// ROBUST MEMORY LOGIC (Persist on Error)
+// ==========================================
 
 // ==========================================
 // ROBUST MEMORY LOGIC (Persist on Error)
