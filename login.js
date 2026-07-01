@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const notification = document.getElementById("notification");
   const appContent = document.getElementById("appContent");
   const landingPage = document.getElementById("landingPage");
+  const bottomNav = document.getElementById("bottomNav");
   const ctta = document.getElementById("ctta");
   if (user && user.username) {
     // ✅ Logged in → show protected sections
@@ -79,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctta?.classList.remove("hidden");
     notification?.classList.remove("hidden");
     appContent?.classList.remove("hidden");
+     bottomNav?.classList.remove("hidden");
     landingPage?.classList.add("hidden");
   } else {
     // ❌ Not logged in → keep hidden
@@ -90,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctta?.classList.add("hidden");
     notification?.classList.add("hidden");
     appContent?.classList.add("hidden");
+    bottomNav?.classList.add("hidden");
     landingPage?.classList.remove("hidden");
   }
 

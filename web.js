@@ -7,10 +7,10 @@ const districtFilter = document.getElementById("districtFilter");
 const PAGE_SIZE = 20;
 let currentPage = 1;
 let lastSearchResults = [];
-//const SERVER_BASE = "https://api.buildskil.com";
-//const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
-const SERVER_BASE = "http://localhost:5000";
-const PROFILE_API = "http://localhost:5000/api/profiles/public";
+const SERVER_BASE = "https://api.buildskil.com";
+const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
+//const SERVER_BASE = "http://localhost:5000";
+//const PROFILE_API = "http://localhost:5000/api/profiles/public";
 let API_PROFILES_CACHE = [];
 const states = [
   "Haryana",
@@ -21,12 +21,12 @@ const states = [
   "Uttar Pradesh",
   "Bihar",
   "Delhi",
-  "Karanataka",
+  "Karnataka",
   "Tamil Nadu",
   "West Bengal",
   "Odisha",
   "Madhya Pradesh",
-  "chhattisgrah",
+  "Chhattisgrah",
   "Assam",
   "Jharkhand",
   "Himachal Pradesh",
@@ -48,12 +48,12 @@ const states = [
   "Ladakh",
   "Andaman & Nicobar", "Dadra & Nagar Haveli and Daman & Diu",
 ];
-const districts = [
-  // Haryana (22)
+const districts = {
+   "Haryana" :[
   "Ambala","Bhiwani","Charkhi Dadri","Faridabad","Fatehabad","Gurugram","Hisar",
   "Jhajjar","Jind","Kaithal","Karnal","Kurukshetra","Mahendragarh","Nuh","Palwal",
-  "Panchkula","Panipat","Rewari","Rohtak","Sirsa","Sonipat","Yamunanagar",
-  // Uttar Pradesh (75)
+  "Panchkula","Panipat","Rewari","Rohtak","Sirsa","Sonipat","Yamunanagar",],
+  "Uttar Pradesh": [
   "Agra","Aligarh","Ambedkar Nagar","Amethi","Amroha","Auraiya","Ayodhya","Azamgarh",
   "Baghpat","Bahraich","Ballia","Balrampur","Banda","Barabanki","Bareilly","Basti",
   "Bhadohi","Bijnor","Budaun","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah",
@@ -64,181 +64,189 @@ const districts = [
   "Mathura","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh",
   "Prayagraj","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur",
   "Shamli","Shravasti","Siddharth Nagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi",
-
-  // Delhi (11)
+  ],
+   "Delhi": [
   "Central Delhi","East Delhi","New Delhi","North Delhi","North East Delhi",
-  "North West Delhi","Shahdara","South Delhi","South East Delhi","South West Delhi","West Delhi",
+  "North West Delhi","Shahdara","South Delhi","South East Delhi","South West Delhi","West Delhi",],
 
-  // Bihar (38)
+   "Bihar": [
   "Araria","Arwal","Aurangabad","Banka","Begusarai","Bhagalpur","Bhojpur","Buxar","Darbhanga",
   "East Champaran","Gaya","Gopalganj","Jamui","Jehanabad","Kaimur","Katihar","Khagaria","Kishanganj",
   "Lakhisarai","Madhepura","Madhubani","Munger","Muzaffarpur","Nalanda","Nawada","Patna","Purnia",
   "Rohtas","Saharsa","Samastipur","Saran","Sheikhpura","Sheohar","Sitamarhi","Siwan","Supaul",
-  "Vaishali","West Champaran",
+  "Vaishali","West Champaran",],
 
-  // Odisha (30)
+   "Odisha": [
   "Angul","Balangir","Balasore","Bargarh","Bhadrak","Boudh","Cuttack","Deogarh","Dhenkanal",
   "Gajapati","Ganjam","Jagatsinghpur","Jajpur","Jharsuguda","Kalahandi","Kandhamal","Kendrapara",
   "Kendujhar","Khordha","Koraput","Malkangiri","Mayurbhanj","Nabarangpur","Nayagarh","Nuapada",
-  "Puri","Rayagada","Sambalpur","Subarnapur","Sundargarh",
+  "Puri","Rayagada","Sambalpur","Subarnapur","Sundargarh",],
 
-  // Chandigarh (1)
-  "Chandigarh",
+   "Chandigarh": [
+  "Chandigarh",],
 
-  // Punjab (23)
+   "Punjab": [
   "Amritsar","Barnala","Bathinda","Faridkot","Fatehgarh Sahib","Fazilka","Ferozepur","Gurdaspur",
   "Hoshiarpur","Jalandhar","Kapurthala","Ludhiana","Mansa","Moga","Mohali","Muktsar","Pathankot",
-  "Patiala","Rupnagar","Sangrur","Shaheed Bhagat Singh Nagar","Tarn Taran",
+  "Patiala","Rupnagar","Sangrur","Shaheed Bhagat Singh Nagar","Tarn Taran",],
 
-  // Gujarat (33)
+   "Gujarat": [
   "Ahmedabad","Amreli","Anand","Aravalli","Banaskantha","Bharuch","Bhavnagar","Botad","Chhota Udaipur",
   "Dahod","Dang","Devbhoomi Dwarka","Gandhinagar","Gir Somnath","Jamnagar","Junagadh","Kheda","Kutch",
   "Mahisagar","Mehsana","Morbi","Narmada","Navsari","Panchmahal","Patan","Porbandar","Rajkot","Sabarkantha",
-  "Surat","Surendranagar","Tapi","Vadodara","Valsad",
-  // Rajasthan (50)
+  "Surat","Surendranagar","Tapi","Vadodara","Valsad",],
+   "Rajasthan": [
   "Ajmer","Alwar","Anupgarh","Balotra","Banswara","Baran","Barmer","Beawar","Bharatpur",
   "Bhilwara","Bikaner","Bundi","Chittorgarh","Churu","Dausa","Deeg","Dholpur","Didwana-Kuchaman",
   "Dungarpur","Gangapur City","Hanumangarh","Jaipur","Jaipur Rural","Jaisalmer","Jalore","Jhalawar",
   "Jhunjhunu","Jodhpur","Jodhpur Rural","Karauli","Kekri","Khairthal-Tijara","Kota","Kotputli-Behror",
   "Nagaur","Neem Ka Thana","Pali","Phalodi","Pratapgarh","Rajsamand","Salumbar","Sanchore",
-  "Sawai Madhopur","Shahpura","Sikar","Sirohi","Sri Ganganagar","Tonk","Udaipur",
+  "Sawai Madhopur","Shahpura","Sikar","Sirohi","Sri Ganganagar","Tonk","Udaipur",],
 
-  // Madhya Pradesh (55)
+  "Madhya Pradesh": [
   "Agar Malwa","Alirajpur","Anuppur","Ashoknagar","Balaghat","Barwani","Betul","Bhind",
   "Bhopal","Burhanpur","Chhatarpur","Chhindwara","Damoh","Datia","Dewas","Dhar","Dindori",
   "Guna","Gwalior","Harda","Indore","Jabalpur","Jhabua","Katni","Khandwa","Khargone",
   "Maihar","Mandla","Mandsaur","Morena","Narsinghpur","Neemuch","Niwari","Panna","Raisen",
   "Rajgarh","Ratlam","Rewa","Sagar","Satna","Sehore","Seoni","Shahdol","Shajapur",
-  "Sheopur","Shivpuri","Sidhi","Singrauli","Tikamgarh","Ujjain","Umaria","Vidisha",
+  "Sheopur","Shivpuri","Sidhi","Singrauli","Tikamgarh","Ujjain","Umaria","Vidisha",],
 
-  // Maharashtra (36)
+  "Maharashtra": [
   "Ahmednagar","Akola","Amravati","Aurangabad","Beed","Bhandara","Buldhana","Chandrapur",
   "Dhule","Gadchiroli","Gondia","Hingoli","Jalgaon","Jalna","Kolhapur","Latur","Mumbai City",
   "Mumbai Suburban","Nagpur","Nanded","Nandurbar","Nashik","Osmanabad","Palghar","Parbhani",
-  "Pune","Raigad","Ratnagiri","Sangli","Satara","Sindhudurg","Solapur","Thane","Wardha","Washim","Yavatmal",
+  "Pune","Raigad","Ratnagiri","Sangli","Satara","Sindhudurg","Solapur","Thane","Wardha","Washim","Yavatmal",],
 
-  // Karnataka (31)
+   "Karnataka": [
   "Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban","Bidar","Chamarajanagar",
   "Chikkaballapur","Chikkamagaluru","Chitradurga","Dakshina Kannada","Davanagere","Dharwad",
   "Gadag","Hassan","Haveri","Kalaburagi","Kodagu","Kolar","Koppal","Mandya","Mysuru",
   "Raichur","Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada","Vijayanagara",
-  "Vijayapura","Yadgir",
+  "Vijayapura","Yadgir",],
 
-  // Tamil Nadu (38)
+  "Tamil Nadu": [
   "Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul",
   "Erode","Kallakurichi","Kancheepuram","Karur","Krishnagiri","Madurai","Mayiladuthurai",
   "Nagapattinam","Namakkal","Nilgiris","Perambalur","Pudukkottai","Ramanathapuram",
   "Ranipet","Salem","Sivaganga","Tenkasi","Thanjavur","Theni","Thoothukudi","Tiruchirappalli",
   "Tirunelveli","Tirupathur","Tiruppur","Tiruvallur","Tiruvannamalai","Tiruvarur",
-  "Vellore","Viluppuram","Virudhunagar",
+  "Vellore","Viluppuram","Virudhunagar",],
 
-  // West Bengal (23)
+  "West Bengal": [
   "Alipurduar","Bankura","Birbhum","Cooch Behar","Dakshin Dinajpur","Darjeeling",
   "Hooghly","Howrah","Jalpaiguri","Jhargram","Kalimpong","Kolkata","Malda",
   "Murshidabad","Nadia","North 24 Parganas","Paschim Bardhaman","Paschim Medinipur",
-  "Purba Bardhaman","Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur",
+  "Purba Bardhaman","Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur",],
 
-  // Andhra Pradesh (26)
+  "Andhra Pradesh":[
   "Alluri Sitharama Raju","Anakapalli","Anantapur","Annamayya","Bapatla","Chittoor",
   "East Godavari","Eluru","Guntur","Kakinada","Konaseema","Krishna","Kurnool",
   "Nandyal","NTR","Palnadu","Parvathipuram Manyam","Prakasam","SPSR Nellore",
-  "Srikakulam","Sri Sathya Sai","Tirupati","Visakhapatnam","Vizianagaram","West Godavari","YSR Kadapa",
+  "Srikakulam","Sri Sathya Sai","Tirupati","Visakhapatnam","Vizianagaram","West Godavari","YSR Kadapa",],
 
-  // Telangana (33)
+  "Telangana": [
   "Adilabad","Bhadradri Kothagudem","Hanamkonda","Hyderabad","Jagtial","Jangaon",
   "Jayashankar Bhupalpally","Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam",
   "Kumuram Bheem","Mahabubabad","Mahabubnagar","Mancherial","Medak","Medchal–Malkajgiri",
   "Mulugu","Nagarkurnool","Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli",
   "Rajanna Sircilla","Rangareddy","Sangareddy","Siddipet","Suryapet","Vikarabad",
-  "Wanaparthy","Warangal","Yadadri Bhuvanagiri",
-  // Kerala (14)
+  "Wanaparthy","Warangal","Yadadri Bhuvanagiri",],
+  "Kerala": [
   "Alappuzha","Ernakulam","Idukki","Kannur","Kasaragod","Kollam","Kottayam",
   "Kozhikode","Malappuram","Palakkad","Pathanamthitta","Thiruvananthapuram",
-  "Thrissur","Wayanad",
+  "Thrissur","Wayanad",],
 
-  // Himachal Pradesh (12)
+   "Himachal Pradesh":[
   "Bilaspur","Chamba","Hamirpur","Kangra","Kinnaur","Kullu","Lahaul and Spiti",
-  "Mandi","Shimla","Sirmaur","Solan","Una",
+  "Mandi","Shimla","Sirmaur","Solan","Una",],
 
-  // Uttarakhand (13)
+  "Uttarakhand": [
   "Almora","Bageshwar","Chamoli","Champawat","Dehradun","Haridwar","Nainital",
-  "Pauri Garhwal","Pithoragarh","Rudraprayag","Tehri Garhwal","Udham Singh Nagar","Uttarkashi",
+  "Pauri Garhwal","Pithoragarh","Rudraprayag","Tehri Garhwal","Udham Singh Nagar","Uttarkashi",],
 
-  // Jharkhand (24)
+   "Jharkhand": [
   "Bokaro","Chatra","Deoghar","Dhanbad","Dumka","East Singhbhum","Garhwa",
   "Giridih","Godda","Gumla","Hazaribagh","Jamtara","Khunti","Koderma","Latehar",
-  "Lohardaga","Pakur","Palamu","Ramgarh","Ranchi","Sahebganj","Seraikela Kharsawan","Simdega","West Singhbhum",
+  "Lohardaga","Pakur","Palamu","Ramgarh","Ranchi","Sahebganj","Seraikela Kharsawan","Simdega","West Singhbhum",],
 
-  // Chhattisgarh (33)
+  "Chhattisgarh": [
   "Balod","Baloda Bazar","Balrampur","Bastar","Bemetara","Bijapur","Bilaspur",
   "Dantewada","Dhamtari","Durg","Gariaband","Gaurela-Pendra-Marwahi","Janjgir-Champa",
   "Jashpur","Kabirdham","Kanker","Kondagaon","Korba","Koriya","Mahasamund",
   "Manendragarh-Chirmiri-Bharatpur","Mohla-Manpur-Ambagarh Chowki","Mungeli",
   "Narayanpur","Raigarh","Raipur","Rajnandgaon","Sakti","Sarangarh-Bilaigarh",
-  "Sukma","Surajpur","Surguja",
+  "Sukma","Surajpur","Surguja",],
 
-  // Assam (35)
+   "Assam": [
   "Baksa","Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang",
   "Darrang","Dhemaji","Dhubri","Dibrugarh","Dima Hasao","Goalpara","Golaghat",
   "Hailakandi","Hojai","Jorhat","Kamrup","Kamrup Metropolitan","Karbi Anglong",
   "Karimganj","Kokrajhar","Lakhimpur","Majuli","Morigaon","Nagaon","Nalbari",
-  "Sivasagar","Sonitpur","South Salmara-Mankachar","Tinsukia","Udalguri","West Karbi Anglong",
+  "Sivasagar","Sonitpur","South Salmara-Mankachar","Tinsukia","Udalguri","West Karbi Anglong",],
 
-  // Arunachal Pradesh (26)
+  "Arunachal Pradesh": [
   "Anjaw","Changlang","Dibang Valley","East Kameng","East Siang","Kamle",
   "Kra Daadi","Kurung Kumey","Leparada","Lohit","Longding","Lower Dibang Valley",
   "Lower Siang","Lower Subansiri","Namsai","Pakke Kessang","Papum Pare",
   "Shi Yomi","Siang","Tawang","Tirap","Upper Siang","Upper Subansiri",
-  "West Kameng","West Siang","Keyi Panyor",
+  "West Kameng","West Siang","Keyi Panyor",],
 
-  // Nagaland (16)
+  "Nagaland": [
   "Chümoukedima","Dimapur","Kiphire","Kohima","Longleng","Mokokchung",
-  "Mon","Niuland","Noklak","Peren","Phek","Shamator","Tseminyü","Tuensang","Wokha","Zunheboto",
+  "Mon","Niuland","Noklak","Peren","Phek","Shamator","Tseminyü","Tuensang","Wokha","Zunheboto",],
 
-  // Manipur (16)
+  "Manipur": [
   "Bishnupur","Chandel","Churachandpur","Imphal East","Imphal West","Jiribam",
   "Kakching","Kamjong","Kangpokpi","Noney","Pherzawl","Senapati","Tamenglong",
-  "Tengnoupal","Thoubal","Ukhrul",
+  "Tengnoupal","Thoubal","Ukhrul",],
 
-  // Meghalaya (12)
+  "Meghalaya": [
   "East Garo Hills","East Jaintia Hills","East Khasi Hills","Mairang",
   "North Garo Hills","Ri Bhoi","South Garo Hills","South West Garo Hills",
-  "South West Khasi Hills","West Garo Hills","West Jaintia Hills","West Khasi Hills",
+  "South West Khasi Hills","West Garo Hills","West Jaintia Hills","West Khasi Hills",],
 
-  // Mizoram (11)
+   "Mizoram": [
   "Aizawl","Champhai","Hnahthial","Khawzawl","Kolasib","Lawngtlai",
-  "Lunglei","Mamit","Saiha","Saitual","Serchhip",
+  "Lunglei","Mamit","Saiha","Saitual","Serchhip",],
 
-  // Tripura (8)
+  "Tripura": [
   "Dhalai","Gomati","Khowai","North Tripura","Sepahijala","South Tripura",
   "Unakoti","West Tripura",
+],
 
-  // Goa (2)
+  "Goa": [
   "North Goa","South Goa",
+],
 
-  // Sikkim (6)
+   "Sikkim": [
   "Gangtok","Gyalshing","Mangan","Namchi","Pakyong","Soreng",
+],
 
-  // Jammu & Kashmir (20)
+   "Jammu & Kashmir": [
   "Anantnag","Bandipora","Baramulla","Budgam","Doda","Ganderbal","Jammu",
   "Kathua","Kishtwar","Kulgam","Kupwara","Poonch","Pulwama","Rajouri",
-  "Ramban","Reasi","Samba","Shopian","Srinagar","Udhampur",
+  "Ramban","Reasi","Samba","Shopian","Srinagar","Udhampur",],
 
-  // Ladakh (2)
+   "Ladakh": [
   "Kargil","Leh",
+],
 
-  // Andaman & Nicobar (3)
+   "Andaman & Nicobar": [
   "Nicobar","North and Middle Andaman","South Andaman",
+],
 
-  // Dadra & Nagar Haveli and Daman & Diu (3)
+   "Dadra & Nagar Haveli and Daman & Diu": [
   "Dadra and Nagar Haveli","Daman","Diu",
+],
 
-  // Lakshadweep (1)
+   "Lakshadweep": [
   "Lakshadweep",
+],
 
-  // Puducherry (4)
+   "Puducherry": [
   "Karaikal","Mahe","Puducherry","Yanam",
-];
+]
+};
 function getSearchStateKey() {
   const user = JSON.parse(localStorage.getItem("cb_login_user"));
 
@@ -260,70 +268,145 @@ function saveSearchState() {
 
   localStorage.setItem(getSearchStateKey(), JSON.stringify(state));
 }
-function restoreSearchState() {
-  const saved = localStorage.getItem(getSearchStateKey());
-  if (!saved) return;
 
-  const state = JSON.parse(saved);
+//console.log("districts =", districts);
+// 1. Core initialization logic (Run this immediately on page load)
+const allDistrictsFallback = Object.values(districts).flat();
 
-  if (state.query) input.value = state.query;
-  if (categoryFilter && state.category) categoryFilter.value = state.category;
-  if (roleFilter && state.role) roleFilter.value = state.role;
-  if (stateFilter && state.state) stateFilter.value = state.state;
-  if (districtFilter && state.district) districtFilter.value = state.district;
+// --- 2. REGULAR ENGINE INITIALIZER ---
+function initializeDropdowns() {
+  // Setup State Select Component
+  setupSearchableSelect("stateFilter", "stateList", states, false);
 
-  // Trigger search after restoring
-  setTimeout(() => {
-    applySearch();
-  }, 10);
-  
-setupSearchableSelect("stateFilter", "stateList", states);
-setupSearchableSelect("districtFilter", "districtList", districts);
+  // Setup District Select Component with dynamic linking fallback logic
+  setupSearchableSelect("districtFilter", "districtList", () => {
+    const stateInput = document.getElementById("stateFilter");
+    const selectedState = stateInput ? stateInput.value : "";
+    
+    if (selectedState && districts[selectedState]) {
+      return districts[selectedState];
+    } else {
+      return allDistrictsFallback;
+    }
+  }, true);
 }
 
-function setupSearchableSelect(inputId, listId, data) {
+
+function setupSearchableSelect(inputId, listId, dataProvider, isDistrict = false) {
   const input = document.getElementById(inputId);
   const list = document.getElementById(listId);
+  
   if (!input || !list) {
     console.error("Missing input or list:", inputId, listId);
     return;
   }
-  input.addEventListener("input", () => {
-    const value = input.value.toLowerCase();
+
+  // Core rendering logic used for inputs, focus, and clicks
+  function renderDropdown() {
+    const value = input.value.toLowerCase().trim();
     list.innerHTML = "";
-    if (!value) {
+
+    // Resolve data if it's a dynamic function (needed for state-linked districts)
+    const activeData = typeof dataProvider === "function" ? dataProvider() : dataProvider;
+
+    if (!activeData || !activeData.length) {
       list.style.display = "none";
       return;
     }
-    const filtered = data.filter((item) => item.toLowerCase().includes(value));
-   console.log("Filtered:", filtered);
+
+    // Filter results based on input text
+    const filtered = activeData.filter((item) => item.toLowerCase().includes(value));
+
     if (!filtered.length) {
-      list.style.display = "none";
+      const emptyLi = document.createElement("li");
+      emptyLi.textContent = "No matches found";
+      emptyLi.style.color = "#999";
+      emptyLi.style.cursor = "default";
+      list.appendChild(emptyLi);
+      list.style.display = "block";
       return;
     }
 
     filtered.forEach((item) => {
       const li = document.createElement("li");
       li.textContent = item;
-      li.onclick = () => {
+      
+      // Use pointerdown instead of click for instant response on both PC and mobile touchscreens
+      li.addEventListener("pointerdown", (e) => {
+        e.preventDefault(); 
         input.value = item;
         list.style.display = "none";
+        
+        if (!isDistrict) {
+          // Reset district field if a new state is chosen
+          const districtInput = document.getElementById("districtFilter");
+          if (districtInput) districtInput.value = "";
+          
+        }
+
         if (typeof applySearch === "function") {
           applySearch();
         }
-      };
+      });
       list.appendChild(li);
     });
-  console.log("List children:", list.children.length);
-    list.style.display = filtered.length ? "block" : "none";
-  });
 
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".search-select")) {
+    list.style.display = "block";
+  }
+
+  // 🔥 FIX 1: Open dropdown when field is clicked or focused (PC & Mobile)
+  input.addEventListener("focus", renderDropdown);
+  input.addEventListener("click", renderDropdown);
+
+  // Filter content while user types
+  input.addEventListener("input", renderDropdown);
+
+  // Close dropdown if user clicks completely outside the target box element
+  document.addEventListener("pointerdown", (e) => {
+    if (!e.target.closest(`#${inputId}`) && !e.target.closest(`#${listId}`)) {
       list.style.display = "none";
     }
   });
 }
+// --- 4. LOCALSTORAGE RESTORATION FUNCTION ---
+function restoreSearchState() {
+  initializeDropdowns();
+
+  if (typeof getSearchStateKey !== "function") return;
+  const saved = localStorage.getItem(getSearchStateKey());
+  if (!saved) return;
+
+  const savedStateData = JSON.parse(saved);
+
+  if (savedStateData.query && typeof input !== 'undefined') {
+    input.value = savedStateData.query;
+  }
+  
+  if (typeof categoryFilter !== 'undefined' && categoryFilter && savedStateData.category) {
+    categoryFilter.value = savedStateData.category;
+  }
+  if (typeof roleFilter !== 'undefined' && roleFilter && savedStateData.role) {
+    roleFilter.value = savedStateData.role;
+  }
+
+  const stateInput = document.getElementById("stateFilter");
+  if (stateInput && savedStateData.state) {
+    stateInput.value = savedStateData.state;
+  }
+
+  const districtInput = document.getElementById("districtFilter");
+  if (districtInput && savedStateData.district) {
+    districtInput.value = savedStateData.district;
+  }
+
+  setTimeout(() => {
+    if (typeof applySearch === "function") {
+      applySearch();
+    }
+  }, 10);
+}
+// Initial engine activation on script load
+//setupSearchableSelect("stateFilter", "stateList", states, false);
 // Define categories for each role
   const categories = {
     contractor: [
@@ -331,7 +414,7 @@ function setupSearchableSelect(inputId, listId, data) {
       "Electrician",
       "Carpentry",
       "Masonry",
-      "Painting",
+      "Painter",
       "Roofing",
       "Flooring",
       "HVAC",
@@ -1243,4 +1326,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 2️⃣ restore previous search
   restoreSearchState();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const currentUrl = window.location.pathname;
+
+    if (currentUrl.includes("home")) {
+        document.getElementById("nav-home").classList.add("active");
+    } else if (currentUrl.includes("account")) {
+        document.getElementById("nav-account").classList.add("active");
+    } else if (currentUrl.includes("table")) {
+        document.getElementById("nav-table").classList.add("active");
+    } else if(currentUrl.includes("create")) {
+      document.getElementById("nav-create").classList.add("active")
+    } else if(currentUrl.includes("projects")) {
+        document.getElementById("nav-projects").classList.add("active");
+    } else {
+        // Fallback default highlight if your index page is home
+        document.getElementById("nav-home").classList.add("active");
+    }
 });

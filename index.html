@@ -38,11 +38,6 @@
           <div id="userMenu" class="user-menu ">
             <span id="userName"></span>
             <div class="dropdown">
-              <a href="./screen/account.html">Manage Account</a>
-              <a href="create-profile.html">Create & Post Profile</a>
-              <a href="./screen/notebook.html">Notebook</a>
-              <a href="./screen/weather.html">Weather</a>
-              <hr />
               <button id="logoutBtn">Logout</button>
             </div>
           </div>
@@ -214,9 +209,9 @@
                   <div class="button-box-content">
                     <div class="hero-buttons" id="heroButtons">
                      <a href="./screen/bhūgolapaṭa.html" class="btn primary">deśa-chitra</a>
-                     <a href="./screen/table.html" class="btn primary">T.D.</a>
+                     <a href="./screen/notebook.html" class="btn primary">Notebook</a>
                      <a href="./screen/tmr.html" class="btn primary">TER</a>
-                     <a href="./screen/projects-reports.html" class="btn secondary">Project</a>
+                     <a href="./screen/progrss.html" class="btn secondary">Stages</a>
                     </div>
                  </div>
     
@@ -232,8 +227,8 @@
            <div class="zero-buttons" id="zeroButtons">
                <a href="./screen/invoice.html" class="btn tertiary">Invoice</a>
               <a href="./screen/conversion.html" class="btn tertiary">U.C.</a>
-              <a href="./screen/progrss.html" class="btn tertiary">Stages</a>
-              <a href="./screen/createpad.html" class="btn tertiary">DESIGN</a>
+              <a href="./screen/createpad.html" class="btn tertiary">Arch.</a>
+              <a href="./screen/weather.html" class="btn tertiary">Weather</a>
            </div>
           </div>
         </div>
@@ -257,18 +252,27 @@
 </div>
 
 <!-- Toggle Button (Floating) aidata.js -->
-<button id="chat-toggle">💬 Chat</button>
-
-<!-- Add the activation button and status bar anywhere on the page voice assistant.js -->
-<div id="voice-activation-area"  >
-    <button id="start-voice-btn" class="voibtn" onclick="initializeVoiceSystem()" >
-        🎤 Enable 
+<!-- Floating Action Buttons Container -->
+<div class="floating-actions-wrapper">
+    <!-- Chat Trigger -->
+    <button id="chat-toggle">
+        <span class="btn-icon">💬</span> <span class="btn-text"></span>
     </button>
+    <!-- Voice Assistant Trigger -->
+    <div id="voice-activation-area">
+        <button id="start-voice-btn" class="voibtn" onclick="initializeVoiceSystem()">
+            <span class="btn-icon">🎤</span> <span class="btn-text"></span>
+        </button>
+    </div>
+
 </div>
 
-<div id="voice-status-bar" style="position: fixed; bottom: 15px; left: 20px; background: #222; color: #fff; padding: 5px; border-radius: 20px; display: none; z-index: 9999;">
+<!-- Voice Status Bar (Repositioned to cleanly sit right above the tabs) -->
+<div id="voice-status-bar">
+    <span class="status-dot"></span>
     <span id="voice-text">System Standby...</span>
 </div>
+
   </section>
     <section class="notifications" id="notification">
       <div class="container">
@@ -335,6 +339,7 @@
       <span class="modal-close" onclick="closeDesignModal()">×</span>
       <img id="modalPhoto" alt="Preview" />
     </div>
+   
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
       <div class="container">
@@ -343,7 +348,32 @@
         </p>
       </div>
     </footer>
-   
+    <!-- Responsive Bottom Tab Bar -->
+     <section id="bottomNav">
+<nav class="bottom-nav" >
+    <a href="index.html" class="nav-item" id="nav-home">
+        <span class="nav-icon">⭐</span>
+        <span class="nav-label">Home</span>
+    </a>
+    <a href="create-profile.html" class="nav-item" id="nav-create">
+        <span class="nav-icon">➕</span>
+        <span class="nav-label">Create</span>
+        </a>
+     <a href="./screen/table.html" class="nav-item" id="nav-table">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">T.D.</span>
+     </a>
+     <a href="./screen/projects-reports.html" class="nav-item" id="nav-projects">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Projects</span>
+     </a>
+    <a href="./screen/account.html" class="nav-item" id="nav-account">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Account</span>
+    </a>
+</nav>
+</section>
+
     <script src="data/search-data.js"></script>
     <script src="data/theory-data.js"></script>
     <script src="data/design-data.js"></script>
@@ -351,15 +381,14 @@
     <script src="data/math-formulas.js"></script>
     <script src="data/kids-data.js"></script>
     <script src="data/quiz.-data.js"></script>
-    <script src="login.js"></script>
     <script src="data/aidata.js"></script>
-<!----    <script src="data/voiceai.js"></script>-->
     <script src="data/voice-assistant.js"></script>
     <script src="./js/screenshotProtector.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();
 </script>
+<script src="login.js"></script>
     <script src="web.js"></script>
   </body>
 </html>

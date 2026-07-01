@@ -509,6 +509,7 @@ body {
     padding: 6px 14px;
   }
 }
+
 .options {
   position: absolute;
   top: 100%;
@@ -2664,35 +2665,12 @@ cursor: pointer;
   margin-top: 20px;
 }
 
-
-
-
-
-/* Floating Button */
-#chat-toggle {
-  position: fixed;
-  bottom: 30px;
-  right: 20px;
-  background: #ff9800; /* Safety Orange */
-  color: white;
-  border: none;
-  padding: 7px 15px;
-  border-radius: 30px;
-  border: 2px solid #fbbf24;
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  z-index: 1000;
-}
-#chat-toggle:hover {
-  background: #85f0b3;
-}
 /* Chat Window */
 #chat-widget {
   display: none; /* Hidden by default */
   position: fixed;
   bottom: 80px;
-  right: 20px;
+  right: 88px;
   width: 300px;
   height: 400px;
   background: white;
@@ -2796,33 +2774,118 @@ h4 {
   min-width: 80px; /* Prevent jitter when text changes */
 }
 
-.voibtn{
-    border-radius: 20px;
-     position:fixed;
-    bottom:35px;
-    right:130px;
-    display:flex;
-    align-items:center;
-    gap:5px;
-    padding:7px 14px;
-    background-color:#007bff;
-    color:white;
-    font-size:12px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:
-      background-color 0.2s,
-      transform 0.1s;
-    box-shadow:
-      0 5px 20px rgba(0,0,0,0.3);
-    z-index:9999;
+/* Container for both floating elements */
+.floating-actions-wrapper {
+    position: fixed;
+    display: flex;
+    flex-direction: column; /* Side by side layout on mobile */
+    gap: 2px;
+    z-index: 2000; /* Stays reliably above the tab bar */
+    
+    /* Mobile First Position: Rises cleanly above your 65px bottom tab bar */
+    bottom: 65px; 
+    right: 10px;
 }
-.voibtn:hover {
-    background-color:#85f0b3;
-    transform:translateY(-2px);
-    box-shadow:
-      0 8px 25px rgba(0,0,0,0.4);
+
+/* Unified Glassmorphism Modern Styling for both buttons */
+.voibtn, #chat-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 10px 16px;
+    border-radius: 50px; /* Perfect pill shapes */
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease-in-out;
 }
+
+/* Individual Color Identity */
+.voibtn {
+    background-color: #007bff; /* Primary Blue */
+}
+
+#chat-toggle {
+    background-color: #ff9800; /* Safety Orange */
+}
+
+/* Smooth Touch and Hover Micro-interactions */
+.voibtn:hover, #chat-toggle:hover {
+    background-color: #10b981; /* Emerald Green look instead of the raw neon */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.voibtn:active, #chat-toggle:active {
+    transform: translateY(-1px);
+}
+
+/* Redesigned Voice Status Bar */
+#voice-status-bar {
+    position: fixed;
+    /* Positions cleanly right over the bottom navigation bar on mobile */
+    bottom: 140px; 
+    left: 16px;
+    background: rgba(34, 34, 34, 0.95);
+    backdrop-filter: blur(5px);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 30px;
+    display: none; /* Controlled by JS */
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 9999;
+}
+
+/* Tiny indicator pulsing animation for the status bar */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* ==========================================================================
+   Responsive Adjustments for Tablets and Large Desktops
+   ========================================================================== */
+
+/* Medium Screens (Tablets) */
+@media (min-width: 600px) {
+    .floating-actions-wrapper {
+        bottom: 90px; /* Slightly higher for taller tab bars */
+        right: 24px;
+    }
+}
+
+/* Large Screens (Desktops) */
+@media (min-width: 1024px) {
+    .floating-actions-wrapper {
+        /* Changes to a cleaner stacked layout on desktops */
+        flex-direction: column; 
+        bottom: 30px; /* Drops back down because tab bar centers as a dock */
+        right: 30px;
+        gap: 10px;
+    }
+    
+    /* Makes desktop layout sleek by showing full labels easily */
+    .voibtn, #chat-toggle {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    #voice-status-bar {
+        bottom: 30px;
+        left: 30px;
+    }
+}
+
 /* The style applied to the active element being spoken about */
 .voice-highlight {
     outline: 4px solid #ff9800;         /* Orange border */
@@ -2872,5 +2935,72 @@ h4 {
 .toast.success { background: #28a745; }
 .toast.error { background: #dc3545; }
 .toast.info { background: #007bff; }
+/* Base styling (Mobile-first) */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background-color: glassmorphism(0.1, 10px);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    /* Fixes layout for modern mobile browsers with bottom swipe bars */
+    padding-bottom: env(safe-area-inset-bottom); 
+}
 
+/* Tab item link styling */
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    text-decoration: none;
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.nav-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+.nav-item:hover{
+  color:#007bff;
+}
+/* Active highlight style */
+.nav-item.active {
+    color: #007bff; /* Change to your brand color */
+    font-weight: bold;
+}
+
+.nav-item:active {
+    transform: scale(0.95);
+}
+
+/* Medium Screens (Tablets) */
+@media (min-width: 600px) {
+    .bottom-nav {
+        height: 70px;
+    }
+    .nav-icon { font-size: 22px; }
+    .nav-label { font-size: 14px; }
+}
+
+/* Large Screens (Desktops) */
+@media (min-width: 1024px) {
+    .bottom-nav {
+        max-width: 500px;
+        margin: 0 auto;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 16px 16px 0 0; 
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    }
+}
 

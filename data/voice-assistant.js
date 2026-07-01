@@ -134,7 +134,7 @@ const tourSteps = [
         selector: '#userMenu',
 
         text: {
-            en: "Here is the navigation bar. On the right side after login, You can click on it to see account, create profile and logout options.",
+            en: "Here is the navigation bar. On the right side after login, You can click on it to see logout options.",
 
             hi: "यह नेविगेशन बार है।  उस पर क्लिक करके आप अकाउंट, प्रोफाइल बनाएं और लॉगआउट विकल्प देख सकते हैं।"
         }
@@ -154,7 +154,7 @@ const tourSteps = [
         selector: '.search-container',
 
         text: {
-            en: "In this section, you can use the search bar and filters to find contractors, architects, technicians and suppliers for your construction needs.",
+            en: "this section, you can use the search bar and filters to find contractors, architects, technicians and suppliers for your construction needs.",
 
             hi: "इस सेक्शन में आप सर्च बार और फिल्टर का उपयोग करके अपने निर्माण कार्य के लिए कॉन्ट्रैक्टर, आर्किटेक्ट, टेक्नीशियन और सप्लायर्स खोज सकते हैं।"
         }
@@ -164,7 +164,7 @@ const tourSteps = [
         selector: '.button-box',
 
         text: {
-            en: "In this section, have four buttons, you can access maps, table data, ter,project management reports and many more tools to make your construction work easier.",
+            en: "this section, have four buttons, you can access maps, table data, ter,project management reports and many more tools to make your construction work easier.",
 
             hi: " इस सेक्शन में चार बटन हैं, जिनके माध्यम से आप मैप्स, टेबल डेटा, टेर, प्रोजेक्ट मैनेजमेंट रिपोर्ट्स और कई अन्य टूल्स तक पहुंच सकते हैं जो आपके निर्माण कार्य को आसान बनाते हैं।"
         }

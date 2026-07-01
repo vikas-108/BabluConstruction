@@ -211,6 +211,29 @@ hr{
 .channelCard.active .channelBody{
   display:block;
 }
+/* Container to push controls to the right */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between delete and arrow */
+}
+
+/* The Delete Button Style */
+.delete-btn {
+    background: #fee2e2; /* Light Red Background */
+    border: 1px solid #ef4444;
+    color: #b91c1c; /* Dark Red Text */
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.delete-btn:hover {
+    background: #ef4444;
+    color: white;
+}
 
 /* Toast */
 #toast{

@@ -45,16 +45,15 @@
           />
         </div>
       </div>
-      <audio id="backgroundAudio" autoplay loop></audio>
 
       <div class="controls">
         <select id="role">
           <option data-rate="">Select role</option>
-          <option data-rate="100">Helper (₹100/hr)</option>
-          <option data-rate="120">Supervisor (₹120/hr)</option>
-          <option data-rate="150">Technician (₹150/hr)</option>
-          <option data-rate="130">Mechanic (₹130/hr)</option>
-          <option data-rate="220">Manager (₹220/hr)</option>
+          <option data-rate="130">Helper (₹130/hr)</option>
+          <option data-rate="150">Supervisor (₹150/hr)</option>
+          <option data-rate="170">Technician (₹170/hr)</option>
+          <option data-rate="140">Mechanic (₹140/hr)</option>
+          <option data-rate="290">Manager (₹290/hr)</option>
 
         </select>
         <button id="startBtn" class="btn green">Start</button>
@@ -90,21 +89,23 @@
       </div>
 
       <!-- History table already has Permissioned Users column -->
-      <table id="historyTable">
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Role</th>
-      <th>Duration</th>
-      <th>Date & Time</th>
-      <th>Earnings</th>
-      <th>Delete</th>
-    </tr>
-  </thead>
-  <tbody id="historyBody">
-    <!-- new rows will go here -->
-  </tbody>
-</table>
+      <div class="history-table-wrap">
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Duration</th>
+              <th>Date & Time</th>
+              <th>Earnings</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <!-- new rows will go here -->
+          </tbody>
+        </table>
+      </div>
     </div>
     <!-- Footer -->
 <footer class="app-footer">

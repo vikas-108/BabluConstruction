@@ -10,10 +10,11 @@ let accumulatedTime = 0; // total time before pause
 let totalHoursWorked = 0;
 let totalEarningsToday = 0;
 let sessionId = null;
-//const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
-//const SERVER_BASE = "https://api.buildskil.com";
-const API_BASE = "http://localhost:5000/api/work"; // change if using domain
-const SERVER_BASE = "http://localhost:5000";
+let motionIntervalId = null;
+const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
+const SERVER_BASE = "https://api.buildskil.com";
+//const API_BASE = "http://localhost:5000/api/work"; // change if using domain
+//const SERVER_BASE = "http://localhost:5000";
 function authHeaders(isFormData = false) {
 
   const headers = {
@@ -83,6 +84,7 @@ document.getElementById("stopBtn").addEventListener("click", async () => {
 
     stopAudioCapture();
     stopCamera();
+    stopMotionDetection();
 
     accumulatedTime += (Date.now() - startTime);
 
@@ -109,6 +111,7 @@ document.getElementById("stopBtn").addEventListener("click", async () => {
 document.getElementById("finishBtn").addEventListener("click", async () => {
   stopCamera();
   stopAudioCapture();
+   stopMotionDetection();
    stopTimer();
    // ✅ Reset role dropdown
     const roleSelect = document.getElementById("role");
@@ -226,17 +229,11 @@ const container = document.getElementById("toastField");
   const toast = document.createElement("div");
 
   toast.textContent = message;
+  toast.className = "toast";
 
-  toast.style.position = "fixed";
-  toast.style.top = "20px";
-  toast.style.right = "30px";
   toast.style.background = "#333";
-  toast.style.color = "#fff";
-  toast.style.padding = "10px 15px";
-  toast.style.borderRadius = "6px";
-  toast.style.zIndex = "9999";
 
-  document.body.appendChild(toast);
+  (container || document.body).appendChild(toast);
 
   setTimeout(() => {
     toast.remove();
@@ -251,14 +248,14 @@ async function loadMyPermissions() {
 
   const permissions = await res.json();
 
-  const table = document.getElementById("historyTable");
+  const table = document.getElementById("historyBody") || document.getElementById("historyTable");
 
   permissions.forEach(p => {
 
     const row = document.createElement("tr");
 
     row.innerHTML = `
-     <td colspan="5">
+     <td colspan="6">
         ${p.name} shared work access
         <button class="viewWorkBtn">📂 Work</button>
          <button class="viewSnapshotsBtn">📷 Snapshots</button>
@@ -293,14 +290,18 @@ async function showWorkForUser(ownerId) {
 
   // clear previous rows
   table.innerHTML = `
-    <tr>
-      <th>Name</th>
-      <th>Role</th>
-      <th>Duration</th>
-      <th>Date & Time</th>
-      <th>Earnings</th>
-    </tr>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Duration</th>
+        <th>Date & Time</th>
+        <th>Earnings</th>
+      </tr>
+    </thead>
+    <tbody id="historyBody"></tbody>
   `;
+  const historyBody = document.getElementById("historyBody") || table;
 
   if (!sessions || sessions.length === 0) {
 
@@ -311,7 +312,7 @@ async function showWorkForUser(ownerId) {
       </td>
     `;
 
-    table.appendChild(row);
+    historyBody.appendChild(row);
     return;
   }
   sessions.forEach(s => {
@@ -327,7 +328,7 @@ async function showWorkForUser(ownerId) {
       <td>₹${s.earnings.toFixed(2)}</td>
     `;
 
-    table.appendChild(row);
+    historyBody.appendChild(row);
 
   });
 
@@ -422,6 +423,7 @@ function resetSession() {
   genuineEarnings = 0;
   accumulatedTime = 0;
   isPaused = false; 
+  stopMotionDetection();
   document.getElementById("warnings").textContent = "";
   document.getElementById("timerDisplay").textContent = "00:00:00";
   document.getElementById("earningsDisplay").textContent = "₹0";
@@ -468,7 +470,8 @@ function logHistory(sessionData) {
     </td>
   `;
 
-  document.getElementById("historyTable").appendChild(row);
+  const historyTarget = document.getElementById("historyBody") || document.getElementById("historyTable");
+  historyTarget.appendChild(row);
 // attach delete event
   row.querySelector(".deleteBtn").addEventListener("click", async () => {
 
@@ -647,9 +650,9 @@ setInterval(captureSnapshot, 480000);
 // Warning logic
 function giveWarning(msg) {
   warnings++;
-  document.getElementById("warnings").textContent = `⚠ Warning ${warnings}/2 - ${msg || ""}`;
+  document.getElementById("warnings").textContent = `⚠ Warning ${warnings}/3 - ${msg || ""}`;
 
-  if (warnings >= 3) {
+  if (warnings >= 4) {
     stopCamera();
     stopTimer();
     clearInterval(timerInterval);
@@ -704,13 +707,14 @@ function showPopup(message) {
   setTimeout(() => popup.remove(), 4000);
 }
 function startMotionDetection() {
+  stopMotionDetection();
   const video = document.getElementById("cameraStream");
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d", { willReadFrequently: true }); // ✅ optimization
 
   let lastImageData;
 
-  setInterval(() => {
+  motionIntervalId = setInterval(() => {
     if (video.videoWidth === 0 || video.videoHeight === 0) return;
 
     canvas.width = video.videoWidth;

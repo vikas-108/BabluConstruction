@@ -1,11 +1,11 @@
-//const socket = io("https://api.buildskil.com");
-const socket = io("http://localhost:5000");
-//const TABLE_API = "https://api.buildskil.com/api/tables"; // change if using domain
-const TABLE_API = "http://localhost:5000/api/tables"; // change if using domain
+const socket = io("https://api.buildskil.com");
+const TABLE_API = "https://api.buildskil.com/api/tables"; // change if using domain
+//const socket = io("http://localhost:5000");
+//const TABLE_API = "http://localhost:5000/api/tables"; // change if using domain
 let userTables = []; // ✅ add this at top
 const actionHistory = [];
 let count = 0;
-const max = 70;
+const max = 99;
 function authHeaders(isFormData = false) {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
   createBtn.addEventListener("click", createTable);
 
   function createTable() {
-    if (userTables.length >= 70) {
-      showToast("You can create only 70 tables", "error");
+    if (userTables.length >= 99) {
+      showToast("You can create only 99 tables", "error");
       return;
     }
     if (count >= max) {
@@ -944,7 +944,7 @@ permissionSelect.appendChild(optionView);
       const limitDiv = document.getElementById("tableLimitInfo");
 
       const count = userTables.length;
-      const max = 70;
+      const max = 99;
 
       limitDiv.innerText = `Tables: ${count}/${max} used`;
 

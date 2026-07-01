@@ -1,8 +1,8 @@
 
-//const API_BASE = "https://api.buildskil.com/api/progress"; // change if deployed
-const API_BASE = "http://localhost:5000/api/progress"; // change if using domain
-//const ACCOUNT_API = "https://api.buildskil.com/api/account/me";
-const ACCOUNT_API = "http://localhost:5000"; // change if using domain
+const API_BASE = "https://api.buildskil.com/api/progress"; // change if deployed
+const ACCOUNT_API = "https://api.buildskil.com";
+//const API_BASE = "http://localhost:5000/api/progress"; // change if using domain
+//const ACCOUNT_API = "http://localhost:5000"; // change if using domain
 let CURRENT_ROLE = null;
 let CURRENT_PHONE = null;
 function authHeaders(isFormData = false) {
@@ -37,9 +37,12 @@ async function api(url, options = {}){
 }
 // Role stages
 const roleStages = {
-  contractor: ["Survey","Material","Work","Finish"],
+  masonry: ["Survey","Material","Work","Finish"],
   plumber: ["Pipes","Fitting","Test","Done"],
-  carpenter: ["Cut","Build","Assemble","Polish"]
+  carpenter: ["Cut","Build","Assemble","Polish"],
+  structural: ["Survey","Foundation","Structure","Finish"],
+  electrician: ["Wiring","Fitting","Test","Done"],
+  painter: ["Prep","Paint","Finish"]
 };
 
 const STORAGE_KEY = "channels";
@@ -116,7 +119,7 @@ document.getElementById("createChannelBtn").onclick = async () => {
     // reset
     document.getElementById("createRole").value = "";
     document.getElementById("clientPhoneCreate").value = "";
-    document.getElementById("updaterPhoneCreate").value = "";
+    //document.getElementById("updaterPhoneCreate").value = "";
 
     fetchMyChannels(); // reload
 
@@ -206,11 +209,17 @@ function renderChannels(data){
 
     const card = document.createElement("div");
     card.className = "channelCard";
-
+    // CRITICAL FIX: Give the card a unique ID based on the database ID
+    card.id = "card-" + ch._id; 
     const header = document.createElement("div");
     header.className = "channelHeader";
     header.innerHTML = `
       <span>${ch.clientPhone} (${ch.role})</span>
+       <div class="header-controls">
+      <!-- Delete Button with StopPropagation -->
+      <button class="delete-btn" onclick="deleteRecord(event, '${ch._id}')">
+        🗑️
+      </button>
       <span>▼</span>
     `;
 
@@ -277,6 +286,41 @@ function renderChannels(data){
     container.appendChild(card);
   });
 }
+async function deleteRecord(event, id) {
+    event.stopPropagation(); // Stop accordion from opening
+
+    if (!confirm("Are you sure you want to delete this record?")) return;
+
+    try {
+        // Call your Node.js API
+        const response = await fetch(`${API_BASE}/delete/${id}`, {
+            method: 'DELETE',
+          headers: authHeaders()
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Deleted Successfully!");
+
+            // --- THE FIX ---
+            // Find the exact element by ID and remove it
+            const elementToRemove = document.getElementById("card-" + id);
+            if (elementToRemove) {
+                elementToRemove.remove();
+            }
+            // ----------------
+            
+        } else {
+            alert("Error: " + result.message);
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Failed to connect to server.");
+    }
+}
+
 function renderClientList(list){
   const container = document.getElementById("clientChannelsContainer");
 

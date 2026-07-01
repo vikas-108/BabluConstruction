@@ -1,9 +1,9 @@
 let CURRENT_PROFILE = null;
 let NEW_PHOTO_FILE = null;
-//const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
-//const SERVER_BASE = "https://api.buildskil.com";
-const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
-const SERVER_BASE = "http://localhost:5000"; // change if using domain
+const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
+const SERVER_BASE = "https://api.buildskil.com";
+//const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
+//const SERVER_BASE = "http://localhost:5000"; // change if using domain
 function authHeaders() {
   return {
     "Content-Type": "application/json",
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const profile = await res.json();
 
   renderProfile(profile);
-  const membershipButton = document.getElementById("membershipButton");
+  //const membershipButton = document.getElementById("membershipButton");
   const subscriptionSection = document.getElementById("subscriptionSection");
   const closeDrawer = document.getElementById("closeDrawer");
   const verifyBtn = document.getElementById("verifyEmailBtn");
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     badge?.classList.add("hidden");
     verifyBtn?.classList.remove("hidden");
   }
-  // Open drawer
+  /* Open drawer
   membershipButton.addEventListener("click", () => {
     subscriptionSection.classList.add("active");
   });
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       subscriptionSection.classList.remove("active");
     }
   });
-
+*/
   document
   .getElementById("verifyEmailBtn")
   ?.addEventListener("click", async () => {

@@ -1,6 +1,8 @@
-//const API_BASE = "https://api.buildskil.com/api/location"; // change if deployed
-const API_BASE = "http://localhost:5000/api/location"; // change if using domain
+const API_BASE = "https://api.buildskil.com/api/location"; // change if deployed
+//const API_BASE = "http://localhost:5000/api/location"; // change if using domain
 let editingProjectId = null;
+let liveInterval;
+let allProjects = [];
 function authHeaders(isFormData = false) {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`
@@ -71,19 +73,36 @@ async function loadLiveUsers() {
 
     const users = await res.json();
 
-    liveLayer.clearLayers();
+if (!Array.isArray(users)) {
+  console.warn("Unexpected response:", users);
+  return;
+}
 
-    users.forEach(u => {
-      L.marker([u.location.lat, u.location.lng])
-        .bindPopup(`User: ${u.user.phone}`)
-        .addTo(liveLayer);
-    });
+liveLayer.clearLayers();
+
+users.forEach((u) => {
+  if (!u.location) return;
+
+  L.marker([u.location.lat, u.location.lng])
+    .bindPopup(`User: ${u.user?.phone || "Unknown"}`)
+    .addTo(liveLayer);
+});
 
   } catch (err) {
     console.error(err);
   }
 }
-  setInterval(loadLiveUsers, 2000);
+  //setInterval(loadLiveUsers, 10000);
+  // Pause live updates when tab is inactive
+  document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    clearInterval(liveInterval);
+  } else {
+    liveInterval = setInterval(loadLiveUsers, 10000);
+  }
+});
+// Initial load for inactive period
+liveInterval = setInterval(loadLiveUsers, 10000);
    // Create a layer group to hold all project markers
 const projectMarkers = L.layerGroup().addTo(map);
 
@@ -158,11 +177,11 @@ async function loadProjects() {
   try {
     const res = await fetch(`${API_BASE}/project`, { headers: authHeaders() });
     const projects = await res.json();
-
+    allProjects = projects;
     projectMarkers.clearLayers();
 
-  const loginUser = JSON.parse(localStorage.getItem("cb_login_user"));
-const currentUserId = loginUser?._id || loginUser?.id;
+     const loginUser = JSON.parse(localStorage.getItem("cb_login_user"));
+     const currentUserId = loginUser?._id || loginUser?.id;
 
     projects.forEach(p => {
       const marker = L.marker([p.location.lat, p.location.lng], { icon: getBuildingIcon(p.projectType) })
@@ -181,8 +200,8 @@ const currentUserId = loginUser?._id || loginUser?.id;
       li.innerHTML = `
         <span class="history-item"><strong>ID:</strong>${shortId} - ${p.projectName}</span>
       `;
-// Debug log to see values
-      console.log("Project owner:", p.owner, "Current user:", currentUserId);
+     // Debug log to see values
+      //console.log("Project owner:", p.owner, "Current user:", currentUserId);
 
 
       // Only show edit/delete if owner
@@ -244,6 +263,47 @@ li.querySelector(".history-item").addEventListener("click", () => {
     console.error("Load error", err);
   }
 }
+const searchBox = document.getElementById("searchBox");
+searchBox.addEventListener("input", () => {
+  const query = searchBox.value.trim().toLowerCase();
+
+  if (!query) {
+    loadProjects(); // reload all markers
+    return;
+  }
+
+  projectMarkers.clearLayers();
+
+  const filtered = allProjects.filter((p) => {
+    return (
+      p.projectName?.toLowerCase().includes(query) ||
+      p.projectType?.toLowerCase().includes(query) ||
+      p.description?.toLowerCase().includes(query) ||
+      p.visibility?.toLowerCase().includes(query)
+    );
+  });
+
+  filtered.forEach((p) => {
+    L.marker(
+      [p.location.lat, p.location.lng],
+      { icon: getBuildingIcon(p.projectType) }
+    )
+      .bindPopup(`
+        <strong>${p.projectName}</strong><br>
+        ${p.projectType}<br>
+        ${p.description}<br>
+        <em>${p.visibility}</em>
+      `)
+      .addTo(projectMarkers);
+  });
+
+  if (filtered.length > 0) {
+    map.setView(
+      [filtered[0].location.lat, filtered[0].location.lng],
+      12
+    );
+  }
+});
 function getBuildingIcon(type) {
   let iconClass = "fa-building"; // default
   let color = "#2c3e50";         // default dark gray

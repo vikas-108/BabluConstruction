@@ -215,7 +215,7 @@ body {
     box-shadow: 0 2px 5px var(--shadow);
     transition: background 0.2s, transform 0.2s;
 }
-.notebook-item:hover { background: #f8f9fa; transform: translateX(2px); }
+.notebook-item:hover { background: #9a74d38b; transform: translateX(2px); }
 .notebook-item .info-side { display: flex; flex-direction: column; gap: 4px; }
 .notebook-item .title { font-weight: bold; color: var(--text-main); }
 .notebook-item .page-count { font-size: 12px; color: var(--text-muted); }
@@ -440,3 +440,25 @@ body {
     .note-title { font-size: 28px !important; margin-bottom: 20px !important; color: black !important; border-bottom: 2px solid #000 !important; }
     .note-body { color: black !important; font-size: 16pt !important; line-height: 1.6 !important; overflow: visible !important; height: auto !important; }
 }
+.drawer-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0; transition: opacity 0.3s ease;
+    display: flex; align-items: flex-end;
+}
+.drawer-overlay:not(.hidden) { opacity: 1; }
+.share-drawer {
+    width: 100%; background: #ffffff;
+    border-radius: 16px 16px 0 0;
+    padding: 20px; box-sizing: border-box;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+}
+.drawer-overlay:not(.hidden) .share-drawer { transform: translateY(0); }
+.drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.drawer-body { display: flex; flex-direction: column; gap: 12px; }
+.drawer-body input, .drawer-body select, .drawer-body button { padding: 10px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc; }
+#send-share-btn { background: #2ecc71; color: white; font-weight: bold; border: none; cursor: pointer; }
+.hidden { display: none !important; }

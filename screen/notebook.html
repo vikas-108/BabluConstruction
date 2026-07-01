@@ -97,6 +97,27 @@
         <button id="print-btn" class="action-btn print-btn">🖨️ Export PDF / Print</button>-->
         <button id="clear-btn" class="action-btn clear-btn">🗑️ Clear Sheet</button>
     </div>
+    <div id="share-drawer-overlay" class="drawer-overlay hidden">
+    <div id="share-drawer" class="share-drawer">
+        <div class="drawer-header">
+            <h3>Share Notebook</h3>
+            <button id="close-drawer-btn">✖</button>
+        </div>
+        <div class="drawer-body">
+            <label for="share-phone">User Phone Number:</label>
+            <input type="tel" id="share-phone" placeholder="Enter recipient's phone number" maxlength="10" required />
+            
+            <label for="share-access">Access Level:</label>
+            <select id="share-access">
+                <option value="read">Read Only</option>
+                <option value="edit">Edit Only</option>
+            </select>
+            
+            <button id="send-share-btn">Send Access</button>
+        </div>
+    </div>
+</div>
+
     <script src="/js/notebook.js"></script>
 </body>
 </html>

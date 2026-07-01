@@ -4,9 +4,10 @@ let activePage = 1;
 let allNotebooks = {};
 let selectedColor = "#2c3e50"; 
 let saveTimeout = null; // Used to control saving animation states
+let targetShareNotebookId = null;
 // API Config Base URL
-const NOTEBOOK_API = 'http://localhost:5000/api/notebooks'; // Update with your actual server URL
-
+//const NOTEBOOK_API = 'http://localhost:5000/api/notebooks'; // Update with your actual server URL
+const NOTEBOOK_API = 'https://api.buildskil.com/api/notebooks'; // Update with your actual server URL
 // DOM References
 const dashboardView = document.getElementById('dashboard-view');
 const notebookView = document.getElementById('notebook-view');
@@ -31,6 +32,12 @@ const pageNumDisplay = document.getElementById('page-number');
 const colorDots = document.querySelectorAll('.color-dot');
 const counterStats = document.getElementById('counter-stats');
 const fontSelect = document.getElementById('font-select');
+
+const shareDrawerOverlay = document.getElementById('share-drawer-overlay');
+const closeDrawerBtn = document.getElementById('close-drawer-btn');
+const sendShareBtn = document.getElementById('send-share-btn');
+const sharePhone = document.getElementById('share-phone');
+const shareAccess = document.getElementById('share-access');
 // Helper to provide headers along with JWT token
 function getAuthHeaders() {
     const token = localStorage.getItem("cb_token"); // Make sure your user login API saves this token
@@ -156,24 +163,26 @@ async function fetchAndRenderNotebooks(searchTerm = "") {
 }
 
 // Build and display filtered/unfiltered notebook list items
+// Helper to decode user ID from your saved JWT login token
+function getCurrentUserId() {
+    const token = localStorage.getItem('cb_token');
+    if (!token) return null;
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(window.atob(base64));
+        return payload.id; // Returns the user ID stored inside your token
+    } catch (e) {
+        return null;
+    }
+}
+
 function renderDashboardList(filterTerm = "") {
     notebooksList.innerHTML = "";
     const keys = Object.keys(allNotebooks);
+    const currentUserId = getCurrentUserId();
 
-    // Apply smart conditional filtering matching keywords inside titles or bodies
-    const filteredKeys = keys.filter(id => {
-        const book = allNotebooks[id];
-        const titleMatch = (book.title || "").toLowerCase().includes(filterTerm);
-        
-        // Scan inside all compiled text blocks across every page sheet
-        const contentsMatch = Object.values(book.pages).some(text => 
-            (text || "").toLowerCase().includes(filterTerm)
-        );
-        
-        return titleMatch || contentsMatch;
-    });
-
-    if (filteredKeys.length === 0) {
+    if (keys.length === 0) {
         const noNotesMsg = document.createElement('div');
         noNotesMsg.className = "empty-list-text";
         noNotesMsg.textContent = filterTerm ? "No notes found matching your search term." : "No notebooks found. Create one above!";
@@ -181,30 +190,44 @@ function renderDashboardList(filterTerm = "") {
         return;
     }
 
-    filteredKeys.forEach(id => {
+    keys.forEach(id => {
         const book = allNotebooks[id];
-        //const pageCount = Object.keys(book.pages).length;
-       const pageCount = book.pages ? Object.keys(book.pages).length : 0;
+        const pageCount = book.pages ? Object.keys(book.pages).length : 0;
         const coverColor = book.color || "#2c3e50";
+        
+        // Check if the current user is the actual creator of this notebook
+        const isOwner = book.user === currentUserId;
+
         const item = document.createElement('div');
         item.className = "notebook-item animate-fade";
-        
-        item.style.borderLeftColor = coverColor;
-        item.style.borderLeftWidth = "6px";
-        item.style.borderLeftStyle = "solid";
+        item.style.borderLeft = `6px solid ${coverColor}`;
         
         item.innerHTML = `
             <div class="info-side">
                 <span class="title">${book.title || "Untitled Notebook"}</span>
-                <span class="page-count">${pageCount} Page(s)</span>
+                <span class="page-count">${pageCount} Page(s) ${!isOwner ? '<span style="font-size:11px;color:#7f8c8d;">(Shared with you)</span>' : ''}</span>
             </div>
-            <button class="delete-btn" title="Delete Notebook">🗑️</button>
+            <div class="action-buttons">
+                <button class="share-btn" title="Share Notebook" ${!isOwner ? 'style="opacity: 0.4;"' : ''}>🔗</button>
+                <button class="delete-btn" title="Delete Notebook" ${!isOwner ? 'style="opacity: 0.4;"' : ''}>🗑️</button>
+            </div>
         `;
         
         item.addEventListener('click', (e) => {
             if (e.target.classList.contains('delete-btn')) {
                 e.stopPropagation(); 
+                if (!isOwner) {
+                    alert("🚫 You cannot delete this notebook because it was shared with you by another user.");
+                    return;
+                }
                 deleteNotebook(id);
+            } else if (e.target.classList.contains('share-btn')) {
+                e.stopPropagation();
+                if (!isOwner) {
+                    alert("🚫 You cannot share this notebook because it was shared with you by another user. Only the owner can share it.");
+                    return;
+                }
+                openShareDrawer(id);
             } else {
                 loadNotebook(id);
             }
@@ -213,26 +236,45 @@ function renderDashboardList(filterTerm = "") {
     });
 }
 
+
 // NEW EXCLUSIVE FEATURE: Trigger Auto Save directly in the background
 function triggerAutoSave() {
     if (!activeNotebookId) return;
-    
+       // NEW BLOCK: If the elements are currently read-only, block background network operations completely
+    if (noteContent.readOnly || noteTitle.readOnly) {
+        saveStatus.textContent = "🔒 Read Only (Changes Not Saved)";
+        saveStatus.style.color = "#e74c3c";
+        return;
+    }
     // Update badge visually to notify text changes are active
     saveStatus.textContent = "Typing...";
     saveStatus.style.color = "#e67e22";
+        if (!allNotebooks[activeNotebookId].pages) {
+        allNotebooks[activeNotebookId].pages = {};
+    }
     
+    if (typeof allNotebooks[activeNotebookId].pages[activePage] !== 'object') {
+        allNotebooks[activeNotebookId].pages[activePage] = { title: "", content: "" };
+    }
     // Cache text data state objects instantly 
     allNotebooks[activeNotebookId].title = noteTitle.value;
     allNotebooks[activeNotebookId].pages[activePage] = noteContent.value;
+    
+    if (activePage === 1) {
+        allNotebooks[activeNotebookId].title = noteTitle.value;
+    }
     
     // Debounce background server writes
     clearTimeout(saveTimeout);
     saveTimeout = setTimeout(async () => {
         try {
             const payload = {
-                title: noteTitle.value,
+                title: allNotebooks[activeNotebookId].title, 
                 pages: {
-                    [activePage]: noteContent.value
+                    [activePage]: JSON.stringify({
+                        title: noteTitle.value,
+                        content: noteContent.value
+                    })
                 }
             };
 
@@ -300,28 +342,79 @@ addNotebookBtn.addEventListener('click', async () => {
         alert("Error creating notebook: " + err.message);
     }
 });
-
+// HELPER FUNCTION: Safely parses page contents whether they are strings or JSON objects
+function renderPageDataContent() {
+    if (!activeNotebookId || !allNotebooks[activeNotebookId]) return;
+    
+    const book = allNotebooks[activeNotebookId];
+    const rawPageData = (book.pages && book.pages[activePage]) ? book.pages[activePage] : "";
+    
+    try {
+        // Attempt to parse as JSON object (New Format)
+        const parsedData = JSON.parse(rawPageData);
+        noteTitle.value = parsedData.title || "";
+        noteContent.value = parsedData.content || "";
+    } catch (e) {
+        // Fallback rule for older plain strings (Old Format)
+        noteTitle.value = (activePage === 1) ? (book.title || "") : "";
+        noteContent.value = rawPageData;
+    }
+}
 function loadNotebook(id) {
     activeNotebookId = id;
-    activePage = 1;
+    activePage = 1; 
+    
     const book = allNotebooks[id];
     notebookSpine.style.borderLeftColor = book.color || "#2c3e50";
-    //map backend response attribute to active window text xones
-    noteTitle.value = book.title || "Unititled Notebook";
-    noteContent.value = (book.pages && book.pages[activePage]) ? book.pages[activePage] : "";
-    //syb font setting
+    pageNumDisplay.textContent = `Page ${activePage}`;
+    
+    // 1. DETERMINE ACCESS LEVEL
+    const currentUserId = getCurrentUserId(); // Uses the token decoder function we made
+    const isOwner = book.user === currentUserId;
+    
+    // Check if you are listed in sharedWith array with 'edit' access
+    // Note: If your backend returns an explicit flag like book.myPermission === 'read', use that instead
+    let canEdit = isOwner; 
+    if (book.sharedWith && !isOwner) {
+        // Fallback check matching against current local profile indicator configurations
+        const hasEditorFlag = book.sharedWith.some(share => share.access === 'edit');
+        if (hasEditorFlag) canEdit = true;
+    }
+
+    // 2. TOGGLE READ-ONLY STATES ON DOM ELEMENTS
+    if (!canEdit) {
+        noteTitle.readOnly = true;
+        noteContent.readOnly = true;
+        if(fontSelect) fontSelect.disabled = true; // Block switching fonts
+        
+        saveStatus.textContent = "🔒 Read Only Mode";
+        saveStatus.style.color = "#7f8c8d";
+    } else {
+        noteTitle.readOnly = false;
+        noteContent.readOnly = false;
+        if(fontSelect) fontSelect.disabled = false;
+        
+        saveStatus.textContent = "Cloud Synchronized";
+        saveStatus.style.color = "#2ecc71";
+    }
+
+    // 3. RENDER TEXT CONTENT VALUES
+    renderPageDataContent(); 
+    
+    // Sync font styles
     noteContent.classList.remove('font-handwriting', 'font-typewriter', 'font-standard');
     const chosenFont = book.preferredFont || "font-handwriting";
     noteContent.classList.add(chosenFont);
-    fontSelect.value = chosenFont;
-    //ui screen swap toggle
+    if(fontSelect) fontSelect.value = chosenFont;
+    
+    // UI Screen Swap Toggles
     dashboardView.classList.add('hidden');
     notebookView.classList.remove('hidden');
-    if(controlsRow)controlsRow.classList.remove('hidden');
+    if(controlsRow) controlsRow.classList.remove('hidden');
+    
     calculateMetrics();
-    saveStatus.textContent = "CloudSynchronized";
-    saveStatus.style.color = "#2ecc71";
 }
+
 
 function renderPage() {
     const currentBook = allNotebooks[activeNotebookId];
@@ -377,12 +470,62 @@ clearBtn.addEventListener('click', () => {
     }
 });
 
-backBtn.addEventListener('click', () => {
+backBtn.addEventListener('click', async () => {
+    activeNotebookId = null;
+    activePage = 1;
+    
+    // Reset fields back to default editable state for the next document selection
+    noteTitle.readOnly = false;
+    noteContent.readOnly = false;
+    if(fontSelect) fontSelect.disabled = false;
+
     notebookView.classList.add('hidden');
-    controlsRow.classList.add('hidden');
+    if(controlsRow) controlsRow.classList.add('hidden');
     dashboardView.classList.remove('hidden');
     
-    activeNotebookId = null;
-    searchBar.value = ""; // Clear active search string upon returning safely
-    renderDashboardList();
+    await fetchAndRenderNotebooks(searchBar.value.trim().toLowerCase());
+});
+
+
+
+
+function openShareDrawer(notebookId) {
+    targetShareNotebookId = notebookId;
+    sharePhone.value = "";
+    shareDrawerOverlay.classList.remove('hidden');
+}
+
+closeDrawerBtn.addEventListener('click', () => {
+    shareDrawerOverlay.classList.add('hidden');
+});
+
+// Close overlay if background area is clicked
+shareDrawerOverlay.addEventListener('click', (e) => {
+    if (e.target === shareDrawerOverlay) shareDrawerOverlay.classList.add('hidden');
+});
+
+sendShareBtn.addEventListener('click', async () => {
+    const phoneNumber = sharePhone.value.trim();
+    const accessLevel = shareAccess.value;
+
+    if (!phoneNumber) {
+        alert("Please enter a phone number.");
+        return;
+    }
+
+    try {
+        const res = await fetch(`${NOTEBOOK_API}/${targetShareNotebookId}/share`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ phone: phoneNumber, access: accessLevel })
+        });
+        const result = await res.json();
+
+        if (!res.ok) throw new Error(result.message || "Failed to share notebook");
+
+        alert("Notebook shared successfully!");
+        shareDrawerOverlay.classList.add('hidden');
+    } catch (err) {
+        alert("Error sharing: " + err.message);
+    }
 });
