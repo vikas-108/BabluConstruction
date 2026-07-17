@@ -1,8 +1,8 @@
 let workers = [];
 //let workers = JSON.parse(localStorage.getItem("billingWorkers")) || [];
 let currentWorker = null;
-const API_BASE = "http://localhost:5000/api/billing";
-//const API_BASE = "https://api.buildskil.com/api/billing";
+//const API_BASE = "http://localhost:5000/api/billing";
+const API_BASE = "https://api.buildskil.com/api/billing";
 function authHeaders(isFormData = false) {
     const headers = {
         Authorization: `Bearer ${localStorage.getItem("cb_token")}`
