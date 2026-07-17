@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Update System</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="../css/trackpay.css"/>
+      <!-- Prevents unauthenticated users from seeing a flash of content -->
+  <script>document.documentElement.style.visibility = 'hidden';</script>
+  
+  <!-- Your common auth guard -->
+  <script src="/js/auth-guard.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+        <h1><i class="fa-solid fa-file-invoice-dollar"></i> Billing Update System</h1>
+        <p>Manage daily worker bills and payment cycles</p>
+    </header>
+
+
+    <!-- ================= CREATE BILL ================= -->
+
+    <section class="create-section">
+
+        <div class="card">
+
+            <h2>Create New Billing</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Site Name</label>
+                    <input
+                        type="text"
+                        id="workerName"
+                        placeholder="Enter site name">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input
+                        type="number"
+                        id="workerPhone"
+                        placeholder="Enter phone number" maxlength="10">
+                </div>
+
+                <div class="form-group">
+                    <label>Daily Rate (₹)</label>
+                    <input
+                        type="number"
+                        id="dailyRate"
+                        placeholder="Enter daily rate">
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Cycle</label>
+
+                    <select id="paymentCycle">
+
+                        <option value="">Select Payment Type</option>
+
+                        <option value="7">
+                            Every 7 Days
+                        </option>
+
+                        <option value="10">
+                            Every 10 Days
+                        </option>
+
+                        <option value="15">
+                            Every 15 Days
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <button id="createBillingBtn" class="primary-btn">
+                <i class="fa-solid fa-plus"></i>
+                Create Billing
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SUMMARY ================= -->
+
+    <section class="summary-section">
+
+        <div class="summary-card">
+            <h3>Total Workers</h3>
+            <h2 id="totalWorkers">0</h2>
+        </div>
+
+        <div class="summary-card">
+            <h3>Active Bills</h3>
+            <h2 id="activeBills">0</h2>
+        </div>
+
+        <div class="summary-card">
+            <h3>Pending Payment</h3>
+            <h2 id="pendingBills">0</h2>
+        </div>
+
+        <div class="summary-card">
+            <h3>Paid Bills</h3>
+            <h2 id="paidBills">0</h2>
+        </div>
+
+    </section>
+
+
+    <!-- ================= WORKER LIST ================= -->
+
+    <section>
+
+        <h2 class="section-title">
+
+            <i class="fa-solid fa-users"></i>
+
+            Worker Billing List
+
+        </h2>
+
+        <div id="workerContainer" class="worker-container">
+
+            <!-- JS Cards -->
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= DAILY WORK ================= -->
+
+    <section id="dailyWorkSection" class="hidden">
+
+        <div class="card">
+
+            <h2>
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                Daily Work Entry
+
+            </h2>
+
+            <div class="worker-info">
+
+                <p><strong>Name :</strong> <span id="viewName"></span></p>
+
+                <p><strong>Phone :</strong> <span id="viewPhone"></span></p>
+
+                <p><strong>Daily Rate :</strong> ₹<span id="viewRate"></span></p>
+
+                <p><strong>Cycle :</strong> <span id="viewCycle"></span> Days</p>
+
+            </div>
+
+            <button id="addWorkDayBtn" class="success-btn">
+
+                <i class="fa-solid fa-calendar-plus"></i>
+
+                Add Today's Work
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= DAILY HISTORY ================= -->
+
+    <section id="historySection" class="hidden">
+
+        <div class="card">
+
+            <h2>
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                Work History
+
+            </h2>
+
+            <table>
+
+                <thead>
+
+                <tr>
+
+                    <th>Day</th>
+
+                    <th>Date</th>
+
+                    <th>Rate</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="historyBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= PAYMENT ================= -->
+
+    <section id="paymentSection" class="hidden">
+
+        <div class="card payment-card">
+
+            <h2>
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+
+                Payment Due
+
+            </h2>
+
+            <h3>Total Amount</h3>
+
+            <h1>
+
+                ₹<span id="totalAmount">0</span>
+
+            </h1>
+
+            <div class="payment-buttons">
+
+                <button id="paidBtn" class="paid-btn">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Paid
+
+                </button>
+                <button id="notPaidBtn" class="not-paid-btn">
+
+                    <i class="fa-solid fa-circle-xmark"></i>
+
+                    Not Paid/Suspended
+                </button>
+                <button id="addBillBtn" class="warning-btn">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add More Bill
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= PAYMENT HISTORY ================= -->
+
+    <section>
+
+        <div class="card">
+
+            <h2>
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                Payment History
+
+            </h2>
+
+            <table>
+
+                <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Worker</th>
+
+                    <th>Amount</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="paymentHistory">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+<div id="historyModal" class="history-modal hidden ">
+
+    <div class="history-box">
+
+        <span id="closeHistory">&times;</span>
+
+        <h2>Previous Billing History</h2>
+
+        <div id="historyContent"></div>
+
+    </div>
+
+</div>
+<!-- ================= HOW TO USE ================= -->
+
+<section class="info-card">
+
+    <h2>
+        <i class="fa-solid fa-circle-info"></i>
+        How Billing Update Works
+    </h2>
+
+    <ul class="info-list">
+
+        <li>
+            <i class="fa-solid fa-user-check"></i>
+            Worker must already be registered on this website using their phone number.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-phone"></i>
+            Enter the worker's registered 10-digit mobile number.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+            Enter the daily payment rate for the worker.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-calendar-days"></i>
+            Select the payment cycle (7 Days, 10 Days, or 15 Days).
+        </li>
+
+        <li>
+            <i class="fa-solid fa-plus"></i>
+            Click <strong>Create Billing</strong> to start a new billing cycle.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-hammer"></i>
+            Click <strong>Open</strong> and use <strong>Add Today's Work</strong> every working day.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-calculator"></i>
+            The system automatically calculates the total amount due.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-money-bill-wave"></i>
+            Once the selected payment cycle is completed, the payment section will appear automatically.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-circle-check"></i>
+            Click <strong>Paid</strong> after payment is completed. The completed cycle is saved in the payment history.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-clock"></i>
+            If payment is pending, click <strong>Not Paid</strong>. The billing remains pending until payment is received.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-folder-open"></i>
+            Click <strong>View</strong> to see all previous payment cycles and work history.
+        </li>
+
+        <li>
+            <i class="fa-solid fa-trash"></i>
+            Workers can be deleted only after the billing cycle has been completed.
+        </li>
+
+    </ul>
+
+</section>
+<script src="/js/trackpay.js"></script>
+<script src="../js/screenshotProtector.js"></script>
+<script>
+  // One single line to activate
+  initScreenshotProtector();
+</script>
+</body>
+</html>
