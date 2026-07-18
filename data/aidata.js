@@ -399,14 +399,21 @@ const toggleBtn = document.getElementById('chat-toggle');
 const closeBtn = document.getElementById('close-chat');
 const sendBtn = document.getElementById('send-btn');
 
-// Toggle Window
+/*Toggle Window
 toggleBtn.addEventListener('click', () => {
   const isHidden = window.getComputedStyle(widget).display === 'none';
   widget.style.display = isHidden ? 'flex' : 'none';
   if(isHidden) inputField.focus();
 });
+closeBtn.addEventListener('click', () => {
+    // Replace with your actual home page URL
+    window.location.href = 'index.html'; 
+});
 
-closeBtn.addEventListener('click', () => widget.style.display = 'none');
+*/
+closeBtn.addEventListener('click', () => {
+    window.history.back();
+});
 
 // Helper: Add Message to Log
 // ==========================================
