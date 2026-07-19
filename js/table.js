@@ -4,6 +4,8 @@ const TABLE_API = "https://api.buildskil.com/api/tables"; // change if using dom
 //const TABLE_API = "http://localhost:5000/api/tables"; // change if using domain
 let userTables = []; // ✅ add this at top
 const actionHistory = [];
+// A registry map to hold automatic clear timers for each cell globals
+const typingTimers = {};
 let count = 0;
 const max = 99;
 function authHeaders(isFormData = false) {
@@ -833,9 +835,6 @@ table.addEventListener("input", (e) => {
         });
     }
 });
-
-// A registry map to hold automatic clear timers for each cell
-const typingTimers = {};
 
 // --- 2. Listen for OTHER users typing inside cells ---
 socket.on("tableTyping", ({ tableId, data }) => {
