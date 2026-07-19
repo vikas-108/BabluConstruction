@@ -219,7 +219,92 @@
   opacity: 1;
   transform: translateY(0);
 }
+/* ===== UNIVERSAL TOGGLE BUTTON BASE ===== */
 #live-toggle-btn {
+    /* Layout & Box Model */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    
+    /* 🔥 Fix: Balanced Medium Dimensions for Laptop/Desktop */
+    width: 220px;             /* Fixed width ensures it never gets too wide */
+    min-width: 200px;         /* Prevents it from getting too small */
+    padding: 12px 20px;       /* Comfortable, elegant height */
+    font-size: 0.95rem;       /* Crisp, professional text size */
+    font-weight: 600;         /* Modern semi-bold weight */
+    letter-spacing: 0.3px;    /* Premium clean spacing */
+    white-space: nowrap;      /* Keeps button text strictly on one line */
+    
+    /* Shapes & Shadows */
+    border: none;
+    border-radius: 50px;      /* Modern pill-shaped aesthetic */
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); /* Balanced depth shadow */
+    
+    /* System Interaction Hooks */
+    cursor: pointer;
+    z-index: 9999;            /* Safely layers on top of map tiles */
+    touch-action: manipulation;
+    
+    /* Smooth Transitions */
+    transition: background-color 0.2s ease, 
+                transform 0.1s ease,
+                box-shadow 0.2s ease;
+}
+
+/* Micro-interaction on click/tap */
+#live-toggle-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== STATUS THEME COLORS ===== */
+.start-state {
+    background-color: #16a34a !important; /* Premium Green */
+    color: #ffffff !important;
+}
+@media (hover: hover) {
+    .start-state:hover {
+        background-color: #15803d !important;
+        box-shadow: 0 6px 18px rgba(22, 163, 74, 0.3); /* Vibrant active hover glow */
+    }
+}
+
+.stop-state {
+    background-color: #dc2626 !important; /* Premium Red */
+    color: #ffffff !important;
+}
+@media (hover: hover) {
+    .stop-state:hover {
+        background-color: #b91c1c !important;
+        box-shadow: 0 6px 18px rgba(220, 38, 38, 0.3); /* Vibrant active hover glow */
+    }
+}
+
+/* ===== DEVICE OPTIMIZED BREAKPOINTS ===== */
+
+/* Tablets and Mobile Phones */
+@media (max-width: 768px) {
+    #live-toggle-btn {
+        width: 190px;         /* Marginally narrower to adapt to compact tablet screen space */
+        min-width: 170px;
+        padding: 11px 18px;
+        font-size: 0.92rem;
+    }
+}
+
+/* Smartphone Portrait Views */
+@media (max-width: 480px) {
+    #live-toggle-btn {
+        width: 180px;         /* Elegant, small/medium floating thumb-target for mobile screens */
+        min-width: 160px;
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    }
+}
+
+/*#live-toggle-btn {
     padding: 10px 16px;
     font-weight: bold;
     border: none;
@@ -229,11 +314,11 @@
     transition: background 0.2s;
 }
 .start-state {
-    background-color: #16a34a; /* Green */
+    background-color: #16a34a; 
     color: white;
 }
 .stop-state {
-    background-color: #dc2626; /* Red */
+    background-color: #dc2626; 
     color: white;
 }
-
+*/
