@@ -771,7 +771,7 @@ permissionSelect.appendChild(optionView);
       a.click();
       URL.revokeObjectURL(url);
     };
-    socket.on("tableUpdated", (update) => {
+   /* socket.on("tableUpdated", (update) => {
       if (update.tableId !== tableData._id) return;
 
       // 🔥 update UI
@@ -782,7 +782,91 @@ permissionSelect.appendChild(optionView);
           }
         }
       }
-    });
+    });*/
+    socket.on("tableUpdated", (update) => {
+    // 1. Safety validation check
+    if (update.tableId !== tableData._id) return;
+
+    // 2. Capture the exact cell element that the user is currently editing right now
+    const activeElement = document.activeElement;
+
+    // 3. Run your multi-dimensional grid scanning array loop
+    for (let i = 0; i < update.data.length; i++) {
+        for (let j = 0; j < update.data[i].length; j++) {
+            
+            // Confirm the table cell element exists physically on the DOM screen canvas
+            if (table.rows[i] && table.rows[i].cells[j]) {
+                const targetCell = table.rows[i].cells[j];
+
+                // 🔥 CRITICAL FIX: If the user is currently typing in this cell, DO NOT overwrite it!
+                if (activeElement === targetCell) {
+                    continue; // Skip this cell update to protect the user's active keyboard typing
+                }
+
+                // If nobody is using this cell, update its content seamlessly
+                // Using innerText for standard grid layouts, or .value if your cells are input fields
+                if (targetCell.tagName === "INPUT" || targetCell.tagName === "TEXTAREA") {
+                    targetCell.value = update.data[i][j];
+                } else {
+                    targetCell.innerText = update.data[i][j];
+                }
+            }
+            
+        }
+    }
+});
+    // --- 1. Broadcast YOUR typing activity to coworkers ---
+// Attach this to your table inputs on 'input' or 'keyup' events
+table.addEventListener("input", (e) => {
+    const targetCell = e.target.closest("td") || e.target;
+    const row = targetCell.getAttribute("data-row");
+    const col = targetCell.getAttribute("data-col");
+
+    if (row !== null && col !== null) {
+        socket.emit("tableTyping", {
+            tableId: tableData._id,
+            data: {
+                row: parseInt(row),
+                col: parseInt(col),
+                text: e.target.value || e.target.innerText
+            }
+        });
+    }
+});
+
+// A registry map to hold automatic clear timers for each cell
+const typingTimers = {};
+
+// --- 2. Listen for OTHER users typing inside cells ---
+socket.on("tableTyping", ({ tableId, data }) => {
+    if (tableId !== tableData._id) return;
+
+    // Find the exact physical cell using row and column coordinates
+    if (table.rows[data.row] && table.rows[data.row].cells[data.col]) {
+        const targetCell = table.rows[data.row].cells[data.col];
+        const cellKey = `${data.row}-${data.col}`;
+
+        // Update the content live on screen
+        if (targetCell.tagName === "INPUT" || targetCell.tagName === "TEXTAREA") {
+            targetCell.value = data.text;
+        } else {
+            targetCell.innerText = data.text;
+        }
+
+        // 🔥 APPLY THE BORDER GLOW CLASS INSTANTLY
+        targetCell.classList.add("remote-typing-cell");
+
+        // Clear any old timers running on this exact cell box
+        if (typingTimers[cellKey]) clearTimeout(typingTimers[cellKey]);
+
+        // Auto-remove the glowing border if they don't type anything else for 2.5 seconds
+        typingTimers[cellKey] = setTimeout(() => {
+            targetCell.classList.remove("remote-typing-cell");
+            delete typingTimers[cellKey];
+        }, 2500);
+    }
+});
+
     // ================= APPEND CONTROLS =================
     // ================= BUTTON BAR =================
     buttonBar.className = "button-bar";
