@@ -92,28 +92,103 @@
     }
 
     /* Map */
-    #map {
-      flex: 1;
+  #map { 
+    flex: 1; 
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== GLOBAL FLOATING ACTION BUTTON (FAB) BASE ===== */
+.fab { 
+    position: absolute; 
+    right: 20px; 
+    border: none; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensures buttons sit perfectly on top of the Leaflet map */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: manipulation; /* Removes click delays on mobile touch screens */
+}
+
+/* Icon-Only Circular Buttons */
+.location-btn, .add-btn {
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    font-size: 20px; 
+    background: #acf9c6;
+}
+
+/* ===== VERTICAL COLUMN POSITIONING ===== */
+.add-btn { 
+    bottom: 20px; 
+}
+
+.location-btn { 
+    bottom: 85px; /* Balanced 15px gap above the add button */
+}
+
+/* 🔥 NEW: Clean Medium-Width Pill Style for the Tracking Button */
+.live-btn {
+    bottom: 150px; /* Balanced 15px gap above the location button */
+    width: 80px;  /* Perfectly proportioned medium width */
+    height: 46px;  /* Elegant, sleek height profile */
+    border-radius: 50px; /* Modern pill look that matches circular FABs */
+    font-size: 0.88rem;
+    font-weight: 200;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    
+    /* Center text inside the pill alignment fix */
+    padding: 0 16px; 
+    
+    /* Mobile-first alignment: offsets right-anchoring to align its right edge with the circles */
+    right: 20px; 
+}
+
+/* Active touch feedback */
+.fab:active {
+    transform: scale(0.95);
+}
+
+/* ===== STATE COLOR MODULES ===== */
+.start-state {
+    background-color: #16a34a !important; /* Premium Green */
+    color: #ffffff !important;
+}
+@media (hover: hover) {
+    .start-state:hover { background-color: #15803d !important; }
+}
+
+.stop-state {
+    background-color: #dc2626 !important; /* Premium Red */
+    color: #ffffff !important;
+}
+@media (hover: hover) {
+    .stop-state:hover { background-color: #b91c1c !important; }
+}
+
+/* ===== SMARTPHONE PORTRAIT SCREEN OPTIMIZATIONS ===== */
+@media (max-width: 480px) {
+    /* Handle edge constraints and account for mobile browser UI / Apple swipe lines */
+    .add-btn {
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     }
-    /* Floating buttons */
-.fab {
-  position: absolute;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: none;
-  font-size: 20px;
-  z-index: 1000;
+    .location-btn {
+        bottom: calc(85px + env(safe-area-inset-bottom, 0px));
+    }
+    .live-btn {
+        bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+        width: 80px; /* Marginally narrower for small screens to preserve screen space */
+        height: 40px;
+        font-size: 0.82rem;
+        right: 20px;
+    }
 }
 
-.location-btn {
-  bottom: 90px;
-}
-
-.add-btn {
-  bottom: 20px;
-}
     /* Mobile */
     @media (max-width: 768px) {
       .container {
@@ -219,106 +294,3 @@
   opacity: 1;
   transform: translateY(0);
 }
-/* ===== UNIVERSAL TOGGLE BUTTON BASE ===== */
-#live-toggle-btn {
-    /* Layout & Box Model */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    
-    /* 🔥 Fix: Balanced Medium Dimensions for Laptop/Desktop */
-    width: 220px;             /* Fixed width ensures it never gets too wide */
-    min-width: 200px;         /* Prevents it from getting too small */
-    padding: 12px 20px;       /* Comfortable, elegant height */
-    font-size: 0.95rem;       /* Crisp, professional text size */
-    font-weight: 600;         /* Modern semi-bold weight */
-    letter-spacing: 0.3px;    /* Premium clean spacing */
-    white-space: nowrap;      /* Keeps button text strictly on one line */
-    
-    /* Shapes & Shadows */
-    border: none;
-    border-radius: 50px;      /* Modern pill-shaped aesthetic */
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); /* Balanced depth shadow */
-    
-    /* System Interaction Hooks */
-    cursor: pointer;
-    z-index: 9999;            /* Safely layers on top of map tiles */
-    touch-action: manipulation;
-    
-    /* Smooth Transitions */
-    transition: background-color 0.2s ease, 
-                transform 0.1s ease,
-                box-shadow 0.2s ease;
-}
-
-/* Micro-interaction on click/tap */
-#live-toggle-btn:active {
-    transform: scale(0.96);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* ===== STATUS THEME COLORS ===== */
-.start-state {
-    background-color: #16a34a !important; /* Premium Green */
-    color: #ffffff !important;
-}
-@media (hover: hover) {
-    .start-state:hover {
-        background-color: #15803d !important;
-        box-shadow: 0 6px 18px rgba(22, 163, 74, 0.3); /* Vibrant active hover glow */
-    }
-}
-
-.stop-state {
-    background-color: #dc2626 !important; /* Premium Red */
-    color: #ffffff !important;
-}
-@media (hover: hover) {
-    .stop-state:hover {
-        background-color: #b91c1c !important;
-        box-shadow: 0 6px 18px rgba(220, 38, 38, 0.3); /* Vibrant active hover glow */
-    }
-}
-
-/* ===== DEVICE OPTIMIZED BREAKPOINTS ===== */
-
-/* Tablets and Mobile Phones */
-@media (max-width: 768px) {
-    #live-toggle-btn {
-        width: 190px;         /* Marginally narrower to adapt to compact tablet screen space */
-        min-width: 170px;
-        padding: 11px 18px;
-        font-size: 0.92rem;
-    }
-}
-
-/* Smartphone Portrait Views */
-@media (max-width: 480px) {
-    #live-toggle-btn {
-        width: 180px;         /* Elegant, small/medium floating thumb-target for mobile screens */
-        min-width: 160px;
-        padding: 12px 16px;
-        font-size: 0.9rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-    }
-}
-
-/*#live-toggle-btn {
-    padding: 10px 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-}
-.start-state {
-    background-color: #16a34a; 
-    color: white;
-}
-.stop-state {
-    background-color: #dc2626; 
-    color: white;
-}
-*/
