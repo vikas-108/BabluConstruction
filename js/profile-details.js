@@ -96,7 +96,7 @@ function renderProfile(p) {
         : ""
     }
   `;
- // ✅ After rendering, set up infinite scroll
+ /*/ ✅ After rendering, set up infinite scroll
   const profileDetails = document.querySelector('.profile-details');
   if (!profileDetails) return;
 
@@ -125,7 +125,7 @@ function renderProfile(p) {
   profileDetails.addEventListener('touchstart', () => { isPaused = true; });
   profileDetails.addEventListener('touchend', () => { isPaused = false; });
 
-  startAutoScroll();
+  startAutoScroll(); */
 const galleryImages = document.querySelectorAll('.gallery img');
 const albumSources = Array.from(galleryImages).map(img => img.src);
 
