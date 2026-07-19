@@ -3004,3 +3004,121 @@ h4 {
     }
 }
 
+
+/* ===== HORIZONTAL ANCHOR ROW CONTAINER ===== */
+/* ===== HORIZONTAL ANCHOR ROW CONTAINER WITH CONTAINER STYLING ===== */
+.water-droplet-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Keeps link blocks strictly side-by-side in one row */
+    gap: 16px; /* Balance spacing between fluid droplets */
+    width: 100%;
+    max-width: 650px; /* Restricts stretching on wide laptop monitors */
+    margin: 20px auto;
+    padding: 0 16px; /* Increased slightly for look balance with rounded edges */
+    box-sizing: border-box;
+    
+    /* 🔥 New Layout Additions */
+    height: 76px;             /* Balanced height wrapper container profile */
+    align-items: center;      /* Centers droplet links vertically inside the blue bar */
+    
+    /* Background Properties */
+    background: #84c5f3;
+    border-radius: 25px;
+    box-shadow: 0 4px 14px rgba(132, 197, 243, 0.4); /* Matching color depth shadow */
+}
+
+/* ===== GLOSSY TRANSLUCENT ANCHOR DROPLET BASE ===== */
+.droplet-water-btn {
+    flex: 1; /* Splits the structural horizontal space perfectly 50/50 */
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    text-decoration: none; /* Removes standard anchor text underlines */
+    box-sizing: border-box;
+    white-space: nowrap; /* Prevents button labels from wrapping into two lines */
+    touch-action: manipulation; /* Remediates touch gesture latency delays on cell phones */
+    
+    /* Premium Ocean Typography Styling */
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e40af; 
+    
+    /* Asymmetrical Organic Water Droplet Curves */
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    
+    /* 🧊 THE WATER TECHNIQUE: Blends Inset Core Shadows with Light Reflections */
+    background: linear-gradient(135deg, rgba(139, 54, 236, 0.73) 0%, rgba(219,234,254,0.42) 100%);
+    box-shadow: 
+        inset -6px -6px 12px rgba(0, 0, 0, 0.05),     /* Internal dark shadow mimics liquid depth */
+        inset 6px 6px 12px rgba(255, 255, 255, 0.95),  /* High gloss edge refraction flare */
+        0 8px 16px rgba(147, 197, 253, 0.35),          /* Smooth ambient shadow under drop */
+        0 2px 4px rgba(30, 64, 175, 0.1);              /* Grounded high-contrast anchor contact point shadow */
+        
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.2s ease, 
+                border-radius 0.2s ease,
+                background-color 0.2s ease;
+}
+
+/* Vector Graphic Sizing and Alignment Standardizer */
+.droplet-water-btn i {
+    font-size: 1.15rem;
+    color: #2563eb; 
+    line-height: 1;
+    display: inline-block;
+}
+
+/* ===== ANIMATED LIQUID INTERACTIONS ===== */
+
+/* Desktop Hover (Mouse Cursors) */
+@media (hover: hover) {
+    .droplet-water-btn:hover {
+        /* Distorts curves smoothly on hover to mimic fluid ripple physics */
+        border-radius: 58% 42% 58% 42% / 42% 58% 42% 58%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(191,219,254,0.65) 100%);
+        box-shadow: 
+            inset -4px -4px 8px rgba(0, 0, 0, 0.03),
+            inset 4px 4px 8px rgba(255, 255, 255, 1),
+            0 12px 20px rgba(147, 197, 253, 0.45);
+        transform: translateY(-2.5px); /* Elegant hovering lift effect */
+    }
+}
+
+/* Mobile Screen Press/Tap Feedback */
+.droplet-water-btn:active {
+    transform: scale(0.95) translateY(1px); /* Compresses liquid mass under touch pressure */
+    border-radius: 46% 46% 46% 46% / 48% 48% 48% 48%;
+    box-shadow: 
+        inset 4px 4px 8px rgba(0, 0, 0, 0.08), /* Inverts lighting calculations to show compressions */
+        inset -4px -4px 8px rgba(255, 255, 255, 0.6),
+        0 4px 8px rgba(147, 197, 253, 0.2);
+}
+
+/* ===== MOBILE SMARTPHONE BREAKPOINTS ===== */
+@media (max-width: 480px) {
+      .water-droplet-row {
+        height: 66px;         /* Sleeker, thinner height to save screen space on phones */
+        gap: 12px;            /* Tighter gap padding for narrow mobile views */
+        padding: 0 12px;
+        border-radius: 20px;  /* Slighly sharper edges match tiny phone display areas better */
+    }
+    
+    .droplet-water-btn {
+        height: 46px; /* Native human fingertip touch-target height guidelines */
+        font-size: 0.82rem; 
+        gap: 5px;
+        border-radius: 50% 50% 50% 50% / 56% 56% 44% 44%;
+        box-shadow: 
+            inset -4px -4px 8px rgba(0, 0, 0, 0.05),
+            inset 4px 4px 8px rgba(255, 255, 255, 0.9),
+            0 6px 12px rgba(147, 197, 253, 0.28);
+    }
+    
+    .droplet-water-btn i {
+        font-size: 1rem;
+    }
+}
