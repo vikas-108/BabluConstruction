@@ -99,92 +99,172 @@ body {
 .whatsapp:hover { background: #15803d; }
 
 /* ===== DETAILS SECTION ===== */
-/* Make profile-details a horizontal scroll row */
+/* ===== RESPONSIVE DETAIL CONTAINER ===== */
+/* ===== GLOBAL COMPATIBILITY HOOKS ===== */
 .profile-details {
-  display: flex;
-  gap: 12px;
-  flex-wrap: nowrap;          /* ✅ keep items in one row */
-  overflow-x: auto;           /* ✅ enable horizontal scroll */
-  scroll-behavior: smooth;    /* ✅ smooth scrolling */
-  -webkit-overflow-scrolling: touch; /* ✅ momentum scroll on iOS */
-  margin-top: 12px;
-  padding: 16px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    /* Browser Fallbacks */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap; /* Prevents overflow; allows stacking on older engine renderers */
+    
+    /* Modern Engine Grid */
+    display: grid;
+    /* Automatically creates columns based on screen width; minimum 260px wide */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+    
+    gap: 10px;
+    margin-top: 8px;
+    padding: 16px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    
+    /* Device Constraint Rules */
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Guaranteed: No horizontal tracking lines or glitches */
 }
 
-/* Hide scrollbar for a cleaner look */
-.profile-details::-webkit-scrollbar {
-  height: 6px;
-}
-.profile-details::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-.profile-details::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Each subsection inside profile-details */
-.profile-details > div,
+/* ===== ROBUST SUBSECTION CARDS ===== */
+.profile-details > div, 
 .profile-details > p {
-  flex: 0 0 150px;            /* ✅ fixed width so they stay side-by-side */
-  background: #bdd5ec;
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.profile-details > div:hover,
-.profile-details > p:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .profile-details > div,
-  .profile-details > p {
-    flex: 0 0 220px;
-  }
+    box-sizing: border-box;
+    background: #bdd5ec;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    
+    /* Micro Animations */
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Content Protection Rules */
+    width: 100%; /* Spans full space of grid lane */
+    white-space: normal; /* Forces manual text line breaks */
+    word-wrap: break-word;
+    word-break: break-word; /* Prevents long text from clipping container walls */
 }
 
-@media (max-width: 480px) {
-  .profile-details > div,
-  .profile-details > p {
-    flex: 0 0 180px;
-    font-size: 13px;
-  }
+/* Smooth Interactive Touch Hover States */
+@media (hover: hover) {
+    .profile-details > div:hover, 
+    .profile-details > p:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
 }
 
-/* Headings inside subsections */
+/* Headings inside cards */
 .profile-details h3 {
-  margin: 0 0 8px;
-  font-size: 16px;
-  color: #111;
+    margin: 0 0 10px 0;
+    font-size: 1.05rem; /* Scales relative to browser custom font selections */
+    color: #111111;
+    font-weight: 600;
+    line-height: 1.3;
 }
 
-
-/* ===== SKILLS TAGS ===== */
+/* ===== SKILLS CHIPS LAYER ===== */
 .skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
 }
 
 .skills span {
-  background: #e2e8f0;
-  padding: 8px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  border-radius: 20px;
-  transition: background 0.3s ease;
+    display: inline-block;
+    background: #e2e8f0;
+    color: #334155;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    white-space: nowrap; /* Prevents individual tags from snapping awkwardly */
+    
+    /* Webkit Engine Fixes */
+    -webkit-text-size-adjust: 100%;
 }
 
-.skills span:hover {
-  background: #cbd5e1;
+@media (hover: hover) {
+    .skills span:hover {
+        background: #cbd5e1;
+    }
 }
+
+/* ===== CROSS-DEVICE DEVICE SCALING MEDIA QUERIES ===== */
+
+/* Large Screens & Multi-monitor setups */
+@media (min-width: 1200px) {
+    .profile-details {
+        /* Cap columns to a clean max structure so rows don't get overly long */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+}
+
+/* Medium Screens, Small Laptops & Tablets (iPads, Surface Pro, Galaxy Tabs) */
+@media (max-width: 1024px) {
+    .profile-details {
+        grid-template-columns: repeat(2, 1fr); /* Stabilizes layout to exactly 2 columns */
+        gap: 10px;
+        padding: 14px;
+    }
+}
+
+/* Compact Tablets & Large Mobile Screens (Landscape Views) */
+@media (max-width: 768px) {
+    .profile-details {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .profile-details > div, 
+    .profile-details > p {
+        padding: 14px;
+    }
+}
+
+/* Strict Smartphone Portrait Mode (iPhone 13-16 Pro, SE, Samsung S-Series, Pixel) */
+@media (max-width: 480px) {
+    .profile-details {
+        grid-template-columns: 1fr; /* Strict full-width vertical list stack */
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    .profile-details > div, 
+    .profile-details > p {
+        padding: 12px;
+    }
+    
+    .profile-details h3 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+    
+    .skills span {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+}
+
+/* Extreme Micro Screens (Older iPhones / Foldable screens half-open) */
+@media (max-width: 320px) {
+    .profile-details {
+        padding: 8px;
+        gap: 8px;
+    }
+    .profile-details > div, 
+    .profile-details > p {
+        padding: 10px;
+    }
+}
+
 
 /* ===== GALLERY ===== */
 .gallery {
@@ -221,21 +301,6 @@ body {
 @media (max-width: 480px) {
   .btn { flex: 1; text-align: center; }
   .profile-actions { flex-direction: column; }
-}
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .profile-details > div,
-  .profile-details > p {
-    flex: 0 0 220px;
-  }
-}
-
-@media (max-width: 480px) {
-  .profile-details > div,
-  .profile-details > p {
-    flex: 0 0 180px;
-    font-size: 13px;
-  }
 }
 /* Lightbox styles */
 .lightbox {
