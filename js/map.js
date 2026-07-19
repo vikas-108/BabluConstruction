@@ -1,8 +1,16 @@
 const API_BASE = "https://api.buildskil.com/api/location"; // change if deployed
 //const API_BASE = "http://localhost:5000/api/location"; // change if using domain
 let editingProjectId = null;
-let liveInterval;
+// 1. Initialize variables globally
+let liveInterval = null;
+let isTrackingActive = false; // Track the global state
 let allProjects = [];
+let watchId = null;
+let followMyLocation = false; // Controls whether map follows user
+ let selectedLat = null;
+  let selectedLng = null;
+  let marker;
+  let userMarker= null;
 function authHeaders(isFormData = false) {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`
@@ -19,36 +27,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-  let selectedLat = null;
-  let selectedLng = null;
-  let marker;
-  let userMarker;
+
   
   // Live tracking
- navigator.geolocation.watchPosition(async (pos) => {
-  const lat = pos.coords.latitude;
-  const lng = pos.coords.longitude;
+function startLocationTracking() {
 
-  if (!userMarker) {
-    userMarker = L.marker([lat, lng]).addTo(map).bindPopup("you here");
-  } else {
-    userMarker.setLatLng([lat, lng]);
-  }
+    if (watchId !== null) return; // already started
 
-  map.setView([lat, lng], 14);
+    watchId = navigator.geolocation.watchPosition(async (pos) => {
 
-  // 🔥 Send to backend
-     try {
-      await fetch(`${API_BASE}/live/update`, {
-        method: "POST",
-        headers: authHeaders(),
-  body: JSON.stringify({ lat, lng })
-      });
-       } catch (err) {
-      console.log("Live update error");
-     }
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
- });
+        if (!userMarker) {
+            userMarker = L.marker([lat, lng])
+                .addTo(map)
+                .bindPopup("You are here");
+        } else {
+            userMarker.setLatLng([lat, lng]);
+        }
+
+        // Only move camera when follow mode is enabled
+        if (followMyLocation) {
+            map.setView([lat, lng], 16);
+        }
+
+        // Send location only while sharing is active
+        if (!isTrackingActive) return;
+
+        try {
+            await fetch(`${API_BASE}/live/update`, {
+                method: "POST",
+                headers: authHeaders(),
+                body: JSON.stringify({ lat, lng })
+            });
+        } catch (err) {
+            console.error(err);
+        }
+
+    }, console.error, {
+        enableHighAccuracy: true,
+        maximumAge: 5000,
+        timeout: 10000
+    });
+
+}
+function stopLocationTracking() {
+
+    if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+    }
+
+}
 
   // Map click
     map.on("click", (e) => {
@@ -63,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .bindPopup("Selected Location")
       .openPopup();
   });
+  const toggleBtn = document.getElementById("live-toggle-btn");
   const liveLayer = L.layerGroup().addTo(map);
 
 async function loadLiveUsers() {
@@ -92,17 +124,68 @@ users.forEach((u) => {
     console.error(err);
   }
 }
-  //setInterval(loadLiveUsers, 10000);
-  // Pause live updates when tab is inactive
-  document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    clearInterval(liveInterval);
-  } else {
+  // 2. The core function to start the loop
+function startTrackingLoop() {
+    if (liveInterval) clearInterval(liveInterval); // Safety clear
+    
+    // Call immediately upon starting so you don't wait 10 seconds for the first run
+    loadLiveUsers(); 
+    
+    // Set up the 10-second loop
     liveInterval = setInterval(loadLiveUsers, 10000);
-  }
+}
+
+// 3. The core function to stop the loop
+function stopTrackingLoop() {
+    if (liveInterval) {
+        clearInterval(liveInterval);
+        liveInterval = null;
+    }
+}
+
+// 4. Click Event Listener for the Start/Stop button
+toggleBtn.addEventListener("click", async () => {
+
+    if (!isTrackingActive) {
+
+        isTrackingActive = true;
+
+        followMyLocation = true;
+
+        startLocationTracking();
+
+        startTrackingLoop();
+
+        toggleBtn.textContent = "Stop Live Tracking";
+
+    } else {
+
+        isTrackingActive = false;
+
+        followMyLocation = false;
+
+        stopTrackingLoop();
+
+        stopLocationTracking();
+
+        toggleBtn.textContent = "Start Live Tracking";
+
+    }
+
 });
-// Initial load for inactive period
-liveInterval = setInterval(loadLiveUsers, 10000);
+
+// 5. Smart Visibility Change (Only loops if the user previously clicked 'Start')
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        // Always stop fetching if tab is hidden to save API resources
+        stopTrackingLoop();
+    } else {
+        // ONLY resume if tracking was actively turned on by the user
+        if (isTrackingActive) {
+            startTrackingLoop();
+        }
+    }
+});
    // Create a layer group to hold all project markers
 const projectMarkers = L.layerGroup().addTo(map);
 
@@ -190,7 +273,7 @@ async function loadProjects() {
             <strong>${p.projectName}</strong><br>
             <strong>${p.projectType}</strong>
             ${p.description}<br>
-            <em>${p.visibility}</em>
+           <!-- <em>${p.visibility}</em> -->
           </div>
         `)
         .addTo(projectMarkers);
@@ -352,14 +435,22 @@ document.getElementById("toggleFormLink").addEventListener("click", () => {
   form.classList.toggle("open");
 });
   // My Location button
-  document.getElementById("myLocationBtn").addEventListener("click", () => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-      map.setView([lat, lng], 15);
-    });
-  });
+ document.getElementById("myLocationBtn").addEventListener("click", () => {
 
+    followMyLocation = true;
+
+    if (userMarker) {
+        map.setView(userMarker.getLatLng(), 16);
+    }
+
+});
+map.on("dragstart", () => {
+    followMyLocation = false;
+});
+
+map.on("zoomstart", () => {
+    followMyLocation = false;
+});
   // Toggle sidebar
   document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("hidden");
@@ -377,8 +468,6 @@ document.getElementById("toggleFormLink").addEventListener("click", () => {
 }
   loadProjects();
 });
-
-
 
 
 
