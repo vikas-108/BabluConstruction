@@ -156,7 +156,7 @@ toggleBtn.addEventListener("click", async () => {
 
         startTrackingLoop();
 
-        toggleBtn.textContent = "Stop Live Tracking";
+        toggleBtn.textContent = "Stop";
 
     } else {
 
@@ -168,7 +168,7 @@ toggleBtn.addEventListener("click", async () => {
 
         stopLocationTracking();
 
-        toggleBtn.textContent = "Start Live Tracking";
+        toggleBtn.textContent = "Start";
 
     }
 
