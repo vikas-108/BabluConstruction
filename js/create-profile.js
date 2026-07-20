@@ -414,8 +414,8 @@ stateInput.addEventListener("change", () => {
       <div class="profile-media">
         ${
           p.mediaType === "video"
-            ? `<video src="${SERVER_BASE + p.media}" controls></video>`
-            : `<img src="${SERVER_BASE + p.media}?v=${Date.now()}" />`
+            ? `<video src="${p.media}" controls></video>`
+            : `<img src="${p.media}?v=${Date.now()}" />`
         }
       </div>
 
@@ -504,7 +504,7 @@ stateInput.addEventListener("change", () => {
       if (profile.album && profile.album.length) {
         profile.album.forEach((img) => {
           const imageEl = document.createElement("img");
-          imageEl.src = SERVER_BASE + img;
+          imageEl.src = img.url;
           imageEl.style.width = "80px";
           imageEl.style.height = "80px";
           imageEl.style.objectFit = "cover";
