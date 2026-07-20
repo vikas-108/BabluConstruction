@@ -812,8 +812,8 @@ async function showSnapshots(ownerId = null) {
 
         const img = document.createElement("img");
 
-        img.src = SERVER_BASE + snapshot.url;
-
+       // img.src = SERVER_BASE + snapshot.url;
+        img.src = snapshot.url;
         img.style.width = "150px";
         img.style.margin = "5px";
         img.style.border = "1px solid #ccc";
