@@ -323,7 +323,8 @@ async function compressImage(file, maxWidth = 1024, quality = 0.7) {
     const media = await res.json();
 
     currentImages = media.map((m) => ({
-      url: SERVER_BASE + m.url,
+      //url: SERVER_BASE + m.url,
+      url: m.url,
       type: m.type,
       timestamp: m.timestamp,
     }));
