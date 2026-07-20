@@ -866,9 +866,11 @@ async function fetchPublishedProfiles() {
       rating: p.rating,
       experience: p.experience,
       category: p.category || "contractor",
-      image: p.mediaType === "image" ? SERVER_BASE + p.media : "",
+      //image: p.mediaType === "image" ? SERVER_BASE + p.media : "",
+      //video: p.mediaType === "video" ? SERVER_BASE + p.media : "",
+      image: p.mediaType === "image" ? p.media : "",
 
-      video: p.mediaType === "video" ? SERVER_BASE + p.media : "",
+      video: p.mediaType === "video" ? p.media : "",
       languages: p.languages,
       phone: p.phone,
       description: p.description,
