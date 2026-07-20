@@ -42,7 +42,7 @@ function renderProfile(p) {
       ${
         p.mediaType === "video"
           ? `<video src="${mediaUrl}" controls></video>`
-          : `<img src="${SERVER_BASE + p.media}?v=${Date.now()}" alt="${p.name}" />`
+          : `<img src="${p.media}?v=${Date.now()}" alt="${p.name}" />`
       }
     </div>
 
@@ -90,7 +90,7 @@ function renderProfile(p) {
          <section class="profile-gallery">
         <h3>Work Gallery</h3>
         <div class="gallery">
-          ${p.album.map(img=>`<img src="${SERVER_BASE + img}" />`).join("")}
+          ${p.album.map(img=>`<img src="${img.url}" />`).join("")}
         </div>
          </section>`
         : ""
