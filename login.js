@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
 
     try {
-      await fetch("http://localhost:5000/api/auth/logout", {
+      await fetch("https://api.buildskil.com/api/auth/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -141,10 +141,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (k.startsWith("searchState_")) localStorage.removeItem(k);
     });
 
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
   });
   authBtn?.addEventListener("click", () => {
-    window.location.href = "login.html";
+    window.location.href = "../login.html";
   });
 
   updateNavbarAuth();
