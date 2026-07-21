@@ -294,3 +294,22 @@
   opacity: 1;
   transform: translateY(0);
 }
+.call-btn{
+    display:inline-block;
+    padding:5px 10px;
+    background:#28a745;
+    color:#fff;
+    text-decoration:none;
+    border-radius:6px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.call-btn:hover{
+    background:#218838;
+}
+
+.call-btn:disabled{
+    background:#999;
+    cursor:not-allowed;
+}
