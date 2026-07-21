@@ -263,10 +263,14 @@ async function loadProjects() {
     allProjects = projects;
     projectMarkers.clearLayers();
 
-     const loginUser = JSON.parse(localStorage.getItem("cb_login_user"));
-     const currentUserId = loginUser?._id || loginUser?.id;
+     //const loginUser = JSON.parse(localStorage.getItem("cb_login_user"));
+     //const currentUserId = loginUser?._id || loginUser?.id;
+const loginUser = JSON.parse(localStorage.getItem("cb_login_user"));
 
+const currentUserId = loginUser.id;
     projects.forEach(p => {
+        const phone = p.ownerPhone;
+
       const marker = L.marker([p.location.lat, p.location.lng], { icon: getBuildingIcon(p.projectType) })
         .bindPopup(`
           <div class="popup-content">
@@ -274,21 +278,38 @@ async function loadProjects() {
             <strong>${p.projectType}</strong>
             ${p.description}<br>
            <!-- <em>${p.visibility}</em> -->
+          ${
+      phone
+        ? `<a href="tel:${phone}" class="call-btn">📞</a>`
+        : `<button class="call-btn" disabled>No Phone</button>`
+    }
           </div>
         `)
         .addTo(projectMarkers);
 
       const li = document.createElement("li");
       const shortId = p._id.slice(-6).toUpperCase();
-      li.innerHTML = `
+    /*  li.innerHTML = `
         <span class="history-item"><strong>ID:</strong>${shortId} - ${p.projectName}</span>
-      `;
+      `;*/
+      const ownerId = p.owner?._id || p.owner;
+
+const isOwner =
+    String(ownerId) === String(currentUserId);
+
+//console.log({ownerId, currentUserId, isOwner});
+
+li.innerHTML = `
+  <span class="history-item">
+    <strong>ID:</strong>${shortId} - ${p.projectName}
+  </span>
+`;
      // Debug log to see values
       //console.log("Project owner:", p.owner, "Current user:", currentUserId);
 
 
       // Only show edit/delete if owner
-      if (String(p.owner) === String(currentUserId)) {
+      if (isOwner) {
         li.innerHTML += `
           <button class="edit-btn">✏️</button>
           <button class="remove-btn">🗑️</button>
@@ -304,22 +325,40 @@ async function loadProjects() {
           document.getElementById("lng").value = p.location.lng;
           document.getElementById("projectType").value = p.projectType;
         });
+if (isOwner) {
 
-        li.querySelector(".remove-btn").addEventListener("click", async () => {
-          if (!confirm("Delete project?")) return;
-          const res = await fetch(`${API_BASE}/project/${p._id}`, {
-            method: "DELETE",
-            headers: authHeaders()
-          });
-          if (res.ok) {
-            showToaster("Project deleted ✅", "success");
-            loadProjects();
-          } else {
-            const err = await res.json();
-            showToaster(err.message || "Delete failed", "error");
-          }
-        });
-      } else {
+  li.querySelector(".edit-btn").addEventListener("click", () => {
+    editingProjectId = p._id;
+
+    document.getElementById("projectName").value = p.projectName;
+    document.getElementById("description").value = p.description;
+    document.getElementById("visibility").value = p.visibility;
+    document.getElementById("phones").value = "";
+    document.getElementById("lat").value = p.location.lat;
+    document.getElementById("lng").value = p.location.lng;
+    document.getElementById("projectType").value = p.projectType;
+  });
+
+  li.querySelector(".remove-btn").addEventListener("click", async () => {
+
+    if (!confirm("Delete project?")) return;
+
+    const res = await fetch(`${API_BASE}/project/${p._id}`, {
+      method: "DELETE",
+      headers: authHeaders()
+    });
+
+    if (res.ok) {
+      showToaster("Project deleted ✅", "success");
+      loadProjects();
+    } else {
+      const err = await res.json();
+      showToaster(err.message || "Delete failed", "error");
+    }
+
+  });
+
+} /*else {
         // Non-owner clicks → toaster error
         li.innerHTML += `
           <button class="edit-btn">✏️</button>
@@ -331,7 +370,8 @@ async function loadProjects() {
         li.querySelector(".remove-btn").addEventListener("click", () => {
           showToaster("Only owner can delete this project", "error");
         });
-      }
+      }*/
+    }
 // History click → focus map and open popup
 li.querySelector(".history-item").addEventListener("click", () => {
   map.setView([p.location.lat, p.location.lng], 15);
