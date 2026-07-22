@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (k.startsWith("searchState_")) localStorage.removeItem(k);
     });
 
-    window.location.href = "../../screen/landing.html";
+    window.location.href = "../index.html";
   });
   authBtn?.addEventListener("click", () => {
     window.location.href = "../login.html";
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
        // localStorage.setItem("cb_token", data.token);
         //localStorage.setItem("cb_userId", data.user._id);   // ✅ store just the ID
       // redirect
-      window.location.href = "index.html";
+      window.location.href = "./landing.html";
     } catch (err) {
       console.error(err);
       alert("Server error");
