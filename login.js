@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (k.startsWith("searchState_")) localStorage.removeItem(k);
     });
 
-    window.location.href = "../index.html";
+    window.location.href = "../../screen/landing.html";
   });
   authBtn?.addEventListener("click", () => {
     window.location.href = "../login.html";
