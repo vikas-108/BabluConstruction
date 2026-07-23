@@ -11,6 +11,8 @@ let totalHoursWorked = 0;
 let totalEarningsToday = 0;
 let sessionId = null;
 let motionIntervalId = null;
+let snapshotImages = [];
+let currentImageIndex = 0;
 const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
 const SERVER_BASE = "https://api.buildskil.com";
 //const API_BASE = "http://localhost:5000/api/work"; // change if using domain
@@ -804,16 +806,17 @@ async function showSnapshots(ownerId = null) {
 
     historyDiv.innerHTML = "";
 
-    sessions.forEach(session => {
+     sessions.forEach(session => {
 
       if (!session.snapshots || session.snapshots.length === 0) return;
 
       session.snapshots.forEach(snapshot => {
-
+       snapshotImages.push(snapshot.url);
         const img = document.createElement("img");
-
-       // img.src = SERVER_BASE + snapshot.url;
+          //img.src = SERVER_BASE + snapshot.url; // old
         img.src = snapshot.url;
+ img.className = "snapshot-thumb";
+  img.dataset.index = snapshotImages.length - 1;
         img.style.width = "150px";
         img.style.margin = "5px";
         img.style.border = "1px solid #ccc";
@@ -824,7 +827,13 @@ async function showSnapshots(ownerId = null) {
                    ? new Date(snapshot.timestamp).toLocaleString()
                    : "Time not available";
         historyDiv.appendChild(img);
-        historyDiv.appendChild(caption);
+        img.onclick = () => {
+
+        openImageViewer(Number(img.dataset.index));
+
+    };
+
+    historyDiv.appendChild(img);
 
       });
 
@@ -878,3 +887,100 @@ function preventScreenshots() {
 // Call once when page loads
 preventScreenshots();
 */
+
+const modal = document.getElementById("imageModal");
+
+const modalImg = document.getElementById("modalImage");
+
+const counter = document.getElementById("imageCounter");
+
+function openImageViewer(index){
+
+    currentImageIndex = index;
+
+    updateViewer();
+
+    modal.style.display = "flex";
+
+}
+
+function updateViewer(){
+
+    modalImg.src = snapshotImages[currentImageIndex];
+
+    counter.textContent =
+        `${currentImageIndex+1} / ${snapshotImages.length}`;
+
+}
+
+function nextImage(){
+
+    if(currentImageIndex < snapshotImages.length-1){
+
+        currentImageIndex++;
+
+        updateViewer();
+
+    }
+
+}
+
+function previousImage(){
+
+    if(currentImageIndex>0){
+
+        currentImageIndex--;
+
+        updateViewer();
+
+    }
+
+}
+
+document.querySelector(".close-modal").onclick=()=>{
+
+    modal.style.display="none";
+
+};
+
+document.querySelector(".next-btn").onclick=nextImage;
+
+document.querySelector(".prev-btn").onclick=previousImage;
+document.addEventListener("keydown",(e)=>{
+
+    if(modal.style.display!=="flex") return;
+
+    if(e.key==="ArrowRight") nextImage();
+
+    if(e.key==="ArrowLeft") previousImage();
+
+    if(e.key==="Escape") modal.style.display="none";
+
+});
+let touchStartX = 0;
+
+let touchEndX = 0;
+
+modal.addEventListener("touchstart",e=>{
+
+    touchStartX = e.changedTouches[0].screenX;
+
+});
+
+modal.addEventListener("touchend",e=>{
+
+    touchEndX = e.changedTouches[0].screenX;
+
+    const diff = touchStartX - touchEndX;
+
+    if(diff > 50){
+
+        nextImage();
+
+    }else if(diff < -50){
+
+        previousImage();
+
+    }
+
+});
