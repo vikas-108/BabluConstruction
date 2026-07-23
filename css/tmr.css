@@ -281,7 +281,7 @@ button {
   font-weight: 700;
   overflow-wrap: anywhere;
 }
-
+/*
 #snapshotHistory {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -303,7 +303,132 @@ button {
   font-size: 0.82rem;
   color: var(--muted);
 }
+*/
+#snapshotHistory{
 
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+
+}
+
+.snapshot-thumb{
+
+    width:150px;
+    height:120px;
+    object-fit:cover;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+    border:2px solid #ddd;
+
+}
+
+.snapshot-thumb:hover{
+
+    transform:scale(1.05);
+
+}
+
+.image-modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.95);
+
+    z-index:99999;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.modal-image{
+
+    max-width:95vw;
+
+    max-height:90vh;
+
+    object-fit:contain;
+
+    user-select:none;
+
+}
+
+.close-modal{
+
+    position:absolute;
+
+    top:15px;
+
+    right:25px;
+
+    color:#fff;
+
+    font-size:45px;
+
+    cursor:pointer;
+
+}
+
+.nav-btn{
+
+    position:absolute;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    background:rgba(255,255,255,.2);
+
+    color:#fff;
+
+    border:none;
+
+    width:60px;
+
+    height:60px;
+
+    font-size:30px;
+
+    cursor:pointer;
+
+    border-radius:50%;
+
+}
+
+.prev-btn{
+
+    left:20px;
+
+}
+
+.next-btn{
+
+    right:20px;
+
+}
+
+.image-counter{
+
+    position:absolute;
+
+    bottom:20px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    color:#fff;
+
+    font-size:18px;
+
+}
 #addMemberBtn {
   display: block;
   margin: 18px auto;
