@@ -232,7 +232,21 @@ document.addEventListener("DOMContentLoaded", () => {
     //digits.slice(-5); // last 5 digits
     return masked + visible;
   }
+function startButtonLoading(button, text = "Loading...") {
+  button.disabled = true;
+  button.classList.add("loading");
 
+  const btnText = button.querySelector(".btn-text");
+  if (btnText) btnText.textContent = text;
+}
+
+function stopButtonLoading(button, text) {
+  button.disabled = false;
+  button.classList.remove("loading");
+
+  const btnText = button.querySelector(".btn-text");
+  if (btnText) btnText.textContent = text;
+}
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -269,9 +283,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fullPhone = `${rule.code}${phone}`;
     // call back end authorization point
     try {
-      submitBtn.disabled = true;
-submitBtn.classList.add("loading");
-submitBtn.querySelector(".btn-text").textContent = "Loading...";
+       // ✅ Start Loader
+    startButtonLoading(submitBtn);
       const res = await fetch(`${LOGIN_API}login`, {
         method: "POST",
         headers: {
@@ -305,10 +318,8 @@ submitBtn.querySelector(".btn-text").textContent = "Loading...";
       console.error(err);
       alert("Server error");
     }finally {
-    // Restore button if page doesn't redirect
-    submitBtn.disabled = false;
-    submitBtn.classList.remove("loading");
-    submitBtn.querySelector(".btn-text").textContent = "Login";
+    // ✅ Stop Loader (won't be seen if page redirects)
+    stopButtonLoading(submitBtn, "Login");
 }
   });
   const forgotBtn = document.getElementById("forgotBtn");
