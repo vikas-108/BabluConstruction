@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const landingPage = document.getElementById("landingPage");
   const bottomNav = document.getElementById("bottomNav");
   const ctta = document.getElementById("ctta");
+  const submitBtn = document.getElementById("submitLogin");
   if (user && user.username) {
     // ✅ Logged in → show protected sections
     heroButtons?.classList.remove("hidden");
@@ -268,6 +269,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const fullPhone = `${rule.code}${phone}`;
     // call back end authorization point
     try {
+      submitBtn.disabled = true;
+submitBtn.classList.add("loading");
+submitBtn.querySelector(".btn-text").textContent = "Loading...";
       const res = await fetch(`${LOGIN_API}login`, {
         method: "POST",
         headers: {
@@ -300,7 +304,12 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error(err);
       alert("Server error");
-    }
+    }finally {
+    // Restore button if page doesn't redirect
+    submitBtn.disabled = false;
+    submitBtn.classList.remove("loading");
+    submitBtn.querySelector(".btn-text").textContent = "Login";
+}
   });
   const forgotBtn = document.getElementById("forgotBtn");
   if (forgotBtn) {
