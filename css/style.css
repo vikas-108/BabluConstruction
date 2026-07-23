@@ -276,7 +276,45 @@ form {
   color: #666;
   margin-top: 0.3rem;
 }
+#submitLogin {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 140px;
+    height: 45px;
+    cursor: pointer;
+}
 
+#submitLogin:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.btn-loader {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: btnSpin .7s linear infinite;
+}
+
+#submitLogin.loading .btn-loader {
+    display: inline-block;
+}
+
+#submitLogin.loading .btn-text {
+    content: "";
+}
+
+@keyframes btnSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 /* Button */
 form button {
   background: #0078d7;
