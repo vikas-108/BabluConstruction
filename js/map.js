@@ -500,6 +500,15 @@ map.on("zoomstart", () => {
   document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("hidden");
   });
+   document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
  const pageLoader = document.getElementById("pageLoader");
 
 function showLoader(message = "Please wait...") {
