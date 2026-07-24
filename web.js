@@ -7,6 +7,7 @@ const districtFilter = document.getElementById("districtFilter");
 const PAGE_SIZE = 20;
 let currentPage = 1;
 let lastSearchResults = [];
+let activeRequests = 0;
 const SERVER_BASE = "https://api.buildskil.com";
 const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
 //const SERVER_BASE = "http://localhost:5000";
@@ -852,6 +853,21 @@ function prevPage() {
     renderPage();
   }
 }
+const originalFetch = window.fetch;
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
 async function fetchPublishedProfiles() {
   try {
     const res = await fetch(PROFILE_API);
