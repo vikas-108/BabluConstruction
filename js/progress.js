@@ -415,6 +415,15 @@ document.getElementById("clientViewBtn").onclick = async () => {
     showToast("Error loading");
   }
 };
+ document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
 const pageLoader = document.getElementById("pageLoader");
 
 function showLoader(message = "Please wait...") {
