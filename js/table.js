@@ -8,6 +8,7 @@ const actionHistory = [];
 const typingTimers = {};
 let count = 0;
 const max = 99;
+let activeRequests = 0;
 function authHeaders(isFormData = false) {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -1045,7 +1046,20 @@ socket.on("tableTyping", ({ tableId, data }) => {
   }
   loadTables(); // 👈 important
 });
+const originalFetch = window.fetch;
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
 
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
 /***
  * // Delete row by index
 const rowIndexInput = document.createElement('input');
