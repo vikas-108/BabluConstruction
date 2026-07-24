@@ -313,3 +313,44 @@
     background:#999;
     cursor:not-allowed;
 }
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(2px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.page-loader.active {
+    display: flex;
+}
+
+.loader-box {
+    text-align: center;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #ddd;
+    border-top: 6px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto 15px;
+}
+
+.loader-box p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
