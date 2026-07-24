@@ -13,6 +13,7 @@ let sessionId = null;
 let motionIntervalId = null;
 let snapshotImages = [];
 let currentImageIndex = 0;
+let activeRequests = 0;
 const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
 const SERVER_BASE = "https://api.buildskil.com";
 //const API_BASE = "http://localhost:5000/api/work"; // change if using domain
@@ -847,6 +848,21 @@ async function showSnapshots(ownerId = null) {
   }
 
 }
+const originalFetch = window.fetch;
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
 document.getElementById("captureBtn").addEventListener("click", () => {
   const video = document.getElementById("cameraStream");
   const canvas = document.getElementById("snapshotCanvas");
