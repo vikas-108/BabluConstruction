@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function startButtonLoading(button, text = "Loading...") {
   button.disabled = true;
   button.classList.add("loading");
-
+//button.querySelector(".btn-text").textContent = text;
   const btnText = button.querySelector(".btn-text");
   if (btnText) btnText.textContent = text;
 }
@@ -243,7 +243,7 @@ function startButtonLoading(button, text = "Loading...") {
 function stopButtonLoading(button, text) {
   button.disabled = false;
   button.classList.remove("loading");
-
+//button.querySelector(".btn-text").textContent = text;
   const btnText = button.querySelector(".btn-text");
   if (btnText) btnText.textContent = text;
 }
@@ -333,6 +333,7 @@ function stopButtonLoading(button, text) {
       }
 
       try {
+         startButtonLoading(forgotBtn);
         const res = await fetch(`${LOGIN_API}forgot-username`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -351,7 +352,9 @@ function stopButtonLoading(button, text) {
       } catch (err) {
         console.error(err);
         alert("Server error");
-      }
+      }finally {
+    stopButtonLoading(forgotBtn, "Forgot Password");
+}
     };
   }
 
@@ -367,6 +370,7 @@ function stopButtonLoading(button, text) {
       }
 
       try {
+        startButtonLoading(verifyBtn);
         const res = await fetch(`${LOGIN_API}verify-username-otp`, {
           method: "POST",
           headers: {
@@ -388,6 +392,8 @@ function stopButtonLoading(button, text) {
       } catch (err) {
         console.error(err);
         alert("Server error");
+      }finally{
+         stopButtonLoading(verifyBtn, "verifing");
       }
     };
   }
@@ -403,6 +409,7 @@ function stopButtonLoading(button, text) {
       }
 
       try {
+         startButtonLoading(saveUsernameBtn);
         const res = await fetch(`${LOGIN_API}update-username`, {
           method: "POST",
           headers: {
@@ -427,6 +434,8 @@ function stopButtonLoading(button, text) {
       } catch (err) {
         console.error(err);
         alert("Server error");
+      }finally{
+         stopButtonLoading(saveUsernameBtn, "updating");
       }
     };
   }
