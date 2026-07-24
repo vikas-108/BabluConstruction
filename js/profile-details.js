@@ -12,6 +12,7 @@ async function loadProfile() {
   }
 
   try {
+    showLoader("loading...");
     const res = await fetch(`${SERVER_BASE}/api/profiles/${profileId}`);
 
     if (!res.ok) {
@@ -25,6 +26,8 @@ async function loadProfile() {
   } catch (err) {
     console.error(err);
     container.innerHTML = "<p>Server error</p>";
+  }finally{
+    hideLoader();
   }
 }
 
@@ -197,5 +200,16 @@ overlay.addEventListener('touchend', e => {
 
 }
 
+
+const pageLoader = document.getElementById("pageLoader");
+
+function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+}
+
+function hideLoader() {
+    pageLoader.classList.remove("active");
+}
 
 loadProfile();
