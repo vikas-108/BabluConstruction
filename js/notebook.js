@@ -495,7 +495,15 @@ backBtn.addEventListener('click', async () => {
     await fetchAndRenderNotebooks(searchBar.value.trim().toLowerCase());
 });
 
-
+document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
 const pageLoader = document.getElementById("pageLoader");
 
 function showLoader(message = "Please wait...") {
