@@ -13,7 +13,27 @@ body {
 h2 {
   text-align: center;
 }
+.page-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
+.back-btn{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:24px;
+    transition:background .2s;
+}
+
+.back-btn:hover{
+    background:#f0f0f0;
+}
 input, button {
   padding: 10px;
   margin: 5px;
