@@ -1,4 +1,5 @@
 let PROJECT_CACHE = [];
+let activeRequests = 0;
 document.addEventListener("DOMContentLoaded", () => {
   // let projectCounter = 3; // start from last existing project ID
   const API_BASE = "https://api.buildskil.com/api/projects";
@@ -479,3 +480,18 @@ async function compressImage(file, maxWidth = 1024, quality = 0.7) {
   };
   //loadProjects();
 });
+const originalFetch = window.fetch;
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
+
