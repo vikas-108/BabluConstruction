@@ -48,7 +48,22 @@ h1{
   font-size:1.6rem;
   font-weight:700;
 }
+.back-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s ease, transform .2s ease;
+}
 
+.back-title:hover {
+    color: #0d6efd;
+}
+
+.back-title:active {
+    transform: translateX(-2px);
+}
 h2{
   margin:0 0 12px;
 }
