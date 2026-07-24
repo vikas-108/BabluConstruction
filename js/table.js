@@ -1046,6 +1046,13 @@ socket.on("tableTyping", ({ tableId, data }) => {
   }
   loadTables(); // 👈 important
 });
+function goBack(fallback = "landing.html") {
+    if (history.length > 1) {
+        history.back();
+    } else {
+        window.location.href = fallback;
+    }
+}
 const originalFetch = window.fetch;
 window.fetch = async (...args) => {
     if (activeRequests++ === 0) {
