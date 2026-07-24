@@ -1,0 +1,35 @@
+.page-loader{
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:rgba(255,255,255,.7);
+    backdrop-filter:blur(2px);
+    z-index:999999;
+}
+
+.page-loader.show{
+    display:flex;
+}
+
+.loader-spinner{
+    width:55px;
+    height:55px;
+    border:5px solid #ddd;
+    border-top-color:#007bff;
+    border-radius:50%;
+    animation:loaderSpin .8s linear infinite;
+}
+
+.loader-text{
+    margin-top:15px;
+    text-align:center;
+    font-weight:600;
+}
+
+@keyframes loaderSpin{
+    to{
+        transform:rotate(360deg);
+    }
+}
