@@ -2,6 +2,7 @@ let CURRENT_PROFILE = null;
 let NEW_PHOTO_FILE = null;
 const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
 const SERVER_BASE = "https://api.buildskil.com";
+let activeRequests = 0;
 //const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
 //const SERVER_BASE = "http://localhost:5000"; // change if using domain
 function authHeaders() {
@@ -287,7 +288,22 @@ async function deleteAccount() {
 
   window.location.href = "index.html";
 }
+const originalFetch = window.fetch;
 
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
 // Delete account
 /*async function deleteAccount() {
   if (!confirm("Delete account permanently?")) return;
