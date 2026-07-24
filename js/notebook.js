@@ -136,6 +136,7 @@ function calculateMetrics() {
 // Fetch all database records for the logged-in user and build dashboard UI
 async function fetchAndRenderNotebooks(searchTerm = "") {
     try {
+        showLoader("Loading notebooks...");
         let url = NOTEBOOK_API;
         if (searchTerm) {
             url += `?search=${encodeURIComponent(searchTerm)}`;
@@ -159,6 +160,8 @@ async function fetchAndRenderNotebooks(searchTerm = "") {
     } catch (err) {
         console.error("Fetch Error:", err);
         notebooksList.innerHTML = `<div class="empty-list-text" style="color: red;">Failed to load notebooks. Please log in again.</div>`;
+    }finally{
+        hideLoader();
     }
 }
 
@@ -303,6 +306,7 @@ function triggerAutoSave() {
 async function deleteNotebook(id) {
     if (confirm(`Are you completely sure you want to delete "${allNotebooks[id].title}"? This cannot be undone.`)) {
         try {
+            showLoader("deleting...");
             const res = await fetch(`${NOTEBOOK_API}/${id}`, {
                 method: 'DELETE',
                 headers: getAuthHeaders()
@@ -314,6 +318,8 @@ async function deleteNotebook(id) {
             renderDashboardList(searchBar.value.trim().toLowerCase());
         } catch (err) {
             alert("Error deleting notebook: " + err.message);
+        }finally{
+            hideLoader();
         }
     }
 }
@@ -321,6 +327,7 @@ async function deleteNotebook(id) {
 // Remote API Post Call
 addNotebookBtn.addEventListener('click', async () => {
     try {
+         showLoader("Creating notebook...");
         const payload = {
             title: "My Notebook",
             color: selectedColor,
@@ -340,6 +347,8 @@ addNotebookBtn.addEventListener('click', async () => {
         loadNotebook(newNotebook._id);
     } catch (err) {
         alert("Error creating notebook: " + err.message);
+    }finally{
+        hideLoader();
     }
 });
 // HELPER FUNCTION: Safely parses page contents whether they are strings or JSON objects
@@ -487,7 +496,16 @@ backBtn.addEventListener('click', async () => {
 });
 
 
+const pageLoader = document.getElementById("pageLoader");
 
+function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+}
+
+function hideLoader() {
+    pageLoader.classList.remove("active");
+}
 
 function openShareDrawer(notebookId) {
     targetShareNotebookId = notebookId;
@@ -514,6 +532,7 @@ sendShareBtn.addEventListener('click', async () => {
     }
 
     try {
+         showLoader("Sharing notebook...");
         const res = await fetch(`${NOTEBOOK_API}/${targetShareNotebookId}/share`, {
             method: 'POST',
             headers: getAuthHeaders(),
@@ -527,5 +546,7 @@ sendShareBtn.addEventListener('click', async () => {
         shareDrawerOverlay.classList.add('hidden');
     } catch (err) {
         alert("Error sharing: " + err.message);
+    }finally{
+        hideLoader();
     }
 });
