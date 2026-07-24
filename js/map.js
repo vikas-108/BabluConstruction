@@ -211,7 +211,7 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
   };
 
   try {
-
+   showLoader("Saving...");
     let url = `${API_BASE}/project`;
     let method = "POST";
 
@@ -242,6 +242,8 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
   } catch (err) {
     console.error(err);
     alert("Error saving project");
+  }finally{
+   hideLoader();
   }
 });
 function resetForm() {
@@ -258,6 +260,7 @@ async function loadProjects() {
   historyList.innerHTML = "";
 
   try {
+   showLoader("Loading...");
     const res = await fetch(`${API_BASE}/project`, { headers: authHeaders() });
     const projects = await res.json();
     allProjects = projects;
@@ -384,6 +387,8 @@ li.querySelector(".history-item").addEventListener("click", () => {
     });
   } catch (err) {
     console.error("Load error", err);
+  }finally{
+    hideLoader();
   }
 }
 const searchBox = document.getElementById("searchBox");
@@ -495,6 +500,16 @@ map.on("zoomstart", () => {
   document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("hidden");
   });
+ const pageLoader = document.getElementById("pageLoader");
+
+function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+}
+
+function hideLoader() {
+    pageLoader.classList.remove("active");
+}
   function showToaster(message, type = "info") {
   const toaster = document.getElementById("toaster");
   toaster.textContent = message;
