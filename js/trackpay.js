@@ -40,7 +40,7 @@ document.getElementById("createBillingBtn").addEventListener("click", async () =
     }
 
     try {
-
+        showLoader("Creating...");
         const res = await fetch(`${API_BASE}/create`, {
 
             method: "POST",
@@ -77,13 +77,15 @@ document.getElementById("createBillingBtn").addEventListener("click", async () =
 
         console.error(err);
 
+    }finally{
+        hideLoader();
     }
 
 });
 async function loadWorkers() {
 
     try {
-
+          showLoader("Loading...");
         const res = await fetch(`${API_BASE}/list`, {
             headers: authHeaders()
         });
@@ -103,6 +105,8 @@ async function loadWorkers() {
 
         console.error(err);
 
+    }finally{
+        hideLoader();
     }
 
 }
@@ -231,7 +235,7 @@ async function openWorker(id){
 async function deleteWorker(id){
 
     try{
-
+        showLoader("Deleting...");
         const res=await fetch(`${API_BASE}/delete/${id}`,{
 
             method:"DELETE",
@@ -256,6 +260,8 @@ async function deleteWorker(id){
 
         console.log(err);
 
+    }finally{
+        hideLoader();
     }
 
 }
@@ -386,7 +392,7 @@ document.getElementById("addBillBtn").addEventListener("click",async()=>{
 async function showPreviousHistory(id) {
 
     try {
-
+         showLoader("wait...");
         const res = await fetch(`${API_BASE}/${id}/history`, {
 
             headers: authHeaders()
@@ -508,6 +514,8 @@ async function showPreviousHistory(id) {
 
         console.error(err);
 
+    }finally{
+        hideLoader();
     }
 
 }
@@ -531,3 +539,11 @@ function saveWorkers() {
 // Initial render local storage data , remove after testing on api call
 
 loadWorkers();
+function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+}
+
+function hideLoader() {
+    pageLoader.classList.remove("active");
+}
