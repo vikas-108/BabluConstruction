@@ -109,6 +109,7 @@ document.getElementById("createChannelBtn").onclick = async () => {
   }
 
   try{
+     showLoader("Creating...");
     await api("/create", {
       method:"POST",
       body: JSON.stringify({ role, clientPhone, updaterPhone })
@@ -125,20 +126,26 @@ document.getElementById("createChannelBtn").onclick = async () => {
 
   }catch(err){
     showToast(err.message);
+  }finally{
+    hideLoader();
   }
 };
 async function fetchMyChannels(){
   try{
+    showLoader("Loading...");
     const channels = await api("/my");
 
     renderChannels(channels);
 
   }catch(err){
     showToast(err.message);
+  }finally{
+    hideLoader();
   }
 }
 async function fetchMyAccount(){ 
   try{
+    showLoader("Fetching...");
     const res = await fetch(`${ACCOUNT_API}/api/account/me`, {
       headers: authHeaders()
     });
@@ -157,6 +164,8 @@ async function fetchMyAccount(){
     applyRoleUI(account);
   }catch(err){
     console.error(err);
+  }finally{
+    hideLoader();
   }
 }
 function applyRoleUI(account){
@@ -246,6 +255,7 @@ function renderChannels(data){
       if(canToggle){
         div.querySelector("button").onclick = async ()=>{
           try{
+            showLoader("Loading...");
             await api(`/${ch._id}/stage`, {
               method:"PATCH",
               body: JSON.stringify({ stageIndex: i })
@@ -255,6 +265,8 @@ function renderChannels(data){
 
           }catch(err){
             showToast(err.message);
+          }finally{
+            hideLoader();
           }
         };
       }
@@ -292,6 +304,7 @@ async function deleteRecord(event, id) {
     if (!confirm("Are you sure you want to delete this record?")) return;
 
     try {
+      showLoader("Deleting...");
         // Call your Node.js API
         const response = await fetch(`${API_BASE}/delete/${id}`, {
             method: 'DELETE',
@@ -318,6 +331,8 @@ async function deleteRecord(event, id) {
     } catch (err) {
         console.error(err);
         alert("Failed to connect to server.");
+    }finally{
+      hideLoader();
     }
 }
 
@@ -400,6 +415,16 @@ document.getElementById("clientViewBtn").onclick = async () => {
     showToast("Error loading");
   }
 };
+const pageLoader = document.getElementById("pageLoader");
+
+function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+}
+
+function hideLoader() {
+    pageLoader.classList.remove("active");
+}
 async function init(){
   await fetchMyAccount();
 
