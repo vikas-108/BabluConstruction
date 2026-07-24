@@ -659,6 +659,17 @@ stateInput.addEventListener("change", () => {
   window.deleteProfile = deleteProfile;
   window.editProfile = editProfile;
 });
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".back-title").forEach(title => {
+        title.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
+});
 const originalFetch = window.fetch;
 window.fetch = async (...args) => {
     if (activeRequests++ === 0) {
