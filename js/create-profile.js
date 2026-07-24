@@ -4,6 +4,7 @@ const SERVER_BASE = "https://api.buildskil.com";
 //const SERVER_BASE = "http://localhost:5000"; // change if using domain
 let EDIT_PROFILE_ID = null;
 let ORIGINAL_MEDIA = null;
+let activeRequests = 0;
 function authHeaders() {
   return {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -658,4 +659,19 @@ stateInput.addEventListener("change", () => {
   window.deleteProfile = deleteProfile;
   window.editProfile = editProfile;
 });
+const originalFetch = window.fetch;
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
+
 
