@@ -54,15 +54,19 @@
         </button>
         <!-- Forgot Username -->
         <div id="forgotBox" style="display: none; margin-top: 10px">
-          <button type="button" id="forgotBtn">
-            Forgot Username?
-          </button>
+         <button type="button" id="forgotBtn" class="loading-btn">
+               <span class="btn-text">Forgot Password</span>
+              <span class="btn-loader"></span>
+         </button>
         </div>
 
         <!-- OTP Verification -->
         <div id="otpBox" style="display: none; margin-top: 15px">
           <input type="text" id="otpInput" placeholder="Enter OTP from email" />
-          <button type="button" id="verifyOtpBtn">Verify OTP</button>
+          <button type="button" id="verifyOtpBtn" class="loading-btn">
+            <span class="btn-text">verifing</span>
+            <span class="btn-loader"></span>
+          </button>
         </div>
 
         <!-- Reset Password -->
@@ -73,7 +77,10 @@
             placeholder="Create new username"
           />
             <small>Must contain letters, numbers & special characters</small>
-          <button type="button" id="saveUsernameBtn">Update New Username</button>
+          <button type="button" id="saveUsernameBtn" class="loading-btn">
+            <span class="btn-text">Updating</span>
+            <span class="btn-loader"></span>
+          </button>
         </div>
       </form>
     </div>
