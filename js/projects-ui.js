@@ -480,6 +480,17 @@ async function compressImage(file, maxWidth = 1024, quality = 0.7) {
   };
   //loadProjects();
 });
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".back-title").forEach(title => {
+        title.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html";
+            }
+        });
+    });
+});
 const originalFetch = window.fetch;
 window.fetch = async (...args) => {
     if (activeRequests++ === 0) {
