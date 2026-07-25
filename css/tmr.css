@@ -70,7 +70,22 @@ button {
   transform: translateY(-3px);
   box-shadow: 0 14px 32px rgba(31, 45, 61, 0.14);
 }
+.back-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s ease, transform .2s ease;
+}
 
+.back-title:hover {
+    color: #0d6efd;
+}
+
+.back-title:active {
+    transform: translateX(-2px);
+}
 .summary-card h3 {
   margin: 0;
   font-size: clamp(0.9rem, 2vw, 1.05rem);
