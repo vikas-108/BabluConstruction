@@ -176,7 +176,15 @@
         // 3. Add to History
         addToHistory(invNum);
     }
-
+ document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
     function addToHistory(id) {
         const client = document.getElementById('toName').value || 'Unknown';
         const date = document.getElementById('billDate').value;
