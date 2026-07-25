@@ -848,6 +848,15 @@ async function showSnapshots(ownerId = null) {
   }
 
 }
+ document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
 const originalFetch = window.fetch;
 
 window.fetch = async (...args) => {
