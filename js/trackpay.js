@@ -532,7 +532,13 @@ document.getElementById("historyModal").onclick = (e) => {
     }
 
 };
-
+function goBack(fallback = "landing.html") {
+    if (history.length > 1) {
+        history.back();
+    } else {
+        window.location.href = fallback;
+    }
+}
 function saveWorkers() {
     localStorage.setItem("billingWorkers", JSON.stringify(workers));
 }
