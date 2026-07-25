@@ -132,7 +132,7 @@ function renderProfile(profile) {
       "http",
     )
       ? profile.photo
-      : SERVER_BASE + profile.photo+ "?v=" + Date.now();;
+      : SERVER_BASE + profile.photo+ "?v=" + Date.now();
   } else {
     // Generate initials avatar if no photo
     const initials = (profile.name || "U N")
