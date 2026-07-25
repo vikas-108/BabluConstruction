@@ -126,7 +126,7 @@ function renderProfile(profile) {
   document.getElementById("profileBio").textContent =
     profile.bio || "No details added";
 
-  // Show saved photo if available
+  /* Show saved photo if available
   if (profile.photo) {
     document.getElementById("profilePhoto").src = profile.photo.startsWith(
       "http",
@@ -141,7 +141,21 @@ function renderProfile(profile) {
       .join("");
     document.getElementById("profilePhoto").src =
       `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
-  }
+  }*/
+  const photo = document.getElementById("profilePhoto");
+
+if (profile.photo) {
+  photo.src = profile.photo.startsWith("http")
+    ? profile.photo
+    : SERVER_BASE + profile.photo;
+} else {
+  const initials = (profile.name || "U N")
+    .split(" ")
+    .map(n => n[0].toUpperCase())
+    .join("");
+
+  photo.src = `https://via.placeholder.com/140/007bff/ffffff?text=${encodeURIComponent(initials)}`;
+}
   // 🔐 LOCK EMAIL IF VERIFIED
 const editEmailInput = document.getElementById("editEmail");
 
