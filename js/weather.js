@@ -96,7 +96,13 @@ function updateBackground(condition, isDay) {
         body.style.background = isDay ? "#2980b9" : "#1a1a2e";
     }
 }
-
+function goBack(fallback = "landing.html") {
+    if (history.length > 1) {
+        history.back();
+    } else {
+        window.location.href = fallback;
+    }
+}
 // Default to India's Capital
 window.addEventListener("DOMContentLoaded", () => {
     fetchData("New Delhi");
