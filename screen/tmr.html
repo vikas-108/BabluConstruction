@@ -14,18 +14,8 @@
   <script src="/js/auth-guard.js"></script>
   </head>
   <body>
-    <div class="dashboard-summary">
-      <div class="summary-card">
-        <h3>Total Hours Worked Today</h3>
-        <p id="totalHours">0h 0m</p>
-      </div>
-      <div class="summary-card">
-        <h3>Total Earnings Today</h3>
-        <p id="totalEarnings">₹0</p>
-      </div>
-    </div>
     <div class="time-rupees-container">
-      <h2>⏰ Time Rupees Earns</h2>
+      <h2 class="back-title">← Time Rupees Earns</h2>
           <div id="toastField"></div>
       <div class="camera-wrapper">
         <video id="cameraStream" autoplay playsinline></video>
@@ -88,7 +78,16 @@
         />
         <button id="permissionBtn">Give Permission</button>
       </div>
-
+<div class="dashboard-summary">
+      <div class="summary-card">
+        <h3>Total Hours Worked Today</h3>
+        <p id="totalHours">0h 0m</p>
+      </div>
+      <div class="summary-card">
+        <h3>Total Earnings Today</h3>
+        <p id="totalEarnings">₹0</p>
+      </div>
+    </div>
       <!-- History table already has Permissioned Users column -->
       <div class="history-table-wrap">
         <table id="historyTable">
