@@ -200,7 +200,15 @@ overlay.addEventListener('touchend', e => {
 
 }
 
+const backBtn = document.querySelector(".back-btn");
 
+backBtn.addEventListener("click", () => {
+    if (window.history.length > 1) {
+        history.back();
+    } else {
+        window.location.href = "landing.html"; // Default page
+    }
+});
 const pageLoader = document.getElementById("pageLoader");
 
 function showLoader(message = "Please wait...") {
