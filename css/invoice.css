@@ -10,7 +10,22 @@
         .panel { background: white; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); padding: clamp(18px, 3vw, 30px); }
         .form-panel { width: min(100%, 420px); height: fit-content; }
         .form-panel > div:first-child { gap: 10px; flex-wrap: wrap; }
-        
+        .back-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s ease, transform .2s ease;
+}
+
+.back-title:hover {
+    color: #0d6efd;
+}
+
+.back-title:active {
+    transform: translateX(-2px);
+}
         h2 { margin-top: 0; font-size: 1.5rem; color: var(--dark); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
         h4 { margin: 18px 0 8px; font-size: 0.85rem; text-transform: uppercase; color: #888; letter-spacing: 0.5px; font-weight: 700; }
         
