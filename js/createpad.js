@@ -978,3 +978,11 @@ if (isDragging) {
     });
   });
 });
+function goBack(fallback = "landing.html") {
+    if (history.length > 1) {
+        history.back();
+    } else {
+        window.location.href = fallback;
+    }
+}
+
