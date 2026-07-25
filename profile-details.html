@@ -12,7 +12,22 @@
   <script src="/js/auth-guard.js"></script>
 </head>
 <body>
+<header class="page-header">
+    <button class="back-btn" onclick="history.back()" aria-label="Go Back">
+        <svg viewBox="0 0 24 24" fill="none">
+            <path d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"/>
+        </svg>
+    </button>
 
+    <h1 class="page-title">Project Details</h1>
+
+    <!-- Keeps title centered -->
+    <div class="header-space"></div>
+</header>
 <div id="profileContainer" class="profile-page"></div>
   <div id="pageLoader" class="page-loader">
     <div class="loader-box">
