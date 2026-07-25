@@ -193,7 +193,15 @@ function tan(deg) {
 function sqrt(num) { 
     return Math.sqrt(num); 
 }
-
+document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
 function calculateResult() {
     try {
         let expression = calcDisplay.value;
