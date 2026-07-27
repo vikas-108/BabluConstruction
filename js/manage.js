@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     if (res.ok) {
-      alert("OTP sent to your email");
+      showToaster("OTP sent to your email");
 
       verifyEmailBtn.classList.add("hidden"); // 👈 hide verify button
       emailVerifyBox.classList.remove("hidden"); // 👈 show input
@@ -102,9 +102,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (res.ok) {
       renderProfile(profile); // 🔥 this updates badge + UI
-      alert("Email verified ✅");
+      showToaster("Email verified ✅");
     } else {
-      alert(profile.message);
+      showToaster(profile.message);
     }
   });
 });
@@ -269,7 +269,7 @@ async function saveProfile() {
 
     if (!res.ok) {
       const err = await res.json();
-      alert(err.message || "Update failed");
+      showToaster(err.message || "Update failed");
       return;
     }
 
@@ -280,7 +280,7 @@ async function saveProfile() {
 
   } catch (err) {
     console.error(err);
-    alert("Server connection error");
+    showToaster("Server connection error");
   }
 }
 async function deleteAccount() {
@@ -292,7 +292,7 @@ async function deleteAccount() {
   });
 
   if (!res.ok) {
-    alert("Delete failed");
+    showToaster("Delete failed");
     return;
   }
 
@@ -318,6 +318,117 @@ window.fetch = async (...args) => {
         }
     }
 };
+
+async function loadDeleteSetting(){
+
+    const res = await fetch(
+        `${ACCOUNT_BASE}/auto-delete`,
+        {
+            headers: authHeaders()
+        }
+    );
+
+    const data = await res.json();
+
+    document.getElementById("deleteAfter").value =
+        data.autoDeleteAfterDays;
+
+    document.getElementById("lastActiveText").innerText =
+        new Date(data.lastActive).toLocaleString();
+
+}
+
+loadDeleteSetting();
+
+async function saveDeleteSetting() {
+    try {
+        const res = await fetch(`${ACCOUNT_BASE}/auto-delete`, {
+            method: "PUT",
+            headers: {
+                ...authHeaders(),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                inactivityDays: Number(deleteAfter.value)
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            showToaster(data.message || "Failed to save", "error");
+            return;
+        }
+
+        showToaster("Setting saved successfully", "success");
+
+        // Update current saved value
+        originalValue = deleteAfter.value;
+
+        // Hide button again
+        saveBtn.style.display = "none";
+
+    } catch (err) {
+        console.error(err);
+        showToaster("Server error", "error");
+    }
+}
+
+const deleteAfter = document.getElementById("deleteAfter");
+const saveBtn = document.getElementById("saveDeleteSetting");
+
+// Hide on page load
+saveBtn.style.display = "none";
+
+let originalValue = deleteAfter.value;
+
+// Show button only when value changes
+deleteAfter.addEventListener("change", () => {
+    saveBtn.style.display = "block";
+});
+document
+.getElementById("saveDeleteSetting")
+.addEventListener("click",saveDeleteSetting);
+
+function showToaster(message, type = "info", duration = 3000) {
+
+    const container = document.getElementById("toastContainer");
+
+    const toast = document.createElement("div");
+
+    toast.className = `toast ${type}`;
+
+    toast.innerHTML = `
+        <span>${message}</span>
+        <span class="toast-close">&times;</span>
+    `;
+
+    container.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.classList.add("show");
+    });
+
+    function removeToast() {
+
+        toast.classList.remove("show");
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        }, 350);
+
+    }
+
+    toast.querySelector(".toast-close")
+        .addEventListener("click", removeToast);
+
+    setTimeout(removeToast, duration);
+
+}
+
+
 // Delete account
 /*async function deleteAccount() {
   if (!confirm("Delete account permanently?")) return;
