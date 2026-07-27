@@ -79,6 +79,35 @@
   <h3>Active membership</h3>
   <p>Plan details coming soon</p>
 </article>
+    <article class="account-card">
+    <h3>Automatic Account Deletion</h3>
+
+    <!---<p class="delete-info">
+        Your account will be permanently deleted if you do not sign in or use the application for the selected period.
+    </p> -->
+
+    <label for="deleteAfter">Delete account after inactivity</label>
+
+    <select id="deleteAfter">
+
+        <option value="0">Never</option>
+        <option value="1">1day</option>
+        <option value="7">1 Week</option>
+        <option value="30">1 Month</option>
+        <option value="90">3 Months</option>
+        <option value="150">5 Months</option>
+
+    </select>
+
+    <div class="last-active">
+        Last Active:
+        <span id="lastActiveText">--</span>
+    </div>
+
+    <button id="saveDeleteSetting" onclick="saveDeleteSetting()">
+        Save Setting
+    </button>
+</article>
 <article class="account-card">
       <h3>Leave</h3>
       <p>By click on button you can leave the platform</p>
