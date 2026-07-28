@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       showToaster(profile.message);
     }
   });
-});
+//});
 
 // Render profile data into DOM
 function renderProfile(profile) {
@@ -428,7 +428,7 @@ function showToaster(message, type = "info", duration = 3000) {
 
 }
 
-
+});
 // Delete account
 /*async function deleteAccount() {
   if (!confirm("Delete account permanently?")) return;
