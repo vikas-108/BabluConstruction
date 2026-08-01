@@ -61,22 +61,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const buttonBar = document.createElement("div");
     buttonBar.className = "button-bar";
     // Phone input + Allow button
-    const phoneInput = document.createElement("input");
-    phoneInput.type = "tel";
-    phoneInput.placeholder = "Enter phone number";
-// ✅ Permission selector
-const permissionSelect = document.createElement("select");
+    //const phoneInput = document.createElement("input");
+    //phoneInput.type = "tel";
+    //phoneInput.placeholder = "Enter phone number";
+    // ✅ Permission selector
+    const permissionSelect = document.createElement("select");
 
-const optionEdit = document.createElement("option");
-optionEdit.value = "edit";
-optionEdit.innerText = "Can Edit";
+    const optionEdit = document.createElement("option");
+    optionEdit.value = "edit";
+    optionEdit.innerText = "Can Edit";
 
-const optionView = document.createElement("option");
-optionView.value = "view";
-optionView.innerText = "Can View";
+    const optionView = document.createElement("option");
+    optionView.value = "view";
+    optionView.innerText = "Can View";
 
-permissionSelect.appendChild(optionEdit);
-permissionSelect.appendChild(optionView);
+    permissionSelect.appendChild(optionEdit);
+    permissionSelect.appendChild(optionView);
     // Allow button with green check
     const saveBtn = document.createElement("button");
     saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk save-icon"></i>';
@@ -84,13 +84,12 @@ permissionSelect.appendChild(optionView);
     saveBtn.setAttribute("data-tooltip", "Save Table");
     saveBtn.onclick = async () => {
       const tableData = extractTableData(table);
-      const phone = phoneInput.value.trim();
+      //const phone = phoneInput.value.trim();
       const permission = permissionSelect.value;
       // ✅ Phone validation (optional but required for sharing)
-      if (phone && !/^[0-9]{10}$/.test(phone)) {
-        showToast("Please enter valid 10-digit phone number");
-        return;
-      }
+      // if (phone && !/^[0-9]{10}$/.test(phone)) {
+      //   showToast("Please enter valid 10-digit phone number");
+      //   return;
 
       const payload = {
         title,
@@ -120,8 +119,9 @@ permissionSelect.appendChild(optionView);
           tableId = result._id;
           block.dataset.id = tableId;
         }
+
         // ================= SHARE TABLE =================
-        if (phone) {
+        /*if (phone) {
           const res = await fetch(`${TABLE_API}/share`, {
             method: "POST",
             headers: authHeaders(),
@@ -142,7 +142,7 @@ permissionSelect.appendChild(optionView);
           }
         } else {
           showToast("Table saved successfully");
-        }
+        }*/
 
         // ================= LOCK TABLE =================
         lockTable(table, true);
@@ -216,8 +216,8 @@ permissionSelect.appendChild(optionView);
     };
 
     // Append all controls into horizontal bar
-    buttonBar.appendChild(phoneInput);
-    buttonBar.appendChild(permissionSelect); // ✅ new
+    //buttonBar.appendChild(phoneInput);
+    // buttonBar.appendChild(permissionSelect); // ✅ new
     buttonBar.appendChild(saveBtn);
     buttonBar.appendChild(editBtn);
     buttonBar.appendChild(deleteBtn);
@@ -561,7 +561,9 @@ permissionSelect.appendChild(optionView);
 
     const block = document.createElement("div");
     block.className = "table-block";
-
+    //console.log(tableData);
+   // console.log("isOwner:", tableData.isOwner);
+    ////console.log("user:", tableData.user);
     // ================= TITLE =================
     const titleDiv = document.createElement("div");
     titleDiv.className = "table-title";
@@ -579,20 +581,22 @@ permissionSelect.appendChild(optionView);
       contentDiv.style.display = isHidden ? "block" : "none";
       titleSpan.innerHTML = (isHidden ? "▼ " : "▶ ") + tableData.title;
     };
-            const currentUserId = localStorage.getItem("userId");
-          const isOwner = tableData.user === currentUserId;
-           const sharedUser = tableData.sharedWith?.find(
-             u => u.user === currentUserId
-           );
+    const currentUserId = localStorage.getItem("userId");
+    //const isOwner = tableData.user === currentUserId;
+    const isOwner = tableData.isOwner;
+    const sharedUser = tableData.sharedWith?.find(
+      (u) => u.user === currentUserId,
+    );
 
-      if (!isOwner && sharedUser) {
-       const badge = document.createElement("span");
-        badge.innerText = sharedUser.permission === "view" ? "🔒 Read Only" : "✏️ Editable";
-         badge.style.marginLeft = "10px";
-           badge.style.color = sharedUser.permission === "view" ? "red" : "green";
+    if (!isOwner && sharedUser) {
+      const badge = document.createElement("span");
+      badge.innerText =
+        sharedUser.permission === "view" ? "🔒 Read Only" : "✏️ Editable";
+      badge.style.marginLeft = "10px";
+      badge.style.color = sharedUser.permission === "view" ? "red" : "green";
 
-           titleDiv.appendChild(badge);
-       }
+      titleDiv.appendChild(badge);
+    }
     // ================= TABLE =================
     const table = document.createElement("table");
     attachTableLogic(table);
@@ -698,17 +702,14 @@ permissionSelect.appendChild(optionView);
       const updatedData = extractTableData(table);
 
       try {
-        const res = await fetch(
-          `${TABLE_API}/${tableData._id}`,
-          {
-            method: "PUT",
-            headers: authHeaders(),
-            body: JSON.stringify({
-              title: tableData.title,
-              data: updatedData,
-            }),
-          },
-        );
+        const res = await fetch(`${TABLE_API}/${tableData._id}`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            title: tableData.title,
+            data: updatedData,
+          }),
+        });
         const data = await res.json();
 
         if (!res.ok) {
@@ -722,7 +723,139 @@ permissionSelect.appendChild(optionView);
         showToast("Update failed", "error");
       }
     };
+    const shareBtn = document.createElement("button");
+    shareBtn.innerHTML = '<i class="fa-solid fa-share-nodes share-icon"></i>';
+    shareBtn.setAttribute("data-tooltip", "Share Table");
 
+    shareBtn.onclick = () => {
+      // Save current table id
+      window.currentShareTableId = tableData._id;
+
+      // Clear previous values
+      document.getElementById("sharePhone").value = "";
+      document.getElementById("sharePermission").value = "view";
+
+      // Open modal
+      document.getElementById("shareModal").style.display = "flex";
+
+      // Load already shared users
+      loadSharedUsers(tableData._id);
+    };
+    async function loadSharedUsers(tableId) {
+      try {
+        const res = await fetch(`${TABLE_API}/${tableId}/shared`, {
+          headers: authHeaders(),
+        });
+
+        const users = await res.json();
+
+        const list = document.getElementById("sharedUsersList");
+        list.innerHTML = "";
+
+        if (!users.length) {
+          list.innerHTML = "<p>No shared users.</p>";
+          return;
+        }
+
+        users.forEach((user) => {
+          const row = document.createElement("div");
+          row.className = "shared-user";
+
+          row.innerHTML = `
+      <div class="shared-info">
+          <i class="fa-solid fa-user"></i>
+          <span>${user.phone}</span>
+      </div>
+
+      <div class="shared-actions">
+
+          <span>${user.permission}</span>
+
+          <button class="remove-share-btn">
+              <i class="fa-solid fa-trash"></i>
+          </button>
+
+      </div>
+  `;
+
+          // Remove button
+          row.querySelector(".remove-share-btn").onclick = async () => {
+            if (!confirm("Remove access for this user?")) return;
+
+            try {
+              const res = await fetch(
+                `${TABLE_API}/share/${tableId}/${user._id}`,
+                {
+                  method: "DELETE",
+                  headers: authHeaders(),
+                },
+              );
+
+              const data = await res.json();
+
+              if (!res.ok) {
+                showToast(data.message, "error");
+                return;
+              }
+
+              showToast("Access removed", "success");
+
+              // Refresh list
+              loadSharedUsers(tableId);
+            } catch (err) {
+              console.error(err);
+              showToast("Unable to remove user", "error");
+            }
+          };
+
+          list.appendChild(row);
+        });
+      } catch (err) {
+        console.error(err);
+        showToast("Unable to load shared users", "error");
+      }
+    }
+    document.getElementById("shareNowBtn").onclick = async () => {
+      const phone = document.getElementById("sharePhone").value.trim();
+      const permission = document.getElementById("sharePermission").value;
+
+      if (!/^[0-9]{10}$/.test(phone)) {
+        showToast("Enter a valid 10 digit phone number", "error");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${TABLE_API}/share`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            tableId: window.currentShareTableId,
+            phone,
+            permission,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showToast(data.message, "error");
+          return;
+        }
+
+        showToast("Table shared successfully", "success");
+
+        document.getElementById("sharePhone").value = "";
+
+        // Refresh shared users list
+        loadSharedUsers(window.currentShareTableId);
+      } catch (err) {
+        console.error(err);
+        showToast("Unable to share table", "error");
+      }
+    };
+    document.getElementById("closeShareModal").onclick = () => {
+      document.getElementById("shareModal").style.display = "none";
+    };
     // ===== DELETE (API) =====
     const deleteBtn = document.createElement("button");
     deleteBtn.innerHTML = '<i class="fa-solid fa-trash delete-icon"></i>';
@@ -736,13 +869,10 @@ permissionSelect.appendChild(optionView);
       if (!confirmed) return;
 
       try {
-        const res = await fetch(
-          `${TABLE_API}/${tableData._id}`,
-          {
-            method: "DELETE",
-            headers: authHeaders(),
-          },
-        );
+        const res = await fetch(`${TABLE_API}/${tableData._id}`, {
+          method: "DELETE",
+          headers: authHeaders(),
+        });
         const data = await res.json();
         if (!res.ok) {
           showToast(data.message, "error"); // ✅ show backend message
@@ -774,7 +904,7 @@ permissionSelect.appendChild(optionView);
       a.click();
       URL.revokeObjectURL(url);
     };
-   /* socket.on("tableUpdated", (update) => {
+    /* socket.on("tableUpdated", (update) => {
       if (update.tableId !== tableData._id) return;
 
       // 🔥 update UI
@@ -787,70 +917,76 @@ permissionSelect.appendChild(optionView);
       }
     });*/
     socket.on("tableUpdated", (update) => {
-    // 1. Safety validation check
-    if (update.tableId !== tableData._id) return;
+      // 1. Safety validation check
+      if (update.tableId !== tableData._id) return;
 
-    // 2. Capture the exact cell element that the user is currently editing right now
-    const activeElement = document.activeElement;
+      // 2. Capture the exact cell element that the user is currently editing right now
+      const activeElement = document.activeElement;
 
-    // 3. Run your multi-dimensional grid scanning array loop
-    for (let i = 0; i < update.data.length; i++) {
+      // 3. Run your multi-dimensional grid scanning array loop
+      for (let i = 0; i < update.data.length; i++) {
         for (let j = 0; j < update.data[i].length; j++) {
-            
-            // Confirm the table cell element exists physically on the DOM screen canvas
-            if (table.rows[i] && table.rows[i].cells[j]) {
-                const targetCell = table.rows[i].cells[j];
+          // Confirm the table cell element exists physically on the DOM screen canvas
+          if (table.rows[i] && table.rows[i].cells[j]) {
+            const targetCell = table.rows[i].cells[j];
 
-                // 🔥 CRITICAL FIX: If the user is currently typing in this cell, DO NOT overwrite it!
-                if (activeElement === targetCell) {
-                    continue; // Skip this cell update to protect the user's active keyboard typing
-                }
-
-                // If nobody is using this cell, update its content seamlessly
-                // Using innerText for standard grid layouts, or .value if your cells are input fields
-                if (targetCell.tagName === "INPUT" || targetCell.tagName === "TEXTAREA") {
-                    targetCell.value = update.data[i][j];
-                } else {
-                    targetCell.innerText = update.data[i][j];
-                }
+            // 🔥 CRITICAL FIX: If the user is currently typing in this cell, DO NOT overwrite it!
+            if (activeElement === targetCell) {
+              continue; // Skip this cell update to protect the user's active keyboard typing
             }
-            
+
+            // If nobody is using this cell, update its content seamlessly
+            // Using innerText for standard grid layouts, or .value if your cells are input fields
+            if (
+              targetCell.tagName === "INPUT" ||
+              targetCell.tagName === "TEXTAREA"
+            ) {
+              targetCell.value = update.data[i][j];
+            } else {
+              targetCell.innerText = update.data[i][j];
+            }
+          }
         }
-    }
-});
+      }
+    });
+
+    //const typingTimers = {}; // Registry for automatic clear timers
     // --- 1. Broadcast YOUR typing activity to coworkers ---
-// Attach this to your table inputs on 'input' or 'keyup' events
-table.addEventListener("input", (e) => {
-    const targetCell = e.target.closest("td") || e.target;
-    const row = targetCell.getAttribute("data-row");
-    const col = targetCell.getAttribute("data-col");
+    // Attach this to your table inputs on 'input' or 'keyup' events
+    table.addEventListener("input", (e) => {
+      const targetCell = e.target.closest("td") || e.target;
+      const row = targetCell.getAttribute("data-row");
+      const col = targetCell.getAttribute("data-col");
 
-    if (row !== null && col !== null) {
+      if (row !== null && col !== null) {
         socket.emit("tableTyping", {
-            tableId: tableData._id,
-            data: {
-                row: parseInt(row),
-                col: parseInt(col),
-                text: e.target.value || e.target.innerText
-            }
+          tableId: tableData._id,
+          data: {
+            row: parseInt(row),
+            col: parseInt(col),
+            text: e.target.value || e.target.innerText,
+          },
         });
-    }
-});
+      }
+    });
 
-// --- 2. Listen for OTHER users typing inside cells ---
-socket.on("tableTyping", ({ tableId, data }) => {
-    if (tableId !== tableData._id) return;
+    // --- 2. Listen for OTHER users typing inside cells ---
+    socket.on("tableTyping", ({ tableId, data }) => {
+      if (tableId !== tableData._id) return;
 
-    // Find the exact physical cell using row and column coordinates
-    if (table.rows[data.row] && table.rows[data.row].cells[data.col]) {
+      // Find the exact physical cell using row and column coordinates
+      if (table.rows[data.row] && table.rows[data.row].cells[data.col]) {
         const targetCell = table.rows[data.row].cells[data.col];
         const cellKey = `${data.row}-${data.col}`;
 
         // Update the content live on screen
-        if (targetCell.tagName === "INPUT" || targetCell.tagName === "TEXTAREA") {
-            targetCell.value = data.text;
+        if (
+          targetCell.tagName === "INPUT" ||
+          targetCell.tagName === "TEXTAREA"
+        ) {
+          targetCell.value = data.text;
         } else {
-            targetCell.innerText = data.text;
+          targetCell.innerText = data.text;
         }
 
         // 🔥 APPLY THE BORDER GLOW CLASS INSTANTLY
@@ -861,11 +997,11 @@ socket.on("tableTyping", ({ tableId, data }) => {
 
         // Auto-remove the glowing border if they don't type anything else for 2.5 seconds
         typingTimers[cellKey] = setTimeout(() => {
-            targetCell.classList.remove("remote-typing-cell");
-            delete typingTimers[cellKey];
+          targetCell.classList.remove("remote-typing-cell");
+          delete typingTimers[cellKey];
         }, 2500);
-    }
-});
+      }
+    });
 
     // ================= APPEND CONTROLS =================
     // ================= BUTTON BAR =================
@@ -877,9 +1013,13 @@ socket.on("tableTyping", ({ tableId, data }) => {
     buttonBar.appendChild(addColBtn);
     buttonBar.appendChild(delRowBtn);
     buttonBar.appendChild(delColBtn);
-    buttonBar.appendChild(deleteBtn);
+    //buttonBar.appendChild(deleteBtn);
     buttonBar.appendChild(downloadBtn);
-
+    // buttonBar.appendChild(shareBtn);
+    if (isOwner) {
+      buttonBar.appendChild(shareBtn);
+      buttonBar.appendChild(deleteBtn);
+    }
     // ================= HEADER =================
     titleDiv.appendChild(titleSpan);
     titleDiv.appendChild(buttonBar); // ✅ NOW IN HEADER
@@ -1047,26 +1187,27 @@ socket.on("tableTyping", ({ tableId, data }) => {
   loadTables(); // 👈 important
 });
 function goBack(fallback = "landing.html") {
-    if (history.length > 1) {
-        history.back();
-    } else {
-        window.location.href = fallback;
-    }
+  if (history.length > 1) {
+    history.back();
+  } else {
+    window.location.href = fallback;
+  }
 }
 const originalFetch = window.fetch;
 window.fetch = async (...args) => {
-    if (activeRequests++ === 0) {
-        showLoader();
-    }
+  if (activeRequests++ === 0) {
+    showLoader();
+  }
 
-    try {
-        return await originalFetch(...args);
-    } finally {
-        if (--activeRequests === 0) {
-            hideLoader();
-        }
+  try {
+    return await originalFetch(...args);
+  } finally {
+    if (--activeRequests === 0) {
+      hideLoader();
     }
+  }
 };
+
 /***
  * // Delete row by index
 const rowIndexInput = document.createElement('input');
