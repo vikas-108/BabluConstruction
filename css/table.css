@@ -273,3 +273,304 @@ td {
     50% { opacity: 1; }
     100% { opacity: 0.8; }
 }
+
+/* ===========================
+   SHARE MODAL
+=========================== */
+
+.share-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+    padding:15px;
+}
+
+.share-modal-content{
+    width:100%;
+    max-width:520px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+    animation:popup .25s ease;
+}
+
+@keyframes popup{
+    from{
+        opacity:0;
+        transform:scale(.9);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+/* ===========================
+HEADER
+=========================== */
+
+.share-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 20px;
+    border-bottom:1px solid #ececec;
+}
+
+.share-header h3{
+    margin:0;
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.close-share{
+    width:38px;
+    height:38px;
+    border:none;
+    background:#f3f3f3;
+    border-radius:50%;
+    cursor:pointer;
+    transition:.25s;
+    font-size:18px;
+}
+
+.close-share:hover{
+    background:#e3e3e3;
+}
+
+/* ===========================
+BODY
+=========================== */
+
+.share-input-group{
+    padding:18px 20px 0;
+}
+
+.share-input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.share-input-group input,
+.share-input-group select{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid #dcdcdc;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    transition:.25s;
+    box-sizing:border-box;
+}
+
+.share-input-group input:focus,
+.share-input-group select:focus{
+    border-color:#2d8cff;
+}
+
+/* ===========================
+SHARE BUTTON
+=========================== */
+
+.share-btn{
+    margin:20px;
+    width:calc(100% - 40px);
+    height:46px;
+    border:none;
+    border-radius:10px;
+    background:#0d6efd;
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    transition:.25s;
+}
+
+.share-btn:hover{
+    background:#0b5ed7;
+}
+
+/* ===========================
+DIVIDER
+=========================== */
+
+.share-modal hr{
+    border:none;
+    border-top:1px solid #ececec;
+    margin:0;
+}
+
+/* ===========================
+SHARED USERS
+=========================== */
+
+.shared-users{
+    padding:20px;
+}
+
+.shared-users h4{
+    margin:0 0 15px;
+    font-size:18px;
+}
+
+#sharedUsersList{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    max-height:280px;
+    overflow-y:auto;
+}
+
+/* ===========================
+USER ROW
+=========================== */
+
+.shared-user{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    border:1px solid #ededed;
+    border-radius:12px;
+    background:#fafafa;
+}
+
+.shared-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+}
+
+.shared-info i{
+    width:42px;
+    height:42px;
+    background:#0d6efd;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-shrink:0;
+}
+
+.shared-info span{
+    font-size:15px;
+    word-break:break-word;
+}
+
+/* ===========================
+RIGHT SIDE
+=========================== */
+
+.shared-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.permission-select{
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #d9d9d9;
+    font-size:14px;
+}
+
+.remove-user{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:8px;
+    background:#ff4d4f;
+    color:#fff;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.remove-user:hover{
+    background:#d9363e;
+}
+
+/* ===========================
+TABLET
+=========================== */
+
+@media(max-width:768px){
+
+    .share-modal-content{
+        max-width:100%;
+    }
+
+    .share-header h3{
+        font-size:18px;
+    }
+
+    .shared-user{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .shared-actions{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .permission-select{
+        flex:1;
+    }
+}
+
+/* ===========================
+MOBILE
+=========================== */
+
+@media(max-width:480px){
+
+    .share-modal{
+        padding:8px;
+        align-items:flex-end;
+    }
+
+    .share-modal-content{
+        border-radius:18px 18px 0 0;
+        max-height:92vh;
+    }
+
+    .share-header{
+        padding:15px;
+    }
+
+    .share-input-group{
+        padding:15px 15px 0;
+    }
+
+    .share-btn{
+        width:calc(100% - 30px);
+        margin:15px;
+    }
+
+    .shared-users{
+        padding:15px;
+    }
+
+    .shared-info span{
+        font-size:14px;
+    }
+}
+
