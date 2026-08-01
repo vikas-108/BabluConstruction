@@ -27,6 +27,66 @@
      <div id="tableLimitInfo" class="table-limit"></div>
     <div id="tablesWrapper"></div>
   </div>
+   <!-- ================= SHARE TABLE MODAL ================= -->
+<div id="shareModal" class="share-modal">
+
+  <div class="share-modal-content">
+
+    <!-- Header -->
+    <div class="share-header">
+      <h3><i class="fa-solid fa-share-nodes"></i> Share Table</h3>
+
+      <button id="closeShareModal" class="close-share">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Phone -->
+    <div class="share-input-group">
+
+      <label>Phone Number</label>
+
+      <input
+        type="tel"
+        id="sharePhone"
+        placeholder="Enter registered phone number">
+
+    </div>
+
+    <!-- Permission -->
+    <div class="share-input-group">
+
+      <label>Permission</label>
+
+      <select id="sharePermission">
+        <option value="view">Can View</option>
+        <option value="edit">Can Edit</option>
+      </select>
+
+    </div>
+
+    <!-- Share Button -->
+    <button id="shareNowBtn" class="share-btn">
+      <i class="fa-solid fa-paper-plane"></i>
+      Share
+    </button>
+
+    <hr>
+
+    <!-- Shared Users -->
+    <div class="shared-users">
+
+      <h4>Shared With</h4>
+
+      <div id="sharedUsersList">
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <!-- <script src="../js/screenshotProtector.js"></script>
   
