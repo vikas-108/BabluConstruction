@@ -47,514 +47,867 @@ function getAuthHeaders() {
     };
 }
 // Initialize Boot Configuration Block
-window.addEventListener('DOMContentLoaded', async() => {
-   // const savedData = localStorage.getItem('global_notebook_system');
-    //if (savedData) {
-    //    allNotebooks = JSON.parse(savedData);
-    //}
-     // Load Saved Dark Theme State
-    const savedTheme = localStorage.getItem('notebook_theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+window.addEventListener("DOMContentLoaded", async () => {
+  // const savedData = localStorage.getItem('global_notebook_system');
+  //if (savedData) {
+  //    allNotebooks = JSON.parse(savedData);
+  //}
+  // Load Saved Dark Theme State
+  const savedTheme = localStorage.getItem("notebook_theme") || "light";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  themeToggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
 
-    //renderDashboardList();
-    setupColorPicker();
-    setupLiveListeners();
-     // Fetch fresh database contents via API instead of localstorage
-    await fetchAndRenderNotebooks();
+  //renderDashboardList();
+  setupColorPicker();
+  setupLiveListeners();
+  // Fetch fresh database contents via API instead of localstorage
+  await fetchAndRenderNotebooks();
 });
 
 // Programmatically assign palette hex colors to preview selectors via JavaScript
 function setupColorPicker() {
-    colorDots.forEach(dot => {
-        const dataColor = dot.getAttribute('data-color');
-        dot.style.backgroundColor = dataColor;
+  colorDots.forEach((dot) => {
+    const dataColor = dot.getAttribute("data-color");
+    dot.style.backgroundColor = dataColor;
 
-        dot.addEventListener('click', () => {
-            colorDots.forEach(d => d.classList.remove('active'));
-            dot.classList.add('active');
-            selectedColor = dataColor;
-        });
+    dot.addEventListener("click", () => {
+      colorDots.forEach((d) => d.classList.remove("active"));
+      dot.classList.add("active");
+      selectedColor = dataColor;
     });
+  });
 }
 
 // Target specific keystroke listeners to perform instant background saving
 function setupLiveListeners() {
-    noteTitle.addEventListener('input', triggerAutoSave);
-    noteContent.addEventListener('input', () => {
-        triggerAutoSave();
-        calculateMetrics(); 
-    });
-    
-    searchBar.addEventListener('input', () => {
-        //renderDashboardList(searchBar.value.trim().toLowerCase());
-         // Trigger live search against database index using values from inputs
-        fetchAndRenderNotebooks(searchBar.value.trim().toLowerCase());
-    });
+  noteTitle.addEventListener("input", triggerAutoSave);
+  noteContent.addEventListener("input", () => {
+    triggerAutoSave();
+    calculateMetrics();
+  });
 
-    fontSelect.addEventListener('change', async () => {
-        if (!activeNotebookId) return;
-        noteContent.classList.remove('font-handwriting', 'font-typewriter');
-        const chosenFont = fontSelect.value;
-        noteContent.classList.add(chosenFont);
-        allNotebooks[activeNotebookId].preferredFont = chosenFont;
-        triggerAutoSave();
+  searchBar.addEventListener("input", () => {
+    //renderDashboardList(searchBar.value.trim().toLowerCase());
+    // Trigger live search against database index using values from inputs
+    fetchAndRenderNotebooks(searchBar.value.trim().toLowerCase());
+  });
+
+  fontSelect.addEventListener("change", async () => {
+    if (!activeNotebookId) return;
+    noteContent.classList.remove("font-handwriting", "font-typewriter");
+    const chosenFont = fontSelect.value;
+    noteContent.classList.add(chosenFont);
+    allNotebooks[activeNotebookId].preferredFont = chosenFont;
+    triggerAutoSave();
     // Immediate network update for structural preference switches
-        try {
-            await fetch(`${NOTEBOOK_API}/${activeNotebookId}`, {
-                method: 'PUT',
-                headers: getAuthHeaders(),
-                body: JSON.stringify({ preferredFont: chosenFont })
-            });
-        } catch (err) {
-            console.error("Error saving font preference:", err);
-        }
-    });
+    try {
+      await fetch(`${NOTEBOOK_API}/${activeNotebookId}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ preferredFont: chosenFont }),
+      });
+    } catch (err) {
+      console.error("Error saving font preference:", err);
+    }
+  });
 
-    /* NEW LISTENER: Native print dialog pipeline
+  /* NEW LISTENER: Native print dialog pipeline
     printBtn.addEventListener('click', () => {
         window.print();
     });*/
 
-    // NEW LISTENER: System theme logic switch
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        //localStorage.setItem('notebook_theme', newTheme);
-        themeToggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-    });
+  // NEW LISTENER: System theme logic switch
+  themeToggleBtn.addEventListener("click", () => {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+    document.documentElement.setAttribute("data-theme", newTheme);
+    //localStorage.setItem('notebook_theme', newTheme);
+    themeToggleBtn.textContent = newTheme === "dark" ? "☀️" : "🌙";
+  });
 }
 
 function calculateMetrics() {
-    const currentText = noteContent.value.trim();
-    const totalWords = currentText === "" ? 0 : currentText.split(/\s+/).length;
-    const totalChars = noteContent.value.length;
-    counterStats.textContent = `Words: ${totalWords} | Chars: ${totalChars}`;
+  const currentText = noteContent.value.trim();
+  const totalWords = currentText === "" ? 0 : currentText.split(/\s+/).length;
+  const totalChars = noteContent.value.length;
+  counterStats.textContent = `Words: ${totalWords} | Chars: ${totalChars}`;
 }
 // Fetch all database records for the logged-in user and build dashboard UI
 async function fetchAndRenderNotebooks(searchTerm = "") {
-    try {
-        showLoader("Loading notebooks...");
-        let url = NOTEBOOK_API;
-        if (searchTerm) {
-            url += `?search=${encodeURIComponent(searchTerm)}`;
-        }
-
-        const res = await fetch(url, {
-            method: 'GET',
-            headers: getAuthHeaders()
-        });
-        const result = await res.json();
-
-        if (!res.ok) throw new Error(result.message || "Failed to load notebooks");
-
-        // Restructure array into matching dynamic front-end state format object
-        allNotebooks = {};
-        result.data.forEach(book => {
-            allNotebooks[book._id] = book;
-        });
-
-        renderDashboardList(searchTerm);
-    } catch (err) {
-        console.error("Fetch Error:", err);
-        notebooksList.innerHTML = `<div class="empty-list-text" style="color: red;">Failed to load notebooks. Please log in again.</div>`;
-    }finally{
-        hideLoader();
+  try {
+    showLoader("Loading notebooks...");
+    let url = NOTEBOOK_API;
+    if (searchTerm) {
+      url += `?search=${encodeURIComponent(searchTerm)}`;
     }
+
+    const res = await fetch(url, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+    const result = await res.json();
+
+    if (!res.ok) throw new Error(result.message || "Failed to load notebooks");
+
+    // Restructure array into matching dynamic front-end state format object
+    allNotebooks = {};
+    result.data.forEach((book) => {
+      allNotebooks[book._id] = book;
+    });
+
+    renderDashboardList(searchTerm);
+  } catch (err) {
+    console.error("Fetch Error:", err);
+    notebooksList.innerHTML = `<div class="empty-list-text" style="color: red;">Failed to load notebooks. Please log in again.</div>`;
+  } finally {
+    hideLoader();
+  }
 }
 
 // Build and display filtered/unfiltered notebook list items
 // Helper to decode user ID from your saved JWT login token
 function getCurrentUserId() {
-    const token = localStorage.getItem('cb_token');
-    if (!token) return null;
-    try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const payload = JSON.parse(window.atob(base64));
-        return payload.id; // Returns the user ID stored inside your token
-    } catch (e) {
-        return null;
-    }
+  const token = localStorage.getItem("cb_token");
+  if (!token) return null;
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(window.atob(base64));
+    return payload.id; // Returns the user ID stored inside your token
+  } catch (e) {
+    return null;
+  }
 }
 
 function renderDashboardList(filterTerm = "") {
-    notebooksList.innerHTML = "";
-    const keys = Object.keys(allNotebooks);
-    const currentUserId = getCurrentUserId();
+  notebooksList.innerHTML = "";
+  const keys = Object.keys(allNotebooks);
+  const currentUserId = getCurrentUserId();
 
-    if (keys.length === 0) {
-        const noNotesMsg = document.createElement('div');
-        noNotesMsg.className = "empty-list-text";
-        noNotesMsg.textContent = filterTerm ? "No notes found matching your search term." : "No notebooks found. Create one above!";
-        notebooksList.appendChild(noNotesMsg);
-        return;
-    }
+  if (keys.length === 0) {
+    const noNotesMsg = document.createElement("div");
+    noNotesMsg.className = "empty-list-text";
+    noNotesMsg.textContent = filterTerm
+      ? "No notes found matching your search term."
+      : "No notebooks found. Create one above!";
+    notebooksList.appendChild(noNotesMsg);
+    return;
+  }
 
-    keys.forEach(id => {
-        const book = allNotebooks[id];
-        const pageCount = book.pages ? Object.keys(book.pages).length : 0;
-        const coverColor = book.color || "#2c3e50";
-        
-        // Check if the current user is the actual creator of this notebook
-        const isOwner = book.user === currentUserId;
+  keys.forEach((id) => {
+    const book = allNotebooks[id];
+    const pageCount = book.pages ? Object.keys(book.pages).length : 0;
+    const coverColor = book.color || "#2c3e50";
 
-        const item = document.createElement('div');
-        item.className = "notebook-item animate-fade";
-        item.style.borderLeft = `6px solid ${coverColor}`;
-        
-        item.innerHTML = `
+    // Check if the current user is the actual creator of this notebook
+    const isOwner = book.user === currentUserId;
+
+    const item = document.createElement("div");
+    item.className = "notebook-item animate-fade";
+    item.style.borderLeft = `6px solid ${coverColor}`;
+
+    item.innerHTML = `
             <div class="info-side">
                 <span class="title">${book.title || "Untitled Notebook"}</span>
-                <span class="page-count">${pageCount} Page(s) ${!isOwner ? '<span style="font-size:11px;color:#7f8c8d;">(Shared with you)</span>' : ''}</span>
+                <span class="page-count">${pageCount} Page(s) ${!isOwner ? '<span style="font-size:11px;color:#7f8c8d;">(Shared with you)</span>' : ""}</span>
             </div>
             <div class="action-buttons">
-                <button class="share-btn" title="Share Notebook" ${!isOwner ? 'style="opacity: 0.4;"' : ''}>🔗</button>
-                <button class="delete-btn" title="Delete Notebook" ${!isOwner ? 'style="opacity: 0.4;"' : ''}>🗑️</button>
+                <button class="share-btn" title="Share Notebook" ${!isOwner ? 'style="opacity: 0.4;"' : ""}>🔗</button>
+                <button class="delete-btn" title="Delete Notebook" ${!isOwner ? 'style="opacity: 0.4;"' : ""}>🗑️</button>
             </div>
         `;
-        
-        item.addEventListener('click', (e) => {
-            if (e.target.classList.contains('delete-btn')) {
-                e.stopPropagation(); 
-                if (!isOwner) {
-                    alert("🚫 You cannot delete this notebook because it was shared with you by another user.");
-                    return;
-                }
-                deleteNotebook(id);
-            } else if (e.target.classList.contains('share-btn')) {
-                e.stopPropagation();
-                if (!isOwner) {
-                    alert("🚫 You cannot share this notebook because it was shared with you by another user. Only the owner can share it.");
-                    return;
-                }
-                openShareDrawer(id);
-            } else {
-                loadNotebook(id);
-            }
-        });
-        notebooksList.appendChild(item);
-    });
-}
 
+    item.addEventListener("click", (e) => {
+      if (e.target.classList.contains("delete-btn")) {
+        e.stopPropagation();
+        if (!isOwner) {
+          showToast(
+            "🚫 You cannot delete this notebook because it was shared with you by another user.",
+          );
+          return;
+        }
+        deleteNotebook(id);
+      } else if (e.target.classList.contains("share-btn")) {
+        e.stopPropagation();
+        if (!isOwner) {
+          showToast(
+            "🚫 You cannot share this notebook because it was shared with you by another user. Only the owner can share it.",
+          );
+          return;
+        }
+        openShareDrawer(id);
+      } else {
+        loadNotebook(id);
+      }
+    });
+    notebooksList.appendChild(item);
+  });
+}
 
 // NEW EXCLUSIVE FEATURE: Trigger Auto Save directly in the background
 function triggerAutoSave() {
-    if (!activeNotebookId) return;
-       // NEW BLOCK: If the elements are currently read-only, block background network operations completely
-    if (noteContent.readOnly || noteTitle.readOnly) {
-        saveStatus.textContent = "🔒 Read Only (Changes Not Saved)";
-        saveStatus.style.color = "#e74c3c";
-        return;
-    }
-    // Update badge visually to notify text changes are active
-    saveStatus.textContent = "Typing...";
-    saveStatus.style.color = "#e67e22";
-        if (!allNotebooks[activeNotebookId].pages) {
-        allNotebooks[activeNotebookId].pages = {};
-    }
-    
-    if (typeof allNotebooks[activeNotebookId].pages[activePage] !== 'object') {
-        allNotebooks[activeNotebookId].pages[activePage] = { title: "", content: "" };
-    }
-    // Cache text data state objects instantly 
+  if (!activeNotebookId) return;
+  // NEW BLOCK: If the elements are currently read-only, block background network operations completely
+  if (noteContent.readOnly || noteTitle.readOnly) {
+    saveStatus.textContent = "🔒 Read Only (Changes Not Saved)";
+    saveStatus.style.color = "#e74c3c";
+    return;
+  }
+  // Update badge visually to notify text changes are active
+  saveStatus.textContent = "Typing...";
+  saveStatus.style.color = "#e67e22";
+  if (!allNotebooks[activeNotebookId].pages) {
+    allNotebooks[activeNotebookId].pages = {};
+  }
+
+  if (typeof allNotebooks[activeNotebookId].pages[activePage] !== "object") {
+    allNotebooks[activeNotebookId].pages[activePage] = {
+      title: "",
+      content: "",
+    };
+  }
+  // Cache text data state objects instantly
+  allNotebooks[activeNotebookId].title = noteTitle.value;
+  allNotebooks[activeNotebookId].pages[activePage] = noteContent.value;
+
+  if (activePage === 1) {
     allNotebooks[activeNotebookId].title = noteTitle.value;
-    allNotebooks[activeNotebookId].pages[activePage] = noteContent.value;
-    
-    if (activePage === 1) {
-        allNotebooks[activeNotebookId].title = noteTitle.value;
+  }
+
+  // Debounce background server writes
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    try {
+      const payload = {
+        title: allNotebooks[activeNotebookId].title,
+        pages: {
+          [activePage]: JSON.stringify({
+            title: noteTitle.value,
+            content: noteContent.value,
+          }),
+        },
+      };
+
+      const res = await fetch(`${NOTEBOOK_API}/${activeNotebookId}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        saveStatus.textContent = "Saved to Cloud";
+        saveStatus.style.color = "#2ecc71";
+      } else {
+        throw new Error("Server write failed");
+      }
+    } catch (err) {
+      saveStatus.textContent = "Connection Error";
+      saveStatus.style.color = "#e74c3c";
+      console.error("Auto-save sync error:", err);
     }
-    
-    // Debounce background server writes
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(async () => {
-        try {
-            const payload = {
-                title: allNotebooks[activeNotebookId].title, 
-                pages: {
-                    [activePage]: JSON.stringify({
-                        title: noteTitle.value,
-                        content: noteContent.value
-                    })
-                }
-            };
-
-            const res = await fetch(`${NOTEBOOK_API}/${activeNotebookId}`, {
-                method: 'PUT',
-                headers: getAuthHeaders(),
-                body: JSON.stringify(payload)
-            });
-
-            if (res.ok) {
-                saveStatus.textContent = "Saved to Cloud";
-                saveStatus.style.color = "#2ecc71";
-            } else {
-                throw new Error("Server write failed");
-            }
-        } catch (err) {
-            saveStatus.textContent = "Connection Error";
-            saveStatus.style.color = "#e74c3c";
-            console.error("Auto-save sync error:", err);
-        }
-    }, 400); 
+  }, 400);
 }
-
 
 // Remote API Delete Call
 async function deleteNotebook(id) {
-    if (confirm(`Are you completely sure you want to delete "${allNotebooks[id].title}"? This cannot be undone.`)) {
-        try {
-            showLoader("deleting...");
-            const res = await fetch(`${NOTEBOOK_API}/${id}`, {
-                method: 'DELETE',
-                headers: getAuthHeaders()
-            });
-            
-            if (!res.ok) throw new Error("Could not delete from server");
+  if (
+    confirm(
+      `Are you completely sure you want to delete "${allNotebooks[id].title}"? This cannot be undone.`,
+    )
+  ) {
+    try {
+      showLoader("deleting...");
+      const res = await fetch(`${NOTEBOOK_API}/${id}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+      });
 
-            delete allNotebooks[id];
-            renderDashboardList(searchBar.value.trim().toLowerCase());
-        } catch (err) {
-            alert("Error deleting notebook: " + err.message);
-        }finally{
-            hideLoader();
-        }
+      if (!res.ok) throw new Error("Could not delete from server");
+
+      delete allNotebooks[id];
+      renderDashboardList(searchBar.value.trim().toLowerCase());
+    } catch (err) {
+      showToast("Error deleting notebook: " + err.message);
+    } finally {
+      hideLoader();
     }
+  }
 }
 
 // Remote API Post Call
-addNotebookBtn.addEventListener('click', async () => {
-    try {
-         showLoader("Creating notebook...");
-        const payload = {
-            title: "My Notebook",
-            color: selectedColor,
-            preferredFont: "font-handwriting"
-        };
+addNotebookBtn.addEventListener("click", async () => {
+  try {
+    showLoader("Creating notebook...");
+    const payload = {
+      title: "My Notebook",
+      color: selectedColor,
+      preferredFont: "font-handwriting",
+    };
 
-        const res = await fetch(NOTEBOOK_API, {
-            method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(payload)
-        });
-         const result = await res.json();
-        if (!res.ok) throw new Error(result.message || "Could not create notebook resource");
+    const res = await fetch(NOTEBOOK_API, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    const result = await res.json();
+    if (!res.ok)
+      throw new Error(result.message || "Could not create notebook resource");
 
-        const newNotebook = result.data;
-        allNotebooks[newNotebook._id] = newNotebook;
-        loadNotebook(newNotebook._id);
-    } catch (err) {
-        alert("Error creating notebook: " + err.message);
-    }finally{
-        hideLoader();
-    }
+    const newNotebook = result.data;
+    allNotebooks[newNotebook._id] = newNotebook;
+    loadNotebook(newNotebook._id);
+  } catch (err) {
+    showToast("Error creating notebook: " + err.message);
+  } finally {
+    hideLoader();
+  }
 });
 // HELPER FUNCTION: Safely parses page contents whether they are strings or JSON objects
 function renderPageDataContent() {
-    if (!activeNotebookId || !allNotebooks[activeNotebookId]) return;
-    
-    const book = allNotebooks[activeNotebookId];
-    const rawPageData = (book.pages && book.pages[activePage]) ? book.pages[activePage] : "";
-    
-    try {
-        // Attempt to parse as JSON object (New Format)
-        const parsedData = JSON.parse(rawPageData);
-        noteTitle.value = parsedData.title || "";
-        noteContent.value = parsedData.content || "";
-    } catch (e) {
-        // Fallback rule for older plain strings (Old Format)
-        noteTitle.value = (activePage === 1) ? (book.title || "") : "";
-        noteContent.value = rawPageData;
-    }
+  if (!activeNotebookId || !allNotebooks[activeNotebookId]) return;
+
+  const book = allNotebooks[activeNotebookId];
+  const rawPageData =
+    book.pages && book.pages[activePage] ? book.pages[activePage] : "";
+
+  try {
+    // Attempt to parse as JSON object (New Format)
+    const parsedData = JSON.parse(rawPageData);
+    noteTitle.value = parsedData.title || "";
+    noteContent.value = parsedData.content || "";
+  } catch (e) {
+    // Fallback rule for older plain strings (Old Format)
+    noteTitle.value = activePage === 1 ? book.title || "" : "";
+    noteContent.value = rawPageData;
+  }
 }
 function loadNotebook(id) {
-    activeNotebookId = id;
-    activePage = 1; 
-    
-    const book = allNotebooks[id];
-    notebookSpine.style.borderLeftColor = book.color || "#2c3e50";
-    pageNumDisplay.textContent = `Page ${activePage}`;
-    
-    // 1. DETERMINE ACCESS LEVEL
-    const currentUserId = getCurrentUserId(); // Uses the token decoder function we made
-    const isOwner = book.user === currentUserId;
-    
-    // Check if you are listed in sharedWith array with 'edit' access
-    // Note: If your backend returns an explicit flag like book.myPermission === 'read', use that instead
-    let canEdit = isOwner; 
-    if (book.sharedWith && !isOwner) {
-        // Fallback check matching against current local profile indicator configurations
-        const hasEditorFlag = book.sharedWith.some(share => share.access === 'edit');
-        if (hasEditorFlag) canEdit = true;
-    }
+  activeNotebookId = id;
+  activePage = 1;
 
-    // 2. TOGGLE READ-ONLY STATES ON DOM ELEMENTS
-    if (!canEdit) {
-        noteTitle.readOnly = true;
-        noteContent.readOnly = true;
-        if(fontSelect) fontSelect.disabled = true; // Block switching fonts
-        
-        saveStatus.textContent = "🔒 Read Only Mode";
-        saveStatus.style.color = "#7f8c8d";
-    } else {
-        noteTitle.readOnly = false;
-        noteContent.readOnly = false;
-        if(fontSelect) fontSelect.disabled = false;
-        
-        saveStatus.textContent = "Cloud Synchronized";
-        saveStatus.style.color = "#2ecc71";
-    }
+  const book = allNotebooks[id];
+  notebookSpine.style.borderLeftColor = book.color || "#2c3e50";
+  pageNumDisplay.textContent = `Page ${activePage}`;
 
-    // 3. RENDER TEXT CONTENT VALUES
-    renderPageDataContent(); 
-    
-    // Sync font styles
-    noteContent.classList.remove('font-handwriting', 'font-typewriter', 'font-standard');
-    const chosenFont = book.preferredFont || "font-handwriting";
-    noteContent.classList.add(chosenFont);
-    if(fontSelect) fontSelect.value = chosenFont;
-    
-    // UI Screen Swap Toggles
-    dashboardView.classList.add('hidden');
-    notebookView.classList.remove('hidden');
-    if(controlsRow) controlsRow.classList.remove('hidden');
-    
-    calculateMetrics();
-}
+  // 1. DETERMINE ACCESS LEVEL
+  const currentUserId = getCurrentUserId(); // Uses the token decoder function we made
+  const isOwner = book.user === currentUserId;
 
+  // Check if you are listed in sharedWith array with 'edit' access
+  // Note: If your backend returns an explicit flag like book.myPermission === 'read', use that instead
+  let canEdit = isOwner;
+  if (book.sharedWith && !isOwner) {
+    // Fallback check matching against current local profile indicator configurations
+    const hasEditorFlag = book.sharedWith.some(
+      (share) => share.access === "edit",
+    );
+    if (hasEditorFlag) canEdit = true;
+  }
 
-function renderPage() {
-    const currentBook = allNotebooks[activeNotebookId];
-    noteTitle.value = currentBook.title;
-    noteContent.value = currentBook.pages[activePage] || "";
-    pageNumDisplay.textContent = `Page ${activePage}`;
-      const notebookFont = currentBook.preferredFont || "font-handwriting";
-    noteContent.classList.remove('font-handwriting', 'font-typewriter');
-    noteContent.classList.add(notebookFont);
-    fontSelect.value = notebookFont;
-    
-    calculateMetrics();
-    // Set immediate status to saved on a page change hook
-    saveStatus.textContent = "Saved";
-    saveStatus.style.color = "#2ecc71";
-}
+  // 2. TOGGLE READ-ONLY STATES ON DOM ELEMENTS
+  if (!canEdit) {
+    noteTitle.readOnly = true;
+    noteContent.readOnly = true;
+    if (fontSelect) fontSelect.disabled = true; // Block switching fonts
 
-prevBtn.addEventListener('click', () => {
-    if (activePage > 1) {
-        activePage--;
-        
-        paperPage.classList.remove('page-turn-next', 'page-turn-prev');
-        void paperPage.offsetWidth; 
-        paperPage.classList.add('page-turn-prev');
-        
-        renderPage();
-    }
-});
-
-nextBtn.addEventListener('click', () => {
-    activePage++;
-    
-    if (!allNotebooks[activeNotebookId].pages[activePage]) {
-        allNotebooks[activeNotebookId].pages[activePage] = "";
-    }
-    
-    paperPage.classList.remove('page-turn-next', 'page-turn-prev');
-    void paperPage.offsetWidth; 
-    paperPage.classList.add('page-turn-next');
-    
-    renderPage();
-});
-
-paperPage.addEventListener('animationend', () => {
-    paperPage.classList.remove('page-turn-next', 'page-turn-prev');
-});
-
-clearBtn.addEventListener('click', () => {
-    if (confirm('Are you sure you want to clear this entire specific page?')) {
-        noteContent.value = "";
-        triggerAutoSave();
-         calculateMetrics();
-    }
-});
-
-backBtn.addEventListener('click', async () => {
-    activeNotebookId = null;
-    activePage = 1;
-    
-    // Reset fields back to default editable state for the next document selection
+    saveStatus.textContent = "🔒 Read Only Mode";
+    saveStatus.style.color = "#7f8c8d";
+  } else {
     noteTitle.readOnly = false;
     noteContent.readOnly = false;
-    if(fontSelect) fontSelect.disabled = false;
+    if (fontSelect) fontSelect.disabled = false;
 
-    notebookView.classList.add('hidden');
-    if(controlsRow) controlsRow.classList.add('hidden');
-    dashboardView.classList.remove('hidden');
-    
-    await fetchAndRenderNotebooks(searchBar.value.trim().toLowerCase());
+    saveStatus.textContent = "Cloud Synchronized";
+    saveStatus.style.color = "#2ecc71";
+  }
+
+  // 3. RENDER TEXT CONTENT VALUES
+  renderPageDataContent();
+
+  // Sync font styles
+  noteContent.classList.remove(
+    "font-handwriting",
+    "font-typewriter",
+    "font-standard",
+  );
+  const chosenFont = book.preferredFont || "font-handwriting";
+  noteContent.classList.add(chosenFont);
+  if (fontSelect) fontSelect.value = chosenFont;
+
+  // UI Screen Swap Toggles
+  dashboardView.classList.add("hidden");
+  notebookView.classList.remove("hidden");
+  if (controlsRow) controlsRow.classList.remove("hidden");
+
+  calculateMetrics();
+}
+
+function renderPage() {
+  const currentBook = allNotebooks[activeNotebookId];
+  noteTitle.value = currentBook.title;
+  noteContent.value = currentBook.pages[activePage] || "";
+  pageNumDisplay.textContent = `Page ${activePage}`;
+  const notebookFont = currentBook.preferredFont || "font-handwriting";
+  noteContent.classList.remove("font-handwriting", "font-typewriter");
+  noteContent.classList.add(notebookFont);
+  fontSelect.value = notebookFont;
+
+  calculateMetrics();
+  // Set immediate status to saved on a page change hook
+  saveStatus.textContent = "Saved";
+  saveStatus.style.color = "#2ecc71";
+}
+
+prevBtn.addEventListener("click", () => {
+  if (activePage > 1) {
+    activePage--;
+
+    paperPage.classList.remove("page-turn-next", "page-turn-prev");
+    void paperPage.offsetWidth;
+    paperPage.classList.add("page-turn-prev");
+
+    renderPage();
+  }
 });
 
-document.querySelectorAll(".back-title").forEach(el => {
-        el.addEventListener("click", () => {
-            if (history.length > 1) {
-                history.back();
-            } else {
-                window.location.href = "landing.html"; // fallback page
-            }
-        });
-    });
+nextBtn.addEventListener("click", () => {
+  activePage++;
+
+  if (!allNotebooks[activeNotebookId].pages[activePage]) {
+    allNotebooks[activeNotebookId].pages[activePage] = "";
+  }
+
+  paperPage.classList.remove("page-turn-next", "page-turn-prev");
+  void paperPage.offsetWidth;
+  paperPage.classList.add("page-turn-next");
+
+  renderPage();
+});
+
+paperPage.addEventListener("animationend", () => {
+  paperPage.classList.remove("page-turn-next", "page-turn-prev");
+});
+
+clearBtn.addEventListener("click", () => {
+  if (confirm("Are you sure you want to clear this entire specific page?")) {
+    noteContent.value = "";
+    triggerAutoSave();
+    calculateMetrics();
+  }
+});
+
+backBtn.addEventListener("click", async () => {
+  activeNotebookId = null;
+  activePage = 1;
+
+  // Reset fields back to default editable state for the next document selection
+  noteTitle.readOnly = false;
+  noteContent.readOnly = false;
+  if (fontSelect) fontSelect.disabled = false;
+
+  notebookView.classList.add("hidden");
+  if (controlsRow) controlsRow.classList.add("hidden");
+  dashboardView.classList.remove("hidden");
+
+  await fetchAndRenderNotebooks(searchBar.value.trim().toLowerCase());
+});
+/*
+const originalFetch = window.fetch;
+
+window.fetch = async (...args) => {
+    showLoader();
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        hideLoader();
+    }
+};*/
+document.querySelectorAll(".back-title").forEach((el) => {
+  el.addEventListener("click", () => {
+    if (history.length > 1) {
+      history.back();
+    } else {
+      window.location.href = "landing.html"; // fallback page
+    }
+  });
+});
 const pageLoader = document.getElementById("pageLoader");
 
 function showLoader(message = "Please wait...") {
-    pageLoader.querySelector("p").textContent = message;
-    pageLoader.classList.add("active");
+  pageLoader.querySelector("p").textContent = message;
+  pageLoader.classList.add("active");
 }
 
 function hideLoader() {
-    pageLoader.classList.remove("active");
+  pageLoader.classList.remove("active");
 }
 
 function openShareDrawer(notebookId) {
-    targetShareNotebookId = notebookId;
-    sharePhone.value = "";
-    shareDrawerOverlay.classList.remove('hidden');
+  targetShareNotebookId = notebookId;
+  sharePhone.value = "";
+  shareDrawerOverlay.classList.remove("hidden");    // ✅ Load current shared users immediately
+loadSharedUsers(targetShareNotebookId);
+
 }
 
-closeDrawerBtn.addEventListener('click', () => {
-    shareDrawerOverlay.classList.add('hidden');
+closeDrawerBtn.addEventListener("click", () => {
+  shareDrawerOverlay.classList.add("hidden");
 });
 
 // Close overlay if background area is clicked
-shareDrawerOverlay.addEventListener('click', (e) => {
-    if (e.target === shareDrawerOverlay) shareDrawerOverlay.classList.add('hidden');
+shareDrawerOverlay.addEventListener("click", (e) => {
+  if (e.target === shareDrawerOverlay)
+    shareDrawerOverlay.classList.add("hidden");
 });
 
-sendShareBtn.addEventListener('click', async () => {
-    const phoneNumber = sharePhone.value.trim();
-    const accessLevel = shareAccess.value;
+sendShareBtn.addEventListener("click", async () => {
+  const phoneNumber = sharePhone.value.trim();
+  const accessLevel = shareAccess.value;
 
-    if (!phoneNumber) {
-        alert("Please enter a phone number.");
-        return;
-    }
+  if (!phoneNumber) {
+    showToast("Please enter a phone number.");
+    return;
+  }
 
-    try {
-         showLoader("Sharing notebook...");
-        const res = await fetch(`${NOTEBOOK_API}/${targetShareNotebookId}/share`, {
-            method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify({ phone: phoneNumber, access: accessLevel })
-        });
-        const result = await res.json();
+  try {
+    showLoader("Sharing notebook...");
+    const res = await fetch(`${NOTEBOOK_API}/${targetShareNotebookId}/share`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ phone: phoneNumber, access: accessLevel }),
+    });
+    const result = await res.json();
 
-        if (!res.ok) throw new Error(result.message || "Failed to share notebook");
+    if (!res.ok) throw new Error(result.message || "Failed to share notebook");
 
-        alert("Notebook shared successfully!");
-        shareDrawerOverlay.classList.add('hidden');
-    } catch (err) {
-        alert("Error sharing: " + err.message);
-    }finally{
-        hideLoader();
-    }
+    showToast("Notebook shared successfully!");
+    shareDrawerOverlay.classList.add("hidden");
+  } catch (err) {
+    showToast("Error sharing: " + err.message);
+  } finally {
+    hideLoader();
+  }
 });
+async function loadSharedUsers(notebookId) {
+  try {
+      showLoader("Loading shared users...");
+    const res = await fetch(`${NOTEBOOK_API}/${notebookId}/shared`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+
+    const users = await res.json();
+
+    const container = document.getElementById("shared-users-list");
+    container.innerHTML = "";
+
+    if (!users.length) {
+      container.innerHTML = "<p>No users have access yet.</p>";
+      return;
+    }
+
+    users.forEach((user) => {
+
+      const row = document.createElement("div");
+      row.className = "shared-user-card";
+
+      row.innerHTML = `
+        <div class="shared-user-left">
+
+          <i class="fa-solid fa-user"></i>
+
+          <div>
+
+            <div class="shared-phone">
+              ${user.userPhone}
+            </div>
+
+            
+
+          </div>
+
+        </div>
+
+        <div class="shared-user-right">
+
+          <select
+              class="permission-select"
+              data-phone="${user.userPhone}"
+          >
+              <option value="view" ${
+                user.access === "view" ? "selected" : ""
+              }>
+                  🔒 Read Only
+              </option>
+
+              <option value="edit" ${
+                user.access === "edit" ? "selected" : ""
+              }>
+                  ✏️ Can Edit
+              </option>
+          </select>
+
+          <button
+              class="remove-share-btn"
+              data-phone="${user.userPhone}"
+          >
+              <i class="fa-solid fa-trash"></i>
+          </button>
+
+        </div>
+      `;
+
+      // ================= REMOVE =================
+
+      const removeBtn = row.querySelector(".remove-share-btn");
+
+      removeBtn.addEventListener("click", async () => {
+
+        if (!confirm(`Remove access for ${user.userPhone}?`)) return;
+
+        try {
+            showLoader("Removing user...");
+          const res = await fetch(
+            `${NOTEBOOK_API}/${notebookId}/share/${user.userPhone}`,
+            {
+              method: "DELETE",
+              headers: getAuthHeaders(),
+            }
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            showToast(data.message);
+            return;
+          }
+
+          row.remove(); // instant UI update
+
+          // or refresh from backend
+          // await loadSharedUsers(notebookId);
+
+        } catch (err) {
+          console.error(err);
+          showToast("Failed to remove user.");
+        } finally{
+            hideLoader();
+        }
+
+      });
+
+      // ================= UPDATE PERMISSION =================
+
+      const permissionSelect = row.querySelector(".permission-select");
+
+      permissionSelect.addEventListener("change", async (e) => {
+
+        try {
+             showLoader("Updating permission...");
+          const res = await fetch(
+            `${NOTEBOOK_API}/${notebookId}/share`,
+            {
+              method: "PUT",
+              headers: getAuthHeaders(),
+              body: JSON.stringify({
+                phone: user.userPhone,
+                access: e.target.value,
+              }),
+            }
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            showToast(data.message);
+            return;
+          }
+
+        } catch (err) {
+          console.error(err);
+          showToast("Failed to update permission.");
+        } finally { 
+            hideLoader();
+                 }
+
+      });
+
+      container.appendChild(row);
+
+    });
+
+  } catch (err) {
+    console.error(err);
+    showToast("Unable to load shared users.");
+  }finally{
+      hideLoader();
+  }
+}
+
+function showToast(message, type = "info", duration = 3000) {
+
+    const container = document.getElementById("toast-container");
+
+    const icons = {
+        success: "fa-circle-check",
+        error: "fa-circle-xmark",
+        warning: "fa-triangle-exclamation",
+        info: "fa-circle-info"
+    };
+
+    const toast = document.createElement("div");
+
+    toast.className = `toast ${type}`;
+
+    toast.style.setProperty("--duration", duration + "ms");
+
+    toast.innerHTML = `
+        <i class="fa-solid ${icons[type] || icons.info}"></i>
+        <span>${message}</span>
+    `;
+
+    toast.style.setProperty("animation-duration", ".35s");
+
+    toast.style.setProperty("--duration", duration + "ms");
+
+    toast.querySelector("span").style.flex = "1";
+
+    toast.style.setProperty("--toast-duration", duration + "ms");
+
+    toast.style.setProperty("--duration", duration + "ms");
+
+    toast.style.setProperty("--time", duration + "ms");
+
+    toast.style.setProperty("--progress", duration + "ms");
+
+    toast.style.setProperty("--delay", duration + "ms");
+
+    toast.style.setProperty("--speed", duration + "ms");
+
+    toast.style.setProperty("--length", duration + "ms");
+
+    toast.style.setProperty("--bar-duration", duration + "ms");
+
+    toast.style.setProperty("--anim", duration + "ms");
+
+    toast.style.setProperty("--toast-bar", duration + "ms");
+
+    toast.style.setProperty("--toast-time", duration + "ms");
+
+    toast.style.setProperty("--toast-duration", duration + "ms");
+
+    toast.style.setProperty("--duration-ms", duration + "ms");
+
+    toast.style.setProperty("--bar", duration + "ms");
+
+    toast.style.setProperty("--toast", duration + "ms");
+
+    toast.style.setProperty("--life", duration + "ms");
+
+    toast.style.setProperty("--remove", duration + "ms");
+
+    toast.style.setProperty("--timeout", duration + "ms");
+
+    toast.style.setProperty("--time-ms", duration + "ms");
+
+    toast.style.setProperty("--show-time", duration + "ms");
+
+    toast.style.setProperty("--hide-time", duration + "ms");
+
+    toast.style.setProperty("--progress-time", duration + "ms");
+
+    toast.style.setProperty("--progress-duration", duration + "ms");
+
+    toast.style.setProperty("--animation-time", duration + "ms");
+
+    toast.style.setProperty("--animation-duration", duration + "ms");
+
+    toast.style.setProperty("--toast-progress", duration + "ms");
+
+    toast.style.setProperty("--toast-progress-duration", duration + "ms");
+
+    toast.style.setProperty("--toast-animation-duration", duration + "ms");
+
+    toast.style.setProperty("--toast-animation-time", duration + "ms");
+
+    toast.style.setProperty("--toast-remove", duration + "ms");
+
+    toast.querySelector("i").style.fontSize = "18px";
+
+    container.appendChild(toast);
+
+    toast.style.setProperty("--duration", duration + "ms");
+    toast.style.setProperty("--toast-duration", duration + "ms");
+    toast.style.setProperty("--progress-duration", duration + "ms");
+
+    toast.style.setProperty("--bar-duration", duration + "ms");
+
+    toast.style.setProperty("--time", duration + "ms");
+
+    toast.style.setProperty("--remove-time", duration + "ms");
+
+    toast.style.setProperty("--animation", duration + "ms");
+
+    toast.style.setProperty("--progress", duration + "ms");
+
+    toast.style.setProperty("--life", duration + "ms");
+
+    toast.style.setProperty("--speed", duration + "ms");
+
+    toast.style.setProperty("--hide", duration + "ms");
+
+    toast.style.setProperty("--show", duration + "ms");
+
+    toast.style.setProperty("--close", duration + "ms");
+
+    toast.style.setProperty("--toastTime", duration + "ms");
+
+    toast.style.setProperty("--progressTime", duration + "ms");
+
+    toast.style.setProperty("--removeTime", duration + "ms");
+
+    toast.style.setProperty("--delayTime", duration + "ms");
+
+    toast.style.setProperty("--barTime", duration + "ms");
+
+    toast.style.setProperty("--animateTime", duration + "ms");
+
+    toast.style.setProperty("--transitionTime", duration + "ms");
+
+    toast.style.setProperty("--toastBarTime", duration + "ms");
+
+    toast.style.setProperty("--toastHideTime", duration + "ms");
+
+    toast.style.setProperty("--toastShowTime", duration + "ms");
+
+    toast.style.setProperty("--toastLife", duration + "ms");
+
+    toast.style.setProperty("--toastRemoveTime", duration + "ms");
+
+    toast.style.setProperty("--toastProgressTime", duration + "ms");
+
+    toast.style.setProperty("--toastProgressDuration", duration + "ms");
+
+    toast.style.setProperty("--toastAnimationDuration", duration + "ms");
+
+    toast.style.setProperty("--toastAnimationTime", duration + "ms");
+
+    toast.style.setProperty("--toastRemoveDuration", duration + "ms");
+
+    toast.querySelector("span").style.wordBreak = "break-word";
+
+    setTimeout(() => {
+
+        toast.style.animation = "toastOut .3s forwards";
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        },300);
+
+    },duration);
+
+}
