@@ -518,3 +518,511 @@ body {
         transform: rotate(360deg);
     }
 }
+
+/* ===========================
+   SHARE MODAL
+=========================== */
+
+.drawer-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:
+        max(16px, env(safe-area-inset-top))
+        16px
+        max(16px, env(safe-area-inset-bottom));
+
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(4px);
+
+    overflow:auto;
+
+    box-sizing:border-box;
+}
+
+.drawer-overlay.hidden{
+    display:none;
+}
+
+/* ===========================
+   MODAL
+=========================== */
+
+.share-drawer{
+
+    width:min(95vw,520px);
+
+    max-height:calc(100vh - 32px);
+
+    background:#fff;
+
+    border-radius:18px;
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+
+    animation:drawerPop .25s ease;
+
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.drawer-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:12px;
+
+    padding:18px 20px;
+
+    background:#fff;
+
+    border-bottom:1px solid #ececec;
+
+    position:sticky;
+    top:0;
+
+    z-index:5;
+}
+
+.drawer-header h3{
+
+    margin:0;
+
+    font-size:clamp(18px,2vw,22px);
+
+    font-weight:600;
+
+    flex:1;
+
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+/* ===========================
+   CLOSE BUTTON
+=========================== */
+
+#close-drawer-btn{
+
+    width:42px;
+    height:42px;
+
+    flex-shrink:0;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f5f5f5;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    display:grid;
+    place-items:center;
+
+    transition:.2s;
+}
+
+#close-drawer-btn:hover{
+
+    background:#ef4444;
+
+    color:#fff;
+}
+
+/* ===========================
+   BODY
+=========================== */
+
+.drawer-body{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    box-sizing:border-box;
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+
+.drawer-body input,
+.drawer-body select{
+
+    width:100%;
+
+    min-height:46px;
+
+    padding:12px 14px;
+
+    border:1px solid #d9d9d9;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    box-sizing:border-box;
+}
+
+.drawer-body label{
+
+    font-weight:600;
+
+    color:#444;
+}
+
+/* ===========================
+   BUTTON
+=========================== */
+
+#send-share-btn{
+
+    width:100%;
+
+    min-height:48px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#0d6efd;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+#send-share-btn:hover{
+
+    background:#0b5ed7;
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width:768px){
+
+.share-drawer{
+
+    width:100%;
+
+    max-width:none;
+
+    max-height:100%;
+
+    border-radius:16px;
+
+}
+
+.drawer-header{
+
+    padding:16px;
+
+}
+
+.drawer-body{
+
+    padding:16px;
+
+}
+
+}
+
+/* ===========================
+   VERY SMALL PHONES
+=========================== */
+
+@media (max-width:420px){
+
+.drawer-overlay{
+
+    padding:8px;
+
+}
+
+.share-drawer{
+
+    border-radius:14px;
+
+}
+
+.drawer-header h3{
+
+    font-size:18px;
+
+}
+
+#close-drawer-btn{
+
+    width:40px;
+    height:40px;
+
+    font-size:18px;
+
+}
+
+}
+/* ===========================
+   REMOVE BUTTON
+=========================== */
+
+.remove-share-btn{
+    width: clamp(38px, 4vw, 44px);
+    height: clamp(38px, 4vw, 44px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+    outline: none;
+
+    border-radius: 50%;
+
+    background: #ef4444;
+    color: #fff;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+
+    flex-shrink: 0;
+}
+
+.remove-share-btn:hover{
+    background: #dc2626;
+    transform: scale(1.08);
+    box-shadow: 0 6px 14px rgba(239,68,68,.35);
+}
+
+.remove-share-btn:active{
+    transform: scale(.95);
+}
+
+.remove-share-btn i{
+    pointer-events: none;
+    font-size: clamp(14px,1.3vw,17px);
+}
+
+/* ===========================
+   TABLETS
+=========================== */
+
+@media (max-width:768px){
+
+    .remove-share-btn{
+        width:44px;
+        height:44px;
+    }
+
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width:480px){
+
+    .shared-user-right{
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        gap:10px;
+    }
+
+    .permission-select{
+        width:100%;
+    }
+
+    .remove-share-btn{
+        width:100%;
+        height:46px;
+        border-radius:10px;
+    }
+
+}
+
+.remove-share-btn{
+    gap:8px;
+}
+
+.remove-share-btn span{
+    display:none;
+}
+
+@media (max-width:480px){
+
+    .remove-share-btn span{
+        display:inline;
+        font-size:14px;
+        font-weight:600;
+    }
+}
+
+/* ===========================
+   TOAST
+=========================== */
+
+#toast-container{
+    position:fixed;
+    top:20px;
+    right:20px;
+
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+    z-index:99999;
+
+    max-width:min(380px,90vw);
+
+    pointer-events:none;
+}
+
+.toast{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:14px 16px;
+
+    border-radius:12px;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+
+    animation:toastIn .35s ease;
+
+    pointer-events:auto;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.toast.success{
+    background:#22c55e;
+}
+
+.toast.error{
+    background:#ef4444;
+}
+
+.toast.warning{
+    background:#f59e0b;
+}
+
+.toast.info{
+    background:#2563eb;
+}
+
+/* Progress Bar */
+
+.toast::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:3px;
+
+    background:rgba(255,255,255,.45);
+
+    animation:toastProgress linear forwards;
+}
+
+@keyframes toastProgress{
+
+    from{width:100%;}
+
+    to{width:0;}
+
+}
+
+@keyframes toastIn{
+
+    from{
+        opacity:0;
+        transform:translateX(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
+
+@keyframes toastOut{
+
+    to{
+        opacity:0;
+        transform:translateX(40px);
+    }
+
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+#toast-container{
+
+    top:12px;
+    left:12px;
+    right:12px;
+
+    max-width:none;
+
+}
+
+.toast{
+
+    font-size:14px;
+
+}
+
+}
