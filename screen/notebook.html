@@ -98,32 +98,56 @@
         <button id="clear-btn" class="action-btn clear-btn">🗑️ Clear Sheet</button>
     </div>
     <div id="share-drawer-overlay" class="drawer-overlay hidden">
-    <div id="share-drawer" class="share-drawer">
+      <div id="share-drawer" class="share-drawer">
         <div class="drawer-header">
-            <h3>Share Notebook</h3>
-            <button id="close-drawer-btn">✖</button>
+          <h3>Share Notebook</h3>
+          <button id="close-drawer-btn">✖</button>
         </div>
         <div class="drawer-body">
-            <label for="share-phone">User Phone Number:</label>
-            <input type="tel" id="share-phone" placeholder="Enter recipient's phone number" maxlength="10" required />
-            
-            <label for="share-access">Access Level:</label>
-            <select id="share-access">
-                <option value="read">Read Only</option>
-                <option value="edit">Edit Only</option>
-            </select>
-            
-            <button id="send-share-btn">Send Access</button>
+          <label for="share-phone">User Phone Number:</label>
+          <input
+            type="tel"
+            id="share-phone"
+            placeholder="Enter recipient's phone number"
+            maxlength="10"
+            required
+          />
+
+          <label for="share-access">Access Level:</label>
+          <select id="share-access">
+            <option value="read">Read Only</option>
+            <option value="edit">Edit Only</option>
+          </select>
+
+          <button id="send-share-btn">
+            <i class="fa-solid fa-paper-plane"></i>
+            Share Notebook
+          </button>
+
+          <hr class="share-divider" />
+
+          <div class="shared-users-section">
+            <h4>People with Access</h4>
+
+            <div id="shared-users-list">
+              <button 
+              class="remove-share-btn" 
+              data-user="${user._id}">
+                <i class="fa-solid fa-trash"></i>
+                 <span>Remove</span>
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</div>
     <div id="pageLoader" class="page-loader">
     <div class="loader-box">
         <div class="spinner"></div>
         <p>Please wait...</p>
     </div>
 </div>
+    <div id="toast-container"></div>
     <script src="/js/notebook.js"></script>
     <!--<script src="../js/screenshotProtector.js"></script>
 <script>
