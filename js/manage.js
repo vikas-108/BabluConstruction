@@ -428,6 +428,11 @@ function showToaster(message, type = "info", duration = 3000) {
 
 }
 
+  window.previewPhoto = previewPhoto;
+window.openEditProfile = openEditProfile;
+window.saveProfile = saveProfile;
+window.closeEdit = closeEdit;
+
 });
 // Delete account
 /*async function deleteAccount() {
