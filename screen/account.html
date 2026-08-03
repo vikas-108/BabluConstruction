@@ -25,14 +25,14 @@
     <!-- Upload & Camera Buttons -->
     <div class="photo-actions">
       <label for="uploadPhoto" class="photo-btn">📁 Upload</label>
-      <input type="file" id="uploadPhoto" accept="image/*" style="display:none" onchange="previewPhoto(event)" />
+      <input type="file" id="uploadPhoto" accept="image/*" style="display:none"  />
 
       <label for="cameraPhoto" class="photo-btn">📷 Camera</label>
-      <input type="file" id="cameraPhoto" accept="image/*" capture="user" style="display:none" onchange="previewPhoto(event)" />
+      <input type="file" id="cameraPhoto" accept="image/*" capture="user" style="display:none" />
     </div>
   </div>
 
-  <button type="button" id="editIconBtn" class="edit-btn" onclick="openEditProfile()" aria-label="Edit Profile">✏️</button>
+  <button type="button" id="editIconBtn" class="edit-btn" aria-label="Edit Profile">✏️</button>
 
   <h2 id="profileName">Your Name</h2>
   <p id="profileRole">Contractor</p>
@@ -141,8 +141,8 @@
 </div>
     <input id="editExp" placeholder="Experience (years)" />
     <textarea id="editBio" placeholder="About your work"></textarea>
-    <button type="button" onclick="saveProfile()">Save</button>
-    <button type="button" class="second" onclick="closeEdit()">Cancel</button>
+    <button type="button" id="saveProfileBtn">Save</button>
+    <button type="button" class="second" id="canceleditbtn" >Cancel</button>
   </div>
 </div>
   <div id="toastContainer"></div>
