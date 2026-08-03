@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       showToaster(profile.message);
     }
   });
-//});
 
 // Render profile data into DOM
 function renderProfile(profile) {
@@ -126,7 +125,7 @@ function renderProfile(profile) {
   document.getElementById("profileBio").textContent =
     profile.bio || "No details added";
 
-  /* Show saved photo if available
+  /*Show saved photo if available
   if (profile.photo) {
     document.getElementById("profilePhoto").src = profile.photo.startsWith(
       "http",
@@ -142,7 +141,7 @@ function renderProfile(profile) {
     document.getElementById("profilePhoto").src =
       `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
   }*/
-  const photo = document.getElementById("profilePhoto");
+ const photo = document.getElementById("profilePhoto");
 
 if (profile.photo) {
   photo.src = profile.photo.startsWith("http")
@@ -206,7 +205,7 @@ function openEditProfile() {
   modal.removeAttribute("inert");
   editName.focus();
 }
-
+document.getElementById("canceleditbtn")?.addEventListener("click", closeEdit);
 function closeEdit() {
   const modal = document.getElementById("editModal");
   if (!modal) return;
@@ -229,7 +228,11 @@ document.getElementById("editModal").addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeEdit();
 });
+const uploadPhoto = document.getElementById("uploadPhoto");
+const cameraPhoto = document.getElementById("cameraPhoto");
 
+uploadPhoto.addEventListener("change", previewPhoto);
+cameraPhoto.addEventListener("change", previewPhoto);
 // Preview selected images
 function previewPhoto(event) {
   const file = event.target.files[0];
@@ -243,6 +246,9 @@ function previewPhoto(event) {
   };
   reader.readAsDataURL(file);
 }
+document
+    .getElementById("saveProfileBtn")
+    .addEventListener("click", saveProfile);
 async function saveProfile() {
   try {
 
@@ -318,7 +324,20 @@ window.fetch = async (...args) => {
         }
     }
 };
+// Delete account
+/*async function deleteAccount() {
+  if (!confirm("Delete account permanently?")) return;
 
+  await fetch(`${ACCOUNT_BASE}/delete`, {
+    method: "DELETE",
+    headers: authHeaders()
+  });
+
+  localStorage.removeItem("cb_token");
+  localStorage.removeItem(LOGIN_KEY);
+
+  location.href = "index.html";
+}*/
 async function loadDeleteSetting(){
 
     const res = await fetch(
@@ -427,12 +446,6 @@ function showToaster(message, type = "info", duration = 3000) {
     setTimeout(removeToast, duration);
 
 }
-
-  window.previewPhoto = previewPhoto;
-window.openEditProfile = openEditProfile;
-window.saveProfile = saveProfile;
-window.closeEdit = closeEdit;
-
 });
 // Delete account
 /*async function deleteAccount() {
