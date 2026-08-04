@@ -412,6 +412,7 @@ searchBox.addEventListener("input", () => {
   });
 
   filtered.forEach((p) => {
+   const phone = p.ownerPhone;
     L.marker(
       [p.location.lat, p.location.lng],
       { icon: getBuildingIcon(p.projectType) }
@@ -421,6 +422,11 @@ searchBox.addEventListener("input", () => {
         ${p.projectType}<br>
         ${p.description}<br>
         <em>${p.visibility}</em>
+         ${
+      phone
+        ? `<a href="tel:${phone}" class="call-btn">📞</a>`
+        : `<button class="call-btn" disabled>No Phone</button>`
+    }
       `)
       .addTo(projectMarkers);
   });
