@@ -1,4 +1,4 @@
-con
+
 const API_BASE = "https://api.buildskil.com/api/progress"; // change if deployed
 const ACCOUNT_API = "https://api.buildskil.com";
 //const API_BASE = "http://localhost:5000/api/progress"; // change if using domain
