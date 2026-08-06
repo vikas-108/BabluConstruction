@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Invoice Management</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="../css/billu.css">
+    <!-- Prevents unauthenticated users from seeing a flash of content -->
+  <script>document.documentElement.style.visibility = 'hidden';</script>
+  
+  <!-- Your common auth guard -->
+  <script src="/js/auth-guard.js"></script>
+</head>
+<body>
+
+    <!-- Control Dashboard Panel -->
+    <div class="control-panel no-print">
+        <h2>Invoice Control Dashboard</h2>
+        <p><strong>Instructions:</strong> Edit the <strong>Client Copy</strong> (Top) directly. The <strong>Office Copy</strong> (Bottom) will update automatically in real-time.</p>
+         <div class="button-group">
+            <button id="btn-print-all" class="btn btn-success">Print All (Both Copies)</button>
+            <button id="btn-print-client" class="btn btn-primary">Print Client Copy Only</button>
+            <button id="btn-print-office" class="btn btn-primary">Print Office Copy Only</button>
+        </div>
+    </div>
+
+    <!-- Master Invoice Wrapper -->
+    <div id="invoice-wrapper">
+        
+        <!-- COPY 1: CLIENT COPY (The Source) -->
+        <section class="invoice-sheet" id="source-invoice">
+            <div class="copy-badge">Original Client Copy</div>
+            
+            <!-- EDITABLE HEADER -->
+            <header class="invoice-header">
+                <input type="text" class="header-title-input" value="Construction Format Invoice">
+                 <textarea class="header-details-input" rows="1">Main Office Center | Industrial Sector | Contact: +91 98765-43210 | Email: build@construct.com</textarea>
+            </header>
+
+            <div class="meta-section">
+                <div class="meta-left">
+                    <div class="meta-field">
+                        <label>Client Name:</label>
+                        <input type="text" class="input-client" value="Amit Kumar">
+                    </div>
+                    <div class="meta-field">
+                        <label>Phone:</label>
+                        <input type="text" class="input-phone" value="+91 98000-00000">
+                    </div>
+                    <div class="meta-field">
+                        <label>Date:</label>
+                        <input type="date" class="input-date" value="2026-08-05">
+                    </div>
+                </div>
+                <div class="meta-right">
+                    <div class="meta-field">
+                        <label>Created By:</label>
+                        <input type="text" class="input-creator" value="Project Manager">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <div class="table-responsive">
+                <table class="item-table">
+                    <thead>
+                        <tr>
+                            <th>Format Type</th>
+                            <th>Description</th>
+                            <th>Qty / Hrs</th>
+                            <th>Rate (₹)</th>
+                            <th>Amount (₹)</th>
+                            <th class="no-print" style="width: 50px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="item-list">
+                        <!-- Dynamic Rows loaded by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn btn-primary add-row-btn no-print">+ Add Resource Item</button>
+
+            <div class="summary-container">
+                <div class="toggle-box no-print">
+                    <div class="toggle-item">
+                        <label for="discount-input">Discount %:</label>
+                        <input type="number" id="discount-input" value="10" min="0" max="100">
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="gst-toggle" checked>
+                        <label for="gst-toggle">Apply 18% GST (Tax)</label>
+                    </div>
+                </div>
+
+                <div class="totals-box">
+                    <div class="total-row"><span>Subtotal:</span><span>₹ <span class="subtotal-val">0.00</span></span></div>
+                    <div class="total-row"><span>Discount (<span class="discount-rate-display">10</span>%):</span><span>-₹ <span class="discount-val">0.00</span></span></div>
+                    <div class="total-row"><span>GST Tax (18%):</span><span>+₹ <span class="gst-val">0.00</span></span></div>
+                    <div class="total-row grand-total"><span>Grand Total:</span><span>₹ <span class="grand-total-val">0.00</span></span></div>
+                </div>
+            </div>
+
+            <footer class="invoice-footer">
+                <div class="signature-block">
+                    <input type="text" class="input-signature" value="Authorized Manager">
+                    <div class="signature-line">Authorized Signatory</div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- PAGE BREAK MARKER -->
+        <div class="page-break"></div>
+
+        <!-- COPY 2: OFFICE COPY (The Reflection) -->
+        <section class="invoice-sheet" id="office-copy-target">
+            <!-- JavaScript will automatically clone and keep this synchronized -->
+        </section>
+    </div>
+
+    <!-- History Logging Box -->
+    <div class="history-section no-print">
+        <h3>Invoice Download History Log</h3>
+        <ul id="history-log">
+            <li class="empty-msg">No invoices generated in this session yet.</li>
+        </ul>
+    </div>
+
+    <script src="../js/billu.js"></script>
+</body>
+</html>
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Invoice Management</title>
+    <link rel="stylesheet" href="../css/billu.css">
+</head>
+<body>
+
+    <div class="control-panel no-print">
+        <h2>Invoice Control Dashboard</h2>
+        <p><strong>Instructions:</strong> Edit the <strong>Client Copy</strong> (Top) directly. The Office Copy updates automatically.</p>
+        <div class="button-group">
+            <button id="btn-print-all" class="btn btn-success">Print All (Both Copies)</button>
+            <button id="btn-print-client" class="btn btn-primary">Print Client Copy Only</button>
+            <button id="btn-print-office" class="btn btn-primary">Print Office Copy Only</button>
+        </div>
+    </div>
+
+    <div id="invoice-wrapper">
+        
+        <!-n- COPY 1: CLIENT COPY -m->
+        <section class="invoice-sheet" id="source-invoice">
+            <div class="copy-badge">Original Client Copy</div>
+            <header class="invoice-header">
+                <input type="text" class="header-title-input" value="Construction Format Invoice">
+                <input type="text" class="header-details-input" value="Main Office Center | Industrial Sector | Contact: +91 98765-43210 | Email: build@construct.com">
+            </header>
+
+            <div class="meta-section">
+                <div class="meta-left">
+                    <div class="meta-field"><label>Client Name:</label><input type="text" class="input-client" value="Amit Kumar"></div>
+                    <div class="meta-field"><label>Phone:</label><input type="text" class="input-phone" value="+91 98000-00000"></div>
+                    <div class="meta-field"><label>Date:</label><input type="date" class="input-date" value="2026-08-05"></div>
+                </div>
+                <div class="meta-right">
+                    <div class="meta-field"><label>Created By:</label><input type="text" class="input-creator" value="Project Manager"></div>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <div class="table-responsive">
+                <table class="item-table">
+                    <thead>
+                        <tr>
+                            <! -- CSS Print logic relies on this specific order m--m>
+                            <th>Format Type</th>
+                            <th>Description</th>
+                            <th>Qty / Hrs</th>
+                            <th>Rate (₹)</th>
+                            <th>Amount (₹)</th>
+                            <th class="no-print" style="width: 50px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="item-list">
+                        <!n-- Javascript Loads Rows Here -l-m>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn btn-primary add-row-btn no-print">+ Add Resource Item</button>
+
+            <div class="summary-container">
+                <div class="toggle-box no-print">
+                    <div class="toggle-item">
+                        <label for="discount-input">Discount %:</label>
+                        <input type="number" id="discount-input" value="10" min="0" max="100">
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="gst-toggle" checked>
+                        <label for="gst-toggle">Apply 18% GST (Tax)</label>
+                    </div>
+                </div>
+
+                <div class="totals-box">
+                    <div class="total-row"><span>Subtotal:</span><span>₹ <span class="subtotal-val">0.00</span></span></div>
+                    <div class="total-row"><span>Discount (<span class="discount-rate-display">10</span>%):</span><span>-₹ <span class="discount-val">0.00</span></span></div>
+                    <div class="total-row"><span>GST Tax (18%):</span><span>+₹ <span class="gst-val">0.00</span></span></div>
+                    <div class="total-row grand-total"><span>Grand Total:</span><span>₹ <span class="grand-total-val">0.00</span></span></div>
+                </div>
+            </div>
+
+            <footer class="invoice-footer">
+                <div class="signature-block">
+                    <input type="text" class="input-signature" value="Authorized Manager">
+                    <div class="signature-line">Authorized Signatory</div>
+                </div>
+            </footer>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="invoice-sheet" id="office-copy-target"></section>
+    </div>
+
+    <div class="history-section no-print">
+        <h3>Invoice Download History Log</h3>
+        <ul id="history-log"><li class="empty-msg">No invoices generated in this session yet.</li></ul>
+    </div>
+
+    <script src="../js/billu.js"></script>
+</body>
+</html>-->
