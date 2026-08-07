@@ -385,6 +385,16 @@ function triggerPrint(mode) {
     // 5. Update Log
     updateAuditLog(clientName, total, logType);
 }
+// Safely attach event listener using Optional Chaining (?.)
+document.getElementById("back")?.addEventListener("click", () => goBack("landing.html"));
+
+function goBack(fallback = "landing.html") {
+  if (document.referrer && history.length > 1) {
+    history.back();
+  } else {
+    window.location.href = fallback;
+  }
+}
 function updateAuditLog(client, amount, type = "Set") {
     const ul = document.getElementById('history-log');
     if(!ul) return;
