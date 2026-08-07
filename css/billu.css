@@ -32,7 +32,90 @@ body {
 
 .control-panel h2 { color: var(--primary-color); margin-bottom: 5px; }
 .control-panel p { color: #666; margin-bottom: 15px; font-size: 14px; }
+.page-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 
+    margin: 0 0 1.5rem;
+    color: var(--primary);
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    text-align: center;
+    min-height: 50px;
+}
+
+.page-title span {
+    flex: 1;
+    text-align: center;
+    padding: 0 50px; /* Prevents text overlapping the back button */
+}
+
+.header-back-btn {
+    position: absolute;
+    left: 0;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: #fff;
+
+    font-size: 22px;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.header-back-btn:hover {
+    background: #0b5ed7;
+}
+
+.header-back-btn:active {
+    transform: scale(.95);
+}
+
+@media (max-width: 768px) {
+
+    .page-title {
+        font-size: 1.35rem;
+        min-height: 44px;
+    }
+
+    .page-title span {
+        padding: 0 42px;
+    }
+
+    .header-back-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .page-title {
+        font-size: 1.15rem;
+    }
+
+    .page-title span {
+        padding: 0 36px;
+    }
+
+    .header-back-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+}
 /* Button Group Styling */
 .button-group {
     display: flex;
