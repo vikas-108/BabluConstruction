@@ -140,7 +140,8 @@ function renderProfile(profile) {
       .join("");
     document.getElementById("profilePhoto").src =
       `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
-  }*/
+  }
+  //breaking line point
  const photo = document.getElementById("profilePhoto");
 
 if (profile.photo) {
@@ -154,7 +155,7 @@ if (profile.photo) {
     .join("");
 
   photo.src = `https://via.placeholder.com/140/007bff/ffffff?text=${encodeURIComponent(initials)}`;
-}
+}*/
   // 🔐 LOCK EMAIL IF VERIFIED
 const editEmailInput = document.getElementById("editEmail");
 
@@ -228,11 +229,11 @@ document.getElementById("editModal").addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeEdit();
 });
-const uploadPhoto = document.getElementById("uploadPhoto");
-const cameraPhoto = document.getElementById("cameraPhoto");
+//const uploadPhoto = document.getElementById("uploadPhoto");
+//const cameraPhoto = document.getElementById("cameraPhoto");
 
-uploadPhoto.addEventListener("change", previewPhoto);
-cameraPhoto.addEventListener("change", previewPhoto);
+//uploadPhoto.addEventListener("change", previewPhoto);
+//cameraPhoto.addEventListener("change", previewPhoto);
 // Preview selected images
 function previewPhoto(event) {
   const file = event.target.files[0];
