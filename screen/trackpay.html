@@ -415,6 +415,88 @@
     </ul>
 
 </section>
+    <!-- ================= SHARE BILLING MODAL ================= -->
+
+<div id="shareModal" class="share-modal hidden">
+
+    <div class="share-modal-box">
+
+        <button
+            type="button"
+            id="closeShareModal"
+            class="share-close">
+            &times;
+        </button>
+
+        <h2>
+            <i class="fa-solid fa-share-nodes"></i>
+            Share Billing
+        </h2>
+
+        <p class="share-description">
+            Enter the registered user's phone number
+            to share this billing.
+        </p>
+
+
+        <!-- PHONE -->
+
+        <div class="share-input-group">
+
+            <label for="sharePhone">
+                Phone Number
+            </label>
+
+            <input
+                type="tel"
+                id="sharePhone"
+                maxlength="10"
+                minlength="10"
+                inputmode="numeric"
+                placeholder="Enter 10-digit phone number"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            id="shareBillingBtn"
+            class="share-submit-btn">
+
+            <i class="fa-solid fa-share"></i>
+
+            Share Billing
+
+        </button>
+
+
+        <!-- MESSAGE -->
+
+        <p id="shareMessage" class="share-message"></p>
+
+
+        <!-- SHARED USERS -->
+
+        <div class="shared-users-section">
+
+            <h3>
+                Shared With
+            </h3>
+
+            <div id="sharedUsersList">
+
+                <p class="no-shared-users">
+                    No users shared yet.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
     <div id="pageLoader" class="page-loader">
     <div class="loader-box">
         <div class="spinner"></div>
