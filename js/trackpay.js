@@ -28,6 +28,25 @@ const paymentSection = document.getElementById("paymentSection");
 const dailyWorkSection = document.getElementById("dailyWorkSection");
 
 const historySection = document.getElementById("historySection");
+const shareModal =
+    document.getElementById("shareModal");
+
+const sharePhone =
+    document.getElementById("sharePhone");
+
+const shareBillingBtn =
+    document.getElementById("shareBillingBtn");
+
+const sharedUsersList =
+    document.getElementById("sharedUsersList");
+
+const shareMessage =
+    document.getElementById("shareMessage");
+
+const closeShareModal =
+    document.getElementById("closeShareModal");
+
+let sharingBillingId = null;
 document.getElementById("createBillingBtn").addEventListener("click", async () => {
 
     const workerName = document.getElementById("workerName").value.trim();
@@ -40,7 +59,7 @@ document.getElementById("createBillingBtn").addEventListener("click", async () =
     }
 
     try {
-        showLoader("Creating...");
+         showLoader("Creating...");
         const res = await fetch(`${API_BASE}/create`, {
 
             method: "POST",
@@ -85,7 +104,7 @@ document.getElementById("createBillingBtn").addEventListener("click", async () =
 async function loadWorkers() {
 
     try {
-          showLoader("Loading...");
+        showLoader("Loading...");
         const res = await fetch(`${API_BASE}/list`, {
             headers: authHeaders()
         });
@@ -126,6 +145,8 @@ dailyRate.value="";
 paymentCycle.value="";
 
 }
+
+
 function renderWorkers(){
 
 workerContainer.innerHTML="";
@@ -133,7 +154,13 @@ workerContainer.innerHTML="";
 workers.forEach(worker=>{
 
 const card=document.createElement("div");
-
+const ownerActions = worker.accessType === "owner"
+    ? `
+        <button class="work">Open</button>
+        <button class="delete">Delete</button>
+        <button class="share">Share</button>
+      `
+    : "";
 card.className="worker-card";
 
 card.innerHTML=`
@@ -154,33 +181,61 @@ card.innerHTML=`
 
 <div class="worker-actions">
 
-<button class="view">View</button>
+<button class="view">
+            View
+        </button>
 
-<button class="work">Open</button>
-<button class="delete">Delete</button>
+        ${ownerActions}
 
 </div>
 
 `;
-card.querySelector(".view").onclick = () => {
-    console.log("View clicked", worker._id);
-    showPreviousHistory(worker._id);
-};
-card.querySelector(".work").onclick=()=>{
+const viewBtn = card.querySelector(".view");
 
-openWorker(worker._id);
+if (viewBtn) {
+    viewBtn.onclick = () => {
+        showPreviousHistory(worker._id);
+    };
+}
 
-};
 
-card.querySelector(".delete").onclick=()=>{
+const workBtn = card.querySelector(".work");
 
-if(confirm("Are you sure you want to delete this worker?")){
+if (workBtn) {
+    workBtn.onclick = () => {
+        openWorker(worker._id);
+    };
+}
 
-deleteWorker(worker._id);
+
+const deleteBtn = card.querySelector(".delete");
+
+if (deleteBtn) {
+
+    deleteBtn.onclick = () => {
+
+        if (
+            confirm(
+                "Are you sure you want to delete this worker?"
+            )
+        ) {
+            deleteWorker(worker._id);
+        }
+
+    };
 
 }
 
-};
+
+const shareBtn = card.querySelector(".share");
+
+if (shareBtn) {
+
+    shareBtn.onclick = () => {
+        openShareModal(worker._id);
+    };
+
+}
 workerContainer.appendChild(card);
 
 });
@@ -236,6 +291,7 @@ async function deleteWorker(id){
 
     try{
         showLoader("Deleting...");
+
         const res=await fetch(`${API_BASE}/delete/${id}`,{
 
             method:"DELETE",
@@ -389,6 +445,114 @@ document.getElementById("addBillBtn").addEventListener("click",async()=>{
     loadWorkers();
 
 });
+//share billing btna
+shareBillingBtn.addEventListener("click", async () => {
+
+    const phone = sharePhone.value.trim();
+
+    if (!sharingBillingId) {
+
+        return;
+
+    }
+
+    if (phone.length !== 10) {
+
+        showShareMessage(
+            "Enter a valid 10-digit phone number.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        shareBillingBtn.disabled = true;
+
+        shareBillingBtn.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Sharing...
+        `;
+
+
+        const res = await fetch(
+            `${API_BASE}/${sharingBillingId}/share`,
+            {
+                method: "POST",
+
+                headers: authHeaders(),
+
+                body: JSON.stringify({
+                    phone
+                })
+            }
+        );
+
+
+        const data = await res.json();
+
+
+        if (!res.ok) {
+
+            showShareMessage(
+                data.message || "Unable to share billing.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        showShareMessage(
+            "Billing shared successfully.",
+            "success"
+        );
+
+
+        sharePhone.value = "";
+
+
+        loadSharedUsers(sharingBillingId);
+
+    }
+
+    catch (err) {
+
+        console.error("Share error:", err);
+
+        showShareMessage(
+            "Something went wrong.",
+            "error"
+        );
+
+    }
+
+    finally {
+
+        shareBillingBtn.disabled = false;
+
+        shareBillingBtn.innerHTML = `
+            <i class="fa-solid fa-share"></i>
+            Share Billing
+        `;
+
+    }
+
+});
+
+function showShareMessage(message, type) {
+
+    shareMessage.textContent = message;
+
+    shareMessage.className =
+        `share-message ${type}`;
+
+}
+
 async function showPreviousHistory(id) {
 
     try {
@@ -532,6 +696,224 @@ document.getElementById("historyModal").onclick = (e) => {
     }
 
 };
+async function loadSharedUsers(billingId) {
+
+    try {
+
+        const res = await fetch(
+            `${API_BASE}/${billingId}/shares`,
+            {
+                headers: authHeaders()
+            }
+        );
+
+
+        const data = await res.json();
+
+
+        if (!res.ok) {
+
+            sharedUsersList.innerHTML = `
+                <p class="no-shared-users">
+                    Unable to load shared users.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        renderSharedUsers(
+            billingId,
+            data.sharedWith || []
+        );
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "Load shared users error:",
+            err
+        );
+
+    }
+
+}
+function renderSharedUsers(billingId, users) {
+
+    sharedUsersList.innerHTML = "";
+
+
+    if (!users.length) {
+
+        sharedUsersList.innerHTML = `
+            <p class="no-shared-users">
+                No users shared yet.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    users.forEach(user => {
+
+        const row = document.createElement("div");
+
+        row.className = "shared-user-row";
+
+
+        row.innerHTML = `
+
+            <div class="shared-user-info">
+
+                <strong>
+                    ${user.name || "User"}
+                </strong>
+
+                <span>
+                    ${user.phone}
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="remove-share-btn"
+                data-user="${user._id}">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Remove
+
+            </button>
+
+        `;
+
+
+        row
+            .querySelector(".remove-share-btn")
+            .addEventListener("click", () => {
+
+                removeSharedUser(
+                    billingId,
+                    user._id
+                );
+
+            });
+
+
+        sharedUsersList.appendChild(row);
+
+    });
+
+}
+async function removeSharedUser(
+    billingId,
+    userId
+) {
+
+    if (
+        !confirm(
+            "Remove this user from billing sharing?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const res = await fetch(
+            `${API_BASE}/${billingId}/share/${userId}`,
+            {
+                method: "DELETE",
+                headers: authHeaders()
+            }
+        );
+
+
+        const data = await res.json();
+
+
+        if (!res.ok) {
+
+            showShareMessage(
+                data.message || "Unable to remove user.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        showShareMessage(
+            "User removed successfully.",
+            "success"
+        );
+
+
+        loadSharedUsers(billingId);
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "Remove share error:",
+            err
+        );
+
+    }
+
+}
+shareModal.addEventListener("click", (e) => {
+
+    if (e.target === shareModal) {
+
+        shareModal.classList.add("hidden");
+
+        sharingBillingId = null;
+
+    }
+
+});
+sharePhone.addEventListener("input", function () {
+
+    this.value = this.value
+        .replace(/\D/g, "")
+        .slice(0, 10);
+
+});
+function openShareModal(billingId) {
+
+    sharingBillingId = billingId;
+
+    sharePhone.value = "";
+
+    shareMessage.textContent = "";
+
+    shareMessage.className = "share-message";
+
+    shareModal.classList.remove("hidden");
+
+    loadSharedUsers(billingId);
+
+}
+closeShareModal.addEventListener("click", () => {
+
+    shareModal.classList.add("hidden");
+
+    sharingBillingId = null;
+
+});
 function goBack(fallback = "landing.html") {
     if (history.length > 1) {
         history.back();
@@ -553,3 +935,4 @@ function showLoader(message = "Please wait...") {
 function hideLoader() {
     pageLoader.classList.remove("active");
 }
+
