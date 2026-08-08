@@ -378,6 +378,9 @@ button{
     background:#ef4848;
 
 }
+.worker-actions .share{
+    background-color: #e99b43;
+}
 /* ===========================
    WORKER INFO
 =========================== */
@@ -1024,6 +1027,347 @@ font-size:14px;
     to {
         transform: rotate(360deg);
     }
+}
+/*open modell function*/
+/* =========================
+   SHARE MODAL
+========================= */
+
+.share-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px;
+
+    z-index: 99999;
+
+}
+
+
+.share-modal.hidden {
+
+    display: none;
+
+}
+
+
+.share-modal-box {
+
+    position: relative;
+
+    width: min(100%, 500px);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #fff;
+
+    border-radius: 16px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
+
+}
+
+
+.share-modal-box h2 {
+
+    margin-bottom: 8px;
+
+}
+
+
+.share-description {
+
+    color: #64748b;
+
+    margin-bottom: 20px;
+
+}
+
+
+.share-close {
+
+    position: absolute;
+
+    right: 15px;
+    top: 12px;
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #334155;
+
+    font-size: 24px;
+
+}
+
+
+.share-input-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.share-input-group label {
+
+    font-weight: 600;
+
+}
+
+
+.share-input-group input {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 9px;
+
+    font-size: 16px;
+
+    outline: none;
+
+}
+
+
+.share-input-group input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.12);
+
+}
+
+
+.share-submit-btn {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+
+.share-submit-btn:disabled {
+
+    opacity: .6;
+
+    cursor: not-allowed;
+
+}
+
+
+.share-message {
+
+    min-height: 20px;
+
+    margin-top: 10px;
+
+    font-size: 14px;
+
+}
+
+
+.share-message.success {
+
+    color: #16a34a;
+
+}
+
+
+.share-message.error {
+
+    color: #dc2626;
+
+}
+
+
+/* =========================
+   SHARED USERS
+========================= */
+
+.shared-users-section {
+
+    margin-top: 25px;
+
+    border-top: 1px solid #e2e8f0;
+
+    padding-top: 20px;
+
+}
+
+
+.shared-users-section h3 {
+
+    margin-bottom: 12px;
+
+}
+
+
+.shared-user-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 12px;
+
+    margin-bottom: 8px;
+
+    background: #f8fafc;
+
+    border-radius: 10px;
+
+}
+
+
+.shared-user-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+
+}
+
+
+.shared-user-info strong {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.shared-user-info span {
+
+    color: #64748b;
+
+    font-size: 14px;
+
+}
+
+
+.remove-share-btn {
+
+    flex-shrink: 0;
+
+    padding: 8px 11px;
+
+    border-radius: 7px;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+}
+
+
+.remove-share-btn:hover {
+
+    background: #fecaca;
+
+}
+
+
+.no-shared-users {
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    padding: 15px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+    .share-modal {
+
+        padding: 10px;
+
+        align-items: flex-end;
+
+    }
+
+
+    .share-modal-box {
+
+        width: 100%;
+
+        max-height: 90vh;
+
+        border-radius: 18px 18px 0 0;
+
+        padding: 20px;
+
+    }
+
+
+    .shared-user-row {
+
+        align-items: flex-start;
+
+    }
+
+
+    .remove-share-btn {
+
+        padding: 7px 9px;
+
+        font-size: 13px;
+
+    }
+
 }
 
 
