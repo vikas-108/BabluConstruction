@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projects — Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+<link rel="stylesheet" href="../css/ctlfetc.css" />
+ <!-- Prevents unauthenticated users from seeing a flash of content -->
+  <script>document.documentElement.style.visibility = 'hidden';</script>
+  
+  <!-- Your common auth guard -->
+  <script src="/js/auth-guard.js"></script>
+</head>
+<body>
+
+<div class="page">
+  <div class="wrap">
+ 
+    <div class="topbar">
+      <div>
+        <div class="eyebrow">
+          <h2 class="page-title">
+            <button class="header-back-btn" id="back" aria-label="Go Back">
+            ←
+           </button> <span> Find projects</span> </h2>
+          </div>
+      </div>
+    </div>
+ 
+    <!-- API error banner (hidden unless a request fails) -->
+    <div id="errorBanner" class="error-banner hidden">
+      <i data-lucide="alert-triangle"></i>
+      <span id="errorBannerText"></span>
+      <button type="button" id="errorBannerClose" aria-label="Dismiss"><i data-lucide="x"></i></button>
+    </div>
+ 
+    <!-- Filter panel -->
+    <div class="filter-panel">
+ 
+      <div class="search-row">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search by project name or address" />
+      </div>
+ 
+      <div class="filter-grid">
+        <div class="filter-field">
+          <label class="filter-label">Category</label>
+          <div class="select-wrap">
+            <select id="f-category">
+              <option value="">All categories</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret"></i>
+          </div>
+        </div>
+ 
+        <div class="filter-field" id="roleField" style="display:none">
+          <label class="filter-label">Role</label>
+          <div class="select-wrap">
+            <select id="f-role">
+              <option value="">All roles</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret"></i>
+          </div>
+        </div>
+ 
+        <div class="filter-field">
+          <label class="filter-label">State</label>
+          <div class="select-wrap">
+            <select id="f-state">
+              <option value="">All states</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret"></i>
+          </div>
+        </div>
+ 
+        <div class="filter-field">
+          <label class="filter-label">District</label>
+          <div class="select-wrap">
+            <select id="f-district" disabled>
+              <option value="">Select a state first</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret"></i>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="active-filters" id="activeFilters"></div>
+    </div>
+ 
+    <div class="results-meta">
+      <span id="resultCount">0 projects</span>
+      <button type="button" id="clearBtn" class="link-btn">Clear filters</button>
+    </div>
+ 
+    <div id="loadingState" class="empty-state hidden">Loading projects…</div>
+ 
+    <div id="emptyState" class="empty-state hidden">No projects match your filters.</div>
+ 
+    <div id="cardsList" class="cards-list"></div>
+ 
+    <div class="load-more-row">
+      <button type="button" id="loadMoreBtn" class="btn-load-more hidden">Load more</button>
+    </div>
+ 
+  </div>
+</div>
+ <div id="pageLoader" class="page-loader">
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Please wait...</p>
+    </div>
+</div>
+<script src="../js/config.js"></script>
+<script src="../js/ctlfetc.js" defer></script>
+</body>
+</html>
