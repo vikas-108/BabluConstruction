@@ -556,8 +556,10 @@ function levenshtein(a, b) {
 const updates = [
   "🚀 New feature launched: search engine",
   "📢 Scheduled maintenance on 29 August",
-  "🎨 Updated design and notebook guidelines available",
-  "🔧 chat bot improvement on going ",
+  "🎨 Updated Home page guidelines available",
+  "📢 C.P. for contractor, tech, helper & others create profiles",
+  "📢 A.P. for client add project profile ",
+  "🔧 chat bot improvement is stll working  ",
 ];
 
 const notificationList = document.getElementById("notificationList");
