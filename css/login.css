@@ -530,3 +530,95 @@ button:disabled .btn-loader { display: inline-block; }
     transition-duration: 0.001ms !important;
   }
 }
+
+.input-group {
+    width: 100%;
+}
+
+.password-input {
+    position: relative;
+    width: 100%;
+}
+
+.password-input input {
+    width: 100%;
+    height: 46px;
+
+    padding: 0 48px 0 14px;
+
+    border: 1px solid #d5d9df;
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 14px;
+    font-family: inherit;
+
+    background: #fff;
+    color: #111827;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.password-input input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, .10);
+}
+
+
+/* Eye button */
+
+#togglePasscode {
+    position: absolute;
+
+    right: 5px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    cursor: pointer;
+}
+
+#togglePasscode:hover {
+    background: #f1f5f9;
+    color: #2563eb;
+}
+#eyeIcon {
+
+    display: block;
+
+    font-size: 20px;
+
+    line-height: 1;
+
+    pointer-events: none;
+}
+.password-input + small {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    line-height: 16px;
+}
