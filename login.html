@@ -43,11 +43,34 @@
           />
         </div>
 
-        <div class="input-group">
-          <input type="text" id="username" placeholder="Unique Passcode" />
-          <small>Must contain letters, numbers & special characters</small>
-        </div>
+           <div class="input-group">
 
+    <div class="password-input">
+
+        <input
+            type="password"
+            class="passuse"
+            id="username"
+            placeholder="Unique Passcode"
+            autocomplete="off"
+        />
+
+        <button
+            type="button"
+            id="togglePasscode"
+            aria-label="Show passcode">
+
+           <span id="eyeIcon">👁</span>
+
+        </button>
+
+    </div>
+
+    <small>
+        Must contain letters, numbers & special characters
+    </small>
+
+</div>
         <button type="submit" id="submitLogin">
            <span class="btn-text">Login</span>
     <span class="btn-loader"></span>
