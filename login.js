@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const userMenu = document.getElementById("userMenu");
   const userName = document.getElementById("userName");
+  const passuse = document.querySelector(".passuse");
+  const togglePasscode = document.getElementById("togglePasscode");
+  const eyeIcon = document.getElementById("eyeIcon");
   const logoutBtn = document.getElementById("logoutBtn");
   const form = document.getElementById("loginForm");
   const welcomeBox = document.getElementById("welcomeBox");
@@ -231,6 +234,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const masked = "•".repeat(digits.length - 2); // mask the rest
     //digits.slice(-5); // last 5 digits
     return masked + visible;
+  }
+
+  if(passuse && togglePasscode && eyeIcon){
+    togglePasscode.addEventListener("click", () => {
+       
+        if (passuse.type === "password") {
+
+            passuse.type = "text";
+
+            eyeIcon.textContent = "🙈";
+
+            togglePasscode.setAttribute(
+                "aria-label",
+                "Hide passcode"
+            );
+
+        } else {
+
+            passuse.type = "password";
+
+            eyeIcon.textContent = "👁";
+
+            togglePasscode.setAttribute(
+                "aria-label",
+                "Show passcode"
+            );
+
+        }
+    })
   }
 function startButtonLoading(button, text = "Loading...") {
   button.disabled = true;
