@@ -180,7 +180,6 @@ backBtn.addEventListener("click", () => {
         window.location.href = "landing.html"; // Default page
     }
 });
-
 const pageLoader = document.getElementById("pageLoader");
 
 function showLoader(message = "Please wait...") {

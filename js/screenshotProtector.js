@@ -50,7 +50,7 @@
       this.touchTimer = setTimeout(() => {
         blurScreen();
         showToast("Screenshots are disabled on this page.");
-      }, 8000); // if finger held >8s
+      }, 10000); // if finger held >8s
     });
     document.addEventListener("touchend", () => clearTimeout(this.touchTimer));
   }

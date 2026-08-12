@@ -58,6 +58,14 @@ h1{
     user-select: none;
     transition: color .2s ease, transform .2s ease;
 }
+.back-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s ease, transform .2s ease;
+}
 
 .back-title:hover {
     color: #0d6efd;

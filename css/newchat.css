@@ -129,6 +129,7 @@ h4 {
     outline: none;
     transition: border-color 0.2s;
     -webkit-appearance: none; /* Fixes unexpected rounding bugs on iOS devices */
+    appearance: none; /* Standard property for broader browser compatibility */
 }
 
 #user-input:focus {

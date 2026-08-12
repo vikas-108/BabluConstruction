@@ -1325,22 +1325,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const buttonBar = document.createElement("div");
     buttonBar.className = "button-bar";
     // Phone input + Allow button
-    const phoneInput = document.createElement("input");
-    phoneInput.type = "tel";
-    phoneInput.placeholder = "Enter phone number";
-// ✅ Permission selector
-const permissionSelect = document.createElement("select");
+    //const phoneInput = document.createElement("input");
+    //phoneInput.type = "tel";
+    //phoneInput.placeholder = "Enter phone number";
+    // ✅ Permission selector
+    const permissionSelect = document.createElement("select");
 
-const optionEdit = document.createElement("option");
-optionEdit.value = "edit";
-optionEdit.innerText = "Can Edit";
+    const optionEdit = document.createElement("option");
+    optionEdit.value = "edit";
+    optionEdit.innerText = "Can Edit";
 
-const optionView = document.createElement("option");
-optionView.value = "view";
-optionView.innerText = "Can View";
+    const optionView = document.createElement("option");
+    optionView.value = "view";
+    optionView.innerText = "Can View";
 
-permissionSelect.appendChild(optionEdit);
-permissionSelect.appendChild(optionView);
+    permissionSelect.appendChild(optionEdit);
+    permissionSelect.appendChild(optionView);
     // Allow button with green check
     const saveBtn = document.createElement("button");
     saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk save-icon"></i>';
@@ -1348,13 +1348,12 @@ permissionSelect.appendChild(optionView);
     saveBtn.setAttribute("data-tooltip", "Save Table");
     saveBtn.onclick = async () => {
       const tableData = extractTableData(table);
-      const phone = phoneInput.value.trim();
+      //const phone = phoneInput.value.trim();
       const permission = permissionSelect.value;
       // ✅ Phone validation (optional but required for sharing)
-      if (phone && !/^[0-9]{10}$/.test(phone)) {
-        showToast("Please enter valid 10-digit phone number");
-        return;
-      }
+      // if (phone && !/^[0-9]{10}$/.test(phone)) {
+      //   showToast("Please enter valid 10-digit phone number");
+      //   return;
 
       const payload = {
         title,
@@ -1384,8 +1383,9 @@ permissionSelect.appendChild(optionView);
           tableId = result._id;
           block.dataset.id = tableId;
         }
+
         // ================= SHARE TABLE =================
-        if (phone) {
+        /*if (phone) {
           const res = await fetch(`${TABLE_API}/share`, {
             method: "POST",
             headers: authHeaders(),
@@ -1480,8 +1480,8 @@ permissionSelect.appendChild(optionView);
     };
 
     // Append all controls into horizontal bar
-    buttonBar.appendChild(phoneInput);
-    buttonBar.appendChild(permissionSelect); // ✅ new
+    //buttonBar.appendChild(phoneInput);
+    // buttonBar.appendChild(permissionSelect); // ✅ new
     buttonBar.appendChild(saveBtn);
     buttonBar.appendChild(editBtn);
     buttonBar.appendChild(deleteBtn);
@@ -1825,7 +1825,9 @@ permissionSelect.appendChild(optionView);
 
     const block = document.createElement("div");
     block.className = "table-block";
-
+    //console.log(tableData);
+   // console.log("isOwner:", tableData.isOwner);
+    ////console.log("user:", tableData.user);
     // ================= TITLE =================
     const titleDiv = document.createElement("div");
     titleDiv.className = "table-title";
@@ -1843,20 +1845,22 @@ permissionSelect.appendChild(optionView);
       contentDiv.style.display = isHidden ? "block" : "none";
       titleSpan.innerHTML = (isHidden ? "▼ " : "▶ ") + tableData.title;
     };
-            const currentUserId = localStorage.getItem("userId");
-          const isOwner = tableData.user === currentUserId;
-           const sharedUser = tableData.sharedWith?.find(
-             u => u.user === currentUserId
-           );
+    const currentUserId = localStorage.getItem("userId");
+    //const isOwner = tableData.user === currentUserId;
+    const isOwner = tableData.isOwner;
+    const sharedUser = tableData.sharedWith?.find(
+      (u) => u.user === currentUserId,
+    );
 
-      if (!isOwner && sharedUser) {
-       const badge = document.createElement("span");
-        badge.innerText = sharedUser.permission === "view" ? "🔒 Read Only" : "✏️ Editable";
-         badge.style.marginLeft = "10px";
-           badge.style.color = sharedUser.permission === "view" ? "red" : "green";
+    if (!isOwner && sharedUser) {
+      const badge = document.createElement("span");
+      badge.innerText =
+        sharedUser.permission === "view" ? "🔒 Read Only" : "✏️ Editable";
+      badge.style.marginLeft = "10px";
+      badge.style.color = sharedUser.permission === "view" ? "red" : "green";
 
-           titleDiv.appendChild(badge);
-       }
+      titleDiv.appendChild(badge);
+    }
     // ================= TABLE =================
     const table = document.createElement("table");
     attachTableLogic(table);
@@ -1962,17 +1966,14 @@ permissionSelect.appendChild(optionView);
       const updatedData = extractTableData(table);
 
       try {
-        const res = await fetch(
-          `${TABLE_API}/${tableData._id}`,
-          {
-            method: "PUT",
-            headers: authHeaders(),
-            body: JSON.stringify({
-              title: tableData.title,
-              data: updatedData,
-            }),
-          },
-        );
+        const res = await fetch(`${TABLE_API}/${tableData._id}`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            title: tableData.title,
+            data: updatedData,
+          }),
+        });
         const data = await res.json();
 
         if (!res.ok) {
@@ -1986,7 +1987,139 @@ permissionSelect.appendChild(optionView);
         showToast("Update failed", "error");
       }
     };
+    const shareBtn = document.createElement("button");
+    shareBtn.innerHTML = '<i class="fa-solid fa-share-nodes share-icon"></i>';
+    shareBtn.setAttribute("data-tooltip", "Share Table");
 
+    shareBtn.onclick = () => {
+      // Save current table id
+      window.currentShareTableId = tableData._id;
+
+      // Clear previous values
+      document.getElementById("sharePhone").value = "";
+      document.getElementById("sharePermission").value = "view";
+
+      // Open modal
+      document.getElementById("shareModal").style.display = "flex";
+
+      // Load already shared users
+      loadSharedUsers(tableData._id);
+    };
+    async function loadSharedUsers(tableId) {
+      try {
+        const res = await fetch(`${TABLE_API}/${tableId}/shared`, {
+          headers: authHeaders(),
+        });
+
+        const users = await res.json();
+
+        const list = document.getElementById("sharedUsersList");
+        list.innerHTML = "";
+
+        if (!users.length) {
+          list.innerHTML = "<p>No shared users.</p>";
+          return;
+        }
+
+        users.forEach((user) => {
+          const row = document.createElement("div");
+          row.className = "shared-user";
+
+          row.innerHTML = `
+      <div class="shared-info">
+          <i class="fa-solid fa-user"></i>
+          <span>${user.phone}</span>
+      </div>
+
+      <div class="shared-actions">
+
+          <span>${user.permission}</span>
+
+          <button class="remove-share-btn">
+              <i class="fa-solid fa-trash"></i>
+          </button>
+
+      </div>
+  `;
+
+          // Remove button
+          row.querySelector(".remove-share-btn").onclick = async () => {
+            if (!confirm("Remove access for this user?")) return;
+
+            try {
+              const res = await fetch(
+                `${TABLE_API}/share/${tableId}/${user._id}`,
+                {
+                  method: "DELETE",
+                  headers: authHeaders(),
+                },
+              );
+
+              const data = await res.json();
+
+              if (!res.ok) {
+                showToast(data.message, "error");
+                return;
+              }
+
+              showToast("Access removed", "success");
+
+              // Refresh list
+              loadSharedUsers(tableId);
+            } catch (err) {
+              console.error(err);
+              showToast("Unable to remove user", "error");
+            }
+          };
+
+          list.appendChild(row);
+        });
+      } catch (err) {
+        console.error(err);
+        showToast("Unable to load shared users", "error");
+      }
+    }
+    document.getElementById("shareNowBtn").onclick = async () => {
+      const phone = document.getElementById("sharePhone").value.trim();
+      const permission = document.getElementById("sharePermission").value;
+
+      if (!/^[0-9]{10}$/.test(phone)) {
+        showToast("Enter a valid 10 digit phone number", "error");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${TABLE_API}/share`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            tableId: window.currentShareTableId,
+            phone,
+            permission,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showToast(data.message, "error");
+          return;
+        }
+
+        showToast("Table shared successfully", "success");
+
+        document.getElementById("sharePhone").value = "";
+
+        // Refresh shared users list
+        loadSharedUsers(window.currentShareTableId);
+      } catch (err) {
+        console.error(err);
+        showToast("Unable to share table", "error");
+      }
+    };
+    document.getElementById("closeShareModal").onclick = () => {
+      document.getElementById("shareModal").style.display = "none";
+    };
     // ===== DELETE (API) =====
     const deleteBtn = document.createElement("button");
     deleteBtn.innerHTML = '<i class="fa-solid fa-trash delete-icon"></i>';
@@ -2000,13 +2133,10 @@ permissionSelect.appendChild(optionView);
       if (!confirmed) return;
 
       try {
-        const res = await fetch(
-          `${TABLE_API}/${tableData._id}`,
-          {
-            method: "DELETE",
-            headers: authHeaders(),
-          },
-        );
+        const res = await fetch(`${TABLE_API}/${tableData._id}`, {
+          method: "DELETE",
+          headers: authHeaders(),
+        });
         const data = await res.json();
         if (!res.ok) {
           showToast(data.message, "error"); // ✅ show backend message
@@ -2145,9 +2275,13 @@ socket.on("tableTyping", ({ tableId, data }) => {
     buttonBar.appendChild(addColBtn);
     buttonBar.appendChild(delRowBtn);
     buttonBar.appendChild(delColBtn);
-    buttonBar.appendChild(deleteBtn);
+    //buttonBar.appendChild(deleteBtn);
     buttonBar.appendChild(downloadBtn);
-
+    // buttonBar.appendChild(shareBtn);
+    if (isOwner) {
+      buttonBar.appendChild(shareBtn);
+      buttonBar.appendChild(deleteBtn);
+    }
     // ================= HEADER =================
     titleDiv.appendChild(titleSpan);
     titleDiv.appendChild(buttonBar); // ✅ NOW IN HEADER

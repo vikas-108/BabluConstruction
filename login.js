@@ -280,7 +280,6 @@ function stopButtonLoading(button, text) {
   const btnText = button.querySelector(".btn-text");
   if (btnText) btnText.textContent = text;
 }
-
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
