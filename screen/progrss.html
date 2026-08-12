@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Progress Channel</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="stylesheet" href="../css/progress.css" />
+  <link rel="stylesheet" href="../dist/css/progress.min.css" />
    <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
 
@@ -19,7 +19,7 @@
 <div id="toast"></div>
   <!-- Entry Screen -->
   <div id="homeScreen" class="screen active">
-    <h1>Progress Channel</h1>
+    <h1 class="back-title">← Progress Channel</h1>
     <p>Select your role</p>
 
     <div class="homeButtons">
@@ -75,7 +75,12 @@
 </div>
 
 </div>
-
-<script src="../js/progress.js"></script>
+<div id="pageLoader" class="page-loader">
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Please wait...</p>
+    </div>
+</div>
+<script src="../dist/js/progress.min.js"></script>
 </body>
 </html>

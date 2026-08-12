@@ -12,6 +12,7 @@ async function loadProfile() {
   }
 
   try {
+     showLoader("loading...");
     const res = await fetch(`${SERVER_BASE}/api/profiles/${profileId}`);
 
     if (!res.ok) {
@@ -25,6 +26,8 @@ async function loadProfile() {
   } catch (err) {
     console.error(err);
     container.innerHTML = "<p>Server error</p>";
+  }finally{
+    hideLoader();
   }
 }
 
@@ -32,7 +35,8 @@ function renderProfile(p) {
 
   const mediaUrl = p.media?.startsWith("http")
     ? p.media
-    : SERVER_BASE + p.media;
+    : p.media;
+    //: SERVER_BASE + p.media;
 
   container.innerHTML = `
 
@@ -42,7 +46,7 @@ function renderProfile(p) {
       ${
         p.mediaType === "video"
           ? `<video src="${mediaUrl}" controls></video>`
-          : `<img src="${SERVER_BASE + p.media}?v=${Date.now()}" alt="${p.name}" />`
+          : `<img src="${p.media}?v=${Date.now()}" alt="${p.name}" />`
       }
     </div>
 
@@ -90,42 +94,13 @@ function renderProfile(p) {
          <section class="profile-gallery">
         <h3>Work Gallery</h3>
         <div class="gallery">
-          ${p.album.map(img=>`<img src="${SERVER_BASE + img}" />`).join("")}
+          ${p.album.map(img=>`<img src="${img.url}" />`).join("")}
         </div>
          </section>`
         : ""
     }
   `;
- // ✅ After rendering, set up infinite scroll
-  const profileDetails = document.querySelector('.profile-details');
-  if (!profileDetails) return;
-
-  // Duplicate content for seamless loop
-  profileDetails.innerHTML += profileDetails.innerHTML;
-
-  let isPaused = false;
-  let scrollInterval;
-
-  function startAutoScroll() {
-    scrollInterval = setInterval(() => {
-      if (!isPaused) {
-        profileDetails.scrollLeft += 1;
-
-        // ✅ Reset halfway through, not at the very end
-        if (profileDetails.scrollLeft >= profileDetails.scrollWidth / 2) {
-          profileDetails.scrollLeft = 0;
-        }
-      }
-    }, 20); // adjust speed here
-  }
-
-  // Pause on hover/touch
-  profileDetails.addEventListener('mouseenter', () => { isPaused = true; });
-  profileDetails.addEventListener('mouseleave', () => { isPaused = false; });
-  profileDetails.addEventListener('touchstart', () => { isPaused = true; });
-  profileDetails.addEventListener('touchend', () => { isPaused = false; });
-
-  startAutoScroll();
+ 
 const galleryImages = document.querySelectorAll('.gallery img');
 const albumSources = Array.from(galleryImages).map(img => img.src);
 
@@ -196,6 +171,25 @@ overlay.addEventListener('touchend', e => {
 });
 
 }
+const backBtn = document.querySelector(".back-btn");
 
+backBtn.addEventListener("click", () => {
+    if (window.history.length > 1) {
+        history.back();
+    } else {
+        window.location.href = "landing.html"; // Default page
+    }
+});
+
+const pageLoader = document.getElementById("pageLoader");
+
+function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+}
+
+function hideLoader() {
+    pageLoader.classList.remove("active");
+}
 
 loadProfile();

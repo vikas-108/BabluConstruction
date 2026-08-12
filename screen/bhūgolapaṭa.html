@@ -13,7 +13,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/map.css" />
+    <link rel="stylesheet" href="../dist/css/map.min.css" />
      <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
@@ -23,7 +23,7 @@
 
   <body>
     <div id="toaster" class="toaster"></div>
-    <header>Project Location Map</header>
+   <header class="back-title">← Project Location Map</header>
 
     <!-- Top Overlay -->
     <div class="top-bar">
@@ -82,23 +82,29 @@
 
         <p><strong>Tip:</strong> Click on map to select location</p>
         <hr />
-        <h3>Project History</h3>
+        <h3>Find Here</h3>
         <ul id="projectHistory" class="history-list"></ul>
       </div>
 
       <div id="map"></div>
-
+       
       <!-- Floating Buttons -->
       <button class="fab location-btn" id="myLocationBtn">📍</button>
       <button class="fab add-btn" id="toggleSidebarBtn">➕</button>
+      <button class="fab live-btn start-state" id="live-toggle-btn" >Start</button>
     </div>
-    
+    <div id="pageLoader" class="page-loader">
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Please wait...</p>
+    </div>
+</div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="../js/screenshotProtector.js"></script>
+    <script src="../dist/js/screenshotProtector.min.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();
 </script>
-    <script src="../js/map.js"></script>
+    <script src="../dist/js/map.min.js"></script>
   </body>
 </html>

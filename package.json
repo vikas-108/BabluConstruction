@@ -1,0 +1,26 @@
+{
+  "name": "construction",
+  "version": "1.0.0",
+  "private": true,
+  "description": "��#\u0000 \u0000B\u0000a\u0000b\u0000l\u0000u\u0000C\u0000o\u0000n\u0000s\u0000t\u0000r\u0000u\u0000c\u0000t\u0000i\u0000o\u0000n\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikas-108/BabluConstruction.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vikas-108/BabluConstruction/issues"
+  },
+  "homepage": "https://github.com/vikas-108/BabluConstruction#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

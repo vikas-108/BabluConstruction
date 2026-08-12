@@ -1,139 +1,3 @@
-/**const EXTERNAL_LINKS = [
-  {
-    title: "IS Code for Concrete (IS 456)",
-    description: "Official Indian Standard code for plain and reinforced concrete",
-    url: "https://bis.gov.in",
-    keywords: "is code concrete is456 rcc standard"
-  },
-  {
-    title: "Cement Price Today in India",
-    description: "Latest cement prices by brand and location",
-    url: "https://www.indiamart.com",
-    keywords: "cement price today cement cost"
-  },
-  {
-    title: "Architect House Design Ideas",
-    description: "Modern house plans and architectural inspirations",
-    url: "https://www.archdaily.com",
-    keywords: "architect design ideas house plan"
-  },
-  {
-    title: "Soil Testing Methods",
-    description: "Soil testing procedures used in construction",
-    url: "https://www.civillearning.com",
-    keywords: "soil testing foundation geotechnical"
-  }
-];
-function searchExternalLinks(query) {
-  return EXTERNAL_LINKS.filter((link) =>
-    (link.title + " " + link.keywords).toLowerCase().includes(query)
-  );
-}
-function isValidURL(text) {
-  try {
-    new URL(text);
-    return true;
-  } catch {
-    return false;
-  }
-}
-    // EXTERNAL LINK RESULT
-// ✅ If user pasted a URL
-let rawInput = input.value.trim();
-
-if (rawInput.startsWith("www.")) {
-  rawInput = "https://" + rawInput;
-}
-if (isValidURL(input.value.trim())) {
-  results.innerHTML = `
-    <div class="card">
-      <div class="badge material">EXTERNAL WEBSITE</div>
-      <h3>Open External Website</h3>
-      <p>${input.value}</p>
-      <a href="${input.value}" target="_blank" rel="noopener noreferrer">
-        🔗 Open Link
-      </a>
-    </div>
-  `;
-  saveSearch(input.value.trim());
-  return;
-}
-// in applysearch function after filtering dataresult 
- const theoryResults = q ? searchTheory(q) : [];
-  const designResults = q ? searchDesigns(q) : [];
-  const externalResults = q ? searchExternalLinks(q) : [];
-  render([
-    ...filtered,
-    ...theoryResults,
-    ...designResults,
-    ...dataResults,
-    ...externalResults,
-  ]);
-}  
-  // css code 
-  .card a {
-  display: inline-block;
-  margin-top: 10px;
-  color: #2563eb;
-  font-weight: 500;
-  text-decoration: none;
-}
-.card a:hover {
-  text-decoration: underline;
-} **/
-
-// this is code of search function which is deleted recently
-  /**function applySearch() {
-  const q = input.value.toLowerCase().trim();
-
-  if (
-    !q &&
-    !categoryFilter.value &&
-    !stateFilter.value &&
-    !districtFilter.value
-  ) {
-    results.innerHTML =
-      "<p style='text-align:center;color:#64748b;'>Start typing or use voice search to see results.</p>";
-    return;
-  }
-  const dataResults = SEARCH_DATA.filter(
-    (item) =>
-      Object.values(item).join(" ").toLowerCase().includes(q) &&
-      (categoryFilter.value === "" || item.category === categoryFilter.value) &&
-      (stateFilter.value === "" || item.state === stateFilter.value) &&
-      (districtFilter.value === "" || item.district === districtFilter.value)
-  );
-
-  const filtered = SEARCH_DATA.filter(
-    (item) =>
-      Object.values(item).join(" ").toLowerCase().includes(q) &&
-      (categoryFilter.value === "" || item.category === categoryFilter.value) &&
-      (stateFilter.value === "" ||
-        item.state === stateFilter.value.toLowerCase()) &&
-      (districtFilter.value === "" ||
-        item.district === districtFilter.value.toLowerCase())
-  );
-  const theoryResults = q ? searchTheory(q) : [];
-  const designResults = q ? searchDesigns(q) : [];
-  const mediaResults = q ? searchMedia(q) : [];
-  render([
-    ...filtered,
-    ...theoryResults,
-    ...designResults,
-    ...dataResults,
-    ...mediaResults,
-  ]);
-} */
-
-
-
-
-
-
-
-
-
-
   // 🔹 SEARCH DATA (ONLY ONCE)
  /**  const dataResults = SEARCH_DATA.filter(
     (item) =>
@@ -529,7 +393,7 @@ exports.updateAccount = async (req, res) => {
 
   res.json(acc);
 };*/
-
+/*
 let timerInterval, startTime, pausedTime = 0;
 let isPaused = false;
 let currentRate = 50; // default helper rate
@@ -543,7 +407,7 @@ let totalHoursWorked = 0;
 let totalEarningsToday = 0;
 let sessionId = null;
 const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
-const SERVER_BASE = "https://api.buildskil.com";
+//const SERVER_BASE = "https://api.buildskil.com";
 let peerConnection;
 const socket = io("https://api.buildskil.com");
 socket.on("offer", async ({ offer, roomId }) => {
@@ -1056,11 +920,11 @@ function updateTimer() {
 
   genuineEarnings = (elapsed / (1000*60*60)) * currentRate;
 
-  /* Deduction if absent > 5 minutes
+  /,* Deduction if absent > 5 minutes
   if (Date.now() - lastPresenceTime > 5*60*1000) {
     genuineEarnings -= ((Date.now() - lastPresenceTime) / (1000*60*60)) * currentRate;
     giveWarning();
-  }*/
+  }*m/
 
   document.getElementById("earningsDisplay").textContent = `₹${genuineEarnings.toFixed(2)}`;
 }
@@ -1567,7 +1431,7 @@ resizeCanvas(); // initial call
     redrawShapes();
   }
   window.addEventListener("resize", resizeCanvas);
-  resizeCanvas();*/
+  resizeCanvas();*m/
 
   function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2950,7 +2814,7 @@ updates.forEach((update) => {
   li.textContent = update;
   notificationList.appendChild(li);
 });
-/* ---------------- SEARCH FUNCTIONS ---------------- */
+/m* ---------------- SEARCH FUNCTIONS ---------------- *n/
 function searchTheory(query) {
   return THEORY_DATA.filter((item) =>
     (item.question + " " + item.keywords).toLowerCase().includes(query),
@@ -3125,7 +2989,7 @@ function openProfile(id) {
   window.location.href = `profile-details.html?id=${id}`;
 }
 function isMathExpression(input) {
-  return /^[0-9+\-*/().%\s^,a-zA-Z]+$/.test(input) && /[\d]/.test(input); // must contain at least one number
+  return /^[0-9+\-*m/().%\s^,a-zA-Z]+$/.test(input) && /[\d]/.test(input); // must contain at least one number
 }
 function clearSearchAll() {
   if (window.recognition) {
@@ -3275,7 +3139,7 @@ function render(items) {
   }
 
   items.forEach((item) => {
-    /* DESIGN RESULT */
+    /* DESIGN RESULT *m/
     // DESIGN RESULT
     if (item.category === "design") {
       results.innerHTML += `
@@ -3634,7 +3498,7 @@ function applySearch() {
   }, 300);
 }
 
-/* ---------------- EVENTS ---------------- */
+/* ---------------- EVENTS ---------------- *n/
 const debouncedSearch = debounce(applySearch, 800);
 
 let isComposing = false;
@@ -3710,3 +3574,918 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 2️⃣ restore previous search
   restoreSearchState();
 });
+
+
+
+
+
+
+
+
+
+
+
+//trackbilling.js
+//let workers = [];
+let workers = JSON.parse(localStorage.getItem("billingWorkers")) || [];
+let currentWorker = null;
+const API_BASE = "http://localhost:5000/api/billing";
+function authHeaders(isFormData = false) {
+    const headers = {
+        Authorization: `Bearer ${localStorage.getItem("cb_token")}`
+    };
+
+    if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    return headers;
+}
+const workerContainer = document.getElementById("workerContainer");
+
+const totalWorkers = document.getElementById("totalWorkers");
+const activeBills = document.getElementById("activeBills");
+const pendingBills = document.getElementById("pendingBills");
+const paidBills = document.getElementById("paidBills");
+
+const historyBody = document.getElementById("historyBody");
+
+const paymentSection = document.getElementById("paymentSection");
+
+const dailyWorkSection = document.getElementById("dailyWorkSection");
+
+const historySection = document.getElementById("historySection");
+document
+.getElementById("createBillingBtn")
+.addEventListener("click",()=>{
+
+const name=document.getElementById("workerName").value.trim();
+
+const phone=document.getElementById("workerPhone").value.trim();
+
+const rate=Number(document.getElementById("dailyRate").value);
+
+const cycle=Number(document.getElementById("paymentCycle").value);
+
+if(!name||!phone||!rate||!cycle){
+
+alert("Fill all fields");
+
+return;
+
+}
+
+const worker={
+
+id:Date.now(),
+
+name,
+
+phone,
+
+rate,
+
+cycle,
+
+workedDays:0,
+
+totalAmount:0,
+
+status:"Active",
+
+history:[],
+payments: []
+
+};
+
+workers.push(worker);
+saveWorkers();   // Save the updated workers array to localStorage
+renderWorkers();
+
+clearForm();
+
+});
+function clearForm(){
+
+workerName.value="";
+
+workerPhone.value="";
+
+dailyRate.value="";
+
+paymentCycle.value="";
+
+}
+function renderWorkers(){
+
+workerContainer.innerHTML="";
+
+workers.forEach(worker=>{
+
+const card=document.createElement("div");
+
+card.className="worker-card";
+
+card.innerHTML=`
+
+<h3>${worker.name}</h3>
+
+<p><strong>Phone :</strong> ${worker.phone}</p>
+
+<p><strong>Rate :</strong> ₹${worker.rate}</p>
+
+<p><strong>Cycle :</strong> ${worker.cycle} Days</p>
+
+<p><strong>Worked :</strong> ${worker.workedDays}</p>
+
+<p><strong>Total :</strong> ₹${worker.totalAmount}</p>
+
+<p><strong>Status :</strong> ${worker.status}</p>
+
+<div class="worker-actions">
+
+<button class="view">View</button>
+
+<button class="work">Open</button>
+<button class="delete">Delete</button>
+
+</div>
+
+`;
+card.querySelector(".view").onclick = () => {
+    console.log("View clicked", worker.id);
+    showPreviousHistory(worker.id);
+};
+card.querySelector(".work").onclick=()=>{
+
+openWorker(worker.id);
+
+};
+
+card.querySelector(".delete").onclick=()=>{
+
+if(confirm("Are you sure you want to delete this worker?")){
+
+deleteWorker(worker.id);
+
+}
+
+};
+workerContainer.appendChild(card);
+
+});
+
+updateDashboard();
+
+}
+function updateDashboard(){
+
+totalWorkers.textContent=workers.length;
+
+activeBills.textContent=
+
+workers.filter(w=>w.status==="Active").length;
+
+pendingBills.textContent=
+
+workers.filter(w=>w.status==="Pending").length;
+
+paidBills.textContent=
+
+workers.filter(w=>w.status==="Paid").length;
+
+}
+function openWorker(id){
+
+currentWorker=
+
+workers.find(w=>w.id===id);
+
+dailyWorkSection.classList.remove("hidden");
+
+historySection.classList.remove("hidden");
+
+document.getElementById("viewName").textContent=currentWorker.name;
+
+document.getElementById("viewPhone").textContent=currentWorker.phone;
+
+document.getElementById("viewRate").textContent=currentWorker.rate;
+
+document.getElementById("viewCycle").textContent=currentWorker.cycle;
+
+renderHistory();
+
+}
+function deleteWorker(id) {
+
+    workers = workers.filter(w => w.id !== id);
+
+    if (currentWorker && currentWorker.id === id) {
+        currentWorker = null;
+
+        dailyWorkSection.classList.add("hidden");
+        historySection.classList.add("hidden");
+        paymentSection.classList.add("hidden");
+    }
+
+    saveWorkers();
+    renderWorkers();
+    updateDashboard();
+
+}
+document
+.getElementById("addWorkDayBtn")
+.addEventListener("click",()=>{
+
+if(!currentWorker)return;
+
+currentWorker.workedDays++;
+
+currentWorker.totalAmount+=currentWorker.rate;
+
+currentWorker.history.push({
+
+day:currentWorker.workedDays,
+
+date:new Date().toLocaleDateString(),
+
+amount:currentWorker.rate,
+
+status:"Worked"
+
+});
+saveWorkers();  // Save the updated workers array to localStorage
+renderHistory();
+
+renderWorkers();
+
+if(currentWorker.workedDays>=currentWorker.cycle){
+
+paymentSection.classList.remove("hidden");
+
+document.getElementById("totalAmount").textContent=
+
+currentWorker.totalAmount;
+
+currentWorker.status="Pending";
+
+renderWorkers();
+
+}
+
+});
+function renderHistory(){
+
+historyBody.innerHTML="";
+
+currentWorker.history.forEach(item=>{
+
+historyBody.innerHTML+=`
+
+<tr>
+
+<td>${item.day}</td>
+
+<td>${item.date}</td>
+
+<td>₹${item.amount}</td>
+
+<td>${item.status}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+document
+.getElementById("paidBtn")
+.addEventListener("click",()=>{
+
+if(!currentWorker)return;
+ currentWorker.payments.push({
+        paymentDate: new Date().toLocaleDateString(),
+        totalAmount: currentWorker.totalAmount,
+        totalDays: currentWorker.workedDays,
+        history: [...currentWorker.history]
+    });
+currentWorker.status="Paid";
+
+currentWorker.workedDays=0;
+
+currentWorker.totalAmount=0;
+
+currentWorker.history=[];
+saveWorkers(); // Save the updated workers array to localStorage
+paymentSection.classList.add("hidden");
+renderWorkers();
+
+renderHistory();
+
+alert("Payment Completed");
+
+});
+document
+.getElementById("notPaidBtn")
+.addEventListener("click",()=>{
+
+if(!currentWorker)return;
+currentWorker.status="Pending";
+paymentSection.classList.add("hidden");
+saveWorkers(); // Save the updated workers array to localStorage
+renderWorkers();
+renderHistory();
+});
+document
+.getElementById("addBillBtn")
+.addEventListener("click",()=>{
+
+paymentSection.classList.add("hidden");
+
+currentWorker.status="Active";
+saveWorkers(); // Save the updated workers array to localStorage
+renderWorkers();
+
+});
+
+function showPreviousHistory(id) {
+console.log("showPreviousHistory", id);
+    const worker = workers.find(w => w.id === id);
+
+    const content = document.getElementById("historyContent");
+
+    content.innerHTML = "";
+
+    if (!worker.payments || worker.payments.length === 0) {
+    content.innerHTML = "<p>No previous billing history.</p>";
+    } else {
+
+        worker.payments.forEach((payment, index) => {
+
+            let html = `
+                <div class="history-card">
+
+                    <h3>Payment ${index + 1}</h3>
+
+                    <p><b>Date:</b> ${payment.paymentDate}</p>
+
+                    <p><b>Worked Days:</b> ${payment.totalDays}</p>
+
+                    <p><b>Total Amount:</b> ₹${payment.totalAmount}</p>
+
+                    <table>
+
+                        <tr>
+                            <th>Day</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                        </tr>
+            `;
+
+            payment.history.forEach(day => {
+
+                html += `
+                    <tr>
+
+                        <td>${day.day}</td>
+
+                        <td>${day.date}</td>
+
+                        <td>₹${day.amount}</td>
+
+                    </tr>
+                `;
+
+            });
+
+            html += `
+                    </table>
+
+                </div>
+            `;
+
+            content.innerHTML += html;
+
+        });
+
+    }
+
+    document.getElementById("historyModal").classList.add("show");
+
+}
+document.getElementById("closeHistory").onclick = () => {
+
+    document.getElementById("historyModal").classList.remove("show");
+
+};
+
+document.getElementById("historyModal").onclick = (e) => {
+
+    if (e.target === historyModal) {
+        historyModal.classList.remove("show");
+    }
+
+};
+
+function saveWorkers() {
+    localStorage.setItem("billingWorkers", JSON.stringify(workers));
+}
+// Initial render local storage data , remove after testing on api call
+renderWorkers();
+updateDashboard();
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiRoute Transport & Logistics</title>
+    <link rel="stylesheet" href="https://jsdelivr.net">
+    <style>
+      /* ===== GLOBAL COMPATIBILITY CONFIGURATIONS ===== 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body, html {
+    width: 100%;
+    min-height: 100%;
+    background-color: #f8fafc;
+    color: #1e293b;
+    overflow-x: hidden;
+}
+
+ ===== PREMIUM INTERFACE TOP HEADER ===== 
+.main-header {
+    width: 100%;
+    height: 70px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1e3a8a; 
+}
+
+.logo i {
+    font-size: 1.6rem;
+    color: #f59e0b; 
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: #1e3a8a;
+}
+
+.nav-cta-btn {
+    background-color: #1e3a8a;
+    color: #ffffff !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    transition: background-color 0.2s !important;
+}
+
+.nav-cta-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.hero-section {
+    width: 100%;
+    min-height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    
+    background: radial-gradient(circle at 10% 20%, rgba(219, 234, 254, 0.4) 0%, rgba(255, 255, 255, 0) 90%),
+                linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 700px;
+    margin-bottom: 40px;
+}
+
+.hero-content h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+}
+
+.highlight-text {
+    color: #1e3a8a;
+    background: linear-gradient(120deg, #dbeafe 0%, #dbeafe 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 40%;
+    background-position: 0 80%;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+
+.booking-card {
+    width: 100%;
+    max-width: 850px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+    box-sizing: border-box;
+}
+
+.booking-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.booking-card h3 i {
+    color: #1e3a8a;
+}
+
+.booking-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.field-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    position: relative;
+}
+
+.field-box label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.field-box label i {
+    color: #1e3a8a;
+}
+
+.field-box input, .retention-select, .select-wrapper select {
+    width: 100%;
+    height: 48px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field-box input:focus, .select-wrapper select:focus {
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.route-input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 12px;
+    position: relative;
+    width: 100%;
+}
+
+
+.swap-action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 4px; 
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.swap-action-btn:hover {
+    background-color: #1e3a8a;
+    color: #ffffff;
+    border-color: #1e3a8a;
+    transform: rotate(180deg);
+}
+
+
+.meta-input-group {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    width: 100%;
+}
+
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.select-wrapper i {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    color: #64748b;
+    pointer-events: none;
+}
+
+.search-submit-btn {
+    height: 50px;
+    width: 100%;
+    background-color: #1e3a8a;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(30, 58, 138, 0.25);
+    transition: background-color 0.2s, opacity 0.2s;
+    touch-action: manipulation;
+}
+
+.search-submit-btn:hover { background-color: #1d4ed8; }
+.search-submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+
+.loader-spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: speedSpin 0.7s linear infinite;
+}
+
+@keyframes speedSpin { to { transform: rotate(360deg); } }
+
+.status-alert {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .main-header { padding: 0 20px; }
+    .hero-content h1 { font-size: 2.2rem; }
+    .hero-content p { font-size: 0.95rem; }
+    
+
+    .route-input-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .swap-action-btn {
+        align-self: center;
+        margin: -4px 0;
+        transform: rotate(90deg); 
+    }
+    .swap-action-btn:hover { transform: rotate(270deg); }
+}
+
+
+@media (max-width: 480px) {
+    .nav-links a:not(.nav-cta-btn) {
+        display: none;
+    }
+    .hero-section { padding: 20px 12px; }
+    .hero-content { margin-bottom: 24px; }
+    .hero-content h1 { font-size: 1.8rem; }
+    
+    .meta-input-group {
+        flex-direction: column; 
+        gap: 12px;
+    }
+    .booking-card { padding: 16px; border-radius: 12px; }
+    .field-box input, .select-wrapper select, .search-submit-btn { height: 44px; font-size: 0.9rem; }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="bi bi-truck"></i> <span>LogiRoute</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#">Services</a>
+            <a href="#">Tracking</a>
+            <a href="#">Fleet</a>
+            <a href="#" class="nav-cta-btn">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Main Hero Workspace Section -->
+    <main class="hero-section">
+        <div class="hero-content">
+            <h1>Reliable Transport & <br><span class="highlight-text">Logistics Network</span></h1>
+            <p>Streamline your cargo route mapping and passenger fleet booking instantly. Safe, fast, and on-time distribution across all states.</p>
+        </div>
+
+        <!-- Interactive Core Booking Module Card -->
+        <div class="booking-card">
+            <h3><i class="bi bi-search"></i> Book a Route / Check Fare</h3>
+            <form id="bookingForm" class="booking-form-grid">
+                
+                <!-- Destination Origin Selector Fields Layout wrapper -->
+                <div class="route-input-group">
+                    <div class="field-box">
+                        <label><i class="bi bi-geo-alt"></i> From (Origin)</label>
+                        <input type="text" id="originInput" placeholder="Enter departure city..." required autocomplete="off">
+                    </div>
+                    
+                    <!-- Middle Dynamic Swap Action Button Component -->
+                    <button type="button" id="swapRouteBtn" class="swap-action-btn" aria-label="Swap directions">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </button>
+
+                    <div class="field-box">
+                        <label><i class="bi bi-geo-fill"></i> To (Destination)</label>
+                        <input type="text" id="destinationInput" placeholder="Enter target city..." required autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Logistics Parameters Module Grid lane -->
+                <div class="meta-input-group">
+                    <div class="field-box">
+                        <label><i class="bi bi-calendar3"></i> Dispatch Date</label>
+                        <input type="date" id="dispatchDate" required>
+                    </div>
+                    <div class="field-box">
+                        <label><i class="bi bi-box-seam"></i> Freight/Vehicle Type</label>
+                        <div class="select-wrapper">
+                            <select id="vehicleType">
+                                <option value="standard">Standard Cargo Truck</option>
+                                <option value="express">Express Mini-Van</option>
+                                <option value="heavy">Heavy-Duty Loader</option>
+                                <option value="passenger">Passenger Fleet Bus</option>
+                            </select>
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submission Loading Button Anchor layout -->
+                <button type="submit" id="searchRouteBtn" class="search-submit-btn">
+                    <span id="btnText">Check Availability</span>
+                    <span id="btnLoader" class="loader-spinner" style="display: none;"></span>
+                </button>
+            </form>
+            
+            <div id="bookingNotification" class="status-alert" style="display: none;"></div>
+        </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+    const swapBtn = document.getElementById("swapRouteBtn");
+    const originInput = document.getElementById("originInput");
+    const destinationInput = document.getElementById("destinationInput");
+    const dateInput = document.getElementById("dispatchDate");
+    const bookingForm = document.getElementById("bookingForm");
+    
+    const searchBtn = document.getElementById("searchRouteBtn");
+    const btnText = document.getElementById("btnText");
+    const btnLoader = document.getElementById("btnLoader");
+    const alertBox = document.getElementById("bookingNotification");
+
+    // 1. Set the minimum reachable date value to TODAY automatically
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+    dateInput.value = today;
+
+    // 2. Dynamic Location Value Swap Interaction Engine
+    swapBtn.addEventListener("click", () => {
+        const tempValue = originInput.value;
+        originInput.value = destinationInput.value;
+        destinationInput.value = tempValue;
+    });
+
+    // 3. Managed Loading State Booking Handler
+    bookingForm.addEventListener("submit", async (e) => {
+        e.preventDefault(); // Defend against browser page reload bounces
+
+        // Enter loading configuration limits
+        searchBtn.disabled = true;
+        btnText.textContent = "Checking Routes...";
+        btnLoader.style.display = "inline-block";
+        alertBox.style.display = "none";
+
+        try {
+            // Replicate typical 2-second backend fleet routing computing delay:
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Render confirmation alert
+            alertBox.innerHTML = `<i class="bi bi-check-circle-fill"></i> Routes located successfully from <strong>${originInput.value}</strong> to <strong>${destinationInput.value}</strong>! Redirecting to pricing schedule...`;
+            alertBox.style.display = "block";
+
+        } catch (error) {
+            console.error("Routing lookup malfunction occurred.");
+        } finally {
+            // Restore interactive components
+            searchBtn.disabled = false;
+            btnText.textContent = "Check Availability";
+            btnLoader.style.display = "none";
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
+
+
+*/

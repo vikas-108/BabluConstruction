@@ -1,13 +1,14 @@
 let PROJECT_CACHE = [];
+let activeRequests = 0;
 document.addEventListener("DOMContentLoaded", () => {
   // let projectCounter = 3; // start from last existing project ID
   const API_BASE = "https://api.buildskil.com/api/projects";
   const SERVER_BASE = "https://api.buildskil.com";
   const ACCESSIBLE_API = "https://api.buildskil.com/api/projects/accessible";
- // const API_BASE = "http://localhost:5000/api/projects"; // change if using domain
+  //const API_BASE = "http://localhost:5000/api/projects"; // change if using domain
   //const SERVER_BASE = "http://localhost:5000";
   //const ACCESSIBLE_API = `${API_BASE}/accessible`;
-
+  
   function authHeaders() {
     return {
       Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -323,7 +324,8 @@ async function compressImage(file, maxWidth = 1024, quality = 0.7) {
     const media = await res.json();
 
     currentImages = media.map((m) => ({
-      url: SERVER_BASE + m.url,
+      //url: SERVER_BASE + m.url,
+      url: m.url,
       type: m.type,
       timestamp: m.timestamp,
     }));
@@ -478,3 +480,30 @@ async function compressImage(file, maxWidth = 1024, quality = 0.7) {
   };
   //loadProjects();
 });
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".back-title").forEach(title => {
+        title.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html";
+            }
+        });
+    });
+});
+const originalFetch = window.fetch;
+
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};

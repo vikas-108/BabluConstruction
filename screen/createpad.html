@@ -5,12 +5,12 @@
   <title>Blueprint Builder</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
   
-  <link rel="stylesheet" href="../css/createpad.css">
+  <link rel="stylesheet" href="../dist/css/createpad.min.css">
    <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
   <div id="toast" style="
@@ -26,6 +26,9 @@
   z-index: 9999;
 "></div>
   <div id="toolbar">
+       <button class="header-back-btn" onclick="goBack()" aria-label="Go Back">
+        ←
+    </button>
     <select id="buildingType">
       <option value="">select word</option>
       <option value="house">House</option>
@@ -51,11 +54,11 @@
   <button id="downloadBtn">Download</button>
   <button id="copyBtn">Copy</button>
 </div>
-<script src="../js/screenshotProtector.js"></script>
+<script src="../dist/js/screenshotProtector.min.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();
 </script>
-  <script src="../js/createpad.js"></script>
+  <script src="../dist/js/createpad.min.js"></script>
 </body>
 </html>

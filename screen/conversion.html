@@ -6,19 +6,25 @@
     <title>Construction & Universal Converter</title>
     
     <!-- Your Custom CSS Path -->
-    <link rel="stylesheet" href="../css/conversion.css">
+    <link rel="stylesheet" href="../dist/css/conversion.min.css">
     <link rel="icon" type="image/png" href="/favicon.png" />
     
     <!-- Auth Guard Logic -->
     <script>document.documentElement.style.visibility = 'hidden';</script>
-    <script src="/js/auth-guard.js"></script>
+    <script src="../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
 
 <!-- Main Content Container -->
 <div class="main-wrapper">
     <div class="converter-card">
-        <h2>Universal Converter</h2>
+        <h2 class="page-title">
+    <button class="header-back-btn" onclick="goBack()" aria-label="Go Back">
+        ←
+    </button>
+
+    <span>Universal Converter</span>
+</h2>
         
         <!-- Category Selection -->
         <div class="form-group">
@@ -142,8 +148,8 @@
 </div>
 
 <!-- Scripts -->
-<script src="../js/conversion.js"></script>
-<script src="../js/screenshotProtector.js"></script>
+<script src="../dist/js/conversion.min.js"></script>
+<script src="../dist/js/screenshotProtector.min.js"></script>
 <script>
   // Initialize security script if present
   if (typeof initScreenshotProtector === 'function') {

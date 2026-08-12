@@ -6,21 +6,23 @@
   <title>Projects & Reports | BUILDSKIL Contractor Construction Service</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/projects-ui.css">
+  
+  <link rel="stylesheet" href="../dist/css/projects-ui.min.css"/>
+  <link rel="stylesheet" href="../dist/css/loader.min.css"/>
    <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
-  
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
 
 <!-- PAGE HERO -->
 <section class="project-table-section">
   <div class="container">
-    <h2 class="section-title">Projects & Reports</h2>
-    <p class="section-subtitle">Transparent execution, documented progress, and proven results</p>
+    <h2 class="section-title back-title">
+    ← Project&Report
+</h2>
+    <p class="section-subtitle">Transparent execution, upload Work Images, documented progress, and proven results</p>
 
     <!-- Project Actions -->
     <div class="actions-wrapper">
@@ -109,7 +111,7 @@
     </div>
 
     <div class="image-count" id="imageCount"></div>
-     <span id="uploadInfo" style="font-size:12px; color:#666;"></span>
+     <span id="uploadInfo" ></span>
   </div>
 </div>
 <div id="toastContainer"></div>
@@ -119,13 +121,13 @@
     <p>© 2025 BUILDSKIL108 Contractor Construction Service."सर्वाधिकार सुरक्षिताः"</p>
   </div>
 </footer>
-<script src="../js/screenshotProtector.js"></script>
+<script src="../dist/js/screenshotProtector.min.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();
 </script>
-
-<script src="../js/projects-ui.js"></script>
+<script src="../dist/js/loader.min.js"></script>
+<script src="../dist/js/projects-ui.min.js"></script>
 
 </body>
 </html>

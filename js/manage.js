@@ -1,5 +1,6 @@
 let CURRENT_PROFILE = null;
 let NEW_PHOTO_FILE = null;
+let activeRequests = 0;
 const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
 const SERVER_BASE = "https://api.buildskil.com";
 //const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
@@ -81,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     if (res.ok) {
-      alert("OTP sent to your email");
+      showToaster("OTP sent to your email");
 
       verifyEmailBtn.classList.add("hidden"); // 👈 hide verify button
       emailVerifyBox.classList.remove("hidden"); // 👈 show input
@@ -101,12 +102,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (res.ok) {
       renderProfile(profile); // 🔥 this updates badge + UI
-      alert("Email verified ✅");
+      showToaster("Email verified ✅");
     } else {
-      alert(profile.message);
+      showToaster(profile.message);
     }
   });
-});
 
 // Render profile data into DOM
 function renderProfile(profile) {
@@ -125,13 +125,13 @@ function renderProfile(profile) {
   document.getElementById("profileBio").textContent =
     profile.bio || "No details added";
 
-  // Show saved photo if available
+  /*Show saved photo if available
   if (profile.photo) {
     document.getElementById("profilePhoto").src = profile.photo.startsWith(
       "http",
     )
       ? profile.photo
-      : SERVER_BASE + profile.photo+ "?v=" + Date.now();;
+      : SERVER_BASE + profile.photo+ "?v=" + Date.now();
   } else {
     // Generate initials avatar if no photo
     const initials = (profile.name || "U N")
@@ -141,6 +141,20 @@ function renderProfile(profile) {
     document.getElementById("profilePhoto").src =
       `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
   }
+ const photo = document.getElementById("profilePhoto");
+
+if (profile.photo) {
+  photo.src = profile.photo.startsWith("http")
+    ? profile.photo
+    : SERVER_BASE + profile.photo;
+} else {
+  const initials = (profile.name || "U N")
+    .split(" ")
+    .map(n => n[0].toUpperCase())
+    .join("");
+
+  photo.src = `https://via.placeholder.com/140/007bff/ffffff?text=${encodeURIComponent(initials)}`;
+}*/
   // 🔐 LOCK EMAIL IF VERIFIED
 const editEmailInput = document.getElementById("editEmail");
 
@@ -191,7 +205,7 @@ function openEditProfile() {
   modal.removeAttribute("inert");
   editName.focus();
 }
-
+document.getElementById("canceleditbtn")?.addEventListener("click", closeEdit);
 function closeEdit() {
   const modal = document.getElementById("editModal");
   if (!modal) return;
@@ -214,7 +228,11 @@ document.getElementById("editModal").addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeEdit();
 });
+//const uploadPhoto = document.getElementById("uploadPhoto");
+//const cameraPhoto = document.getElementById("cameraPhoto");
 
+//uploadPhoto.addEventListener("change", previewPhoto);
+//cameraPhoto.addEventListener("change", previewPhoto);
 // Preview selected images
 function previewPhoto(event) {
   const file = event.target.files[0];
@@ -228,6 +246,9 @@ function previewPhoto(event) {
   };
   reader.readAsDataURL(file);
 }
+document
+    .getElementById("saveProfileBtn")
+    .addEventListener("click", saveProfile);
 async function saveProfile() {
   try {
 
@@ -254,7 +275,7 @@ async function saveProfile() {
 
     if (!res.ok) {
       const err = await res.json();
-      alert(err.message || "Update failed");
+      showToaster(err.message || "Update failed");
       return;
     }
 
@@ -265,7 +286,7 @@ async function saveProfile() {
 
   } catch (err) {
     console.error(err);
-    alert("Server connection error");
+    showToaster("Server connection error");
   }
 }
 async function deleteAccount() {
@@ -277,7 +298,7 @@ async function deleteAccount() {
   });
 
   if (!res.ok) {
-    alert("Delete failed");
+    showToaster("Delete failed");
     return;
   }
 
@@ -287,7 +308,22 @@ async function deleteAccount() {
 
   window.location.href = "index.html";
 }
+const originalFetch = window.fetch;
 
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
 // Delete account
 /*async function deleteAccount() {
   if (!confirm("Delete account permanently?")) return;
@@ -302,3 +338,171 @@ async function deleteAccount() {
 
   location.href = "index.html";
 }*/
+async function loadDeleteSetting(){
+
+    const res = await fetch(
+        `${ACCOUNT_BASE}/auto-delete`,
+        {
+            headers: authHeaders()
+        }
+    );
+
+    const data = await res.json();
+
+    document.getElementById("deleteAfter").value =
+        data.autoDeleteAfterDays;
+
+    document.getElementById("lastActiveText").innerText =
+        new Date(data.lastActive).toLocaleString();
+
+}
+
+loadDeleteSetting();
+
+async function saveDeleteSetting() {
+    try {
+        const res = await fetch(`${ACCOUNT_BASE}/auto-delete`, {
+            method: "PUT",
+            headers: {
+                ...authHeaders(),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                inactivityDays: Number(deleteAfter.value)
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            showToaster(data.message || "Failed to save", "error");
+            return;
+        }
+
+        showToaster("Setting saved successfully", "success");
+
+        // Update current saved value
+        originalValue = deleteAfter.value;
+
+        // Hide button again
+        saveBtn.style.display = "none";
+
+    } catch (err) {
+        console.error(err);
+        showToaster("Server error", "error");
+    }
+}
+
+const deleteAfter = document.getElementById("deleteAfter");
+const saveBtn = document.getElementById("saveDeleteSetting");
+
+// Hide on page load
+saveBtn.style.display = "none";
+
+let originalValue = deleteAfter.value;
+
+// Show button only when value changes
+deleteAfter.addEventListener("change", () => {
+    saveBtn.style.display = "block";
+});
+document
+.getElementById("saveDeleteSetting")
+.addEventListener("click",saveDeleteSetting);
+
+function showToaster(message, type = "info", duration = 3000) {
+
+    const container = document.getElementById("toastContainer");
+
+    const toast = document.createElement("div");
+
+    toast.className = `toast ${type}`;
+
+    toast.innerHTML = `
+        <span>${message}</span>
+        <span class="toast-close">&times;</span>
+    `;
+
+    container.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.classList.add("show");
+    });
+
+    function removeToast() {
+
+        toast.classList.remove("show");
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        }, 350);
+
+    }
+
+    toast.querySelector(".toast-close")
+        .addEventListener("click", removeToast);
+
+    setTimeout(removeToast, duration);
+
+}
+/*
+async function loadMembershipCard() {
+
+
+
+
+    try {
+
+        const res = await fetch(
+            "https://api.buildskil.com/api/membership/my-membership",
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("cb_token")}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        if (!data.success) {
+
+            document.getElementById("membershipInfo").textContent =
+                "Unable to load membership.";
+
+            return;
+        }
+
+        const membership = data.membership;
+
+        const plan =
+            membership.plan.charAt(0).toUpperCase() +
+            membership.plan.slice(1);
+
+        const endDate = new Date(membership.endDate);
+
+        document.getElementById("membershipInfo").innerHTML = `
+            <strong>Plan:</strong> ${plan}<br>
+            <strong>Status:</strong> ${membership.status}<br>
+            <strong>Valid Until:</strong> ${endDate.toLocaleDateString()}
+        `;
+
+    } catch (err) {
+
+        console.error(err);
+
+        document.getElementById("membershipInfo").textContent =
+            "Server error.";
+
+    }
+
+}
+
+loadMembershipCard();*/
+
+//window.previewPhoto = previewPhoto;
+//window.openEditProfile = openEditProfile;
+//window.saveProfile = saveProfile;
+//window.closeEdit = closeEdit;
+
+});

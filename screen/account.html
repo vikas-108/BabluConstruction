@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Manage Account</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="stylesheet" href="../css/manage-account.css" />
+  <link rel="stylesheet" href="../dist/css/manage-account.min.css" />
+  <link rel="stylesheet" href="../dist/css/loader.min.css" />
   <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
 
@@ -19,19 +20,19 @@
   <!-- PROFILE HEADER -->
 <header class="profile-header">
   <div class="profile-photo-wrapper">
-    <img id="profilePhoto" src="" alt="Profile photo" />
+    <!-- <img id="profilePhoto" src="" alt="Profile photo" />
 
-    <!-- Upload & Camera Buttons -->
+    Upload & Camera Buttons 
     <div class="photo-actions">
       <label for="uploadPhoto" class="photo-btn">📁 Upload</label>
-      <input type="file" id="uploadPhoto" accept="image/*" style="display:none" onchange="previewPhoto(event)" />
+      <input type="file" id="uploadPhoto" accept="image/*" style="display:none" />
 
       <label for="cameraPhoto" class="photo-btn">📷 Camera</label>
-      <input type="file" id="cameraPhoto" accept="image/*" capture="user" style="display:none" onchange="previewPhoto(event)" />
+      <input type="file" id="cameraPhoto" accept="image/*" capture="user" style="display:none" />
     </div>
   </div>
-
-  <button type="button" id="editIconBtn" class="edit-btn" onclick="openEditProfile()" aria-label="Edit Profile">✏️</button>
+-->
+  <button type="button" id="editIconBtn" class="edit-btn"  aria-label="Edit Profile">✏️</button>
 
   <h2 id="profileName">Your Name</h2>
   <p id="profileRole">Contractor</p>
@@ -54,11 +55,17 @@
 
   <!-- DETAILS -->
   <section class="account-cards">
+    <article class="section-card">
+    <h3>Home</h3>
+
+    <a href="/landing.html" class="home-btn">
+        Go to Home
+    </a>
+   </article>
     <article class="account-card">
       <h3>Bio details</h3>
       <p id="profileBio">No details added</p>
     </article>
-
     <article class="account-card">
       <h3>History</h3>
       <p>callogs and otherlogs will coming soon </p>
@@ -67,15 +74,50 @@
       <h3>Activity</h3>
       <p>logins device details coming soon</p>
     </article>
-   <article class="account-card" id="membershipButton">
+     <article class="account-card" id="membershipButton">
   <h3>Active membership</h3>
   <p>Plan details coming soon</p>
 </article>
+   <!--<article class="account-card" id="membershipButton">
+    <h3 id="membershipTitle">Active Membership</h3>
+    <p id="membershipInfo">Loading...</p>
+</article>-->
+    <article class="account-card">
+    <h3>Automatic Account Deletion</h3>
 
-    <article class="account-card danger">
+    <!---<p class="delete-info">
+        Your account will be permanently deleted if you do not sign in or use the application for the selected period.
+    </p> -->
+
+    <label for="deleteAfter">Delete account after inactivity</label>
+
+    <select id="deleteAfter">
+
+        <option value="0">Never</option>
+        <option value="30">1 Month</option>
+        <option value="90">3 Months</option>
+        <option value="150">5 Months</option>
+
+    </select>
+
+    <div class="last-active">
+        Last Active:
+        <span id="lastActiveText">--</span>
+    </div>
+
+    <button id="saveDeleteSetting" >
+        Save Setting
+    </button>
+</article>
+     <article class="account-card">
+      <h3>Leave</h3>
+      <p>By click on button you can leave the platform</p>
+       <button id="logoutBtn">Logout</button>
+    </article>
+    <!-- <article class="account-card danger">
       <h3>Danger Zone</h3>
       <button type="button" onclick="deleteAccount()">Delete My Account</button>
-    </article>
+    </article> -->
   </section>
 
 </main>
@@ -100,16 +142,18 @@
 </div>
     <input id="editExp" placeholder="Experience (years)" />
     <textarea id="editBio" placeholder="About your work"></textarea>
-    <button type="button" onclick="saveProfile()">Save</button>
-    <button type="button" class="second" onclick="closeEdit()">Cancel</button>
+    <button type="button"  id="saveProfileBtn">Save</button>
+    <button type="button" class="second" id="canceleditbtn" >Cancel</button>
   </div>
 </div>
-<script src="../js/screenshotProtector.js"></script>
+<div id="toastContainer"></div>
+<script src="../dist/js/screenshotProtector.min.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();
 </script>
-<script src="../login.js"></script>
-<script src="../js/manage.js"></script>
+<script src="../dist/js/loader.min.js"></script>
+<script src="../dist/login.min.js"></script>
+<script src="../dist/js/manage.min.js"></script>
 </body>
 </html>

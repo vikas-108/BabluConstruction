@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Create Profile</title>
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="stylesheet" href="css/creat-profile.css" />
+    <link rel="stylesheet" href="dist/css/creat-profile.min.css" />
+    <link rel="stylesheet" href="dist/css/loader.min.css"/>
     <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="dist/js/auth-guard.min.js"></script>
   </head>
   <body>
     <section class="create-profile login-required">
-      <h2>Create Your Work Profile</h2>
+      <h2 class="back-title">← Create Profile</h2>
       <button id="toggleFormBtn" class="toggle-form-btn">➕ Add Profile</button>
       <!-- FORM -->
       <div id="formWrapper" class="hidden">
@@ -119,7 +120,7 @@
   // One single line to activate
   initScreenshotProtector();
 </script>
-
+<script src="js/loader.js"></script>
     <script src="js/create-profile.js"></script>
   </body>
 </html>

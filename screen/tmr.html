@@ -5,26 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Time Rupees Earns</title>
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="stylesheet" href="../css/tmr.css" />
+    <link rel="stylesheet" href="../dist/css/tmr.min.css" />
+    <link rel="stylesheet" href="../dist/css/loader.min.css"/>
      <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="../dist/js/auth-guard.min.js"></script>
   </head>
   <body>
-    <div class="dashboard-summary">
-      <div class="summary-card">
-        <h3>Total Hours Worked Today</h3>
-        <p id="totalHours">0h 0m</p>
-      </div>
-      <div class="summary-card">
-        <h3>Total Earnings Today</h3>
-        <p id="totalEarnings">₹0</p>
-      </div>
-    </div>
     <div class="time-rupees-container">
-      <h2>⏰ Time Rupees Earns</h2>
+      <h2 class="back-title">← Time Rupees Earns</h2>
           <div id="toastField"></div>
       <div class="camera-wrapper">
         <video id="cameraStream" autoplay playsinline></video>
@@ -87,7 +78,16 @@
         />
         <button id="permissionBtn">Give Permission</button>
       </div>
-
+<div class="dashboard-summary">
+      <div class="summary-card">
+        <h3>Total Hours Worked Today</h3>
+        <p id="totalHours">0h 0m</p>
+      </div>
+      <div class="summary-card">
+        <h3>Total Earnings Today</h3>
+        <p id="totalEarnings">₹0</p>
+      </div>
+    </div>
       <!-- History table already has Permissioned Users column -->
       <div class="history-table-wrap">
         <table id="historyTable">
@@ -107,16 +107,30 @@
         </table>
       </div>
     </div>
+    <div id="imageModal" class="image-modal">
+
+    <span class="close-modal">&times;</span>
+
+    <button class="nav-btn prev-btn">&#10094;</button>
+
+    <img id="modalImage" class="modal-image">
+
+    <button class="nav-btn next-btn">&#10095;</button>
+
+    <div id="imageCounter" class="image-counter"></div>
+
+</div>
     <!-- Footer -->
 <footer class="app-footer">
   <p>&RightTee; 2026 BR & G Contractor Construction Service. — "सर्वाधिकार सुरक्षिताः".</p>
 </footer>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-<script src="../js/screenshotProtector.js"></script>
+<script src="../dist/js/screenshotProtector.min.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();
 </script>
-    <script src="../js/tmr.js"></script>
+<script src="../dist/js/loader.min.js"></script>
+    <script src="../dist/js/tmr.min.js"></script>
   </body>
 </html>

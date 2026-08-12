@@ -15,7 +15,25 @@ body {
   padding: 16px;
   width: 100%;
 }
+.back-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s ease, transform .2s ease;
+}
 
+.back-title:hover {
+    color: #0d6efd;
+}
+
+.back-title:active {
+    transform: translateX(-2px);
+}
 /* Responsive form layout */
 form {
   background: white;

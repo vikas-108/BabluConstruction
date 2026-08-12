@@ -154,29 +154,56 @@
     }
 
     /* --- 4. PDF EXPORT & HISTORY --- */
-    async function downloadPDF() {
-        const element = document.getElementById('invoice-preview');
-        const invNum = document.getElementById('invoiceNum').value;
-        
-        // 1. Capture HTML as Canvas
-        const canvas = await html2canvas(element, { scale: 2, useCORS: true });
-        const imgData = canvas.toDataURL('image/png');
-        
-        // 2. Generate PDF
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`Invoice_${invNum}.pdf`);
+   async function downloadPDF() {
+    const element = document.getElementById("invoice-preview");
+    const invNum = document.getElementById("invoiceNum").value;
 
-        // 3. Add to History
-        addToHistory(invNum);
+    const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        scrollY: -window.scrollY
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+
+    const imgWidth = pageWidth;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
     }
 
+    pdf.save(`Invoice_${invNum}.pdf`);
+
+    addToHistory(invNum);
+}
+
+      document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
+    
     function addToHistory(id) {
         const client = document.getElementById('toName').value || 'Unknown';
         const date = document.getElementById('billDate').value;
@@ -196,3 +223,4 @@
         // Prepend to top
         tbody.insertBefore(row, tbody.firstChild);
     }
+

@@ -1,8 +1,576 @@
 const API_BASE = "https://api.buildskil.com/api/location"; // change if deployed
 //const API_BASE = "http://localhost:5000/api/location"; // change if using domain
 let editingProjectId = null;
-let liveInterval;
+// 1. Initialize variables globally
+let liveInterval = null;
+let isTrackingActive = false; // Track the global state
 let allProjects = [];
+let watchId = null;
+let followMyLocation = false; // Controls whether map follows user
+let selectedLat = null;
+let selectedLng = null;
+let marker = null;
+let userMarker = null;
+function authHeaders(isFormData = false) {
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
+  };
+
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return headers;
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const map = L.map("map").setView([20.5937, 78.9629], 5);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+  // Live tracking
+  function startLocationTracking() {
+    if (watchId !== null) return; // already started
+
+    watchId = navigator.geolocation.watchPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        if (!userMarker) {
+          userMarker = L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup("You are here");
+        } else {
+          userMarker.setLatLng([lat, lng]);
+        }
+
+        // Only move camera when follow mode is enabled
+        if (followMyLocation) {
+          map.setView([lat, lng], 16);
+        }
+
+        // Send location only while sharing is active
+        if (!isTrackingActive) return;
+
+        try {
+          await fetch(`${API_BASE}/live/update`, {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify({ lat, lng }),
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      },
+      console.error,
+      {
+        enableHighAccuracy: true,
+        maximumAge: 5000,
+        timeout: 10000,
+      },
+    );
+  }
+  function stopLocationTracking() {
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+      watchId = null;
+    }
+  }
+
+  // Map click
+  map.on("click", (e) => {
+    selectedLat = e.latlng.lat;
+    selectedLng = e.latlng.lng;
+    document.getElementById("lat").value = selectedLat;
+    document.getElementById("lng").value = selectedLng;
+    if (marker) map.removeLayer(marker);
+
+    marker = L.marker([selectedLat, selectedLng])
+      .addTo(map)
+      .bindPopup("Selected Location")
+      .openPopup();
+  });
+  const toggleBtn = document.getElementById("live-toggle-btn");
+  const liveLayer = L.layerGroup().addTo(map);
+
+  async function loadLiveUsers() {
+    try {
+      const res = await fetch(`${API_BASE}/live/users`, {
+        headers: authHeaders(),
+      });
+
+      const users = await res.json();
+
+      if (!Array.isArray(users)) {
+        console.warn("Unexpected response:", users);
+        return;
+      }
+
+      liveLayer.clearLayers();
+
+      users.forEach((u) => {
+        if (!u.location) return;
+
+        L.marker([u.location.lat, u.location.lng])
+          .bindPopup(`User: ${u.user?.phone || "Unknown"}`)
+          .addTo(liveLayer);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  // 2. The core function to start the loop
+  function startTrackingLoop() {
+    if (liveInterval) clearInterval(liveInterval); // Safety clear
+
+    // Call immediately upon starting so you don't wait 10 seconds for the first run
+    loadLiveUsers();
+
+    // Set up the 10-second loop
+    liveInterval = setInterval(loadLiveUsers, 10000);
+  }
+
+  // 3. The core function to stop the loop
+  function stopTrackingLoop() {
+    if (liveInterval) {
+      clearInterval(liveInterval);
+      liveInterval = null;
+    }
+  }
+
+  // 4. Click Event Listener for the Start/Stop button
+  toggleBtn.addEventListener("click", async () => {
+    if (!isTrackingActive) {
+      isTrackingActive = true;
+
+      followMyLocation = true;
+
+      startLocationTracking();
+
+      startTrackingLoop();
+
+      toggleBtn.textContent = "Stop";
+    } else {
+      isTrackingActive = false;
+
+      followMyLocation = false;
+
+      stopTrackingLoop();
+
+      stopLocationTracking();
+
+      toggleBtn.textContent = "Start";
+    }
+  });
+
+  // 5. Smart Visibility Change (Only loops if the user previously clicked 'Start')
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      // Always stop fetching if tab is hidden to save API resources
+      stopTrackingLoop();
+    } else {
+      // ONLY resume if tracking was actively turned on by the user
+      if (isTrackingActive) {
+        startTrackingLoop();
+      }
+    }
+  });
+  // Create a layer group to hold all project markers
+  const projectMarkers = L.layerGroup().addTo(map);
+
+  document.getElementById("saveBtn").addEventListener("click", async () => {
+    if (!selectedLat && !editingProjectId) {
+      showToaster("Select location first", "error");
+      return;
+    }
+    selectedLat = Number(document.getElementById("lat").value);
+    selectedLng = Number(document.getElementById("lng").value);
+    if (Number.isNaN(selectedLat) || Number.isNaN(selectedLng)) {
+      showToaster("Please select a project location.", "error");
+      return;
+    }
+    const phones = document
+      .getElementById("phones")
+      .value.split(",")
+      .map((p) => p.trim())
+      .filter((p) => p.length > 0);
+
+    const data = {
+      projectName: document.getElementById("projectName").value.trim(),
+      description: document.getElementById("description").value.trim(),
+      lat: selectedLat,
+      lng: selectedLng,
+      visibility: document.getElementById("visibility").value,
+      projectType: document.getElementById("projectType").value,
+      phones,
+    };
+
+    try {
+      showLoader("Saving...");
+      let url = `${API_BASE}/project`;
+      let method = "POST";
+      //console.log("Updating:", editingProjectId);
+      // 🔥 UPDATE MODE
+      if (editingProjectId) {
+        url = `${API_BASE}/project/${editingProjectId}`;
+        method = "PUT";
+      }
+      //console.log("Sending data to backend:", data);
+      //console.log("Editing:", editingProjectId);
+      const res = await fetch(url, {
+        method,
+        headers: authHeaders(),
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        showToaster(result.message, "error");
+        return;
+      }
+
+      showToaster(editingProjectId ? "Updated ✅" : "Created ✅");
+
+      editingProjectId = null; // reset mode
+      loadProjects();
+      resetForm();
+    } catch (err) {
+      console.error(err);
+      showToaster("Error saving project", "error");
+    } finally {
+      hideLoader();
+    }
+  });
+  function resetForm() {
+    document.getElementById("projectName").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("visibility").value = ""; // default
+    document.getElementById("phones").value = "";
+    document.getElementById("lat").value = "";
+    document.getElementById("lng").value = "";
+    document.getElementById("projectType").value = ""; // default
+  }
+  async function loadProjects() {
+    const historyList = document.getElementById("projectHistory");
+    historyList.innerHTML = "";
+
+    try {
+      showLoader("Loading...");
+      const res = await fetch(`${API_BASE}/project`, {
+        headers: authHeaders(),
+      });
+      const projects = await res.json();
+      //console.log("Projects from API:", projects);
+      allProjects = projects;
+      projectMarkers.clearLayers();
+
+      //const loginUser = JSON.parse(localStorage.getItem("cb_login_user"));
+      //const currentUserId = loginUser?._id || loginUser?.id;
+      const loginUser = JSON.parse(localStorage.getItem("cb_login_user"));
+
+      const currentUserId = loginUser.id;
+
+      projects.forEach((p) => {
+        const phone = p.ownerPhone;
+        let projectMarker = null;
+
+        if (
+          p.location &&
+          Number.isFinite(p.location.lat) &&
+          Number.isFinite(p.location.lng)
+        ) {
+          projectMarker = L.marker([p.location.lat, p.location.lng], {
+            icon: getBuildingIcon(p.projectType),
+          }).addTo(projectMarkers);
+        }
+
+        if (
+          p.location &&
+          Number.isFinite(p.location.lat) &&
+          Number.isFinite(p.location.lng)
+        ) {
+          projectMarker = L.marker([p.location.lat, p.location.lng], {
+            icon: getBuildingIcon(p.projectType),
+          })
+            .bindPopup(
+              `
+      <div class="popup-content">
+        <strong>${p.projectName}</strong><br>
+        <strong>${p.projectType}</strong><br>
+        ${p.description}<br>
+        ${
+          phone
+            ? `<a href="tel:${phone}" class="call-btn">📞</a>`
+            : `<button class="call-btn" disabled>No Phone</button>`
+        }
+      </div>
+    `,
+            )
+            .addTo(projectMarkers);
+          }
+          const li = document.createElement("li");
+          const shortId = p._id.slice(-6).toUpperCase();
+          /*  li.innerHTML = `
+        <span class="history-item"><strong>ID:</strong>${shortId} - ${p.projectName}</span>
+      `;*/
+          const ownerId = p.owner?._id || p.owner;
+
+          const isOwner = String(ownerId) === String(currentUserId);
+
+          //console.log({ownerId, currentUserId, isOwner});
+
+          li.innerHTML = `
+  <span class="history-item">
+    <strong>ID:</strong>${shortId} - ${p.projectName}
+  </span>
+`;
+          // Debug log to see values
+          //console.log("Project owner:", p.owner, "Current user:", currentUserId);
+
+          // Only show edit/delete if owner
+          if (isOwner) {
+            li.innerHTML += `
+          <button class="edit-btn">✏️</button>
+          <button class="remove-btn">🗑️</button>
+         `;
+
+            li.querySelector(".edit-btn").addEventListener("click", () => {
+              editingProjectId = p._id;
+              selectedLat = p.location.lat ?? null;
+              selectedLng = p.location.lng ?? null;
+              document.getElementById("projectName").value = p.projectName;
+              document.getElementById("description").value = p.description;
+              document.getElementById("visibility").value = p.visibility;
+              document.getElementById("phones").value = "";
+              document.getElementById("lat").value = p.location.lat ?? "";
+              document.getElementById("lng").value = p.location.lng ?? "";
+              document.getElementById("projectType").value = p.projectType;
+            });
+
+            li.querySelector(".remove-btn").addEventListener(
+              "click",
+              async () => {
+                if (!confirm("Delete project?")) return;
+
+                const res = await fetch(`${API_BASE}/project/${p._id}`, {
+                  method: "DELETE",
+                  headers: authHeaders(),
+                });
+
+                if (res.ok) {
+                  showToaster("Project deleted ✅", "success");
+                  loadProjects();
+                } else {
+                  const err = await res.json();
+                  showToaster(err.message || "Delete failed", "error");
+                }
+              },
+            );
+            /*else {
+        // Non-owner clicks → toaster error
+        li.innerHTML += `
+          <button class="edit-btn">✏️</button>
+          <button class="remove-btn">🗑️</button>
+        `;
+        li.querySelector(".edit-btn").addEventListener("click", () => {
+          showToaster("Only owner can edit this project", "error");
+        });
+        li.querySelector(".remove-btn").addEventListener("click", () => {
+          showToaster("Only owner can delete this project", "error");
+        });
+      }*/
+          }
+          // History click → focus map and open popup
+          li.querySelector(".history-item").addEventListener("click", () => {
+            if (!projectMarker) {
+              showToaster(
+                "This project has no valid location. Edit it and choose a location.",
+                "warning",
+              );
+              return;
+            }
+
+            map.setView(projectMarker.getLatLng(), 16, {
+        animate: true,
+        duration: 0.8
+    });
+            projectMarker.openPopup(); // 🔥 show popup too
+          });
+          historyList.appendChild(li);
+          //console.log("History item appended:", p.projectName);
+          projectMarker.on("mouseover", function () {
+            this.openPopup();
+          });
+          projectMarker.on("mouseout", function () {
+            this.closePopup();
+          });
+      
+      });
+    } catch (err) {
+      console.error("Load error", err);
+    } finally {
+      hideLoader();
+    }
+  }
+  const searchBox = document.getElementById("searchBox");
+  searchBox.addEventListener("input", () => {
+    const query = searchBox.value.trim().toLowerCase();
+
+    if (!query) {
+      loadProjects(); // reload all markers
+      return;
+    }
+
+    projectMarkers.clearLayers();
+
+    const filtered = allProjects.filter((p) => {
+      return (
+        p.projectName?.toLowerCase().includes(query) ||
+        p.projectType?.toLowerCase().includes(query) ||
+        p.description?.toLowerCase().includes(query) ||
+        p.visibility?.toLowerCase().includes(query)
+      );
+    });
+
+    filtered.forEach((p) => {
+      const phone = p.ownerPhone;
+      L.marker([p.location.lat, p.location.lng], {
+        icon: getBuildingIcon(p.projectType),
+      })
+        .bindPopup(
+          `
+        <strong>${p.projectName}</strong><br>
+        ${p.projectType}<br>
+        ${p.description}<br>
+        <em>${p.visibility}</em>
+        ${
+          phone
+            ? `<a href="tel:${phone}" class="call-btn">📞</a>`
+            : `<button class="call-btn" disabled>No Phone</button>`
+        }
+      `,
+        )
+        .addTo(projectMarkers);
+    });
+
+    if (filtered.length > 0) {
+      map.setView([filtered[0].location.lat, filtered[0].location.lng], 12);
+    }
+  });
+  function getBuildingIcon(type) {
+    let iconClass = "fa-building"; // default
+    let color = "#2c3e50"; // default dark gray
+
+    switch (type) {
+      case "office":
+        iconClass = "fa-city";
+        color = "blue";
+        break;
+      case "school":
+        iconClass = "fa-school";
+        color = "green";
+        break;
+      case "hospital":
+        iconClass = "fa-hospital";
+        color = "red";
+        break;
+      case "home":
+        iconClass = "fa-house";
+        color = "orange";
+        break;
+      case "building":
+        iconClass = "fa-building";
+        color = "gray";
+        break;
+    }
+
+    return L.divIcon({
+      html: `<i class="fa-solid ${iconClass}" style="font-size:24px;color:${color};"></i>`,
+      iconSize: [24, 24],
+      className: "custom-marker",
+    });
+  }
+  async function startSharing(projectId, lat, lng) {
+    await fetch(`${API_BASE}/live/start`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({ projectId, lat, lng }),
+    });
+  }
+  document.getElementById("toggleFormLink").addEventListener("click", () => {
+    const form = document.getElementById("projectForm");
+    form.classList.toggle("open");
+  });
+  // My Location button
+  document.getElementById("myLocationBtn").addEventListener("click", () => {
+    followMyLocation = true;
+
+    if (userMarker) {
+      map.setView(userMarker.getLatLng(), 16);
+    }
+  });
+  map.on("dragstart", () => {
+    followMyLocation = false;
+  });
+
+  map.on("zoomstart", () => {
+    followMyLocation = false;
+  });
+  // Toggle sidebar
+  document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
+    document.getElementById("sidebar").classList.toggle("hidden");
+  });
+  document.querySelectorAll(".back-title").forEach((el) => {
+    el.addEventListener("click", () => {
+      if (history.length > 1) {
+        history.back();
+      } else {
+        window.location.href = "landing.html"; // fallback page
+      }
+    });
+  });
+  const pageLoader = document.getElementById("pageLoader");
+
+  function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+  }
+
+  function hideLoader() {
+    pageLoader.classList.remove("active");
+  }
+  function showToaster(message, type = "info") {
+    const toaster = document.getElementById("toaster");
+    toaster.textContent = message;
+
+    if (type === "error") toaster.style.background = "#e74c3c";
+    else if (type === "success") toaster.style.background = "#2ecc71";
+    else toaster.style.background = "#333";
+
+    toaster.classList.add("show");
+    setTimeout(() => toaster.classList.remove("show"), 3000);
+  }
+  loadProjects();
+});
+
+/*
+//const API_BASE = "https://api.buildskil.com/api/location"; // change if deployed
+const API_BASE = "http://localhost:5000/api/location"; // change if using domain
+let editingProjectId = null;
+// 1. Initialize variables globally
+let liveInterval = null;
+let isTrackingActive = false; // Track the global state
+let allProjects = [];
+let watchId = null;
+let followMyLocation = false; // Controls whether map follows user
+ let selectedLat = null;
+  let selectedLng = null;
+  let marker;
+  let userMarker= null;
 function authHeaders(isFormData = false) {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`
@@ -19,36 +587,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-  let selectedLat = null;
-  let selectedLng = null;
-  let marker;
-  let userMarker;
+
   
   // Live tracking
- navigator.geolocation.watchPosition(async (pos) => {
-  const lat = pos.coords.latitude;
-  const lng = pos.coords.longitude;
+function startLocationTracking() {
 
-  if (!userMarker) {
-    userMarker = L.marker([lat, lng]).addTo(map).bindPopup("you here");
-  } else {
-    userMarker.setLatLng([lat, lng]);
-  }
+    if (watchId !== null) return; // already started
 
-  map.setView([lat, lng], 14);
+    watchId = navigator.geolocation.watchPosition(async (pos) => {
 
-  // 🔥 Send to backend
-     try {
-      await fetch(`${API_BASE}/live/update`, {
-        method: "POST",
-        headers: authHeaders(),
-  body: JSON.stringify({ lat, lng })
-      });
-       } catch (err) {
-      console.log("Live update error");
-     }
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
- });
+        if (!userMarker) {
+            userMarker = L.marker([lat, lng])
+                .addTo(map)
+                .bindPopup("You are here");
+        } else {
+            userMarker.setLatLng([lat, lng]);
+        }
+
+        // Only move camera when follow mode is enabled
+        if (followMyLocation) {
+            map.setView([lat, lng], 16);
+        }
+
+        // Send location only while sharing is active
+        if (!isTrackingActive) return;
+
+        try {
+            await fetch(`${API_BASE}/live/update`, {
+                method: "POST",
+                headers: authHeaders(),
+                body: JSON.stringify({ lat, lng })
+            });
+        } catch (err) {
+            console.error(err);
+        }
+
+    }, console.error, {
+        enableHighAccuracy: true,
+        maximumAge: 5000,
+        timeout: 10000
+    });
+
+}
+function stopLocationTracking() {
+
+    if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+    }
+
+}
 
   // Map click
     map.on("click", (e) => {
@@ -63,6 +654,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .bindPopup("Selected Location")
       .openPopup();
   });
+  const toggleBtn = document.getElementById("live-toggle-btn");
   const liveLayer = L.layerGroup().addTo(map);
 
 async function loadLiveUsers() {
@@ -92,17 +684,68 @@ users.forEach((u) => {
     console.error(err);
   }
 }
-  //setInterval(loadLiveUsers, 10000);
-  // Pause live updates when tab is inactive
-  document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    clearInterval(liveInterval);
-  } else {
+  // 2. The core function to start the loop
+function startTrackingLoop() {
+    if (liveInterval) clearInterval(liveInterval); // Safety clear
+    
+    // Call immediately upon starting so you don't wait 10 seconds for the first run
+    loadLiveUsers(); 
+    
+    // Set up the 10-second loop
     liveInterval = setInterval(loadLiveUsers, 10000);
-  }
+}
+
+// 3. The core function to stop the loop
+function stopTrackingLoop() {
+    if (liveInterval) {
+        clearInterval(liveInterval);
+        liveInterval = null;
+    }
+}
+
+// 4. Click Event Listener for the Start/Stop button
+toggleBtn.addEventListener("click", async () => {
+
+    if (!isTrackingActive) {
+
+        isTrackingActive = true;
+
+        followMyLocation = true;
+
+        startLocationTracking();
+
+        startTrackingLoop();
+
+        toggleBtn.textContent = "Stop";
+
+    } else {
+
+        isTrackingActive = false;
+
+        followMyLocation = false;
+
+        stopTrackingLoop();
+
+        stopLocationTracking();
+
+        toggleBtn.textContent = "Start";
+
+    }
+
 });
-// Initial load for inactive period
-liveInterval = setInterval(loadLiveUsers, 10000);
+
+// 5. Smart Visibility Change (Only loops if the user previously clicked 'Start')
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        // Always stop fetching if tab is hidden to save API resources
+        stopTrackingLoop();
+    } else {
+        // ONLY resume if tracking was actively turned on by the user
+        if (isTrackingActive) {
+            startTrackingLoop();
+        }
+    }
+});
    // Create a layer group to hold all project markers
 const projectMarkers = L.layerGroup().addTo(map);
 
@@ -190,7 +833,7 @@ async function loadProjects() {
             <strong>${p.projectName}</strong><br>
             <strong>${p.projectType}</strong>
             ${p.description}<br>
-            <em>${p.visibility}</em>
+           <!-- <em>${p.visibility}</em> -->
           </div>
         `)
         .addTo(projectMarkers);
@@ -352,14 +995,22 @@ document.getElementById("toggleFormLink").addEventListener("click", () => {
   form.classList.toggle("open");
 });
   // My Location button
-  document.getElementById("myLocationBtn").addEventListener("click", () => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-      map.setView([lat, lng], 15);
-    });
-  });
+ document.getElementById("myLocationBtn").addEventListener("click", () => {
 
+    followMyLocation = true;
+
+    if (userMarker) {
+        map.setView(userMarker.getLatLng(), 16);
+    }
+
+});
+map.on("dragstart", () => {
+    followMyLocation = false;
+});
+
+map.on("zoomstart", () => {
+    followMyLocation = false;
+});
   // Toggle sidebar
   document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("hidden");
@@ -378,139 +1029,4 @@ document.getElementById("toggleFormLink").addEventListener("click", () => {
   loadProjects();
 });
 
-
-
-
-
-
-
-
-
-
-
-
-/*document.addEventListener("DOMContentLoaded", () => {
-  const map = L.map("map").setView([20.5937, 78.9629], 5);
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-
-  let selectedLat = null;
-  let selectedLng = null;
-  let marker;
-  let userMarker;
-  
-  // Live tracking
-  navigator.geolocation.watchPosition((pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-    if (!userMarker) {
-      userMarker = L.marker([lat, lng]).addTo(map).bindPopup("You are here");
-    } else {
-      userMarker.setLatLng([lat, lng]);
-    }
-
-    map.setView([lat, lng], 14);
-  });
-
-  // Map click
-  map.on("click", (e) => {
-    selectedLat = e.latlng.lat;
-    selectedLng = e.latlng.lng;
-    document.getElementById("lat").value = selectedLat;
-    document.getElementById("lng").value = selectedLng;
-    if (marker) map.removeLayer(marker);
-
-    marker = L.marker([selectedLat, selectedLng])
-      .addTo(map)
-      .bindPopup("Selected Location")
-      .openPopup();
-  });
-   // Create a layer group to hold all project markers
-const projectMarkers = L.layerGroup().addTo(map);
-
-document.getElementById("saveBtn").addEventListener("click", () => {
-  if (!selectedLat) {
-    alert("Select location first");
-    return;
-  }
-
-  const phones = document.getElementById('phones').value
-    .split(',')
-    .map(p => p.trim());
-
-  const data = {
-    id: Date.now(), // unique ID
-    projectName: document.getElementById('projectName').value,
-    description: document.getElementById('description').value,
-    lat: selectedLat,
-    lng: selectedLng,
-    visibility: document.getElementById('visibility').value,
-    permittedUsers: phones
-  };
-
-  // Create a new marker for this project
-  const projectMarker = L.marker([data.lat, data.lng])
-    .bindPopup(`
-      <strong>${data.projectName}</strong><br>
-      ${data.description}<br>
-      <em>Visibility: ${data.visibility}</em><br>
-      Phones: ${data.permittedUsers.join(", ")}
-    `)
-    .addTo(projectMarkers);
-
-  projectMarker.on('mouseover', function () { this.openPopup(); });
-  projectMarker.on('mouseout', function () { this.closePopup(); });
-
-  // Add to history list
-  const historyList = document.getElementById("projectHistory");
-  const li = document.createElement("li");
-  li.innerHTML = `
-    <span class="history-item"><strong>ID:</strong> ${data.id} - ${data.projectName}</span>
-    <button class="edit-btn">✏️</button>
-    <button class="remove-btn">🗑️</button>
-  `;
-
-  // Click on history item → zoom to marker
-  li.querySelector(".history-item").addEventListener("click", () => {
-    map.setView([data.lat, data.lng], 15);
-    projectMarker.openPopup();
-  });
-
-  // Edit button
-  li.querySelector(".edit-btn").addEventListener("click", () => {
-    document.getElementById('projectName').value = data.projectName;
-    document.getElementById('description').value = data.description;
-    document.getElementById('visibility').value = data.visibility;
-    document.getElementById('phones').value = data.permittedUsers.join(", ");
-    document.getElementById('lat').value = data.lat;
-    document.getElementById('lng').value = data.lng;
-    map.setView([data.lat, data.lng], 14);
-  });
-
-  // Remove button
-  li.querySelector(".remove-btn").addEventListener("click", () => {
-    historyList.removeChild(li);
-    projectMarkers.removeLayer(projectMarker);
-  });
-
-  historyList.appendChild(li);
-
-  console.log("Send to backend:", data);
-  alert("Saved (connect soon)");
-});
-
-  // My Location button
-  document.getElementById("myLocationBtn").addEventListener("click", () => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-      map.setView([lat, lng], 15);
-    });
-  });
-
-  // Toggle sidebar
-  document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
-    document.getElementById("sidebar").classList.toggle("hidden");
-  });
-});
 */

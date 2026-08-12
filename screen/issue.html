@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Report an Issue</title>
+
+    <link rel="stylesheet" href="../dist/css/issue.min.css">
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <main class="issue-page">
+
+        <section class="issue-card">
+
+            <div class="header">
+
+                <div class="icon">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+
+                <h1>Report an Issue</h1>
+
+                <p>
+                    Help us improve this application by reporting
+                    any problem you experience.
+                </p>
+
+            </div>
+
+
+            <form id="issueForm">
+
+                <!-- Problem Type -->
+
+                <div class="form-group">
+
+                    <label for="issueType">
+                        Select Problem
+                    </label>
+
+                    <select id="issueType" required>
+
+                        <option value="">
+                            -- Select Issue --
+                        </option>
+
+                        <option value="Login Problem">
+                            Login Problem
+                        </option>
+
+                        <option value="Registration Problem">
+                            Registration Problem
+                        </option>
+
+                        <option value="OTP Issue">
+                            OTP Not Received
+                        </option>
+
+                        <option value="Application Crash">
+                            Application Crash
+                        </option>
+
+                        <option value="Website Slow">
+                            Website Running Slow
+                        </option>
+
+                        <option value="Loading Problem">
+                            Data Not Loading
+                        </option>
+
+                        <option value="Map Issue">
+                            Map Problem
+                        </option>
+
+                        <option value="Chat Issue">
+                            Chat Problem
+                        </option>
+
+                        <option value="Camera Issue">
+                            Camera Problem
+                        </option>
+
+                        <option value="Payment Issue">
+                            Payment Issue
+                        </option>
+
+                        <option value="Billing Issue">
+                            Billing Issue
+                        </option>
+
+                        <option value="Wrong Information">
+                            Wrong Information
+                        </option>
+
+                        <option value="Feature Request">
+                            Request New Feature
+                        </option>
+
+                        <option value="Security Issue">
+                            Security Issue
+                        </option>
+
+                        <option value="other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Other Problem -->
+
+                <div class="form-group hidden"
+                    id="otherProblemBox">
+
+                    <label>
+                        Enter Your Problem
+                    </label>
+
+                    <input
+                        type="text"
+                        id="otherProblem"
+                        maxlength="100"
+                        placeholder="Write your issue title">
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="form-group">
+
+                    <label>
+                        Describe the Issue
+                    </label>
+
+                    <textarea
+                        id="description"
+                        maxlength="500"
+                        rows="6"
+                        placeholder="Explain what happened, when it happened, and how we can reproduce the problem."
+                        required></textarea>
+
+                    <div class="counter">
+                        <span id="charCount">
+                            0
+                        </span>/500
+                    </div>
+
+                </div>
+
+
+                <!-- Screenshot -->
+
+                <div class="form-group">
+
+                    <label>
+                        Upload Screenshot (Optional)
+                    </label>
+
+                    <input
+                        type="file"
+                        id="screenshot"
+                        accept="image/*">
+
+                </div>
+
+
+                <!-- Preview -->
+
+                <div class="preview hidden"
+                    id="previewBox">
+
+                    <img
+                        id="previewImage"
+                        alt="Preview">
+
+                </div>
+
+
+                <!-- Loading -->
+
+                <div
+                    class="loading hidden"
+                    id="loading">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    Sending Report...
+
+                </div>
+
+
+                <!-- Message -->
+
+                <div
+                    id="responseMessage">
+
+                </div>
+
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="submit-btn">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Submit Report
+
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script src="../dist/js/issue.min.js"></script>
+
+</body>
+
+</html>

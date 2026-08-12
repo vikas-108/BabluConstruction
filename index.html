@@ -1,394 +1,1140 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BABLU Contractor Construction Service</title>
-    <link rel="icon" type="image/png" href="/favicon.png" />
-
-    <!-- Google Font -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BABLU CONTRACTOR CONSTRUCTION SERVICE — Conts&Build108</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css" />
-    
+    <link rel="stylesheet" href="dist/css/landing.min.css" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
   </head>
   <body>
-    <!-- ================= HEADER ================= -->
-    <header class="header">
-      <div id="toastContainer"></div>
-      <div class="container header-bar">
-        <!-- LEFT : LOGO -->
-        <div class="header-left">
-          <div class="brand-logo">108</div>
-        </div>
-
-        <!-- CENTER : APP NAME -->
-        <div class="header-center">
-          <h1 class="brand-name">BABLU<span>108</span></h1>
-        </div>
-
-        <!-- RIGHT : AUTH -->
-        <div class="header-right">
-          <button id="authBtn" class="auth-btn">Login / Sign Up</button>
-
-          <div id="userMenu" class="user-menu ">
-            <span id="userName"></span>
-            <div class="dropdown">
-              <button id="logoutBtn">Logout</button>
-            </div>
-          </div>
-        </div>
+    <header class="site-header" role="banner">
+      <!--<div class="brand" aria-hidden="false">
+      <div class="logo" aria-hidden="true">B</div>
+      <div class="brand-name">conts&build108</div>
+    </div>-->
+      <div class="brand">
+        <img src="./images/log.png" class="header-logo" />
       </div>
+
+      <nav class="header-actions" role="navigation" aria-label="Top actions">
+        <button class="btn btn-ghost" id="exploreBtn" type="button">
+          Explore
+        </button>
+
+        <!-- With this -->
+        <a id="authBtn" class="auth-btn">Login / Sign Up</a>
+      </nav>
     </header>
 
-    <!-- ================= HERO ================= -->
-    <section class="hero">
-      <div class="container hero-content">
-        <div class="brand-slogan">
-          <span class="slogan-en">YOUR FAITH, OUR BUILD POWER</span>
-          <span class="slogan-hi">आपका विश्वास, हमारी निर्माण शक्ति</span>
-        </div>
+    <main id="landingPage" role="main">
+      <section class="hero" aria-labelledby="hero-heading">
+        <div class="hero-overlay"></div>
 
-        <h2>Reliable Construction & Skilled Workforce</h2>
-        <p>
-          BABLU Contractor Construction Service delivers professional slab
-          shuttering, soil filling, technician supply, and labour services with
-          quality and transparency.
-        </p>
-      </div>
-    </section>
-    <!-- LANDING PAGE (visible before login) -->
-  <div id="landingPage">
-    <!-- FEATURES -->
-    <section class="features">
-      <h2>Our Services</h2>
-      <div class="feature-grid">
-        <div class="card">
-          <h3>🏗 Contractors</h3>
-          <p>Experienced professionals for every construction need.</p>
-        </div>
-        <div class="card">
-          <h3>🧱 Materials</h3>
-          <p>Reliable suppliers for cement, steel, and more.</p>
-        </div>
-        <div class="card">
-          <h3>👷 Skilled Labour</h3>
-          <p>Verified technicians and workforce at your service.</p>
-        </div>
-        <div class="card">
-          <h3>👷 Choice own need</h3>
-          <p>Verified technicians,helpers, contractors, architects, and workforce at your service.</p>
-        </div>
-        <div class="card">
-          <h3>Find Best</h3>
-          <p>Discover the best contractors and materials suppliers for your construction needs.</p>
-        </div>
-        <div class="card">
-          <h3>Transparent Pricing</h3>
-          <p>Competitive rates with no hidden costs.</p>
-        </div>
-         <div class="card">
-          <h3>Quality Assurance</h3>
-          <p>Skilled professionals ensuring high-quality workmanship.</p> 
-      </div>
-        <div class="card">
-            <h3>Customer Support</h3>
-            <p>Dedicated support team to assist you at every step.</p>
-          </div>
-          <div class="card">
-            <h3>Project Management</h3>
-            <p>End-to-end project execution with regular updates.</p>
-          </div>
-          <div class="card">
-            <h3>Safety Standards</h3>
-            <p>Adherence to safety protocols for a secure construction environment.</p> 
-            </div>
-    </section>
+        <div class="hero-left">
+          <span class="eyebrow"> WELCOME TO BUILDSKIL </span>
 
-    <!-- TESTIMONIALS -->
-    <section class="testimonials">
-      <h2>What Clients Say</h2>
-      <blockquote>
-        "BUILDSKIL completed our project on time with excellent quality. Highly recommended!"
-      </blockquote>
-      <blockquote>
-        "Transparent pricing and skilled workforce made our experience stress-free."
-      </blockquote>
-      <blockquote>
-        "The best platform to find reliable contractors, supplier, helpers, advisors and materials suppliers." 
-        </blockquote>
-        <blockquote>
-          - “Suppliers and especially manufacturers have market power because they have information about a product or a service that the customer does not.”
-        </blockquote>
-    </section>
-    
-    <!-- CTA -->
-    <section class="cta">
-      <h2>Ready to Build?</h2>
-      <p>Contact BABLU CONTRACTOR CONSTRUCTION SERVICE today and experience professional execution with transparency.</p>
-      
-    </section>
-  </div>
+          <h1 id="hero-heading">
+            Build Better.<br />
+            Hire Smarter.
+          </h1>
 
+          <p class="lead">
+            Find trusted Contractors, Electricians, Plumbers, Architects,
+            Labour, Material Suppliers and many more near your location.
+          </p>
 
-    <section id="appContent" >
-             <!---search code here and voice code -->
-       <div class="search-container">
-          <!-- <h2>Search Contractors & Materials</h2>-->
+          <div class="hero-ctas">
+            <button class="cta-btn cta-primary" id="heroLogin">
+              Get Started
+            </button>
 
-            <!-- SEARCH + VOICE -->
-        <div class="search-panel">
-          <!-- SEARCH ROW -->
-          <div class="search-top">
-             <div class="search-input-wrapper">
-              <input
-              type="text"
-              id="searchInput"
-              placeholder="Search mason, cement, Haryana, Panipat..."
-            />
-            <button id="voiceBtn" class="mic-btn" title="Voice Search">
-              🎤
+            <button class="cta-btn cta-secondary" id="learnMore">
+              Explore Services
             </button>
           </div>
 
-          <button class="filter-toggle hidden" id="filterToggle">
-            🔍 Filters
-          </button>
-          <button id="clearSearchBtn" class="clear-btn hidden">✖</button>
-        </div>
-        <!-- FILTERS (HIDDEN BY DEFAULT) -->
-        <div class="filter-box" id="filterBox">
-          <select id="categoryFilter">
-            <option value="">All Categories</option>
-            <option value="contractor">Contractor</option>
-            <option value="supplier">Supplier</option>
-            <option value="technician">Technician</option>
-            <option value="architecture">Architecture</option>
-            <option value="mechanic">Mechanic</option>
-            <option value="client">Client works</option>
-          </select>
-            <select id="role" >
-            <option value="">-- Select Role --</option>
-          </select>
-          <div class="search-select">
-            <input type="text" id="stateFilter" placeholder="Search State" />
-            <ul id="stateList" class="options"></ul>
-          </div>
-
-          <div class="search-select">
-            <input
-              type="text"
-              id="districtFilter"
-              placeholder="Search District"
-            />
-            <ul id="districtList" class="options"></ul>
-          </div>
-        </div>
-      </div>
-      <!--<div id="calcResult" class="calc-result hidden"></div>-->
-      <!-- RESULTS -->
-      <div class="results" id="results"></div>
-      <div id="pagination" class="pagination hidden"></div>
-      <div id="searchLoader" class="search-loader hidden">
-        <div class="loader-108">108</div>
-      </div>
-    </div>
-    
-          <div class="button-box">
-
-                           <!-- Header -->
-                   <div class="button-box-header">
-                      🚀 Tap Actions
-                 </div>
-
-                    <!-- Content -->
-                  <div class="button-box-content">
-                    <div class="hero-buttons" id="heroButtons">
-                     <a href="./screen/bhūgolapaṭa.html" class="btn primary">deśa-chitra</a>
-                     <a href="./screen/notebook.html" class="btn primary">Notebook</a>
-                     <a href="./screen/tmr.html" class="btn primary">TER</a>
-                     <a href="./screen/progrss.html" class="btn secondary">Stages</a>
-                    </div>
-                 </div>
-    
-          </div>
-
-         <div class="button-bvox">
-
-            <!-- Header -->
-            <div class="button-box-leader">
-                🚀 Use TABS
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <h2>15K+</h2>
+              <p>Users</p>
             </div>
-          <div class="button-box-contsent">
-           <div class="zero-buttons" id="zeroButtons">
-               <a href="./screen/invoice.html" class="btn tertiary">Invoice</a>
-              <a href="./screen/conversion.html" class="btn tertiary">U.C.</a>
-              <a href="./screen/createpad.html" class="btn tertiary">Arch.</a>
-              <a href="./screen/weather.html" class="btn tertiary">Weather</a>
-           </div>
+
+            <div class="hero-stat">
+              <h2>3500+</h2>
+              <p>Professionals</p>
+            </div>
+
+            <div class="hero-stat">
+              <h2>8K+</h2>
+              <p>Projects</p>
+            </div>
+
+            <div class="hero-stat">
+              <h2>4.9★</h2>
+              <p>Rating</p>
+            </div>
           </div>
         </div>
-        <!-- Chat Widget Container -->
-<div id="chat-widget">
-  <div id="chat-header">
-    <span>Chat Support</span>
-    <button id="close-chat">&times;</button>
-  </div>
-  
-  <div id="chat-log">
-    <!-- Messages appear here -->
-    <div class="bot-msg">Hi! Ask me about <b>costs</b>, <b>timelines</b>, or <b>services</b>.</div>
-    <h4>chat bot can make mistakes. please verify important information.</h4>
-  </div>
-  
-  <div id="chat-input-area">
-    <input type="text" id="user-input" placeholder="Type your question..." />
-    <button id="send-btn">Send</button>
-  </div>
-</div>
 
-<!-- Toggle Button (Floating) aidata.js -->
-<!-- Floating Action Buttons Container -->
-<div class="floating-actions-wrapper">
-    <!-- Chat Trigger -->
-    <button id="chat-toggle">
-        <span class="btn-icon">💬</span> <span class="btn-text"></span>
-    </button>
-    <!-- Voice Assistant Trigger -->
-    <div id="voice-activation-area">
-        <button id="start-voice-btn" class="voibtn" onclick="initializeVoiceSystem()">
-            <span class="btn-icon">🎤</span> <span class="btn-text"></span>
-        </button>
-    </div>
+        <div class="hero-right">
+          <img src="./images/front.png" alt="">
+<!--
+    <div class="construction-scene">
 
-</div>
+        <img
+            src="./images/left gate.png"
+            class="gate gate-left">
 
-<!-- Voice Status Bar (Repositioned to cleanly sit right above the tabs) -->
-<div id="voice-status-bar">
-    <span class="status-dot"></span>
-    <span id="voice-text">System Standby...</span>
-</div>
+        <img
+            src="images/right gate.png"
+            class="gate gate-right">
 
-  </section>
-    <section class="notifications" id="notification">
-      <div class="container">
-        <h2 class="section-title">Latest Updates</h2>
-        <ul class="notification-list" id="notificationList">
-          <!-- Updates will be injected here -->
-        </ul>
-      </div>
-    </section>
- 
-    <!-- ================= CTA ================= -->
-    <section class="cta" id="ctta">
-      <div class="container">
-        <h2>Looking for Trusted Construction Services?</h2>
-        <p>
-          Contact us today and experience professional execution with
-          transparency.
-        </p>
-        <div class="cta-actions">
-          <a href="privacy.html" class="cta-btn">Policy</a>
-          <a href="terms.html" class="cta-btn">Terms</a>
-         <!--- <a href="contact.html" class="cta-btn">Contact</a> -->
-          <a href="company-rules.html" class="cta-btn">Rules</a>
+        <img
+            src="images/man.png"
+            class="worker">
+
+        <img
+            src="images/crane.png"
+            class="crane">
+
+    </div>-->
+
         </div>
-      </div>
-    </section>
-    <!-- DESIGN MODAL full screen view -->
-    <div id="designModal" class="design-modal">
-      <span class="close-modal" onclick="closeDesignModal()">×</span>
 
-      <div class="modal-content">
-        <img id="designModalImage" src="" alt="Blueprint" />
+        <div class="scroll-down">↓</div>
+      </section>
 
-        <div class="modal-details">
-          <h2 id="modalTitle"></h2>
-          <p id="modalArea"></p>
-          <p id="modalType"></p>
+      <!-- ================= TRUST BAR ================= -->
 
-          <a id="modalDownload" class="download-btn" download>
-            ⬇ Download Blueprint
-          </a>
+<section class="trust-bar" id="testimonials-heading">
+
+    <div class="trust-container">
+
+        <div class="trust-item">
+            <div class="trust-icon">🛡️</div>
+            <div>
+                <h3>Verified Professionals</h3>
+                <p>Every professional is verified before joining.</p>
+            </div>
         </div>
-      </div>
+
+        <div class="trust-item">
+            <div class="trust-icon">📍</div>
+            <div>
+                <h3>Nearby Search</h3>
+                <p>Discover skilled workers around your location.</p>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <div class="trust-icon">⭐</div>
+            <div>
+                <h3>Ratings & Reviews</h3>
+                <p>Choose trusted professionals with confidence.</p>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <div class="trust-icon">🔒</div>
+            <div>
+                <h3>Secure Platform</h3>
+                <p>Your information and projects stay protected.</p>
+            </div>
+        </div>
+
     </div>
 
-    <!-- DESIGN theory MODAL full screen view -->
-    <div id="designTheoryModal" class="design-modal">
-      <span class="close-modal" onclick="closeDesignModal()">×</span>
-
-      <div class="modal-content">
-        <img id="modalImage" alt="Theory Image" />
-      </div>
-    </div>
-    <!----full screen view modal of media code -->
-    <div id="mediaModal" class="design-modal">
-      <span class="close-modal" onclick="closeDesignModal()">×</span>
-      <div class="modal-content">
-        <img id="mediaImage" style="display: none" />
-        <video id="mediaVideo" controls style="display: none"></video>
-      </div>
-    </div>
-    <!-- FULL SCREEN IMAGE MODAL -->
-    <div id="imageModal" class="image-modal">
-      <span class="modal-close" onclick="closeDesignModal()">×</span>
-      <img id="modalPhoto" alt="Preview" />
-    </div>
-   
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer">
-      <div class="container">
-        <p>
-          © 2025 BABLU Contractor Construction Service. "सर्वाधिकार सुरक्षिताः"
-        </p>
-      </div>
-    </footer>
-    <!-- Responsive Bottom Tab Bar -->
-     <section id="bottomNav">
-<nav class="bottom-nav" >
-    <a href="index.html" class="nav-item" id="nav-home">
-        <span class="nav-icon">⭐</span>
-        <span class="nav-label">Home</span>
-    </a>
-    <a href="create-profile.html" class="nav-item" id="nav-create">
-        <span class="nav-icon">➕</span>
-        <span class="nav-label">Create</span>
-        </a>
-     <a href="./screen/table.html" class="nav-item" id="nav-table">
-        <span class="nav-icon">📋</span>
-        <span class="nav-label">T.D.</span>
-     </a>
-     <a href="./screen/projects-reports.html" class="nav-item" id="nav-projects">
-        <span class="nav-icon">📊</span>
-        <span class="nav-label">Projects</span>
-     </a>
-    <a href="./screen/account.html" class="nav-item" id="nav-account">
-        <span class="nav-icon">⚙️</span>
-        <span class="nav-label">Account</span>
-    </a>
-</nav>
 </section>
+<!--==========================
+POPULAR SERVICES
+===========================-->
 
-    <script src="data/search-data.js"></script>
-    <script src="data/theory-data.js"></script>
-    <script src="data/design-data.js"></script>
-    <script src="data/media-data.js"></script>
-    <script src="data/math-formulas.js"></script>
-    <script src="data/kids-data.js"></script>
-    <script src="data/quiz.-data.js"></script>
-    <script src="data/aidata.js"></script>
-    <script src="data/voice-assistant.js"></script>
-    <script src="./js/screenshotProtector.js"></script>
-<script>
-  // One single line to activate
-  initScreenshotProtector();
-</script>
-<script src="login.js"></script>
-    <script src="web.js"></script>
+<section class="popular-services">
+
+<div class="section-title">
+
+<span>OUR SERVICES</span>
+
+<h2>
+Find the Right Professional
+for Every Construction Need
+</h2>
+
+<p>
+
+Hire trusted professionals with ratings, reviews,
+and verified experience.
+
+</p>
+
+</div>
+
+
+<div class="services-grid">
+
+<div class="service-card">
+
+<img src="./images/elect.jpeg">
+
+<div class="service-overlay">
+
+<h3>Electrician</h3>
+
+<p>
+
+House Wiring, Repair,
+Installation & Maintenance
+
+</p>
+
+<button>
+
+Explore
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="service-card">
+
+<img src="./images/plum.jpeg">
+
+<div class="service-overlay">
+
+<h3>Plumber</h3>
+
+<p>
+
+Bathroom Fittings,
+Pipeline & Water Systems
+
+</p>
+
+<button>
+
+Explore
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="service-card">
+
+<img src="./images/front.png">
+
+<div class="service-overlay">
+
+<h3>Contractor</h3>
+
+<p>
+
+Residential &
+Commercial Projects
+
+</p>
+
+<button>
+
+Explore
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="service-card">
+
+<img src="./images/painter.png">
+
+<div class="service-overlay">
+
+<h3>Painter</h3>
+
+<p>
+
+Interior &
+Exterior Painting
+
+</p>
+
+<button>
+
+Explore
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="service-card">
+
+<img src="./images/carpenter.png">
+
+<div class="service-overlay">
+
+<h3>Carpenter</h3>
+
+<p>
+
+Furniture &
+Wood Works
+
+</p>
+
+<button>
+
+Explore
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="service-card">
+
+<img src="./images/arch.png">
+
+<div class="service-overlay">
+
+<h3>Architect</h3>
+
+<p>
+
+Planning &
+Design Services
+
+</p>
+
+<button>
+
+Explore
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!--============================
+HOW BUILDSKIL WORKS
+=============================-->
+
+<section class="work-flow">
+
+<div class="workflow-title">
+
+<span>PROCESS</span>
+
+<h2>Build Your Project In 5 Easy Steps</h2>
+
+<p>
+
+Everything you need from finding professionals
+to completing your project.
+
+</p>
+
+</div>
+
+
+<div class="timeline">
+
+<div class="step">
+
+<div class="circle">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+</div>
+
+<h3>Search</h3>
+
+<p>
+
+Search nearby professionals.
+
+</p>
+
+</div>
+
+
+<div class="line"></div>
+
+
+<div class="step">
+
+<div class="circle">
+
+<i class="fa-solid fa-user-check"></i>
+
+</div>
+
+<h3>Select</h3>
+
+<p>
+
+Choose verified professionals.
+
+</p>
+
+</div>
+
+
+<div class="line"></div>
+
+
+<div class="step">
+
+<div class="circle">
+
+<i class="fa-solid fa-comments"></i>
+
+</div>
+
+<h3>Connect</h3>
+
+<p>
+
+Call or Chat instantly.
+
+</p>
+
+</div>
+
+
+<div class="line"></div>
+
+
+<div class="step">
+
+<div class="circle">
+
+<i class="fa-solid fa-list-check"></i>
+
+</div>
+
+<h3>Manage</h3>
+
+<p>
+
+Track work progress.
+
+</p>
+
+</div>
+
+
+<div class="line"></div>
+
+
+<div class="step">
+
+<div class="circle">
+
+<i class="fa-solid fa-house-circle-check"></i>
+
+</div>
+
+<h3>Complete</h3>
+
+<p>
+
+Finish with confidence.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<!--=================================
+EXPLORE PROFESSIONALS
+==================================-->
+
+<section class="professional-section">
+
+<div class="section-heading">
+
+<span class="spn">EXPLORE</span>
+
+<h2 class="h22">Find Professionals By Category</h2>
+
+<p class="para">
+
+Discover trusted experts for every stage of your
+construction project.
+
+</p>
+
+</div>
+
+
+<div class="professional-grid">
+
+<div class="professional-card">
+
+<div class="card-icon">
+<i class="fa-solid fa-bolt"></i>
+</div>
+
+<h3>Electrician</h3>
+
+<p>
+
+House Wiring
+
+Industrial Wiring
+
+Repair & Installation
+
+</p>
+
+<a href="#">Explore →</a>
+
+</div>
+
+
+<div class="professional-card">
+
+<div class="card-icon">
+<i class="fa-solid fa-faucet-drip"></i>
+</div>
+
+<h3>Plumber</h3>
+
+<p>
+
+Water Supply
+
+Pipeline
+
+Bathroom Fitting
+
+</p>
+
+<a href="#">Explore →</a>
+
+</div>
+
+
+<div class="professional-card">
+
+<div class="card-icon">
+<i class="fa-solid fa-building"></i>
+</div>
+
+<h3>Contractor</h3>
+
+<p>
+
+Residential
+
+Commercial
+
+Industrial
+
+</p>
+
+<a href="#">Explore →</a>
+
+</div>
+
+
+<div class="professional-card">
+
+<div class="card-icon">
+<i class="fa-solid fa-paint-roller"></i>
+</div>
+
+<h3>Painter</h3>
+
+<p>
+
+Interior
+
+Exterior
+
+Texture Paint
+
+</p>
+
+<a href="#">Explore →</a>
+
+</div>
+
+
+<div class="professional-card">
+
+<div class="card-icon">
+<i class="fa-solid fa-ruler-combined"></i>
+</div>
+
+<h3>Architect</h3>
+
+<p>
+
+Planning
+
+Elevation
+
+3D Design
+
+</p>
+
+<a href="#">Explore →</a>
+
+</div>
+
+
+<div class="professional-card">
+
+<div class="card-icon">
+<i class="fa-solid fa-truck"></i>
+</div>
+
+<h3>Transport</h3>
+
+<p>
+
+Truck
+
+Tractor
+
+Material Delivery
+
+</p>
+
+<a href="#">Explore →</a>
+
+</div>
+
+</div>
+
+</section>
+<!--====================================
+FEATURED PROJECTS
+=====================================-->
+
+<section class="featured-projects" id="features-heading">
+
+<div class="section-heading">
+
+<span class="spn">SUCCESS STORIES</span>
+
+<h2 class="h22">Featured Construction Projects</h2>
+
+<p class="para">
+Explore completed projects and connect with the professionals behind them.
+</p>
+
+</div>
+
+<div class="projects-grid">
+
+<div class="project-card">
+
+<div class="project-image">
+
+<img src="./images/ChatGPT Image.png" alt="Luxury House">
+
+<div class="project-badge">
+Completed
+</div>
+
+</div>
+
+<div class="project-content">
+
+<h3>Luxury Villa Construction</h3>
+
+<p>
+
+Modern residential villa completed with premium materials and skilled professionals.
+
+</p>
+
+<div class="project-meta">
+
+<span>📍 Haryana</span>
+
+<span>⭐ 4.9</span>
+
+<span>45 Days</span>
+
+</div>
+
+<a href="#" class="project-btn">
+
+View Project
+
+</a>
+
+</div>
+
+</div>
+
+
+
+<div class="project-card">
+
+<div class="project-image">
+
+<img src="./images/houAI.png" alt="Commercial Building">
+
+<div class="project-badge">
+
+Completed
+
+</div>
+
+</div>
+
+<div class="project-content">
+
+<h3>Commercial Office</h3>
+
+<p>
+
+Professional office construction with electrical, plumbing and interior work.
+
+</p>
+
+<div class="project-meta">
+
+<span>📍 Haryana</span>
+
+<span>⭐ 5.0</span>
+
+<span>60 Days</span>
+
+</div>
+
+<a href="#" class="project-btn">
+
+View Project
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!--==================================
+WHY BUILDSKIL
+===================================-->
+
+<section class="why-buildskil">
+
+<div class="section-heading">
+
+<span class="spn">WHY CHOOSE US</span>
+
+<h2 class="h22">
+One Platform.<br>
+Unlimited Construction Solutions.
+</h2>
+
+<p class="para">
+
+Everything from finding professionals to managing projects.
+
+</p>
+
+</div>
+
+
+<div class="why-wrapper">
+
+
+<div class="feature-column">
+
+<div class="feature-box">
+
+<i class="fa-solid fa-user-check"></i>
+
+<h3>Verified Professionals</h3>
+
+<p>
+
+Every professional is verified before joining.
+
+</p>
+
+</div>
+
+
+<div class="feature-box">
+
+<i class="fa-solid fa-location-dot"></i>
+
+<h3>Nearby Search</h3>
+
+<p>
+
+Find trusted professionals near your location.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<div class="center-worker">
+
+<img
+src="./images/man.png">
+
+</div>
+
+
+
+<div class="feature-column">
+
+<div class="feature-box">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+<h3>Secure Platform</h3>
+
+<p>
+
+Safe communication and protected data.
+
+</p>
+
+</div>
+
+
+
+<div class="feature-box">
+
+<i class="fa-solid fa-list-check"></i>
+
+<h3>Project Tracking</h3>
+
+<p>
+
+Manage every stage of your project.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!--==============================
+DASHBOARD PREVIEW
+===============================-->
+
+<section class="dashboard-preview">
+
+<div class="dashboard-content">
+
+<div class="dashboard-left">
+
+<span class="section-label">
+PLATFORM
+</span>
+
+<h2>
+
+Manage Every Construction Project
+From One Dashboard
+
+</h2>
+
+<p>
+
+Track workers, projects, materials, locations,
+documents, photos, progress and communication
+all in one secure platform.
+
+</p>
+
+<ul class="dashboard-list">
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Project Tracking
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Live Chat
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Location Management
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Worker Attendance
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Document Storage
+</li>
+
+<li>
+<i class="fa-solid fa-circle-check"></i>
+Photo Timeline
+</li>
+
+</ul>
+
+<button class="dashboard-btn" id="dashboardStart">
+
+Start Building
+
+</button>
+
+</div>
+
+
+
+<div class="dashboard-right">
+
+<div class="dashboard-screen">
+
+<img
+src="./images/front.png"
+alt="Dashboard Preview">
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!--====================================
+FINAL CTA
+=====================================-->
+
+<section class="final-cta">
+
+<div class="cta-background"></div>
+
+<div class="cta-content">
+
+<span class="cta-tag">
+
+LET'S BUILD TOGETHER
+
+</span>
+
+<h2>
+
+Your Next Construction Project
+Starts Here.
+
+</h2>
+
+<p>
+
+Whether you're building a home, managing a commercial project,
+or searching for trusted professionals, BuildSkil connects
+you with the right people.
+
+</p>
+
+<div class="cta-buttons">
+
+<button class="cta-main" id="ctaLogin">
+
+Join BuildSkil
+
+</button>
+
+<button class="cta-outline" id="contactBtn">
+
+Contact Us
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+<!--==================================
+FOOTER
+===================================-->
+
+<footer class="site-footer">
+
+<div class="footer-top">
+
+<div class="footer-brand">
+
+<h2>BuildSkil</h2>
+
+<p>
+
+Connecting contractors, professionals,
+workers and customers on one platform.
+
+</p>
+
+<div class="footer-social">
+
+<a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+
+<a href="#"><i class="fa-brands fa-instagram"></i></a>
+
+<a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+
+<a href="#"><i class="fa-brands fa-youtube"></i></a>
+
+</div>
+
+</div>
+
+
+
+<div class="footer-links">
+
+<h3>Company</h3>
+
+<a href="#">About</a>
+
+<a href="#">Careers</a>
+
+<a href="#">Privacy Policy</a>
+
+<a href="#">Terms & Conditions</a>
+
+</div>
+
+
+
+<div class="footer-links">
+
+<h3>Services</h3>
+
+<a href="#">Contractors</a>
+
+<a href="#">Electricians</a>
+
+<a href="#">Plumbers</a>
+
+<a href="#">Architects</a>
+
+<a href="#">Material Suppliers</a>
+
+</div>
+
+
+
+<div class="footer-links">
+
+<h3>Support</h3>
+
+<a href="#">Help Center</a>
+
+<a href="#">FAQ</a>
+
+<a href="#">Contact</a>
+
+<a href="#">Community</a>
+
+</div>
+
+
+
+<div class="footer-links">
+
+<h3>Contact</h3>
+
+<p>
+
+📞 +91 XXXXX XXXXX
+
+</p>
+
+<p>
+
+✉ support@buildskil.com
+
+</p>
+
+<p>
+
+📍 Haryana, India
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<div class="footer-bottom">
+
+<p>
+
+ © <span id="year"></span> BABLU CONTRACTOR CONSTRUCTION SERVICE.
+        "सर्वाधिकार सुरक्षिताः"
+
+</p>
+
+<button id="backToTop">
+
+↑
+
+</button>
+
+</div>
+
+</footer>
+     
+    </main>
+    <!--<script src="js/hero.js"></script>-->
+    <script src="dist/js/landing.min.js"></script>
   </body>
 </html>

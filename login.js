@@ -1,7 +1,7 @@
 const LOGIN_KEY = "cb_login_user";
 const USERS_KEY = "cb_users";
-//const LOGIN_API = "https://api.buildskil.com/api/auth/";
-const LOGIN_API = "http://localhost:5000/api/auth/";
+const LOGIN_API = "https://api.buildskil.com/api/auth/";
+//const LOGIN_API = "http://localhost:5000/api/auth/";
 // change if needed
 const COUNTRY_PHONE_RULES = {
   IN: {
@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const userMenu = document.getElementById("userMenu");
   const userName = document.getElementById("userName");
+  const passuse = document.querySelector(".passuse");
+  const togglePasscode = document.getElementById("togglePasscode");
+  const eyeIcon = document.getElementById("eyeIcon");
   const logoutBtn = document.getElementById("logoutBtn");
   const form = document.getElementById("loginForm");
   const welcomeBox = document.getElementById("welcomeBox");
@@ -67,9 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const subscriptionSection = document.getElementById("subscriptionSection");
   const notification = document.getElementById("notification");
   const appContent = document.getElementById("appContent");
-  const landingPage = document.getElementById("landingPage");
+  //const landingPage = document.getElementById("landingPage");
   const bottomNav = document.getElementById("bottomNav");
   const ctta = document.getElementById("ctta");
+  const submitBtn = document.getElementById("submitLogin");
   if (user && user.username) {
     // ✅ Logged in → show protected sections
     heroButtons?.classList.remove("hidden");
@@ -81,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     notification?.classList.remove("hidden");
     appContent?.classList.remove("hidden");
      bottomNav?.classList.remove("hidden");
-    landingPage?.classList.add("hidden");
+   // landingPage?.classList.add("hidden");
   } else {
     // ❌ Not logged in → keep hidden
     heroButtons?.classList.add("hidden");
@@ -93,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     notification?.classList.add("hidden");
     appContent?.classList.add("hidden");
     bottomNav?.classList.add("hidden");
-    landingPage?.classList.remove("hidden");
+  //  landingPage?.classList.remove("hidden");
   }
 
   // ---------------- NAVBAR LOGIC ----------------
@@ -125,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
 
     try {
-      await fetch("http://localhost:5000/api/auth/logout", {
+      await fetch("https://api.buildskil.com/api/auth/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -141,10 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (k.startsWith("searchState_")) localStorage.removeItem(k);
     });
 
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
   });
   authBtn?.addEventListener("click", () => {
-    window.location.href = "login.html";
+    window.location.href = "../login.html";
   });
 
   updateNavbarAuth();
@@ -232,6 +236,51 @@ document.addEventListener("DOMContentLoaded", () => {
     return masked + visible;
   }
 
+  if(passuse && togglePasscode && eyeIcon){
+    togglePasscode.addEventListener("click", () => {
+       
+        if (passuse.type === "password") {
+
+            passuse.type = "text";
+
+            eyeIcon.textContent = "🙈";
+
+            togglePasscode.setAttribute(
+                "aria-label",
+                "Hide passcode"
+            );
+
+        } else {
+
+            passuse.type = "password";
+
+            eyeIcon.textContent = "👁";
+
+            togglePasscode.setAttribute(
+                "aria-label",
+                "Show passcode"
+            );
+
+        }
+    })
+  }
+function startButtonLoading(button, text = "Loading...") {
+  button.disabled = true;
+  button.classList.add("loading");
+   //button.querySelector(".btn-text").textContent = text;
+  const btnText = button.querySelector(".btn-text");
+  if (btnText) btnText.textContent = text;
+  
+}
+
+function stopButtonLoading(button, text) {
+  button.disabled = false;
+  button.classList.remove("loading");
+//button.querySelector(".btn-text").textContent = text;
+  const btnText = button.querySelector(".btn-text");
+  if (btnText) btnText.textContent = text;
+}
+
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -268,6 +317,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fullPhone = `${rule.code}${phone}`;
     // call back end authorization point
     try {
+         // ✅ Start Loader
+    startButtonLoading(submitBtn);
       const res = await fetch(`${LOGIN_API}login`, {
         method: "POST",
         headers: {
@@ -296,11 +347,14 @@ document.addEventListener("DOMContentLoaded", () => {
        // localStorage.setItem("cb_token", data.token);
         //localStorage.setItem("cb_userId", data.user._id);   // ✅ store just the ID
       // redirect
-      window.location.href = "index.html";
+      window.location.href = "./landing.html";
     } catch (err) {
       console.error(err);
       alert("Server error");
-    }
+    }finally {
+    // ✅ Stop Loader (won't be seen if page redirects)
+    stopButtonLoading(submitBtn, "Login");
+}
   });
   const forgotBtn = document.getElementById("forgotBtn");
   if (forgotBtn) {
@@ -313,6 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
+        startButtonLoading(forgotBtn);
         const res = await fetch(`${LOGIN_API}forgot-username`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -331,7 +386,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (err) {
         console.error(err);
         alert("Server error");
-      }
+      }finally {
+    stopButtonLoading(forgotBtn, "Forgot Password");
+}
     };
   }
 
@@ -347,6 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
+         startButtonLoading(verifyBtn);
         const res = await fetch(`${LOGIN_API}verify-username-otp`, {
           method: "POST",
           headers: {
@@ -368,6 +426,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (err) {
         console.error(err);
         alert("Server error");
+      }finally{
+         stopButtonLoading(verifyBtn, "verifing");
       }
     };
   }
@@ -383,6 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
+        startButtonLoading(saveUsernameBtn);
         const res = await fetch(`${LOGIN_API}update-username`, {
           method: "POST",
           headers: {
@@ -407,6 +468,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (err) {
         console.error(err);
         alert("Server error");
+      }finally{
+         stopButtonLoading(saveUsernameBtn, "updating");
       }
     };
   }

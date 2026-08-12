@@ -5,26 +5,92 @@
   <title>Privacy Policy | BABLU Contractor Construction Service</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="dist/css/style.min.css">
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="dist/js/auth-guard.min.js"></script>
+    <style>
+    .section-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+.section-card h3 {
+    margin: 0 0 16px;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 240px;
+    min-height: 46px;
+
+    padding: 12px 20px;
+
+    background: #0d6efd;
+    color: #fff;
+    text-decoration: none;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    border-radius: 8px;
+    transition: background .2s ease, transform .2s ease;
+    box-sizing: border-box;
+}
+
+.home-btn:hover {
+    background: #0b5ed7;
+}
+
+.home-btn:active {
+    transform: scale(.98);
+}
+
+@media (max-width: 768px) {
+    .section-card {
+        padding: 16px;
+    }
+
+    .section-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .home-btn {
+        max-width: 100%;
+        font-size: 0.95rem;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-card {
+        padding: 14px;
+    }
+
+    .section-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .home-btn {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+}
+  </style>
 </head>
 <body>
-<!---
-<header class="header">
-  <div class="container header-flex">
-    <h1 class="logo">BABLU <span>Construction</span></h1>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="services.html">Services</a>
-      <a href="projects-reports.html">Projects</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </div>
-</header>-->
 
 <section class="page-hero">
   <div class="container">
@@ -38,6 +104,11 @@
   <button type="button" id="btn-hi" onclick="showPolicy('hi')">
     हिंदी
   </button>
+  <button>
+    <a href="/landing.html" class="home-btn">
+        Go to Home
+    </a>
+</button>
 </div>
 
 
@@ -388,7 +459,7 @@ function showPolicy(lang) {
   }
 }
 </script>
-<script src="./js/screenshotProtector.js"></script>
+<script src="dist/js/screenshotProtector.min.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();

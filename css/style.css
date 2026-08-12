@@ -4,12 +4,26 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-
-body {
-  background: #ffffff;
-  color: #333;
-  line-height: 1.6;
-}
+:root{
+      --bg:#f9fafb;
+      --primary:#2563eb;
+      --primary-600:#1e40af;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --glass: rgba(255,255,255,0.6);
+      --radius:12px;
+      --shadow: 0 6px 20px rgba(16,24,40,0.08);
+    }
+     html,body,#landingPage{height:100%}
+    body{
+      margin:0;
+      font-family:'Poppins',sans-serif;
+      background:linear-gradient(180deg,#f8fafc 0%,var(--bg) 100%);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
 
 .container {
   width: 90%;
@@ -276,7 +290,103 @@ form {
   color: #666;
   margin-top: 0.3rem;
 }
+#submitLogin {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 140px;
+    height: 45px;
+    cursor: pointer;
+}
 
+#submitLogin:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.btn-loader {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: btnSpin .7s linear infinite;
+}
+
+#submitLogin.loading .btn-loader {
+    display: inline-block;
+}
+
+#submitLogin.loading .btn-text {
+    content: "";
+}
+
+@keyframes btnSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(2px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.page-loader.active {
+    display: flex;
+}
+
+.loader-box {
+    text-align: center;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #ddd;
+    border-top: 6px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto 15px;
+}
+
+.loader-box p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.loading-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 170px;
+    height: 45px;
+    cursor: pointer;
+}
+
+.loading-btn:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.loading-btn.loading .btn-loader {
+    display: inline-block;
+}
 /* Button */
 form button {
   background: #0078d7;
@@ -2665,61 +2775,6 @@ cursor: pointer;
   margin-top: 20px;
 }
 
-/* Chat Window */
-#chat-widget {
-  display: none; /* Hidden by default */
-  position: fixed;
-  bottom: 80px;
-  right: 88px;
-  width: 300px;
-  height: 400px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  flex-direction: column;
-  z-index: 1000;
-  font-family: sans-serif;
-}
-.thinking {
-  font-style: italic;
-  font-size: 0.9rem;
-  color: #666;
-  background: #f0f0f0 !important;
-}
-#chat-header {
-  background: #333;
-  color: white;
-  padding: 10px;
-  border-radius: 10px 10px 0 0;
-  display: flex;
-  justify-content: space-between;
-}
-
-#chat-log {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-  background: #f9f9f9;
-}
-
-/* Message Bubbles */
-.user-msg { text-align: right; margin: 5px 0; }
-.user-msg span { background: #e0e0e0; padding: 8px; border-radius: 10px; display: inline-block; }
-
-.bot-msg { text-align: left; margin: 5px 0; }
-.bot-msg span, .bot-msg { background: #ff9800; color: white; padding: 8px; border-radius: 10px; display: inline-block; }
-h4 {
-  margin: 0;
-  font-size: 7px;
-  color:#334155;
-}
-#chat-input-area {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #eee;
-}
-
 #user-input { flex: 1; padding: 5px; }
 /* Fade In Animation for Answers */
 @keyframes fadeIn {
@@ -2730,36 +2785,6 @@ h4 {
 #chat-widget {
   display: none; /* JS toggles this to 'flex' */
 }
-/* 1. The Container */
-.loading-bubble {
-  background: #f1f1f1;
-  padding: 10px 15px;
-  border-radius: 15px 15px 15px 0; /* Bubble shape */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: fit-content;
-  margin: 5px 0;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-/* 2. The Bouncing Dots */
-.typing-indicator {
-  display: flex;
-  align-items: center;
-}
-
-.dot {
-  height: 8px;
-  width: 8px;
-  margin: 0 2px;
-  background-color: #ff9800; /* Orange Theme */
-  border-radius: 50%;
-  animation: bounce 1.4s infinite ease-in-out both;
-}
-
-.dot:nth-child(1) { animation-delay: -0.32s; }
-.dot:nth-child(2) { animation-delay: -0.16s; }
 
 @keyframes bounce {
   0%, 80%, 100% { transform: scale(0); }
@@ -3001,6 +3026,124 @@ h4 {
         transform: translateX(-50%);
         border-radius: 16px 16px 0 0; 
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* ===== HORIZONTAL ANCHOR ROW CONTAINER ===== */
+/* ===== HORIZONTAL ANCHOR ROW CONTAINER WITH CONTAINER STYLING ===== */
+.water-droplet-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Keeps link blocks strictly side-by-side in one row */
+    gap: 16px; /* Balance spacing between fluid droplets */
+    width: 100%;
+    max-width: 650px; /* Restricts stretching on wide laptop monitors */
+    margin: 20px auto;
+    padding: 0 16px; /* Increased slightly for look balance with rounded edges */
+    box-sizing: border-box;
+    
+    /* 🔥 New Layout Additions */
+    height: 76px;             /* Balanced height wrapper container profile */
+    align-items: center;      /* Centers droplet links vertically inside the blue bar */
+    
+    /* Background Properties */
+    background: #84c5f3;
+    border-radius: 25px;
+    box-shadow: 0 4px 14px rgba(132, 197, 243, 0.4); /* Matching color depth shadow */
+}
+
+/* ===== GLOSSY TRANSLUCENT ANCHOR DROPLET BASE ===== */
+.droplet-water-btn {
+    flex: 1; /* Splits the structural horizontal space perfectly 50/50 */
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    text-decoration: none; /* Removes standard anchor text underlines */
+    box-sizing: border-box;
+    white-space: nowrap; /* Prevents button labels from wrapping into two lines */
+    touch-action: manipulation; /* Remediates touch gesture latency delays on cell phones */
+    
+    /* Premium Ocean Typography Styling */
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e40af; 
+    
+    /* Asymmetrical Organic Water Droplet Curves */
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    
+    /* 🧊 THE WATER TECHNIQUE: Blends Inset Core Shadows with Light Reflections */
+    background: linear-gradient(135deg, rgba(139, 54, 236, 0.73) 0%, rgba(219,234,254,0.42) 100%);
+    box-shadow: 
+        inset -6px -6px 12px rgba(0, 0, 0, 0.05),     /* Internal dark shadow mimics liquid depth */
+        inset 6px 6px 12px rgba(255, 255, 255, 0.95),  /* High gloss edge refraction flare */
+        0 8px 16px rgba(147, 197, 253, 0.35),          /* Smooth ambient shadow under drop */
+        0 2px 4px rgba(30, 64, 175, 0.1);              /* Grounded high-contrast anchor contact point shadow */
+        
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.2s ease, 
+                border-radius 0.2s ease,
+                background-color 0.2s ease;
+}
+
+/* Vector Graphic Sizing and Alignment Standardizer */
+.droplet-water-btn i {
+    font-size: 1.15rem;
+    color: #2563eb; 
+    line-height: 1;
+    display: inline-block;
+}
+
+/* ===== ANIMATED LIQUID INTERACTIONS ===== */
+
+/* Desktop Hover (Mouse Cursors) */
+@media (hover: hover) {
+    .droplet-water-btn:hover {
+        /* Distorts curves smoothly on hover to mimic fluid ripple physics */
+        border-radius: 58% 42% 58% 42% / 42% 58% 42% 58%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(191,219,254,0.65) 100%);
+        box-shadow: 
+            inset -4px -4px 8px rgba(0, 0, 0, 0.03),
+            inset 4px 4px 8px rgba(255, 255, 255, 1),
+            0 12px 20px rgba(147, 197, 253, 0.45);
+        transform: translateY(-2.5px); /* Elegant hovering lift effect */
+    }
+}
+
+/* Mobile Screen Press/Tap Feedback */
+.droplet-water-btn:active {
+    transform: scale(0.95) translateY(1px); /* Compresses liquid mass under touch pressure */
+    border-radius: 46% 46% 46% 46% / 48% 48% 48% 48%;
+    box-shadow: 
+        inset 4px 4px 8px rgba(0, 0, 0, 0.08), /* Inverts lighting calculations to show compressions */
+        inset -4px -4px 8px rgba(255, 255, 255, 0.6),
+        0 4px 8px rgba(147, 197, 253, 0.2);
+}
+
+/* ===== MOBILE SMARTPHONE BREAKPOINTS ===== */
+@media (max-width: 480px) {
+      .water-droplet-row {
+        height: 66px;         /* Sleeker, thinner height to save screen space on phones */
+        gap: 12px;            /* Tighter gap padding for narrow mobile views */
+        padding: 0 12px;
+        border-radius: 20px;  /* Slighly sharper edges match tiny phone display areas better */
+    }
+    
+    .droplet-water-btn {
+        height: 46px; /* Native human fingertip touch-target height guidelines */
+        font-size: 0.82rem; 
+        gap: 5px;
+        border-radius: 50% 50% 50% 50% / 56% 56% 44% 44%;
+        box-shadow: 
+            inset -4px -4px 8px rgba(0, 0, 0, 0.05),
+            inset 4px 4px 8px rgba(255, 255, 255, 0.9),
+            0 6px 12px rgba(147, 197, 253, 0.28);
+    }
+    
+    .droplet-water-btn i {
+        font-size: 1rem;
     }
 }
 

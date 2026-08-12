@@ -7,28 +7,119 @@
   <title>Responsive Dynamic Table</title>
    <!-- Add Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="../css/table.css">
+  <link rel="stylesheet" href="../dist/css/table.min.css"/>
+  <link rel="stylesheet" href="../dist/css/loader.min.css"/>
+  
    <!-- Prevents unauthenticated users from seeing a flash of content -->
   <script>document.documentElement.style.visibility = 'hidden';</script>
   
   <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
+  <script src="../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
   <div class="container">
     <div id="toastContainer"></div>
-    <h2>Create Your work list</h2>
+   <div class="page-header">
+    <span class="back-btn" onclick="goBack()">←</span>
+    <h2>T.DATA</h2>
+</div>
     <input type="text" id="tableTitle" placeholder="Enter title">
     <button id="createBtn">Create Table</button>
      <div id="tableLimitInfo" class="table-limit"></div>
     <div id="tablesWrapper"></div>
   </div>
+
+  <!-- ================= SHARE TABLE MODAL ================= -->
+<div id="shareModal" class="share-modal">
+
+  <div class="share-modal-content">
+
+    <!-- Header -->
+    <div class="share-header">
+      <h3><i class="fa-solid fa-share-nodes"></i> Share Table</h3>
+
+      <button id="closeShareModal" class="close-share">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Phone -->
+    <div class="share-input-group">
+
+      <label>Phone Number</label>
+
+      <input
+        type="tel"
+        id="sharePhone"
+        placeholder="Enter registered phone number">
+
+    </div>
+
+    <!-- Permission -->
+    <div class="share-input-group">
+
+      <label>Permission</label>
+
+      <select id="sharePermission">
+        <option value="view">Can View</option>
+        <option value="edit">Can Edit</option>
+      </select>
+
+    </div>
+
+    <!-- Share Button -->
+    <button id="shareNowBtn" class="share-btn">
+      <i class="fa-solid fa-paper-plane"></i>
+      Share
+    </button>
+
+    <hr>
+
+    <!-- Shared Users -->
+    <div class="shared-users">
+
+      <h4>Shared With</h4>
+
+      <div id="sharedUsersList">
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+  <!-- Instructional Guide Panel Grid 
+<div class="table-instructions-card">
+    <h3><i class="bi bi-info-circle-fill"></i> How to use Live Collaborative Tables:</h3>
+    <ul class="instructions-list">
+        <li>
+            <i class="bi bi-hand-index-thumb-fill"></i>
+            <div><strong>Select Any Cell:</strong> Tap or click on any spreadsheet coordinate grid block to highlight your focus area zone.</div>
+        </li>
+        <li>
+            <i class="bi bi-lightning-charge-fill"></i>
+            <div><strong>Real-Time View Indicators:</strong> When coworkers type, you will instantly see a flashing blue border highlight with their name tag.</div>
+        </li>
+        <li>
+            <i class="bi bi-shield-lock-fill"></i>
+            <div><strong>Typing Protection Locks:</strong> The system automatically blocks incoming refreshes from erasing or moving your active keyboard focus cursor.</div>
+        </li>
+        <li>
+            <i class="bi bi-cloud-check-fill"></i>
+            <div><strong>Automatic Auto-Saves:</strong> Clicking completely outside of your active row box updates the permanent cloud database database safely.</div>
+        </li>
+    </ul>
+</div>-->
+
+
    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-   <script src="../js/screenshotProtector.js"></script>
+   <script src="../dist/js/screenshotProtector.min.js"></script>
+   <script src="../dist/js/loader.min.js"></script>
 <script>
   // One single line to activate
   initScreenshotProtector();
 </script>
-  <script src="../js/table.js"></script>
+  <script src="../dist/js/table.min.js"></script>
 </body>
 </html>

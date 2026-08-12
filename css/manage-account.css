@@ -150,7 +150,81 @@ button:hover {
   font-size: 1.2rem;
   cursor: pointer;
 }
+.section-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
 
+.section-card h3 {
+    margin: 0 0 16px;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 240px;
+    min-height: 46px;
+
+    padding: 12px 20px;
+
+    background: #0d6efd;
+    color: #fff;
+    text-decoration: none;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    border-radius: 8px;
+    transition: background .2s ease, transform .2s ease;
+    box-sizing: border-box;
+}
+
+.home-btn:hover {
+    background: #0b5ed7;
+}
+
+.home-btn:active {
+    transform: scale(.98);
+}
+
+@media (max-width: 768px) {
+    .section-card {
+        padding: 16px;
+    }
+
+    .section-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .home-btn {
+        max-width: 100%;
+        font-size: 0.95rem;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-card {
+        padding: 14px;
+    }
+
+    .section-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .home-btn {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+}
 /* Buttons */
 .account-modal-box button {
   width: 100%;
@@ -406,4 +480,298 @@ button:hover {
   background:#f1f5f9;
   cursor:not-allowed;
   opacity:0.7;
+}
+/* auto deletion of acc css code */
+/* ===========================
+   AUTO DELETE ACCOUNT CARD
+=========================== */
+
+.delete-setting-card{
+    width:100%;
+    max-width:700px;
+    margin:24px auto;
+    background:#fff;
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+.delete-setting-card h3{
+    color:#222;
+    font-size:1.5rem;
+    margin-bottom:12px;
+    line-height:1.3;
+    word-break:break-word;
+}
+
+.delete-info{
+    color:#666;
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:22px;
+}
+
+.delete-setting-card label{
+    display:block;
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:10px;
+    color:#333;
+}
+
+#deleteAfter{
+    width:100%;
+    min-height:48px;
+    padding:12px 14px;
+    border:1px solid #d7d7d7;
+    border-radius:10px;
+    outline:none;
+    background:#fff;
+    font-size:15px;
+    margin-bottom:18px;
+    transition:.25s;
+}
+
+#deleteAfter:focus{
+    border-color:#0066ff;
+    box-shadow:0 0 0 3px rgba(0,102,255,.12);
+}
+
+.last-active{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+    color:#555;
+    margin-bottom:20px;
+    line-height:1.6;
+}
+
+#saveDeleteSetting{
+    width:100%;
+    min-height:48px;
+    border:none;
+    border-radius:10px;
+    background:#0066ff;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+#saveDeleteSetting:hover{
+    background:#0052d6;
+}
+
+#saveDeleteSetting:active{
+    transform:scale(.98);
+}
+
+/* ===========================
+        TABLET
+=========================== */
+
+@media (max-width:992px){
+
+    .delete-setting-card{
+        max-width:95%;
+        padding:22px;
+    }
+
+}
+
+/* ===========================
+        MOBILE
+=========================== */
+
+@media (max-width:768px){
+
+    .delete-setting-card{
+        max-width:100%;
+        margin:16px;
+        padding:18px;
+        border-radius:14px;
+    }
+
+    .delete-setting-card h3{
+        font-size:1.3rem;
+    }
+
+    .delete-info{
+        font-size:14px;
+    }
+
+    #deleteAfter{
+        font-size:14px;
+        min-height:46px;
+    }
+
+    #saveDeleteSetting{
+        font-size:15px;
+        min-height:46px;
+    }
+
+}
+
+/* ===========================
+      SMALL PHONES
+=========================== */
+
+@media (max-width:480px){
+
+    .delete-setting-card{
+        margin:10px;
+        padding:15px;
+        border-radius:12px;
+    }
+
+    .delete-setting-card h3{
+        font-size:1.15rem;
+    }
+
+    .delete-info{
+        font-size:13px;
+        line-height:1.6;
+    }
+
+    .delete-setting-card label{
+        font-size:14px;
+    }
+
+    #deleteAfter{
+        font-size:14px;
+        padding:10px 12px;
+    }
+
+    .last-active{
+        font-size:13px;
+    }
+
+    #saveDeleteSetting{
+        font-size:14px;
+        padding:12px;
+    }
+
+}
+
+/* ===========================
+      LARGE DESKTOP
+=========================== */
+
+@media (min-width:1400px){
+
+    .delete-setting-card{
+        max-width:760px;
+    }
+
+}
+/* ===========================
+   TOAST NOTIFICATION
+=========================== */
+
+#toastContainer{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:999999;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    pointer-events:none;
+}
+
+.toast{
+
+    min-width:280px;
+    max-width:420px;
+
+    padding:14px 18px;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+
+    transform:translateX(120%);
+
+    opacity:0;
+
+    transition:.35s ease;
+
+    pointer-events:auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+
+}
+
+.toast.show{
+
+    transform:translateX(0);
+
+    opacity:1;
+
+}
+
+.toast.success{
+
+    background:#16a34a;
+
+}
+
+.toast.error{
+
+    background:#dc2626;
+
+}
+
+.toast.warning{
+
+    background:#f59e0b;
+
+}
+
+.toast.info{
+
+    background:#2563eb;
+
+}
+
+.toast-close{
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+@media(max-width:600px){
+
+    #toastContainer{
+
+        left:15px;
+        right:15px;
+        top:15px;
+
+    }
+
+    .toast{
+
+        min-width:100%;
+        max-width:100%;
+
+    }
+
 }

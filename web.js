@@ -7,6 +7,7 @@ const districtFilter = document.getElementById("districtFilter");
 const PAGE_SIZE = 20;
 let currentPage = 1;
 let lastSearchResults = [];
+let activeRequests = 0;
 const SERVER_BASE = "https://api.buildskil.com";
 const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
 //const SERVER_BASE = "http://localhost:5000";
@@ -556,7 +557,9 @@ const updates = [
   "🚀 New feature launched: search engine",
   "📢 Scheduled maintenance on 29 August",
   "🎨 Updated design and notebook guidelines available",
-  "🔧 chat bot improvement on going ",
+  "📢 C.P. for contractor, tech, helper & others create profiles",
+  "📢 A.P. for client add project profile ",
+  "🔧 chat bot improvement is stll working  ",
 ];
 
 const notificationList = document.getElementById("notificationList");
@@ -852,8 +855,24 @@ function prevPage() {
     renderPage();
   }
 }
+const originalFetch = window.fetch;
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
 async function fetchPublishedProfiles() {
   try {
+    
     const res = await fetch(PROFILE_API);
     const data = await res.json();
 
@@ -866,9 +885,11 @@ async function fetchPublishedProfiles() {
       rating: p.rating,
       experience: p.experience,
       category: p.category || "contractor",
-      image: p.mediaType === "image" ? SERVER_BASE + p.media : "",
+      //image: p.mediaType === "image" ? SERVER_BASE + p.media : "",
+      //video: p.mediaType === "video" ? SERVER_BASE + p.media : "",
+      image: p.mediaType === "image" ? p.media : "",
 
-      video: p.mediaType === "video" ? SERVER_BASE + p.media : "",
+      video: p.mediaType === "video" ? p.media : "",
       languages: p.languages,
       phone: p.phone,
       description: p.description,

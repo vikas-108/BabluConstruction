@@ -1,123 +1,189 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Multi-Page Digital Notebook</title>
-     <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-   <link
+    <link rel="preconnect" href="https://googleapis.com" />
+    <link rel="preconnect" href="https://gstatic.com" crossorigin />
+    <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../css/notebook.css">
+    <link rel="stylesheet" href="../dist/css/notebook.min.css" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <!-- Prevents unauthenticated users from seeing a flash of content -->
-  <script>document.documentElement.style.visibility = 'hidden';</script>
-  
-  <!-- Your common auth guard -->
-  <script src="/js/auth-guard.js"></script>
-</head>
-<body>
-    
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+  </head>
+  <body>
     <!-- Dashboard Container Screen -->
     <div id="dashboard-view" class="dashboard animate-fade">
-        <!-- NEW THEME SWITCH ROW -->
-        <div class="dashboard-header">
-            <h2>Digital Bookshelf</h2>
-            <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Dark/Light Mode">🌙</button>
+      <!-- NEW THEME SWITCH ROW -->
+      <div class="dashboard-header">
+        <h2 class="back-title">← Digital Bookshelf</h2>
+        <button
+          id="theme-toggle-btn"
+          class="theme-toggle-btn"
+          title="Toggle Dark/Light Mode"
+        >
+          🌙
+        </button>
+      </div>
+
+      <!-- Notebook Creator Configuration Board -->
+      <div class="creator-box">
+        <div class="color-picker-wrapper">
+          <label>Pick Notebook Cover Color:</label>
+          <div class="color-options">
+            <div class="color-dot active" data-color="#2c3e50"></div>
+            <div class="color-dot" data-color="#9b59b6"></div>
+            <div class="color-dot" data-color="#e67e22"></div>
+            <div class="color-dot" data-color="#1abc9c"></div>
+            <div class="color-dot" data-color="#c0392b"></div>
+          </div>
         </div>
-        
-        <!-- Notebook Creator Configuration Board -->
-        <div class="creator-box">
-            <div class="color-picker-wrapper">
-                <label>Pick Notebook Cover Color:</label>
-                <div class="color-options">
-                    <div class="color-dot active" data-color="#2c3e50"></div>
-                    <div class="color-dot" data-color="#9b59b6"></div>
-                    <div class="color-dot" data-color="#e67e22"></div>
-                    <div class="color-dot" data-color="#1abc9c"></div>
-                    <div class="color-dot" data-color="#c0392b"></div>
-                </div>
-            </div>
-            <button id="add-notebook-btn" class="add-btn">➕ Add New Notebook</button>
-        </div>
-        
-        <!-- Saved Workspace Display Section -->
-        <div class="saved-section">
-            <h3>Your Saved Notebooks</h3>
-            <!-- NEW FEATURE: Live Dynamic Content Search Bar -->
-            <input type="text" id="search-bar" placeholder="🔍 Search notes title or page contents..." class="search-input">
-            <div id="notebooks-list" class="notebooks-list"></div>
-        </div>
+        <button id="add-notebook-btn" class="add-btn">
+          ➕ Add New Notebook
+        </button>
+      </div>
+
+      <!-- Saved Workspace Display Section -->
+      <div class="saved-section">
+        <h3>Your Saved Notebooks</h3>
+        <!-- NEW FEATURE: Live Dynamic Content Search Bar -->
+        <input
+          type="text"
+          id="search-bar"
+          placeholder="🔍 Search notes title or page contents..."
+          class="search-input"
+        />
+        <div id="notebooks-list" class="notebooks-list"></div>
+      </div>
     </div>
 
     <!-- Interactive Notebook Page Sheet View -->
     <div id="notebook-view" class="notebook-container hidden">
-        <button id="prev-btn" class="nav-btn left-nav" aria-label="Previous Page">❮</button>
+      <button id="prev-btn" class="nav-btn left-nav" aria-label="Previous Page">
+        ❮
+      </button>
 
-        <div id="notebook-spine" class="notebook">
-            <div class="binding">
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-            </div>
-
-            <div id="paper-page" class="page">
-                <div class="margin-line"></div>
-                <div class="content">
-                    <!-- NEW VISUAL FEEDBACK: Auto-saving indicator badge -->
-                    <div id="save-status" class="save-status">Saved</div>
-                    <input type="text" id="note-title" placeholder="Notebook Title..." class="note-title">
-                    <textarea id="note-content" placeholder="Type your text content onto the lines here..." class="note-body"></textarea>
-                    <div class="page-footer">
-                        <div id="counter-stats" class="counter-stats">Words: 0 | Chars: 0</div>
-                        <div class="font-toggle-box">
-                            <label for="font-select">Font:</label>
-                            <select id="font-select" class="font-dropdown">
-                               <option value="font-handwriting">Handwriting</option>
-                               <option value="font-typewriter">Typewriter</option>
-                            </select>
-                        </div>
-                        <div id="page-number" class="page-number">Page 1</div>
-                    </div>
-                </div>
-            </div>
+      <div id="notebook-spine" class="notebook">
+        <div class="binding">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
         </div>
 
-        <button id="next-btn" class="nav-btn right-nav" aria-label="Next Page">❯</button>
+        <div id="paper-page" class="page">
+          <div class="margin-line"></div>
+          <div class="content">
+            <!-- NEW VISUAL FEEDBACK: Auto-saving indicator badge -->
+            <div id="save-status" class="save-status">Saved</div>
+            <input
+              type="text"
+              id="note-title"
+              placeholder="Notebook Title..."
+              class="note-title"
+            />
+            <textarea
+              id="note-content"
+              placeholder="Type your text content onto the lines here..."
+              class="note-body"
+            ></textarea>
+            <div class="page-footer">
+              <div id="counter-stats" class="counter-stats">
+                Words: 0 | Chars: 0
+              </div>
+              <div class="font-toggle-box">
+                <label for="font-select">Font:</label>
+                <select id="font-select" class="font-dropdown">
+                  <option value="font-handwriting">Handwriting</option>
+                  <option value="font-typewriter">Typewriter</option>
+                </select>
+              </div>
+              <div id="page-number" class="page-number">Page 1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="next-btn" class="nav-btn right-nav" aria-label="Next Page">
+        ❯
+      </button>
     </div>
 
     <!-- Responsive Action Controls Row Below -->
     <div id="controls-row" class="controls hidden">
-        <button id="back-btn" class="action-btn back-btn">⬅️ Exit Back</button>
-       <!-- NEW ACTION ELEMENT: Print & PDF export pipeline -
+      <button id="back-btn" class="action-btn back-btn">⬅️ Exit Back</button>
+      <!-- NEW ACTION ELEMENT: Print & PDF export pipeline -
         <button id="print-btn" class="action-btn print-btn">🖨️ Export PDF / Print</button>-->
-        <button id="clear-btn" class="action-btn clear-btn">🗑️ Clear Sheet</button>
+      <button id="clear-btn" class="action-btn clear-btn">
+        🗑️ Clear Sheet
+      </button>
     </div>
     <div id="share-drawer-overlay" class="drawer-overlay hidden">
-    <div id="share-drawer" class="share-drawer">
+      <div id="share-drawer" class="share-drawer">
         <div class="drawer-header">
-            <h3>Share Notebook</h3>
-            <button id="close-drawer-btn">✖</button>
+          <h3>Share Notebook</h3>
+          <button id="close-drawer-btn">✖</button>
         </div>
         <div class="drawer-body">
-            <label for="share-phone">User Phone Number:</label>
-            <input type="tel" id="share-phone" placeholder="Enter recipient's phone number" maxlength="10" required />
-            
-            <label for="share-access">Access Level:</label>
-            <select id="share-access">
-                <option value="read">Read Only</option>
-                <option value="edit">Edit Only</option>
-            </select>
-            
-            <button id="send-share-btn">Send Access</button>
-        </div>
-    </div>
-</div>
+          <label for="share-phone">User Phone Number:</label>
+          <input
+            type="tel"
+            id="share-phone"
+            placeholder="Enter recipient's phone number"
+            maxlength="10"
+            required
+          />
 
-    <script src="/js/notebook.js"></script>
-</body>
+          <label for="share-access">Access Level:</label>
+          <select id="share-access">
+            <option value="read">Read Only</option>
+            <option value="edit">Edit Only</option>
+          </select>
+
+          <button id="send-share-btn">
+            <i class="fa-solid fa-paper-plane"></i>
+            Share Notebook
+          </button>
+
+          <hr class="share-divider" />
+
+          <div class="shared-users-section">
+            <h4>People with Access</h4>
+
+            <div id="shared-users-list">
+              <button 
+              class="remove-share-btn" 
+              data-user="${user._id}">
+                <i class="fa-solid fa-trash"></i>
+                 <span>Remove</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pageLoader" class="page-loader">
+      <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Please wait...</p>
+      </div>
+    </div>
+    <div id="toast-container"></div>
+    <script src="../dist/js/notebook.min.js"></script>
+    <script src="../dist/js/screenshotProtector.min.js"></script>
+    <script>
+      // One single line to activate
+      initScreenshotProtector();
+    </script>
+  </body>
 </html>

@@ -109,6 +109,7 @@ document.getElementById("createChannelBtn").onclick = async () => {
   }
 
   try{
+    showLoader("Creating...");
     await api("/create", {
       method:"POST",
       body: JSON.stringify({ role, clientPhone, updaterPhone })
@@ -125,27 +126,33 @@ document.getElementById("createChannelBtn").onclick = async () => {
 
   }catch(err){
     showToast(err.message);
+  }finally{
+    hideLoader();
   }
 };
 async function fetchMyChannels(){
   try{
+    showLoader("Loading...");
     const channels = await api("/my");
 
     renderChannels(channels);
 
   }catch(err){
     showToast(err.message);
+  }finally{
+    hideLoader();
   }
 }
 async function fetchMyAccount(){ 
   try{
+    showLoader("Fetching...");
     const res = await fetch(`${ACCOUNT_API}/api/account/me`, {
       headers: authHeaders()
     });
 
     const account = await res.json();
 
-    console.log("ACCOUNT:", account);
+    //console.log("ACCOUNT:", account);
 
     CURRENT_ROLE = (account.role || "").toLowerCase();
      CURRENT_PHONE = account.phone || "";
@@ -157,6 +164,8 @@ async function fetchMyAccount(){
     applyRoleUI(account);
   }catch(err){
     console.error(err);
+  }finally{
+    hideLoader();
   }
 }
 function applyRoleUI(account){
@@ -192,6 +201,7 @@ async function renderClientFromAccount(){
   if(!CURRENT_PHONE) return;
 
   try{
+
     const data = await api(`/client/${CURRENT_PHONE}`); // ✅ use api()
 
     renderClientList(data);
@@ -246,6 +256,7 @@ function renderChannels(data){
       if(canToggle){
         div.querySelector("button").onclick = async ()=>{
           try{
+            showLoader("Loading...");
             await api(`/${ch._id}/stage`, {
               method:"PATCH",
               body: JSON.stringify({ stageIndex: i })
@@ -255,6 +266,8 @@ function renderChannels(data){
 
           }catch(err){
             showToast(err.message);
+          }finally{
+            hideLoader();
           }
         };
       }
@@ -292,6 +305,7 @@ async function deleteRecord(event, id) {
     if (!confirm("Are you sure you want to delete this record?")) return;
 
     try {
+      showLoader("Deleting...");
         // Call your Node.js API
         const response = await fetch(`${API_BASE}/delete/${id}`, {
             method: 'DELETE',
@@ -318,6 +332,8 @@ async function deleteRecord(event, id) {
     } catch (err) {
         console.error(err);
         alert("Failed to connect to server.");
+    }finally{
+      hideLoader();
     }
 }
 
@@ -400,6 +416,25 @@ document.getElementById("clientViewBtn").onclick = async () => {
     showToast("Error loading");
   }
 };
+document.querySelectorAll(".back-title").forEach(el => {
+        el.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
+const pageLoader = document.getElementById("pageLoader");
+
+function showLoader(message = "Please wait...") {
+    pageLoader.querySelector("p").textContent = message;
+    pageLoader.classList.add("active");
+}
+
+function hideLoader() {
+    pageLoader.classList.remove("active");
+}
 async function init(){
   await fetchMyAccount();
 

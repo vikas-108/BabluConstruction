@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
-    <link rel="stylesheet" href="../css/weather.css">
+    <link rel="stylesheet" href="../dist/css/weather.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="/favicon.png" />
 </head>
@@ -12,6 +12,9 @@
   <div class="weather-app">
         <!-- Search Section -->
         <div class="search-container">
+             <button class="header-back-btn" onclick="goBack()" aria-label="Go Back">
+        ←
+    </button>
             <input type="text" id="city-input" placeholder="Enter City (e.g. Pune, IN)" autocomplete="off">
             <button onclick="getWeather()">🔍</button>
             <button onclick="getGeoLocation()" title="Use My Current Location">📍</button>
@@ -63,6 +66,6 @@
     </div>
 
 
-<script src="../js/weather.js"></script>
+<script src="../dist/js/weather.min.js"></script>
 </body>
 </html>

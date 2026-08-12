@@ -4,6 +4,7 @@ const SERVER_BASE = "https://api.buildskil.com";
 //const SERVER_BASE = "http://localhost:5000"; // change if using domain
 let EDIT_PROFILE_ID = null;
 let ORIGINAL_MEDIA = null;
+let activeRequests = 0;
 function authHeaders() {
   return {
     Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -413,10 +414,10 @@ stateInput.addEventListener("change", () => {
 
       <div class="profile-media">
         ${
-          p.mediaType === "video"
-            ? `<video src="${SERVER_BASE + p.media}" controls></video>`
-            : `<img src="${SERVER_BASE + p.media}?v=${Date.now()}" />`
-        }
+  p.mediaType === "video"
+    ? `<video src="${p.media}" controls></video>`
+    : `<img src="${p.media}" />`
+}
       </div>
 
       <div class="profile-body">
@@ -504,7 +505,8 @@ stateInput.addEventListener("change", () => {
       if (profile.album && profile.album.length) {
         profile.album.forEach((img) => {
           const imageEl = document.createElement("img");
-          imageEl.src = SERVER_BASE + img;
+          imageEl.src = img.url;
+         // imageEl.src = SERVER_BASE + img;
           imageEl.style.width = "80px";
           imageEl.style.height = "80px";
           imageEl.style.objectFit = "cover";
@@ -658,4 +660,28 @@ stateInput.addEventListener("change", () => {
   window.deleteProfile = deleteProfile;
   window.editProfile = editProfile;
 });
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".back-title").forEach(title => {
+        title.addEventListener("click", () => {
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "landing.html"; // fallback page
+            }
+        });
+    });
+});
+const originalFetch = window.fetch;
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
 
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};

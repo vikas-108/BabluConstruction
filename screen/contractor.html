@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Service Agreement</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="../dist/css/contractor.min.css">
+      <!-- Prevents unauthenticated users from seeing a flash of content -->
+  <script>document.documentElement.style.visibility = 'hidden';</script>
+  
+  <!-- Your common auth guard -->
+  <script src="../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+
+    <div class="contract-container">
+        <!-- Control Panel (Hidden during print / export) -->
+        <div class="control-panel">
+            <div class="control-group">
+                <label for="worker-type">Agree. Type:</label>
+                <select id="worker-type">
+                    <option value="general">General Contractor Agreement</option>
+                    <option value="technician">Specialized Technician Agreement</option>
+                    <option value="helper">Helper / General Labor Agreement</option>
+                </select>
+            </div>
+            <button id="btn-download" class="btn-download">Download / Print PDF</button>
+        </div>
+
+        <!-- Contract Page -->
+        <div class="contract-page" contenteditable="true">
+            
+            <header class="contract-header">
+                <h1>CONSTRUCTION SERVICE AGREEMENT</h1>
+                <p class="subtitle">This document is legally binding and fully editable.</p>
+            </header>
+
+            <!-- Parties Section -->
+            <div class="parties-section">
+                <!-- Left Side: Contractor Details -->
+                <div class="party-box">
+                    <h3>CONTRACTOR / PROVIDER</h3>
+                    <p class="editable-field"><strong>Name:</strong> [Click to edit Contractor Name]</p>
+                    <p class="editable-field"><strong>Phone:</strong> [Contractor Phone Number]</p>
+                    <p class="editable-field"><strong>Address:</strong> [Contractor Street, City, State]</p>
+                    <p class="editable-field"><strong>License No:</strong> [License/Registration Number]</p>
+                </div>
+
+                <!-- Right Side: Client Details -->
+                <div class="party-box text-right">
+                    <h3>CLIENT / PROPERTY OWNER</h3>
+                    <p class="editable-field"><strong>Name:</strong> [Click to edit Client Name]</p>
+                    <p class="editable-field"><strong>Phone:</strong> [Client Phone Number]</p>
+                    <p class="editable-field"><strong>Address:</strong> [Project or Site Address]</p>
+                    <p class="editable-field"><strong>Date:</strong> August 6, 2026</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Terms & Tables Area -->
+            <main class="contract-body" id="contract-content">
+                <!-- Content is systematically injected via script.js -->
+            </main>
+
+            <!-- Signatures Section -->
+            <footer class="signature-section">
+                <div class="signature-block">
+                    <div class="sig-line"></div>
+                    <p><strong>Contractor Signature</strong></p>
+                    <p>Date: _______________</p>
+                </div>
+                <div class="signature-block text-right">
+                    <div class="sig-line"></div>
+                    <p><strong>Client Signature</strong></p>
+                    <p>Date: _______________</p>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <script src="../dist/js/contractor.min.js"></script>
+</body>
+</html>
+
+
+<!--
+<div class="contract-container">
+        <!- - Control Panel (Hidden during print / export) - ->
+        <div class="control-panel">
+            <div class="control-group">
+                <label id="lbl-worker-type" for="worker-type">Agreement Type:</label>
+                <select id="worker-type">
+                    <!- - Options populated via JS to support live language switching - ->
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button id="btn-lang-toggle" class="btn-lang">हिन्दी में बदलें</button>
+                <button id="btn-download" class="btn-download">Download / Print PDF</button>
+            </div>
+        </div>
+
+        <! - - Contract Page - ->
+        <div class="contract-page" contenteditable="true">
+            
+            <header class="contract-header">
+                <h1 id="contract-title">CONSTRUCTION SERVICE AGREEMENT</h1>
+                <p id="contract-subtitle" class="subtitle">This document is legally binding and fully editable.</p>
+            </header>
+
+            <!- - Parties Section -- >
+            <div class="parties-section">
+                <!- - Left Side: Contractor Details - ->
+                <div class="party-box">
+                    <h3 id="lbl-contractor-header">CONTRACTOR / PROVIDER</h3>
+                    <p class="editable-field"><strong id="lbl-c-name">Name:</strong> [Click to edit Contractor Name]</p>
+                    <p class="editable-field"><strong id="lbl-c-phone">Phone:</strong> [Contractor Phone Number]</p>
+                    <p class="editable-field"><strong id="lbl-c-address">Address:</strong> [Contractor Street, City, State]</p>
+                    <p class="editable-field"><strong id="lbl-c-license">License No:</strong> [License/Registration Number]</p>
+                </div>
+
+                <! -- Right Side: Client Details - ->
+                <div class="party-box text-right">
+                    <h3 id="lbl-client-header">CLIENT / PROPERTY OWNER</h3>
+                    <p class="editable-field"><strong id="lbl-cl-name">Name:</strong> [Click to edit Client Name]</p>
+                    <p class="editable-field"><strong id="lbl-cl-phone">Phone:</strong> [Client Phone Number]</p>
+                    <p class="editable-field"><strong id="lbl-cl-address">Address:</strong> [Project or Site Address]</p>
+                    <p class="editable-field"><strong id="lbl-cl-date">Date:</strong> August 6, 2026</p>
+                </div>
+            </div>
+
+            <!- - Dynamic Terms & Tables Area -n->
+            <main class="contract-body" id="contract-content">
+                <!- - Content is systematically injected via script.js - ->
+            </main> 
+
+            <! -- Signatures Section -n->
+            <footer class="signature-section">
+                <div class="signature-block">
+                    <div class="sig-line"></div>
+                    <p><strong id="lbl-sig-contractor">Contractor Signature</strong></p>
+                    <p id="lbl-date-line-1">Date: _______________</p>
+                </div>
+                <div class="signature-block text-right">
+                    <div class="sig-line"></div>
+                    <p><strong id="lbl-sig-client">Client Signature</strong></p>
+                    <p id="lbl-date-line-2">Date: _______________</p>
+                </div>
+            </footer>
+
+        </div>-->
