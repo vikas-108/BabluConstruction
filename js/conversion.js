@@ -64,8 +64,9 @@ const factors = {
 const categorySelect = document.getElementById('category');
 const fromSelect = document.getElementById('fromUnit');
 const toSelect = document.getElementById('toUnit');
-const inputVal = document.getElementById('inputVal');
-const outputVal = document.getElementById('outputVal');
+const category = document.getElementById("category");
+
+category?.addEventListener("change", updateCategory);
 
 function updateCategory() {
     const category = categorySelect.value;
@@ -86,7 +87,24 @@ function updateCategory() {
     inputVal.value = '';
     outputVal.value = '';
 }
+const inputVal = document.getElementById("inputVal");
+const outputVal = document.getElementById("outputVal");
+const fromUnit = document.getElementById("fromUnit");
+const toUnit = document.getElementById("toUnit");
+const swapUnitsBtn = document.getElementById("swapUnitsBtn");
 
+function handleConvert() {
+    convert();
+}
+
+function handleSwapUnits() {
+    swapUnits();
+}
+
+inputVal?.addEventListener("input", handleConvert);
+fromUnit?.addEventListener("change", handleConvert);
+toUnit?.addEventListener("change", handleConvert);
+swapUnitsBtn?.addEventListener("click", handleSwapUnits);
 function convert() {
     const category = categorySelect.value;
     const from = fromSelect.value;
@@ -147,7 +165,44 @@ updateCategory();
 // ==========================================
 // 2. SCIENTIFIC CALCULATOR LOGIC
 // ==========================================
+const calculatorTriggerBtn = document.getElementById("calculatorTriggerBtn");
+const closeCalculatorBtn = document.getElementById("closeCalculatorBtn");
+const calcKeys = document.querySelector(".calc-keys");
 
+calcKeys?.addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const value = button.dataset.value;
+
+    switch (action) {
+        case "calc":
+            appendCalc(value);
+            break;
+
+        case "func":
+            appendFunc(value);
+            break;
+
+        case "clear":
+            clearCalc();
+            break;
+
+        case "delete":
+            deleteChar();
+            break;
+
+        case "result":
+            calculateResult();
+            break;
+    }
+});
+
+calculatorTriggerBtn?.addEventListener("click", toggleCalculator);
+closeCalculatorBtn?.addEventListener("click", toggleCalculator);
+calcBackdrop?.addEventListener("click", toggleCalculator);
 const calcDrawer = document.getElementById('calcDrawer');
 const calcBackdrop = document.getElementById('calcBackdrop');
 const calcDisplay = document.getElementById('calcDisplay');
@@ -193,15 +248,15 @@ function tan(deg) {
 function sqrt(num) { 
     return Math.sqrt(num); 
 }
-function goBack(fallback = "landing.html") {
-
-    if (document.referrer && history.length > 1) {
-        history.back();
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
     } else {
-        window.location.href = fallback;
+        window.location.href = "index.html";
     }
-
 }
+
+document.getElementById("gobackBtn")?.addEventListener("click", goBack);
 function calculateResult() {
     try {
         let expression = calcDisplay.value;

@@ -474,19 +474,6 @@ function restoreSearchState() {
       "Aircraft Mechanic",
       "Industrial Mechanic",
     ],
-    client:[
-      "require Painter",
-      "PLumber",
-      "Havc",
-      "Raj Mistry",
-      "Technician",
-      "Machanic",
-      "Carpenter",
-      "renovation",
-      "Marble&Tiles",
-      "Electrician",
-      "Glass",
-    ]
   };
 
   // Update category dropdown when role changes
@@ -688,7 +675,19 @@ function hideSearchLoader() {
   if (!loader) return;
   loader.classList.add("hidden");
 }
+document.addEventListener("click", (event) => {
+    const image = event.target.closest("[data-design-modal]");
 
+    if (!image) return;
+
+    openDesignModal(
+        image.dataset.image,
+        image.dataset.title,
+        image.dataset.sqft,
+        image.dataset.gaz,
+        image.dataset.type
+    );
+});
 function openDesignModal(image, title, sqft, gaz, type) {
   document.getElementById("designModalImage").src = image;
   document.getElementById("modalTitle").innerText = title;
@@ -701,11 +700,32 @@ function openDesignModal(image, title, sqft, gaz, type) {
 
   document.getElementById("designModal").classList.add("show");
 }
+document.addEventListener("click", (event) => {
+    const image = event.target.closest("[data-theory-modal]");
+
+    if (!image) return;
+
+    openTheoryModal(image.dataset.image);
+});
 function openTheoryModal(image) {
   if (!image) return;
   document.getElementById("modalImage").src = image;
   document.getElementById("designTheoryModal").classList.add("show");
+ // if (!modalImage || !modal) return;
+
+    modalImage.src = image;
+   // modal.classList.add("show");
 }
+document.addEventListener("click", (event) => {
+    const image = event.target.closest("[data-media-modal]");
+
+    if (!image) return;
+
+    openMediaModal(
+        image.dataset.src,
+        image.dataset.type
+    );
+});
 function openMediaModal(src, type) {
   const img = document.getElementById("mediaImage");
   const video = document.getElementById("mediaVideo");
@@ -730,7 +750,11 @@ function openImageModal(src) {
   img.src = src;
   modal.classList.add("show");
 }
-
+document
+    .querySelectorAll("[data-close-design-modal]")
+    .forEach((button) => {
+        button.addEventListener("click", closeDesignModal);
+    });
 function closeDesignModal() {
   document.getElementById("designModal").classList.remove("show");
   document.getElementById("designTheoryModal").classList.remove("show");
@@ -918,13 +942,17 @@ function render(items) {
     if (item.category === "design") {
       results.innerHTML += `
     <div class="card design-card">
-      <img 
-        src="${item.image}" 
-        alt="${item.title}" 
-        class="design-img"
-        onclick="openDesignModal('${item.image}', '${item.title}', '${item.area_sqft}', '${item.area_gaz}', '${item.type}')"
-      >
-
+   <img
+    src="${item.image}"
+    alt="${item.title}"
+    class="design-img"
+    data-design-modal
+    data-image="${item.image}"
+    data-title="${item.title}"
+    data-sqft="${item.area_sqft}"
+    data-gaz="${item.area_gaz}"
+    data-type="${item.type}"
+>
       <div class="design-info">
         <h3>${item.title}</h3>
         <p><strong>Area:</strong> ${item.area_sqft} sq ft / ${item.area_gaz} gaz</p>
@@ -998,11 +1026,13 @@ function render(items) {
       ${
         item.image
           ? `
-        <img 
-          src="${item.image}" 
-          class="design-img"
-          onclick="openTheoryModal('${item.image}')"
-        >
+          <img
+        src="${item.image}"
+        class="design-img"
+        data-theory-modal
+        data-image="${item.image}"
+        alt="${item.title || "Theory image"}"
+    >
       `
           : ""
       }
@@ -1018,13 +1048,24 @@ function render(items) {
     <div class="card media-card">
       <h3>${item.title}</h3>
 
-      ${
-        item.mediaType === "image"
-          ? `<img src="${item.src}" class="media-img" onclick="openMediaModal('${item.src}', 'image')">`
-          : `<video controls class="media-video">
-               <source src="${item.src}" type="video/mp4">
-             </video>`
-      }
+     ${ 
+    item.mediaType === "image"
+        ? `
+            <img
+                src="${item.src}"
+                class="media-img"
+                alt="Media"
+                data-media-modal="true"
+                data-src="${item.src}"
+                data-type="image"
+            >
+          `
+        : `
+            <video controls class="media-video">
+                <source src="${item.src}" type="video/mp4">
+            </video>
+          `
+}
     </div>
   `;
       return;

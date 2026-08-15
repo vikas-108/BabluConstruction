@@ -174,7 +174,13 @@ label {
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+.key-equals {
+    grid-row: span 2;
+}
 
+.key-zero {
+    grid-column: span 2;
+}
 /* Inputs & Selects */
 select, input {
     width: 100%;

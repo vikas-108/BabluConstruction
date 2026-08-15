@@ -979,10 +979,12 @@ if (isDragging) {
   });
   
 });
-function goBack(fallback = "landing.html") {
-    if (history.length > 1) {
-        history.back();
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
     } else {
-        window.location.href = fallback;
+        window.location.href = "index.html";
     }
 }
+
+document.getElementById("goBackBtn")?.addEventListener("click", goBack);

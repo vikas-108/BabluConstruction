@@ -264,8 +264,8 @@
           <li><span class="check">✓</span> Limited Usage</li>
           <li><span class="check">✓</span> Community Support</li>
         </ul>
-        <button class="btn free-btn" onclick="buyPlan('free')">
-    Upgrade
+       <button type="button" class="btn free-btn" data-action="buy-plan" data-plan="free">
+    Free Plan
 </button>
       </div>
       <div class="card popular">
@@ -280,8 +280,8 @@
           <li><span class="check">✓</span> Chatbot Access</li>
           <li><span class="check">✓</span> Premium Dashboard</li>
         </ul>
-        <button class="btn small-btn" onclick="buyPlan('small')">
-    Upgrade
+        <button type="button" class="btn small-btn" data-action="buy-plan" data-plan="small">
+    Small Plan
 </button>
       </div>
       <div class="card">
@@ -296,8 +296,8 @@
           <li><span class="check">✓</span> 6 Screen Access</li>
           <li><span class="check">✓</span> Unlimited Usage</li> 
         </ul>
-      <button class="btn big-btn" onclick="buyPlan('big')">
-    Upgrade
+      <button type="button" class="btn big-btn" data-action="buy-plan" data-plan="big">
+    Big Plan
 </button>
       </div>
     </div>
@@ -307,9 +307,9 @@
         Upgrade your membership plan to unlock chatbot,
         AI tools, premium dashboard and full website features.
       </p>
-      <button class="upgrade-btn" onclick="openModal()">
-        Upgrade Membership
-      </button>
+      <button type="button" class="upgrade-btn" data-action="open-modal">
+    Upgrade
+</button>
     </div>
   </div>
   <div class="modal" id="upgradeModal">
@@ -320,12 +320,13 @@
         Upgrade your plan to continue.
       </p>
       <div class="modal-buttons">
-        <button class="cancel-btn" onclick="closeModal()">
-          Cancel
-        </button>
-        <button class="continue-btn" onclick="goToPricing()">
-          View Plans
-        </button>
+       <button type="button" class="cancel-btn" data-action="close-modal">
+    Cancel
+</button>
+
+<button type="button" class="continue-btn" data-action="pricing">
+    View Plans
+</button>
       </div>
     </div>
   </div>

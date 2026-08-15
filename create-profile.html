@@ -5,122 +5,204 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Create Profile</title>
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="dist/css/creat-profile.min.css" />
-    <link rel="stylesheet" href="dist/css/loader.min.css"/>
+    <link rel="stylesheet" href="dist/css/loader.min.css" />
     <!-- Prevents unauthenticated users from seeing a flash of content -->
-  <script>document.documentElement.style.visibility = 'hidden';</script>
-  
-  <!-- Your common auth guard -->
-  <script src="dist/js/auth-guard.min.js"></script>
+    <script>document.documentElement.style.visibility = 'hidden';</script>
+
+    <!-- Your common auth guard -->
+    <script src="dist/js/auth-guard.min.js"></script>
   </head>
   <body>
     <section class="create-profile login-required">
-      <h2 class="back-title">← Create Profile</h2>
-      <button id="toggleFormBtn" class="toggle-form-btn">➕ Add Profile</button>
+      <header class="page-head">
+        <h2 class="back-title"><span class="back-arrow">←</span> Create Profile</h2>
+        <p class="page-sub">Fill in your work order &mdash; every field here is what a client sees first.</p>
+      </header>
+
+      <button id="toggleFormBtn" class="toggle-form-btn">
+        <span class="toggle-icon">+</span> Add Profile
+      </button>
+
       <!-- FORM -->
       <div id="formWrapper" class="hidden">
-        <form id="profileForm">
-          <input id="name" placeholder="Full Name" required />
-          <!-- Role dropdown -->
-          <label for="category">Select Category:</label>
-          <select id="category" required>
-            <option value="">-- Select Category --</option>
-            <option value="contractor">Contractor</option>
-            <option value="technician">Technician</option>
-            <option value="supplier">Supplier</option>
-            <option value="architecture">Architecture</option>
-             <option value="mechanic">Mechanic</option>
-             <option value="client">Client works</option>
-          </select>
+        <form id="profileForm" class="job-sheet">
 
-          <!-- Category dropdown -->
-          <label for="role">Select Role:</label>
-          <select id="role" required>
-            <option value="">-- Select Role --</option>
-          </select>
+          <!-- SECTION: IDENTITY -->
+          <fieldset class="form-section">
+            <legend><span class="tag">Identity</span></legend>
 
-          <input id="experience" placeholder="Experience (years)" required />
-          <input id="location" placeholder="City / village" required />
-          <select id="state" required>
-            <option value="">select state</option>
-            <option>Andhra Pradesh</option>
-            <option>Arunachal Pradesh</option>
-            <option>Assam</option>
-            <option>Bihar</option>
-            <option>Chhattisgarh</option>
-            <option>Goa</option>
-            <option>Gujarat</option>
-            <option>Haryana</option>
-            <option>Himachal Pradesh</option>
-            <option>Delhi</option>
-            <option>Jharkhand</option>
-            <option>Karnataka</option>
-            <option>Kerala</option>
-            <option>Madhya Pradesh</option>
-            <option>Maharashtra</option>
-            <option>Manipur</option>
-            <option>Meghalaya</option>
-            <option>Mizoram</option>
-            <option>Nagaland</option>
-            <option>Odisha</option>
-            <option>Punjab</option>
-            <option>Rajasthan</option>
-            <option>Sikkim</option>
-            <option>Tamil Nadu</option>
-            <option>Telangana</option>
-            <option>Tripura</option>
-            <option>Uttar Pradesh</option>
-            <option>Uttarakhand</option>
-            <option>West Bengal</option>
-            <option>Puducherry</option>
-            <option>Ladakh</option>
-            <option>Jammu and Kashmir</option>
-            <option>Andaman and Nicobar Islands</option>
-            <option>Chandigarh</option>
-            <option>Dadra & Nagar Haveli and Daman & Diu</option>
-            <option>Lakshadweep</option>
-          </select>
+            <div class="field">
+              <label for="name">Full name</label>
+              <input id="name" placeholder="e.g. Ramesh Kumar" required />
+            </div>
 
-          <select id="district" required>
-  <option value="">Select District</option>
-</select>
-          <input id="skills" placeholder="Skills (comma separated)" />
-          <input id="teamSize" placeholder="Team Size" />
-          <input id="projectsDone" placeholder="Number of Projects Done 1,2,3....." />
-          <input id="price" placeholder="Starting Price" />
-          <input id="languages" placeholder="Languages" />
-          <textarea
-            id="description"
-            placeholder="Describe your work"
-            required
-          ></textarea>
+            <div class="field-row">
+              <div class="field">
+                <label for="category">Category</label>
+                <select id="category" required>
+                  <option value="">-- Select Category --</option>
+                  <option value="contractor">Contractor</option>
+                  <option value="technician">Technician</option>
+                  <option value="supplier">Supplier</option>
+                  <option value="architecture">Architecture</option>
+                  <option value="mechanic">Mechanic</option>
+                  <option value="client">Client works</option>
+                </select>
+              </div>
 
-          <!-- ✅ Main media input -->
-          <input type="file" id="media" name="media" accept="image/*,video/*" />
+              <div class="field">
+                <label for="role">Role / specialty</label>
+                <select id="role" required>
+                  <option value="">-- Select Role --</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
 
-          <!-- ✅ Album input field -->
-          <label for="album">Upload Work Gallery:</label>
-          <input
-            type="file"
-            id="album"
-            name="album"
-            accept="image/*"
-            multiple
-          />
-          <div id="albumPreview"></div>
+          <!-- SECTION: LOCATION & EXPERIENCE -->
+          <fieldset class="form-section">
+            <legend><span class="tag">Location &amp; Experience</span></legend>
 
-          <button type="submit">Create Profile</button>
+            <div class="field-row">
+              <div class="field field-mono">
+                <label for="experience">Experience (years)</label>
+                <input id="experience" placeholder="e.g. 6" inputmode="numeric" required />
+              </div>
+              <div class="field">
+                <label for="location">City / village</label>
+                <input id="location" placeholder="e.g. Karnal" required />
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="state">State</label>
+                <select id="state" required>
+                  <option value="">select state</option>
+                  <option>Andhra Pradesh</option>
+                  <option>Arunachal Pradesh</option>
+                  <option>Assam</option>
+                  <option>Bihar</option>
+                  <option>Chhattisgarh</option>
+                  <option>Goa</option>
+                  <option>Gujarat</option>
+                  <option>Haryana</option>
+                  <option>Himachal Pradesh</option>
+                  <option>Delhi</option>
+                  <option>Jharkhand</option>
+                  <option>Karnataka</option>
+                  <option>Kerala</option>
+                  <option>Madhya Pradesh</option>
+                  <option>Maharashtra</option>
+                  <option>Manipur</option>
+                  <option>Meghalaya</option>
+                  <option>Mizoram</option>
+                  <option>Nagaland</option>
+                  <option>Odisha</option>
+                  <option>Punjab</option>
+                  <option>Rajasthan</option>
+                  <option>Sikkim</option>
+                  <option>Tamil Nadu</option>
+                  <option>Telangana</option>
+                  <option>Tripura</option>
+                  <option>Uttar Pradesh</option>
+                  <option>Uttarakhand</option>
+                  <option>West Bengal</option>
+                  <option>Puducherry</option>
+                  <option>Ladakh</option>
+                  <option>Jammu and Kashmir</option>
+                  <option>Andaman and Nicobar Islands</option>
+                  <option>Chandigarh</option>
+                  <option>Dadra & Nagar Haveli and Daman & Diu</option>
+                  <option>Lakshadweep</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="district">District</label>
+                <select id="district" required>
+                  <option value="">Select District</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- SECTION: WORK DETAILS -->
+          <fieldset class="form-section">
+            <legend><span class="tag">Work Details</span></legend>
+
+            <div class="field">
+              <label for="skills">Skills</label>
+              <input id="skills" placeholder="Comma separated, e.g. Wiring, Fitting, Panel work" />
+            </div>
+
+            <div class="field-row field-row-3">
+              <div class="field field-mono">
+                <label for="teamSize">Team size</label>
+                <input id="teamSize" placeholder="e.g. 4" inputmode="numeric" />
+              </div>
+              <div class="field field-mono">
+                <label for="projectsDone">Projects done</label>
+                <input id="projectsDone" placeholder="e.g. 25" inputmode="numeric" />
+              </div>
+              <div class="field field-mono">
+                <label for="price">Starting price</label>
+                <input id="price" placeholder="e.g. ₹500/day" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="languages">Languages</label>
+              <input id="languages" placeholder="e.g. Hindi, English" />
+            </div>
+
+            <div class="field">
+              <label for="description">Describe your work</label>
+              <textarea
+                id="description"
+                placeholder="Tell clients what you do, what makes your work reliable, and what they can expect."
+                required
+              ></textarea>
+            </div>
+          </fieldset>
+
+          <!-- SECTION: MEDIA -->
+          <fieldset class="form-section">
+            <legend><span class="tag">Media</span></legend>
+
+            <div class="field">
+              <label for="media">Cover photo or video</label>
+              <input type="file" id="media" name="media" accept="image/*,video/*" />
+            </div>
+
+            <div class="field">
+              <label for="album">Work gallery</label>
+              <input type="file" id="album" name="album" accept="image/*" multiple />
+              <p class="field-hint">Upload a few of your best finished jobs.</p>
+              <div id="albumPreview"></div>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="submit-btn">Create Profile</button>
         </form>
       </div>
+
       <!-- PROFILE CARD -->
       <div id="profileCard" class="profile-card hidden"></div>
     </section>
     <script src="dist/js/screenshotProtector.min.js"></script>
-<script>
-  // One single line to activate
-  initScreenshotProtector();
-</script>
-<script src="dist/js/loader.min.js"></script>
+    <script>
+      // One single line to activate
+      initScreenshotProtector();
+    </script>
+    <script src="dist/js/loader.min.js"></script>
     <script src="dist/js/create-profile.min.js"></script>
   </body>
 </html>

@@ -228,7 +228,55 @@ body {
         margin: 0;
     }
 }
+/* --- Dynamic Table Management Actions Configuration --- */
+.table-action-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
 
+.btn-add-row {
+    background-color: #10b981; /* Construction emerald green */
+    color: #ffffff;
+    border: none;
+    padding: 5px 12px;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-add-row:hover {
+    background-color: #059669;
+}
+
+/* Print Overrides */
+@media print {
+    .control-panel, 
+    .table-action-container,
+    .btn-add-row {
+        display: none !important; /* Forces row action tools to disappear on PDF print */
+    }
+}
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-lang {
+    background-color: #475569;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
 
 /**
 /* Core Professional Slate & Dark Blue Theme *m/

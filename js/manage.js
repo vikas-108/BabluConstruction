@@ -1,9 +1,8 @@
 let CURRENT_PROFILE = null;
 let NEW_PHOTO_FILE = null;
-//let activeRequests = 0;
+let activeRequests = 0;
 const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
 const SERVER_BASE = "https://api.buildskil.com";
-let activeRequests = 0;
 //const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
 //const SERVER_BASE = "http://localhost:5000"; // change if using domain
 function authHeaders() {
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!login) return;
 
   document.querySelector(".login-required").style.display = "block";
-  document.querySelector(".login-required").style.display = "block";
+  //document.querySelector(".login-required").style.display = "block";
 
   const res = await fetch(`${ACCOUNT_BASE}/me`, {
     headers: authHeaders(),
@@ -53,27 +52,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     badge?.classList.add("hidden");
     verifyBtn?.classList.remove("hidden");
   }
-  /* Open drawer
-  membershipButton.addEventListener("click", () => {
-    subscriptionSection.classList.add("active");
-  });
-
-  // Close drawer
-  closeDrawer.addEventListener("click", () => {
-    subscriptionSection.classList.remove("active");
-  });
-
-  // Optional: close drawer when clicking outside
-  document.addEventListener("click", (e) => {
-    if (
-      subscriptionSection.classList.contains("active") &&
-      !subscriptionSection.contains(e.target) &&
-      e.target !== membershipButton
-    ) {
-      subscriptionSection.classList.remove("active");
-    }
-  });
-*/
   document
   .getElementById("verifyEmailBtn")
   ?.addEventListener("click", async () => {
@@ -456,7 +434,7 @@ async function loadMembershipCard() {
     try {
 
         const res = await fetch(
-            "https://api.buildskil.com/api/membership/my-membership",
+            "http://localhost:5000/api/membership/my-membership",
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("cb_token")}`

@@ -29,7 +29,8 @@ async function buyPlan(plan) {
   }
 }
 
-
+window.buyPlan = buyPlan;
+window.updateCurrentPlan = updateCurrentPlan;
 function updateCurrentPlan(plan) {
   document.querySelectorAll(".btn").forEach((btn) => {
     btn.disabled = false;

@@ -15,10 +15,12 @@
     <!-- CSS -->
     <link rel="stylesheet" href="dist/css/homne.min.css" />
     <!-- Prevents unauthenticated users from seeing a flash of content -->
-  <script>document.documentElement.style.visibility = 'hidden';</script>
-  
-  <!-- Your common auth guard -->
-  <script src="dist/js/auth-guard.min.js"></script>
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="dist/js/auth-guard.min.js"></script>
   </head>
   <body>
     <!-- ================= HEADER ================= -->
@@ -41,12 +43,12 @@
 
           <div id="userMenu" class="user-menu">
             <span id="userName"></span>
-            <div class="dropdown">
+           <!---- <div class="dropdown">
               <a href="/screen/issue.html">helpdesk</a>
               <a href="./screen/price.html">join</a>
               <a href="./screen/createpad.html">ARCH.</a>
               <a href="./screen/contractor.html">Agre</a>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
@@ -103,7 +105,6 @@
               <option value="technician">Technician</option>
               <option value="architecture">Architecture</option>
               <option value="mechanic">Mechanic</option>
-              <option value="client">Client works</option>
             </select>
             <select id="role">
               <option value="">-- Select Role --</option>
@@ -139,7 +140,7 @@
         <!-- Content -->
         <div class="button-box-content">
           <div class="hero-buttons" id="heroButtons">
-           <!-- <a
+            <!-- <a
               href="./screen/bhūgolapaṭa.html"
               class="btn primary protected-btn"
               data-page="bhūgolapaṭa.html"
@@ -164,10 +165,12 @@
               >Stages</a
             >-->
 
-                    <a href="./screen/bhūgolapaṭa.html" class="btn primary">deśa-chitra</a>
-                     <a href="./screen/notebook.html" class="btn primary">Notebook</a>
-                     <a href="./screen/tmr.html" class="btn primary">TER</a>
-                     <a href="./screen/progrss.html" class="btn secondary">Stages</a> 
+            <a href="./screen/bhūgolapaṭa.html" class="btn primary"
+              >deśa-chitra</a
+            >
+            <a href="./screen/notebook.html" class="btn primary">Notebook</a>
+            <a href="./screen/tmr.html" class="btn primary">TER</a>
+            <a href="./screen/progrss.html" class="btn secondary">Stages</a>
           </div>
         </div>
       </div>
@@ -272,7 +275,14 @@
     </section>
     <!-- DESIGN MODAL full screen view -->
     <div id="designModal" class="design-modal">
-      <span class="close-modal" onclick="closeDesignModal()">×</span>
+      <button
+        type="button"
+        class="close-modal"
+        data-close-design-modal
+        aria-label="Close"
+      >
+        ×
+      </button>
 
       <div class="modal-content">
         <img id="designModalImage" src="" alt="Blueprint" />
@@ -291,23 +301,48 @@
 
     <!-- DESIGN theory MODAL full screen view -->
     <div id="designTheoryModal" class="design-modal">
-      <span class="close-modal" onclick="closeDesignModal()">×</span>
+      <button
+        type="button"
+        class="close-modal"
+        data-close-design-modal
+        aria-label="Close"
+      >
+        ×
+      </button>
 
       <div class="modal-content">
         <img id="modalImage" alt="Theory Image" />
       </div>
     </div>
-    <!----full screen view modal of media code -->
+
+    <!-- FULL SCREEN VIEW MODAL OF MEDIA -->
     <div id="mediaModal" class="design-modal">
-      <span class="close-modal" onclick="closeDesignModal()">×</span>
+      <button
+        type="button"
+        class="close-modal"
+        data-close-design-modal
+        aria-label="Close"
+      >
+        ×
+      </button>
+
       <div class="modal-content">
-        <img id="mediaImage" style="display: none" />
+        <img id="mediaImage" style="display: none" alt="Media preview" />
         <video id="mediaVideo" controls style="display: none"></video>
       </div>
     </div>
+
     <!-- FULL SCREEN IMAGE MODAL -->
     <div id="imageModal" class="image-modal">
-      <span class="modal-close" onclick="closeDesignModal()">×</span>
+      <button
+        type="button"
+        class="modal-close"
+        data-close-design-modal
+        aria-label="Close"
+      >
+        ×
+      </button>
+
       <img id="modalPhoto" alt="Preview" />
     </div>
 
@@ -334,11 +369,7 @@
           <span class="nav-icon">🔍 </span>
           <span class="nav-label">F.P.</span>
         </a>
-        <a
-          href="./screen/cltprofile.html"
-          class="nav-item"
-          id="nav-projects"
-        >
+        <a href="./screen/cltprofile.html" class="nav-item" id="nav-projects">
           <span class="nav-icon">⨁ </span>
           <span class="nav-label">A.P.</span>
         </a>
@@ -361,7 +392,7 @@
     <script>
       initScreenshotProtector();
     </script>
-   <!---- <script src="dist/js/mempri.min.js"></script>-->
+    <!---- <script src="dist/js/mempri.min.js"></script>-->
     <script src="dist/js/loader.min.js"></script>
     <script src="dist/login.min.js"></script>
     <script src="dist/web.min.js"></script>

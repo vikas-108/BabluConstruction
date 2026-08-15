@@ -275,7 +275,27 @@ select:focus{
     background:#218838;
     transform:translateY(-2px);
 }
+.invoice-number-input {
+    background: #f9f9f9;
+    font-weight: bold;
+    color: #666;
+    margin-top: 5px;
+}
 
+.hidden {
+    display: none;
+}
+
+.gst-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.gstin-input {
+    text-transform: uppercase;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
 /*==========================
  PREVIEW
 ==========================*/

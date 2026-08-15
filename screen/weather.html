@@ -12,22 +12,42 @@
   <div class="weather-app">
         <!-- Search Section -->
         <div class="search-container">
-             <button class="header-back-btn" onclick="goBack()" aria-label="Go Back">
+             <button class="header-back-btn" id="comeback" aria-label="Go Back">
         ←
     </button>
-            <input type="text" id="city-input" placeholder="Enter City (e.g. Pune, IN)" autocomplete="off">
-            <button onclick="getWeather()">🔍</button>
-            <button onclick="getGeoLocation()" title="Use My Current Location">📍</button>
-        </div>
+           <input
+        type="text"
+        id="city-input"
+        placeholder="Enter City (e.g. Pune, IN)"
+        autocomplete="off"
+    >
 
-        <!-- Quick Select for Indian Metros -->
-        <div class="city-chips">
-            <button onclick="fetchData('New Delhi,IN')">Delhi</button>
-            <button onclick="fetchData('Mumbai,IN')">Mumbai</button>
-            <button onclick="fetchData('Bengaluru,IN')">Bengaluru</button>
-            <button onclick="fetchData('Chennai,IN')">Chennai</button>
-            <button onclick="fetchData('Karnal,IN')">Karnal</button>
-        </div>
+    <button
+        type="button"
+        id="weatherSearchBtn"
+        aria-label="Search weather"
+    >
+        🔍
+    </button>
+
+    <button
+        type="button"
+        id="geoLocationBtn"
+        title="Use My Current Location"
+        aria-label="Use My Current Location"
+    >
+        📍
+    </button>
+</div>
+
+<!-- Quick Select for Indian Metros -->
+<div class="city-chips" id="cityChips">
+    <button type="button" data-city="New Delhi,IN">Delhi</button>
+    <button type="button" data-city="Mumbai,IN">Mumbai</button>
+    <button type="button" data-city="Bengaluru,IN">Bengaluru</button>
+    <button type="button" data-city="Chennai,IN">Chennai</button>
+    <button type="button" data-city="Karnal,IN">Karnal</button>
+</div>
 
         <!-- Main Display -->
         <div class="main-info">

@@ -14,6 +14,7 @@ let motionIntervalId = null;
 let snapshotImages = [];
 let currentImageIndex = 0;
 let activeRequests = 0;
+
 const API_BASE = "https://api.buildskil.com/api/work"; // change if using domain
 const SERVER_BASE = "https://api.buildskil.com";
 //const API_BASE = "http://localhost:5000/api/work"; // change if using domain
@@ -785,7 +786,11 @@ function detectPresence(isPresent) {
   }
 }
 
+const showSnapshotsBtn = document.getElementById("showSnapshotsBtn");
 
+showSnapshotsBtn?.addEventListener("click", () => {
+    showSnapshots();
+});
 async function showSnapshots(ownerId = null) {
 
   const historyDiv = document.getElementById("snapshotHistory");
@@ -807,7 +812,7 @@ async function showSnapshots(ownerId = null) {
 
     historyDiv.innerHTML = "";
 
-     sessions.forEach(session => {
+    sessions.forEach(session => {
 
       if (!session.snapshots || session.snapshots.length === 0) return;
 

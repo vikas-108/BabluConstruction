@@ -23,7 +23,7 @@ async function loadMembership() {
     // ⭐ Update the buttons
 
     setupProtectedButtons();
-   // updateCurrentPlan(membership.plan);
+   updateCurrentPlan(membership.plan);
   } catch (err) {
     console.error(err);
   }
@@ -95,7 +95,31 @@ function checkChatbotAccess() {
   }
   return true;
 }
+document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-action]");
 
+    if (!button) return;
+
+    const action = button.dataset.action;
+
+    switch (action) {
+        case "buy-plan":
+            buyPlan(button.dataset.plan);
+            break;
+
+        case "open-modal":
+            openModal();
+            break;
+
+        case "close-modal":
+            closeModal();
+            break;
+
+        case "pricing":
+            goToPricing();
+            break;
+    }
+});
 async function openProtectedPage(url) {
 
     if (!permissions) {

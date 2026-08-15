@@ -1,3 +1,35 @@
+const cityInput = document.getElementById("city-input");
+const weatherSearchBtn = document.getElementById("weatherSearchBtn");
+const geoLocationBtn = document.getElementById("geoLocationBtn");
+const cityChips = document.getElementById("cityChips");
+
+// Search button
+weatherSearchBtn?.addEventListener("click", () => {
+    getWeather();
+});
+
+// Current location button
+geoLocationBtn?.addEventListener("click", () => {
+    getGeoLocation();
+});
+
+// Quick city buttons
+cityChips?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-city]");
+
+    if (!button) return;
+
+    const city = button.dataset.city;
+
+    fetchData(city);
+});
+
+// Optional: press Enter in city input
+cityInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        getWeather();
+    }
+});
 const apiKey = "2af41d190681424fa5774639262905"; // Get this from weatherapi.com
 const apiUrl = "https://api.weatherapi.com/v1/forecast.json?key=";
 
@@ -96,13 +128,15 @@ function updateBackground(condition, isDay) {
         body.style.background = isDay ? "#2980b9" : "#1a1a2e";
     }
 }
-function goBack(fallback = "landing.html") {
-    if (history.length > 1) {
-        history.back();
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
     } else {
-        window.location.href = fallback;
+        window.location.href = "index.html";
     }
 }
+
+document.getElementById("comeback")?.addEventListener("click", goBack);
 // Default to India's Capital
 window.addEventListener("DOMContentLoaded", () => {
     fetchData("New Delhi");

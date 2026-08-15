@@ -1170,7 +1170,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const count = userTables.length;
       const max = 99;
 
-      limitDiv.innerText = `Tables: ${count}/${max} used`;
+      //limitDiv.innerText = `Tables: ${count}/${max} used`;
 
       limitDiv.className =
         "table-limit " + (count >= max ? "limit-full" : "limit-ok");
@@ -1186,13 +1186,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   loadTables(); // 👈 important
 });
-function goBack(fallback = "landing.html") {
-  if (history.length > 1) {
-    history.back();
-  } else {
-    window.location.href = fallback;
-  }
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = "index.html";
+    }
 }
+
+document.getElementById("goBackBtn")?.addEventListener("click", goBack);
 const originalFetch = window.fetch;
 window.fetch = async (...args) => {
   if (activeRequests++ === 0) {

@@ -1,4 +1,4 @@
-const LOGIN_KEY = "cb_login_user";
+window.LOGIN_KEY = "cb_login_user";
 const USERS_KEY = "cb_users";
 const LOGIN_API = "https://api.buildskil.com/api/auth/";
 //const LOGIN_API = "http://localhost:5000/api/auth/";
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
 
     try {
-      await fetch("https://api.buildskil.com/api/auth/logout", {
+      await fetch("http://localhost:5000/api/auth/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("cb_token")}`,
@@ -280,6 +280,7 @@ function stopButtonLoading(button, text) {
   const btnText = button.querySelector(".btn-text");
   if (btnText) btnText.textContent = text;
 }
+
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 

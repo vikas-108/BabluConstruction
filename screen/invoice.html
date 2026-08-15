@@ -25,14 +25,14 @@
           <h2  class="back-title">
             ← Invoice Generator
           </h2>
-          <button class="btn-refresh" onclick="generateRandomID()">
+          <button class="btn-refresh" id="generateRandom">
             ↻ New #
           </button>
         </div>
 
         <!-- 1. Template -->
         <label>Template Style</label>
-        <select id="templateSelect" onchange="changeTemplate()">
+        <select id="templateSelect" >
           <option value="theme-classic">Classic Clean</option>
           <option value="theme-modern">Modern Corporate (Blue)</option>
           <option value="theme-bold">Bold & High Contrast (Red)</option>
@@ -42,161 +42,196 @@
         </select>
 
         <!-- 2. Issuer (From) -->
-        <h4>Issued By</h4>
+       <h4>Issued By</h4>
+
+<input
+    type="text"
+    id="fromName"
+    placeholder="Your Business Name"
+/>
+
+<div class="row">
+    <input
+        type="text"
+        class="col"
+        id="fromPhone"
+        placeholder="Your Phone"
+    />
+</div>
+
+
+<!-- 3. Client (To) -->
+
+<h4>Bill To</h4>
+
+<input
+    type="text"
+    id="toName"
+    placeholder="Client Name"
+/>
+
+<div class="row">
+    <input
+        type="text"
+        class="col"
+        id="toPhone"
+        placeholder="Client Phone"
+    />
+
+    <input
+        type="date"
+        class="col"
+        id="billDate"
+    />
+</div>
+
+<input
+    type="text"
+    id="invoiceNum"
+    readonly
+    class="invoice-number-input"
+/>
+
+
+<!-- 4. Calculation Mode -->
+
+<h4>Charges</h4>
+
+<div>
+    <input
+        type="text"
+        id="product"
+        placeholder="Enter product name"
+    />
+</div>
+
+<div class="mode-selector">
+
+    <label>
         <input
-          type="text"
-          id="fromName"
-          placeholder="Your Business Name"
-          oninput="updatePreview()"
+            type="radio"
+            name="mode"
+            value="daily"
+            checked
         />
-        <div class="row">
-          <input
-            type="text"
-            class="col"
-            id="fromPhone"
-            placeholder="Your Phone"
-            oninput="updatePreview()"
-          />
-        </div>
+        Daily Rate
+    </label>
 
-        <!-- 3. Client (To) -->
-        <h4>Bill To</h4>
+    <label>
         <input
-          type="text"
-          id="toName"
-          placeholder="Client Name"
-          oninput="updatePreview()"
+            type="radio"
+            name="mode"
+            value="lump"
         />
-        <div class="row">
-          <input
-            type="text"
-            class="col"
-            id="toPhone"
-            placeholder="Client Phone"
-            oninput="updatePreview()"
-          />
-          <input
-            type="date"
-            class="col"
-            id="billDate"
-            oninput="updatePreview()"
-          />
-        </div>
-        <input
-          type="text"
-          id="invoiceNum"
-          readonly
-          style="
-            background: #f9f9f9;
-            font-weight: bold;
-            color: #666;
-            margin-top: 5px;
-          "
-        />
+        Fixed Amount
+    </label>
 
-        <!-- 4. Calculation Mode -->
-        <h4>Charges</h4>
-        <div>
-          <input
-            type="text"
-            id="product"
-            placeholder="Enter product name"
-            oninput="updatePreview()"
-          />
-        </div>
-        <div class="mode-selector">
-          <label
-            ><input
-              type="radio"
-              name="mode"
-              value="daily"
-              checked
-              onchange="toggleMode()"
-            />
-            Daily Rate</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="mode"
-              value="lump"
-              onchange="toggleMode()"
-            />
-            Fixed Amount</label
-          >
-        </div>
+</div>
 
-        <!-- Dynamic Inputs -->
-        <div id="dailyInputs" class="row">
-          <input
-            type="number"
-            class="col"
-            id="rate"
-            placeholder="Rate (₹)"
-            oninput="updatePreview()"
-          />
-          <input
-            type="number"
-            class="col"
-            id="days"
-            placeholder="Days"
-            value="1"
-            oninput="updatePreview()"
-          />
-        </div>
-        <div id="lumpInputs" style="display: none">
-          <input
-            type="number"
-            id="fixedAmount"
-            placeholder="Total Amount (₹)"
-            oninput="updatePreview()"
-          />
-        </div>
 
-        <!-- 5. Discount & GST -->
-        <label>Discount (%)</label>
-        <input
-          type="number"
-          id="discount"
-          placeholder="0"
-          max="100"
-          oninput="updatePreview()"
-        />
+<!-- Dynamic Inputs -->
 
-        <div class="gst-wrapper">
-          <div class="switch-row">
-            <span style="font-weight: 600; font-size: 0.9rem"
-              >Add GST (18%)</span
-            >
-            <label class="switch">
-              <input type="checkbox" id="gstToggle" onchange="toggleGST()" />
-              <span class="slider"></span>
-            </label>
-          </div>
+<div id="dailyInputs" class="row">
 
-          <!-- Hidden GSTIN Input -->
-          <div id="gstDetails">
-            <label>Your GSTIN Number</label>
+    <input
+        type="number"
+        class="col"
+        id="rate"
+        placeholder="Rate (₹)"
+    />
+
+    <input
+        type="number"
+        class="col"
+        id="days"
+        placeholder="Days"
+        value="1"
+    />
+
+</div>
+
+
+<div id="lumpInputs" class="hidden">
+
+    <input
+        type="number"
+        id="fixedAmount"
+        placeholder="Total Amount (₹)"
+    />
+
+</div>
+
+
+<!-- 5. Discount & GST -->
+
+<label for="discount">Discount (%)</label>
+
+<input
+    type="number"
+    id="discount"
+    placeholder="0"
+    max="100"
+/>
+
+
+<div class="gst-wrapper">
+
+    <div class="switch-row">
+
+        <span class="gst-label">
+            Add GST (18%)
+        </span>
+
+        <label class="switch">
+
             <input
-              type="text"
-              id="gstin"
-              placeholder="Ex: 22ABCDE1234F1Z5"
-              maxlength="15"
-              style="
-                text-transform: uppercase;
-                font-family: monospace;
-                letter-spacing: 1px;
-              "
-              oninput="validateGST()"
+                type="checkbox"
+                id="gstToggle"
             />
-            <div id="gstError" class="error-msg">Invalid GSTIN Format</div>
-          </div>
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- Hidden GSTIN Input -->
+
+    <div id="gstDetails">
+
+        <label for="gstin">
+            Your GSTIN Number
+        </label>
+
+        <input
+            type="text"
+            id="gstin"
+            placeholder="Ex: 22ABCDE1234F1Z5"
+            maxlength="15"
+            class="gstin-input"
+        />
+
+        <div
+            id="gstError"
+            class="error-msg"
+        >
+            Invalid GSTIN Format
         </div>
 
-        <button class="btn-download" onclick="downloadPDF()">
-          <span>⬇</span> Generate & Download PDF
-        </button>
-      </div>
+    </div>
+
+</div>
+
+
+<button
+    type="button"
+    class="btn-download"
+    id="downloadPdfBtn"
+>
+    <span>⬇</span>
+    Generate & Download PDF
+</button>
 
       <!-- RIGHT: PREVIEW AREA -->
       <div class="preview-wrapper">

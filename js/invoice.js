@@ -4,7 +4,10 @@
         document.getElementById('billDate').valueAsDate = new Date();
         updatePreview();
     };
-
+ const generateRandom = document.getElementById("generateRandom");
+ generateRandom?.addEventListener("click",() => {
+    generateRandomID();
+ });
     function generateRandomID() {
         const year = new Date().getFullYear();
         const rand = Math.floor(1000 + Math.random() * 9000);
@@ -13,11 +16,30 @@
     }
 
     /* --- 2. UI INTERACTIONS --- */
-    function changeTemplate() {
-        const theme = document.getElementById('templateSelect').value;
-        const preview = document.getElementById('invoice-preview');
-        preview.className = theme; // Replaces all classes with the selected theme
-    }
+   const templateSelect = document.getElementById("templateSelect");
+const preview = document.getElementById("invoice-preview");
+
+function changeTemplate() {
+    if (!templateSelect || !preview) return;
+
+    const theme = templateSelect.value;
+
+    preview.classList.remove(
+        "theme-classic",
+        "theme-modern",
+        "theme-bold",
+        "theme-elegant",
+        "theme-creative",
+        "theme-tech"
+    );
+
+    preview.classList.add(theme);
+}
+
+templateSelect?.addEventListener("change", changeTemplate);
+
+// Apply the initial selected theme
+changeTemplate();
 
     function toggleMode() {
         const isDaily = document.querySelector('input[name="mode"]:checked').value === 'daily';
@@ -224,3 +246,62 @@
         tbody.insertBefore(row, tbody.firstChild);
     }
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    const previewInputs = [
+        "fromName",
+        "fromPhone",
+        "toName",
+        "toPhone",
+        "billDate",
+        "product",
+        "rate",
+        "days",
+        "fixedAmount",
+        "discount"
+    ];
+
+    previewInputs.forEach((id) => {
+        const element = document.getElementById(id);
+
+        element?.addEventListener("input", updatePreview);
+    });
+
+
+    // Calculation mode
+    document
+        .querySelectorAll('input[name="mode"]')
+        .forEach((radio) => {
+
+            radio.addEventListener("change", toggleMode);
+
+        });
+
+
+    // GST toggle
+    const gstToggle = document.getElementById("gstToggle");
+
+    gstToggle?.addEventListener("change", toggleGST);
+
+
+    // GSTIN validation
+    const gstin = document.getElementById("gstin");
+
+    gstin?.addEventListener("input", validateGST);
+
+
+    // PDF button
+    const downloadPdfBtn =
+        document.getElementById("downloadPdfBtn");
+
+    downloadPdfBtn?.addEventListener(
+        "click",
+        downloadPDF
+    );
+
+
+    // Apply initial state
+    toggleMode();
+    toggleGST();
+
+});
