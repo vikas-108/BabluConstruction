@@ -765,6 +765,7 @@ function closeDesignModal() {
 function cleanPhone(phone) {
   return phone.replace(/[^0-9]/g, "");
 }
+window.openProfile = openProfile;
 function openProfile(id) {
   window.location.href = `profile-details.html?id=${id}`;
 }
