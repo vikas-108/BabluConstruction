@@ -134,7 +134,7 @@ if (profile.photo) {
 
   photo.src = `https://via.placeholder.com/140/007bff/ffffff?text=${encodeURIComponent(initials)}`;
 }*/
-  // 🔐 LOCK EMAIL IF VERIFIED
+  /*/ 🔐 LOCK EMAIL IF VERIFIED
 const editEmailInput = document.getElementById("editEmail");
 
 if(profile.emailVerified){
@@ -144,8 +144,8 @@ if(profile.emailVerified){
   editEmailInput?.removeAttribute("disabled");
   editEmailInput?.classList.remove("locked");
 }
-}
-/**
+
+
  *   // 🔐 LOCK EMAIL + ROLE IF VERIFIED
   const editEmailInput = document.getElementById("editEmail");
   const editRoleInput  = document.getElementById("editRole");
@@ -159,9 +159,9 @@ if(profile.emailVerified){
       input.removeAttribute("disabled");
       input.classList.remove("locked");
     }
-  });
+  }); */
 }
- */
+
 
 const editName = document.getElementById("editName");
 const editRole = document.getElementById("editRole");
@@ -226,11 +226,11 @@ function previewPhoto(event) {
   reader.readAsDataURL(file);
 }
 document
-    .getElementById("saveProfileBtn")
-    .addEventListener("click", saveProfile);
+  .getElementById("saveProfileBtn")
+  .addEventListener("click", saveProfile);
+
 async function saveProfile() {
   try {
-
     const formData = new FormData();
 
     formData.append("name", editName.value.trim());
@@ -239,7 +239,7 @@ async function saveProfile() {
     formData.append("bio", editBio.value.trim());
     formData.append("email", editEmail.value.trim());
 
-    // ✅ attach file ONLY if changed
+    // Attach file only if changed
     if (NEW_PHOTO_FILE) {
       formData.append("photo", NEW_PHOTO_FILE);
     }
@@ -252,19 +252,36 @@ async function saveProfile() {
       body: formData
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      const err = await res.json();
-      showToaster(err.message || "Update failed");
+      showToaster(data.message || "Update failed");
       return;
     }
 
-    const profile = await res.json();
+    // Backend returns { success, message, account }
+    const updatedProfile = data.account || data;
 
-    renderProfile(profile);
+    // Update current profile immediately
+    CURRENT_PROFILE = updatedProfile;
+
+    // Update the visible profile immediately
+    renderProfile(updatedProfile);
+
+    // Optional: update edit form with the new values
+    // populateEditForm(updatedProfile);
+
+    // Clear selected new photo after successful save
+    NEW_PHOTO_FILE = null;
+
     closeEdit();
 
+    showToaster(
+      data.message || "Profile updated successfully"
+    );
+
   } catch (err) {
-    console.error(err);
+    console.error("SAVE PROFILE ERROR:", err);
     showToaster("Server connection error");
   }
 }
@@ -477,11 +494,11 @@ async function loadMembershipCard() {
 
 }
 
-loadMembershipCard();*/
+loadMembershipCard();
 
 //window.previewPhoto = previewPhoto;
 //window.openEditProfile = openEditProfile;
 //window.saveProfile = saveProfile;
 //window.closeEdit = closeEdit;
-
+*/
 });
