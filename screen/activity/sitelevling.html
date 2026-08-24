@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Site Level — Level, Plumb &amp; Slope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/siteleveling.min.css"/>
+<!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="10" width="18" height="4" rx="1" stroke="#1c1a0d" stroke-width="1.6"/><circle cx="12" cy="12" r="1.6" fill="#1c1a0d"/></svg>
+    </div>
+    <div>
+      <h1>Site Level</h1>
+      <div class="sub">Level · Plumb · Slope — from your phone's sensors</div>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-mode="level">Level</div>
+    <div class="tab" data-mode="plumb">Plumb</div>
+    <div class="tab" data-mode="slope">Slope</div>
+  </div>
+
+  <div class="hint" id="hintText"></div>
+
+  <div class="permission" id="permBox">
+    Your phone needs your OK to read its motion sensors. Tap below once — it only asks the first time.
+    <div style="margin-top:10px;"><button class="btn-primary" id="permBtn" style="width:100%;">Enable Sensors</button></div>
+  </div>
+
+  <div class="status" id="statusStrip">WAITING FOR SENSORS…</div>
+
+  <div class="stage" id="levelStage">
+    <div class="bubble-wrap">
+      <svg viewBox="0 0 250 250">
+        <circle cx="125" cy="125" r="118" fill="none" stroke="#2b3136" stroke-width="2"/>
+        <circle cx="125" cy="125" r="92" fill="none" stroke="#2b3136" stroke-width="1"/>
+        <circle cx="125" cy="125" r="6" fill="#2b3136"/>
+        <line x1="125" y1="7" x2="125" y2="22" stroke="#3a4147" stroke-width="2"/>
+        <line x1="125" y1="228" x2="125" y2="243" stroke="#3a4147" stroke-width="2"/>
+        <line x1="7" y1="125" x2="22" y2="125" stroke="#3a4147" stroke-width="2"/>
+        <line x1="228" y1="125" x2="243" y2="125" stroke="#3a4147" stroke-width="2"/>
+        <circle cx="125" cy="125" r="34" fill="none" stroke="#3a4147" stroke-width="1" stroke-dasharray="3 4"/>
+        <g id="bubbleGroup" transform="translate(0,0)">
+          <circle id="bubbleGlow" cx="125" cy="125" r="30" fill="var(--green)" opacity="0"/>
+          <circle id="bubbleDot" cx="125" cy="125" r="22" fill="#ff5347"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stage slope-stage" id="slopeStage" style="display:none;">
+    <svg class="slope-visual" viewBox="0 0 250 150">
+      <line x1="15" y1="130" x2="235" y2="130" stroke="#2b3136" stroke-width="2"/>
+      <g id="slopeGroup" transform-origin="20 130">
+        <line id="slopeLine" x1="20" y1="130" x2="220" y2="130" stroke="var(--yellow)" stroke-width="6" stroke-linecap="round"/>
+      </g>
+      <circle cx="20" cy="130" r="7" fill="#3a4147"/>
+    </svg>
+  </div>
+
+  <div class="stage cam-stage" id="camStage" style="display:none;">
+    <div class="cam-wrap">
+      <video id="camVideo" autoplay playsinline muted></video>
+      <svg class="cam-overlay" id="camOverlaySvg" viewBox="0 0 250 250" preserveAspectRatio="none">
+        <g id="camLineGroup">
+          <line id="camLine" x1="-40" y1="125" x2="290" y2="125" stroke="var(--red)" stroke-width="2.5"/>
+          <circle cx="125" cy="125" r="3.5" fill="var(--red)" id="camDot"/>
+        </g>
+      </svg>
+      <div class="cam-note" id="camNote"></div>
+      <div class="cam-badge" id="camBadge">0.0°</div>
+    </div>
+  </div>
+
+  <button class="cam-toggle" id="camToggleBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.4"/></svg>
+    <span id="camToggleLabel">Sight it with the camera</span>
+  </button>
+
+  <div class="readout" id="readoutRow"></div>
+
+  <div class="actions">
+    <button class="btn-primary" id="calibrateBtn">Calibrate Zero</button>
+    <button class="btn-ghost" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="refs" id="refBox">
+    <div class="title">Quick Reference</div>
+    <div class="row"><span>ADA ramp max</span><span>4.8° · 1:12</span></div>
+    <div class="row"><span>Min. roof drainage</span><span>~1–2°</span></div>
+    <div class="row"><span>Standard stair pitch</span><span>30–35°</span></div>
+  </div>
+
+  <footer>
+    Uses your device's accelerometer/gyroscope. Good for field checks — for<br>
+    structural or legal tolerances, confirm with a certified level or laser.
+  </footer>
+</div>
+<script src="../../dist/js/siteleveling.min.js"></script>
+</body>
+</html>

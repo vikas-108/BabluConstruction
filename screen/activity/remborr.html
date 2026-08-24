@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Rental Equipment Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/reborro.min.css">
+ <link rel="icon" type="image/png" href="/favicon.png" />
+ <!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="icon-btn" id="backBtn" style="display:none;" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><rect x="3" y="11" width="12" height="7" rx="1"/><path d="M15 13h3l3 3v2h-6z"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg></div>
+      <div class="header-titles">
+        <h1>Rental Equipment</h1>
+        <div class="sub">Track rentals &amp; get expiry alerts</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ MAIN VIEW ============ -->
+  <div id="mainView">
+    <div class="histlink" id="openHistBtn">View returned equipment →</div>
+    <div class="alerts" id="alertsBox"></div>
+    <div id="rentalsList"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="big">🏗️</div>
+      No equipment on rent right now.<br>Tap "Add Rental" to start tracking one.
+    </div>
+  </div>
+
+  <!-- ============ HISTORY VIEW ============ -->
+  <div id="histView">
+    <!--div class="back-link" id="closeHistBtn">← Back</div-->
+    <div id="histList"></div>
+    <div class="empty-state" id="histEmpty" style="display:none;">No returned equipment logged yet.</div>
+  </div>
+
+  <div class="cta-bar" id="ctaBar"><div class="inner"><button id="addBtn">+ Add Rental</button></div></div>
+
+  <!-- ============ ADD RENTAL DRAWER ============ -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="addDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title-row">
+      <div class="drawer-title">Add Rental</div>
+      <button class="drawer-x" id="addDrawerCloseBtn" aria-label="Close">✕</button>
+    </div>
+
+    <div class="field">
+      <label>Equipment</label>
+      <div class="eq-grid" id="eqGrid"></div>
+      <input type="text" id="customNameInput" placeholder="Equipment name" style="display:none;">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Rental start</label>
+        <input type="date" id="startInput">
+      </div>
+      <div class="field">
+        <label>Rental end</label>
+        <input type="date" id="endInput">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Daily price</label>
+        <input type="number" id="priceInput" placeholder="0" min="0" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label>Hours used (optional)</label>
+        <input type="number" id="hoursInput" placeholder="0" min="0" inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="field-row" id="workingHoursRow" style="display:none;">
+      <div class="field">
+        <label>Working hrs/day</label>
+        <input type="number" id="workingHoursInput" placeholder="8" min="1" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <div class="hint-note">Daily price ÷ working hrs/day = the hourly rate used below.</div>
+      </div>
+    </div>
+
+    <div class="calc-preview" id="calcPreview" style="display:none;"></div>
+
+    <div class="field">
+      <label>Deposit</label>
+      <input type="number" id="depositInput" placeholder="0" min="0" inputmode="decimal">
+    </div>
+
+    <div class="field">
+      <label>Damage (optional)</label>
+      <textarea id="damageInput" rows="2" placeholder="Note any damage, e.g. cracked hose, dent on panel"></textarea>
+    </div>
+
+    <button class="btn-yellow" id="saveRentalBtn">Save Rental</button>
+  </div>
+
+  <!-- ============ SHARE DRAWER ============ -->
+  <div class="drawer-backdrop" id="shareBackdrop"></div>
+  <div class="drawer" id="shareDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title-row">
+      <div class="drawer-title" id="shareDrawerTitle">Share rental</div>
+      <button class="drawer-x" id="shareDrawerCloseBtn" aria-label="Close">✕</button>
+    </div>
+    <div class="field">
+      <label>Phone number</label>
+      <input type="tel" id="sharePhone" placeholder="e.g. 98765 43210" maxlength="10"  inputmode="numeric" pattern="[0-9]" >
+    </div>
+    <button class="btn-yellow" id="shareSendBtn" style="width:100%;">Share</button>
+    <div class="copied-flag" id="shareNote"></div>
+
+    <div class="shared-list" id="sharedListWrap" style="display:none;">
+      <div class="shared-title">Shared with</div>
+      <div id="sharedList"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../../dist/js/reborro.min.js"></script>
+</body>
+</html>

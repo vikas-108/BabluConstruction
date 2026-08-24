@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Daily Site Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/site-command.min.css"/>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+ 
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="icon-btn" id="backBtn" style="display:none;" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3"/></svg></div>
+      <div class="header-titles">
+        <h1>Daily Site Report</h1>
+        <input type="text" id="siteNameInput" placeholder="Enter site / project name">
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </header>
+ 
+  <!-- ============ FORM VIEW ============ -->
+  <div id="formView">
+ 
+    <div class="histlink" id="openHistBtn">View past reports →</div>
+ 
+    <section class="block">
+      <div class="card date-row">
+        <span class="date-big" id="dateBig">Today</span>
+        <input type="date" id="dateInput">
+      </div>
+    </section>
+ 
+    <section class="block">
+      <div class="block-title"><span class="n">1</span>Workers &amp; progress</div>
+      <div class="card">
+        <div class="row3">
+          <div class="field">
+            <label>Technicians</label>
+            <input type="number" id="techInput" placeholder="0" min="0" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label>Labour/Helpers</label>
+            <input type="number" id="labourInput" placeholder="0" min="0" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label>Other</label>
+            <input type="number" id="otherInput" placeholder="0" min="0" inputmode="numeric">
+          </div>
+        </div>
+        <div class="workers-total">Total on site <span id="workersTotal">0</span></div>
+ 
+        <div class="pct-wrap">
+          <label style="display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;">Work completed</label>
+          <input type="number" id="pctNumber" placeholder="0" min="0" max="100" inputmode="numeric" style="width:100%;margin-bottom:10px;">
+          <input type="range" id="pctSlider" min="0" max="100" value="0">
+          <div class="bar-track"><div class="bar-fill" id="pctBar" style="width:0%"></div></div>
+        </div>
+      </div>
+    </section>
+ 
+    <section class="block">
+      <div class="block-title"><span class="n">2</span>Material used</div>
+      <div class="card" id="materialsCard">
+        <div id="materialsList"></div>
+        <button class="add-row" id="addMaterialBtn">+ Add material</button>
+      </div>
+    </section>
+ 
+    <section class="block">
+      <div class="block-title"><span class="n">3</span>Problems today</div>
+      <div class="card" id="problemsCard">
+        <div id="problemsList"></div>
+        <button class="add-row" id="addProblemBtn">+ Add problem</button>
+      </div>
+    </section>
+ 
+    <!-- Photos section removed for now — kept here (commented) for a future release.
+    <section class="block">
+      <div class="block-title"><span class="n">4</span>Photos</div>
+      <div class="card">
+        <div class="photo-zone" id="photoZone">
+          <div class="photo-count" id="photoCount">0</div>
+          <div>Tap to add site photos</div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+        <input type="file" id="photoInput" accept="image/*" multiple capture="environment" style="display:none;">
+      </div>
+    </section>
+    -->
+ 
+    <section class="block">
+      <div class="block-title"><span class="n">4</span>Tomorrow's plan</div>
+      <div class="card" id="tomorrowCard">
+        <div id="tomorrowList"></div>
+        <button class="add-row" id="addTomorrowBtn">+ Add task</button>
+      </div>
+    </section>
+ 
+    <div style="height:6px;"></div>
+  </div>
+ 
+  <!-- ============ REPORT (TICKET) VIEW ============ -->
+  <div id="reportView">
+    <div class="ticket">
+      <div class="ticket-notch l"></div><div class="ticket-notch r"></div>
+      <div class="ticket-head">
+        <div class="eyebrow" id="rSiteName">Daily Site Report</div>
+        <div class="day" id="rDay">—</div>
+      </div>
+      <div class="ticket-body">
+        <div class="t-section" style="padding-top:0;">
+          <span class="k">Workers on site</span>
+          <div id="rWorkersBreakdown"></div>
+        </div>
+        <div class="t-row"><span class="k">Work completed</span><span class="v" id="rPct">0%</span></div>
+        <div class="t-bar"><div class="bar-track"><div class="bar-fill" id="rBar"></div></div></div>
+ 
+        <div class="t-section">
+          <span class="k">Material used</span>
+          <div id="rMaterials"></div>
+        </div>
+        <div class="t-section">
+          <span class="k">Problems</span>
+          <div id="rProblems"></div>
+        </div>
+        <!-- Photos row removed for now, alongside the Photos input section.
+        <div class="t-section">
+          <span class="k">Photos</span>
+          <div class="t-list-row"><span>Attached today</span><span id="rPhotos">0</span></div>
+        </div>
+        -->
+        <div class="t-section">
+          <span class="k">Tomorrow</span>
+          <div id="rTomorrow"></div>
+        </div>
+        <div class="t-section">
+          <span class="k">Tomorrow</span>
+          <div id="rTomorrow"></div>
+        </div>
+      </div>
+      <div class="ticket-foot">
+        <div class="report-actions">
+          <button class="btn-ghost" id="editBtn">Edit</button>
+          <button class="btn-ghost" id="copyBtn">Copy text</button>
+          <button class="btn-ghost" id="shareBtn">Share</button>
+          <button class="btn-yellow" id="newDayBtn">New day</button>
+        </div>
+        <div class="copied-flag" id="copiedFlag"></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ============ SHARE DRAWER ============ -->
+  <div class="drawer-backdrop" id="shareBackdrop"></div>
+  <div class="drawer" id="shareDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Share report</div>
+    <label style="display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;">Phone number (optional)</label>
+    <input type="tel" id="sharePhone" placeholder="e.g. 98765 43210" maxlength="10">
+    <button class="btn-yellow" id="shareSendBtn" style="width:100%;margin-top:14px;">Share</button>
+    <div class="copied-flag" id="shareNote"></div>
+ 
+    <div class="shared-list" id="sharedListWrap" style="display:none;">
+      <div class="shared-title">Shared with</div>
+      <div id="sharedList"></div>
+    </div>
+  </div>
+ 
+  <!-- ============ HISTORY VIEW ============ -->
+  <div id="histView">
+    <!--div class="back-link" id="closeHistBtn">← Back to today</div-->
+    <div id="histList"></div>
+    <div class="t-empty" id="histEmpty" style="display:none; padding:20px 2px;">No past reports saved yet on this device.</div>
+  </div>
+ 
+  <div class="cta-bar" id="ctaBar"><div class="inner"><button id="finishBtn">Finish Day</button></div></div>
+</div>
+
+<script src="../../dist/js/site-command.min.js"></script>
+</body>
+</html>

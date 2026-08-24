@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Site Workforce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/attanc.min.css">
+ <link rel="icon" type="image/png" href="/favicon.png" />
+ <!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header>
+     <button class="back-btn"  id="homeBtn" aria-label="Back to home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 18l-6-6 6-6"/>
+  </svg>
+</button>
+    <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/><circle cx="18" cy="9" r="2.4"/><path d="M15.5 20c.2-2.4 2-4.3 4.5-4.7"/></svg></div>
+    <div>
+      <h1>Site Workforce</h1>
+      <div class="sub">Attendance &amp; wages — one tap a day</div>
+    </div>
+  </header>
+
+  <div id="mainView">
+    <div class="toolbar">
+      <div class="tb-row1">
+        <input type="date" class="tb-date" id="dateInput">
+        <button id="markAllBtn">Mark all present</button>
+      </div>
+      <div class="tb-stats">
+        <div class="stat-chip p"><div class="num" id="statPresent">0</div><div class="lbl">Present</div></div>
+        <div class="stat-chip h"><div class="num" id="statHalf">0</div><div class="lbl">Half</div></div>
+        <div class="stat-chip a"><div class="num" id="statAbsent">0</div><div class="lbl">Absent</div></div>
+        <div class="stat-chip"><div class="num" id="statTotal">0</div><div class="lbl">Total</div></div>
+      </div>
+    </div>
+
+    <div class="linkrow">
+      <div class="histlink" id="openGeoBtn">Geo attendance →</div>
+      <div class="histlink" id="openPayoutBtn">Payout summary →</div>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search name or role…">
+    </div>
+
+    <div id="workerList"></div>
+
+    <div class="section-title" style="margin-top:18px;">How to use this screen</div>
+    <div class="geo-card" style="padding:14px 16px; margin-top:0;">
+      <ul style="margin:0; padding-left:18px; color:var(--text-dim); font-size:12.5px; line-height:1.9;">
+        <li>Pick the date at the top, then tap a worker's <strong style="color:var(--text);">chip</strong> on the right to cycle Present → Half → Absent → blank.</li>
+        <li>Use <strong style="color:var(--text);">"Mark all present"</strong> to fill in the whole roster for that date in one tap.</li>
+        <li>Tap a worker's name to open their card — set daily wage, add a work note, record advances/payments, and see their site check-ins.</li>
+        <li>Tap <strong style="color:var(--text);">+</strong> (bottom right) to add a new worker to the roster.</li>
+        <li>Open <strong style="color:var(--text);">Geo attendance</strong> for GPS-verified check-ins, or <strong style="color:var(--text);">Payout summary</strong> to see what's owed across a date range.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ PAYOUT SUMMARY VIEW ============ -->
+  <div id="payoutView" style="display:none;">
+    <div class="back-link" id="closePayoutBtn">← Back to today</div>
+
+    <div class="preset-btns">
+      <button class="preset-btn" data-range="week">This week</button>
+      <button class="preset-btn" data-range="month">This month</button>
+      <button class="preset-btn" data-range="all">All time</button>
+    </div>
+
+    <div class="range-row">
+      <div class="field"><label>From</label><input type="date" id="rangeFrom"></div>
+      <div class="field"><label>To</label><input type="date" id="rangeTo"></div>
+    </div>
+
+    <div class="grand-card">
+      <div class="gc-row"><span>Total earned</span><span id="gcEarned">₹0</span></div>
+      <div class="gc-row"><span>Total pay/paid</span><span id="gcAdvances">₹0</span></div>
+      <div class="gc-row total"><span>Total outstanding</span><span id="gcBalance">₹0</span></div>
+    </div>
+
+    <button class="btn-yellow" id="payAllBtn" style="margin-bottom:14px;">Record payout for everyone owed</button>
+
+    <div id="payoutList"></div>
+  </div>
+
+  <!-- ============ GEO ATTENDANCE VIEW ============ -->
+  <div id="geoView" style="display:none;">
+    <div class="back-link" id="closeGeoBtn">← Back to today</div>
+
+    <div class="geo-card">
+      <div class="geo-row">
+        <div class="field">
+          <label>Site / project</label>
+          <select id="geoProjectSelect"></select>
+        </div>
+        <button class="icon-btn" id="addSiteBtn" title="Add site">+</button>
+      </div>
+      <div id="siteEmptyNote" class="empty-note" style="display:none; padding:14px 4px 4px;">No sites yet — tap + to add one.</div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Worker</label>
+        <select id="geoWorkerSelect"></select>
+      </div>
+
+      <div class="radar-wrap">
+        <svg id="radarSvg" width="180" height="180" viewBox="0 0 180 180"></svg>
+        <div class="radar-status idle" id="radarStatus">Awaiting check-in</div>
+        <div class="geo-msg" id="geoMsg"></div>
+      </div>
+
+      <button class="checkin-btn" id="checkinBtn">Check in now</button>
+    </div>
+
+    <div class="section-title" style="margin-top:18px;">Recent check-ins</div>
+    <div id="checkinLog"></div>
+
+    <div class="section-title" style="margin-top:18px;">How to use this screen</div>
+    <div class="geo-card" style="padding:14px 16px;">
+      <ul style="margin:0; padding-left:18px; color:var(--text-dim); font-size:12.5px; line-height:1.9;">
+        <li>Tap <strong style="color:var(--text);">+</strong> next to Site/project to add a work site — name it, then tap "Use my current location" while standing there, or enter its lat/lng manually.</li>
+        <li>Set the site's geofence radius in metres — how far a worker can be from that point and still count as "on site".</li>
+        <li>Pick the <strong style="color:var(--text);">Worker</strong> checking in and the <strong style="color:var(--text);">Site</strong> they're at.</li>
+        <li>Tap <strong style="color:var(--text);">Check in now</strong> and allow location access when your browser asks.</li>
+        <li>Green marker = inside the geofence, verified. Amber/red = far from site — flagged for review.</li>
+        <li>Every check-in is saved under that worker's profile too, so you can review their history from their detail card.</li>
+      </ul>
+    </div>
+  </div>
+
+  <button class="fab" id="fabAdd">+</button>
+
+  <!-- ADD WORKER DRAWER -->
+  <div class="drawer-backdrop" id="addBackdrop"></div>
+  <div class="drawer" id="addDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Add worker</div>
+    <div class="field"><label>Name</label><input type="text" id="newName" placeholder="e.g. Ramesh Kumar"></div>
+    <div class="row2">
+      <div class="field"><label>Role</label>
+        <select id="newRole">
+          <option>Mason</option><option>Helper</option><option>Carpenter</option><option>Technician</option>
+          <option>Electrician</option><option>Plumber</option><option>Painter</option>
+          <option>Bar bender</option><option>Supervisor</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field"><label>Daily wage</label><input type="number" id="newWage" placeholder="0" inputmode="numeric"></div>
+    </div>
+    <button class="btn-yellow" id="saveNewBtn">Add to roster</button>
+  </div>
+
+  <!-- ADD SITE DRAWER -->
+  <div class="drawer-backdrop" id="siteBackdrop"></div>
+  <div class="drawer" id="siteDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Add site</div>
+    <div class="field"><label>Site name</label><input type="text" id="siteName" placeholder="e.g. Sector 21 — Gurugram"></div>
+    <div class="row2">
+      <div class="field"><label>Latitude</label><input type="number" id="siteLat" placeholder="28.4595" step="0.0001"></div>
+      <div class="field"><label>Longitude</label><input type="number" id="siteLng" placeholder="77.0266" step="0.0001"></div>
+    </div>
+    <div class="field"><label>Geofence radius (metres)</label><input type="number" id="siteRadius" placeholder="150" value="150"></div>
+    <button class="btn-ghost" id="useCurrentLocBtn" style="margin-bottom:12px;">Use my current location</button>
+    <div class="geo-msg" id="siteLocMsg" style="text-align:left; margin-bottom:12px;"></div>
+    <button class="btn-yellow" id="saveSiteBtn">Save site</button>
+  </div>
+
+  <!-- WORKER DETAIL DRAWER -->
+  <div class="drawer-backdrop" id="detailBackdrop"></div>
+  <div class="drawer" id="detailDrawer">
+    <div class="drawer-handle"></div>
+    <div class="d-header">
+      <div>
+        <div class="d-name" id="dName">—</div>
+        <div class="d-role" id="dRole">—</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="d-role">Daily wage</div>
+        <input type="number" id="dWage" style="width:90px; text-align:right; background:var(--panel-2); border:1px solid var(--ring); color:var(--yellow); font-family:'JetBrains Mono',monospace; font-weight:700; font-size:15px; padding:7px 8px; border-radius:8px; margin-top:4px;">
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      <div class="sg-card"><div class="v" id="dPresentDays" style="color:var(--green);">0</div><div class="l">Present</div></div>
+      <div class="sg-card"><div class="v" id="dHalfDays" style="color:var(--amber);">0</div><div class="l">Half</div></div>
+      <div class="sg-card"><div class="v" id="dAbsentDays" style="color:var(--red);">0</div><div class="l">Absent</div></div>
+    </div>
+
+    <div class="field">
+      <label>Today's work / progress note</label>
+      <input type="text" id="dNote" placeholder="e.g. Slab shuttering — 60% done">
+    </div>
+
+    <div class="section-title">Advances &amp; payments</div>
+    <div id="advList"></div>
+    <div class="add-adv-row">
+      <input type="number" id="advAmount" placeholder="Amount" inputmode="numeric">
+      <input type="text" id="advNote" placeholder="Note (optional)">
+      <button class="btn-yellow" id="addAdvBtn">Add</button>
+    </div>
+
+    <div class="section-title">Site check-ins</div>
+    <div id="dCheckinList"></div>
+
+    <div class="balance-card">
+      <div class="l">Balance owed to worker</div>
+      <div class="v" id="dBalance">₹0</div>
+      <div class="note" id="dBalanceNote"></div>
+    </div>
+
+    <button class="btn-ghost" id="closeDetailBtn" style="margin-bottom:10px;">Close</button>
+    <button class="btn-red" id="deleteWorkerBtn">Remove worker from roster</button>
+  </div>
+
+</div>
+<script src="../../dist/js/attanc.min.js"></script>
+</body>
+</html>
