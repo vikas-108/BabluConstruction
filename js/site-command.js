@@ -354,7 +354,7 @@
     shareBackdrop.classList.remove('show');
     shareDrawer.classList.remove('show');
   }
-  document.getElementById('shareBtn').addEventListener('click', openShareDrawer);
+  //document.getElementById('shareBtn').addEventListener('click', openShareDrawer);
   shareBackdrop.addEventListener('click', closeShareDrawer);
  
   document.getElementById('shareSendBtn').addEventListener('click', ()=>{
