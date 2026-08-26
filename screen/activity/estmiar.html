@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Estimate Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/estimator.min.css">
+<script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="back-btn" id="homeBtn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M9 3v4M15 3v4M4 8h16M6 8v12a1 1 0 001 1h10a1 1 0 001-1V8"/><path d="M9 12h6M9 16h4"/></svg></div>
+    <div>
+      <h1>Estimate Generator</h1>
+      <div class="sub">Local-only project cost estimates</div>
+    </div>
+    <button class="icon-btn" id="settingsBtn" title="Your business details">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.23.5.7.85 1.25 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+  </header>
+
+  <!-- ============ LIST VIEW ============ -->
+  <div id="listView">
+    <div class="search-wrap"><input type="text" id="searchInput" placeholder="Search by project name…"></div>
+    <div id="estList"></div>
+  </div>
+
+  <!-- ============ EDITOR VIEW ============ -->
+  <div id="editorView" style="display:none;">
+    <div class="back-link" id="closeEditorBtn">← Back to estimates</div>
+
+    <div class="section-title">Project</div>
+    <div class="field"><label>Project name</label><input type="text" id="fProject" placeholder="e.g. Verma Residence — 2BHK"></div>
+    <div class="row2">
+      <div class="field"><label>Client (optional)</label><input type="text" id="fClient" placeholder="Client name"></div>
+      <div class="field"><label>Date</label><input type="date" id="fDate"></div>
+    </div>
+
+    <div class="section-title">Cost categories</div>
+    <div class="cat-wrap">
+      <div id="catRows"></div>
+    </div>
+    <button class="add-cat-btn" id="addCatBtn">+ Add category</button>
+
+    <div class="totals-card">
+      <div class="t-row"><span>Subtotal</span><span class="val" id="sumSubtotal">₹0</span></div>
+      <div class="t-row dashed"><span>Waste (%)</span><input type="number" id="fWaste" value="5" min="0"></div>
+      <div class="t-row"><span>Waste amount</span><span class="val" id="sumWaste">₹0</span></div>
+      <div class="t-row"><span>Profit (%)</span><input type="number" id="fProfit" value="10" min="0"></div>
+      <div class="t-row"><span>Profit amount</span><span class="val" id="sumProfit">₹0</span></div>
+      <div class="t-row grand"><span>TOTAL</span><span class="val" id="sumGrand">₹0</span></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-ghost" id="singleCatBtn">Single category</button>
+      <button class="btn-ghost" id="printBtn">Print / PDF</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn-yellow" id="saveEstBtn">Save estimate</button>
+    </div>
+    <button class="btn-red" id="deleteEstBtn" style="margin-top:10px; display:none;">Delete this estimate</button>
+  </div>
+
+  <button class="fab" id="fabAdd">+</button>
+</div>
+
+<!-- SETTINGS DRAWER -->
+<div class="drawer-backdrop" id="settingsBackdrop"></div>
+<div class="drawer" id="settingsDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Your business details</div>
+  <div class="field"><label>Business / contractor name</label><input type="text" id="bizName" placeholder="e.g. Verma Construction Co."></div>
+  <div class="field"><label>Phone</label><input type="text" id="bizPhone" placeholder="98xxxxxxxx"></div>
+  <div class="field"><label>Address</label><input type="text" id="bizAddress" placeholder="Business address"></div>
+  <button class="btn-yellow" id="saveBizBtn">Save details</button>
+</div>
+
+<!-- SINGLE CATEGORY ESTIMATE DRAWER -->
+<div class="drawer-backdrop" id="catEstBackdrop"></div>
+<div class="drawer" id="catEstDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Estimate a single category</div>
+  <div class="field">
+    <label>Category</label>
+    <select id="catEstSelect" style="width:100%; background:var(--panel-2); border:1px solid var(--ring); color:var(--text); font-family:'Inter',sans-serif; font-weight:500; font-size:14.5px; padding:10px 12px; border-radius:10px;"></select>
+  </div>
+  <div class="totals-card" style="margin-top:4px;">
+    <div class="t-row"><span>Category amount</span><span class="val" id="catSumSubtotal">₹0</span></div>
+    <div class="t-row"><span>Waste (<span id="catWasteLabel">5</span>%)</span><span class="val" id="catSumWaste">₹0</span></div>
+    <div class="t-row"><span>Profit (<span id="catProfitLabel">10</span>%)</span><span class="val" id="catSumProfit">₹0</span></div>
+    <div class="t-row grand"><span>TOTAL</span><span class="val" id="catSumGrand">₹0</span></div>
+  </div>
+  <button class="btn-yellow" id="catEstPrintBtn" style="margin-top:14px;">Print this category</button>
+</div>
+
+<!-- SHARE DRAWER -->
+<div class="drawer-backdrop" id="shareBackdrop"></div>
+<div class="drawer" id="shareDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Share estimate</div>
+  <div class="field">
+    <label>Phone number</label>
+    <div class="share-row">
+      <input type="tel" id="sharePhone" placeholder="98xxxxxxxx">
+      <button class="btn-yellow" id="shareSendBtn">Share</button>
+    </div>
+  </div>
+  <div class="section-title" style="margin-top:16px;">Shared with</div>
+  <div id="sharedList"></div>
+</div>
+
+<!-- printable estimate, hidden on screen -->
+<div id="printArea"></div>
+
+<script src="../../dist/js/estimator.min.js"></script>
+</body>
+</html>
