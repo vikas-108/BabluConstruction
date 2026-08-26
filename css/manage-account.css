@@ -850,3 +850,38 @@ button:hover {
     }
 
 }
+
+.account-action-btn {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 16px;
+  padding: 12px 16px;
+
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+
+  background: #fff;
+  color: #111827;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.account-action-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.account-action-btn:active {
+  transform: scale(0.98);
+}
+
