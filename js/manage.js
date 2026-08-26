@@ -160,9 +160,48 @@ if(profile.emailVerified){
       input.classList.remove("locked");
     }
   }); */
+   renderRoleActionCard(profile.role);
 }
 
+function renderRoleActionCard(role) {
 
+  const roleActionCard = document.getElementById("roleActionCard");
+
+  if (!roleActionCard) return;
+
+  if (role === "Client") {
+
+    roleActionCard.innerHTML = `
+      <article class="account-card">
+        <h3>A.P.</h3>
+        <p>
+          Here client creates projects and publishes them for workers to see.
+        </p>
+
+        <a href="../screen/cltprofile.html"
+           class="account-action-btn">
+          Create Project
+        </a>
+      </article>
+    `;
+
+  } else {
+
+    roleActionCard.innerHTML = `
+      <article class="account-card">
+        <h3>C.P.</h3>
+        <p>
+          Here workers create profiles and publish them for clients to see.
+        </p>
+
+        <a href="../create-profile.html"
+           class="account-action-btn">
+          Create Profile
+        </a>
+      </article>
+    `;
+  }
+}
 const editName = document.getElementById("editName");
 const editRole = document.getElementById("editRole");
 const editExp = document.getElementById("editExp");
@@ -267,7 +306,8 @@ async function saveProfile() {
 
     // Update the visible profile immediately
     renderProfile(updatedProfile);
-
+ // IMPORTANT: update role-specific card
+renderRoleActionCard(updatedProfile.role);
     // Optional: update edit form with the new values
     // populateEditForm(updatedProfile);
 
