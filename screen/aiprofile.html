@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Find Profiles — Site Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+<link rel="stylesheet" href="../dist/css/aiprofile.min.css" />
+<script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <button type="button" id="backBtn" class="icon-only-btn" aria-label="Go back">
+      <i data-lucide="arrow-left"></i>
+    </button>
+    <div class="topbar-title">
+      <div class="eyebrow">Operators</div>
+      <h1 class="page-title">Find Better</h1>
+    </div>
+    <button type="button" id="filterBtn" class="icon-only-btn filter-btn" aria-label="Filters">
+      <i data-lucide="sliders-horizontal"></i>
+      <span id="filterDot" class="filter-dot hidden"></span>
+    </button>
+  </header>
+
+  <!-- API error banner -->
+  <div id="errorBanner" class="error-banner hidden">
+    <i data-lucide="alert-triangle"></i>
+    <span id="errorBannerText"></span>
+    <button type="button" id="errorBannerClose" aria-label="Dismiss"><i data-lucide="x"></i></button>
+  </div>
+
+  <!-- Active filter chips -->
+  <div id="activeFilters" class="active-filters"></div>
+
+  <!-- Results area -->
+  <main class="results-area" id="resultsArea">
+
+    <!-- AI searching state -->
+    <div id="aiState" class="ai-state hidden">
+      <div class="ai-orb">
+        <span class="ai-orb-ring"></span>
+        <i data-lucide="sparkles" class="ai-orb-icon"></i>
+      </div>
+      <div class="ai-status" id="aiStatusText">Understanding your search…</div>
+      <div class="ai-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="empty-state hidden">
+      <i data-lucide="user-search"></i>
+      <p>No profiles match your search.</p>
+    </div>
+
+    <!-- Idle / prompt state -->
+    <div id="idleState" class="empty-state">
+      <i data-lucide="users"></i>
+      <p>Search by name, or use filters to find contractors, technicians, suppliers and more.</p>
+    </div>
+
+    <div class="results-meta hidden" id="resultsMeta">
+      <span id="resultCount"></span>
+    </div>
+
+    <div id="cardsGrid" class="cards-grid"></div>
+
+    <div class="pagination hidden" id="pagination">
+      <button type="button" id="prevBtn" class="page-btn" disabled>
+        <i data-lucide="chevron-left"></i> Prev
+      </button>
+      <span class="page-indicator" id="pageIndicator">Page 1 of 1</span>
+      <button type="button" id="nextBtn" class="page-btn" disabled>
+        Next <i data-lucide="chevron-right"></i>
+      </button>
+    </div>
+  </main>
+
+  <!-- Bottom search bar -->
+  <div class="bottom-bar">
+    <div class="search-row">
+      <i data-lucide="search" class="search-icon"></i>
+      <input type="text" id="searchInput" placeholder="Search profiles by name…" />
+      <button type="button" id="clearSearchBtn" class="clear-search-btn hidden" aria-label="Clear search">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter sheet -->
+  <div id="filterBackdrop" class="filter-backdrop hidden"></div>
+  <div id="filterSheet" class="filter-sheet hidden">
+    <div class="filter-sheet-handle"></div>
+    <div class="filter-sheet-header">
+      <span class="filter-sheet-title">Filters</span>
+      <button type="button" id="filterCloseBtn" class="icon-only-btn" aria-label="Close filters">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="filter-sheet-body">
+      <div class="filter-field">
+        <label class="filter-label">Category</label>
+        <div class="select-wrap">
+          <select id="f-category">
+            <option value="">All categories</option>
+          </select>
+          <i data-lucide="chevron-down" class="select-caret"></i>
+        </div>
+      </div>
+
+      <div class="filter-field" id="roleField" style="display:none">
+        <label class="filter-label">Role</label>
+        <div class="select-wrap">
+          <select id="f-role">
+            <option value="">All roles</option>
+          </select>
+          <i data-lucide="chevron-down" class="select-caret"></i>
+        </div>
+      </div>
+
+      <div class="filter-field">
+        <label class="filter-label">Address</label>
+        <input type="text" id="f-address" placeholder="Street, locality…" />
+      </div>
+
+      <div class="filter-field">
+        <label class="filter-label">Phone</label>
+        <input type="text" id="f-phone" placeholder="Phone number" inputmode="tel" />
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-field">
+          <label class="filter-label">State</label>
+          <div class="select-wrap">
+            <select id="f-state">
+              <option value="">All states</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret"></i>
+          </div>
+        </div>
+
+        <div class="filter-field">
+          <label class="filter-label">District</label>
+          <div class="select-wrap">
+            <select id="f-district" disabled>
+              <option value="">Select a state first</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-sheet-footer">
+      <button type="button" id="clearFiltersBtn" class="btn-secondary">Clear all</button>
+      <button type="button" id="applyFiltersBtn" class="btn-primary">Apply filters</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="../dist/js/config.min.js"></script>
+<script src="../dist/js/aiprofile.min.js" defer></script>
+</body>
+</html>
