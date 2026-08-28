@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Workshop Ledger — Attendance &amp; Payments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<link rel="stylesheet" href="../dist/css/workshopedger2punch.min.css">
+ <link rel="icon" type="image/png" href="/favicon.png" />
+ <!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="screen-login">
+  <div class="login-wrap">
+    <div class="login-hero">
+      <div class="hero-mark">WL</div>
+      <h1>Workshop Ledger</h1>
+      <p>Attendance and payments for the crew — check-ins tracked by location, wages, monthly pay and advances all in one place.</p>
+      <div class="hero-stamp">◆ EST. ON SITE · CARPENTRY CREW</div>
+    </div>
+    <div class="login-panel">
+      <div class="role-toggle">
+        <button id="tab-admin-login" class="active" type="button">Admin</button>
+        <button id="tab-worker-login" type="button">Worker</button>
+      </div>
+
+      <!-- BuildSkil admin login -->
+      <div id="form-admin-login">
+        <h2>Admin sign in</h2>
+        <div class="login-sub">Use your existing BuildSkil account. Each BuildSkil user gets their own workshop, workers and records.</div>
+        <div class="err-msg" id="admin-err">Please sign in to BuildSkil first.</div>
+       <button
+    class="btn btn-primary btn-block"
+    id="adminLoginBtn"
+    type="button">
+    Login with BuildSkil
+</button>
+        <div class="hint">No separate Workshop Ledger admin username or password is required.</div>
+      </div>
+
+      <!-- Worker login form -->
+      <div id="form-worker-login" class="hidden">
+        <h2>Worker sign in</h2>
+        <div class="login-sub">Mark attendance and check your salary.</div>
+        <div class="err-msg" id="worker-err">We couldn't match those details. Check with your admin.</div>
+        <form id="worker-login-form">
+
+  <div class="field">
+    <label>Phone number</label>
+    <input
+      id="worker-phone"
+      type="tel"
+      placeholder="98765 43210"
+      inputmode="numeric"
+      autocomplete="tel"
+    >
+  </div>
+
+  <div class="field">
+    <label>Name</label>
+    <input
+      id="worker-name"
+      type="text"
+      placeholder="Your full name"
+      autocomplete="name"
+    >
+  </div>
+
+  <div class="field">
+    <label>Password</label>
+    <input
+      id="worker-pass"
+      type="password"
+      placeholder="••••••••"
+      autocomplete="current-password"
+    >
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary btn-block">
+    Sign in
+  </button>
+
+</form></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ADMIN APP ================= -->
+<div class="app" id="app-admin">
+  <div class="sidebar">
+    <div class="brand"><div class="mark">WL</div><span>Workshop Ledger</span></div>
+    <button class="nav-item active" data-view="overview" type="button"><span class="ic">◆</span> Overview</button>
+    <button class="nav-item" data-view="projects" type="button"><span class="ic">⌂</span> Projects</button>
+    <button class="nav-item" data-view="attendance" type="button"><span class="ic">◷</span> Attendance</button>
+    <button class="nav-item" data-view="payments" type="button"><span class="ic">₹</span> Payments</button>
+    <button class="nav-item" data-view="workers" type="button"><span class="ic">☰</span> Workers</button>
+    <button class="nav-item" data-view="account" type="button"><span class="ic">⚙</span> Account</button>
+    <button id="adminLogoutBtn" class="btn btn-ghost btn-block btn-sm" type="button">Sign out</button>
+    <div class="sidebar-foot">
+      <div class="who"><b id="admin-who-name">Admin</b>Site supervisor access</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- Overview -->
+    <div id="view-overview">
+      <div class="topbar">
+        <div><h1>Overview</h1><div class="sub" id="today-label"></div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="card stat-card"><div class="label">Total workers</div><div class="value" id="stat-total">0</div><div class="sub">on the crew roster</div></div>
+        <div class="card stat-card"><div class="label">Present today</div><div class="value" id="stat-present">0</div><div class="sub" id="stat-present-sub">checked in today</div></div>
+        <div class="card stat-card"><div class="label">Pending dues</div><div class="value" id="stat-due">₹0</div><div class="sub">owed across the crew</div></div>
+        <div class="card stat-card"><div class="label">Paid this month</div><div class="value" id="stat-paid">₹0</div><div class="sub">wages, salary &amp; advances</div></div>
+      </div>
+      <div class="section-title">Today's check-ins</div>
+      <div class="card table-wrap"><div id="overview-attendance-table"></div></div>
+      <div class="section-title">Recent payments</div>
+      <div class="card table-wrap"><div id="overview-payments-table"></div></div>
+    </div>
+
+    <!-- Projects -->
+    <div id="view-projects" class="hidden">
+      <div class="topbar">
+        <div><h1>Projects</h1><div class="sub">Site locations workers must be near to check in</div></div>
+        <button  id="addProjectBtn" class="btn btn-primary" type="button">+ Add project</button>
+      </div>
+      <div class="card table-wrap"><div id="projects-table"></div></div>
+    </div>
+
+    <!-- Attendance -->
+    <div id="view-attendance" class="hidden">
+      <div class="topbar"><div><h1>Attendance</h1><div class="sub">Location-verified check-ins from every worker</div></div></div>
+      <div class="filters">
+       <input
+    type="date"
+    id="att-date-filter"
+>
+
+<select id="att-worker-filter">
+    <option value="">All workers</option>
+</select>
+
+<select id="att-project-filter">
+    <option value="">All projects</option>
+</select>
+
+<button
+    id="clearAttFiltersBtn"
+    class="btn btn-ghost btn-sm"
+    type="button"
+>
+    Clear filters
+</button>
+      </div>
+      <div class="card table-wrap"><div id="attendance-table"></div></div>
+    </div>
+
+    <!-- Payments -->
+    <div id="view-payments" class="hidden">
+      <div class="topbar">
+        <div><h1>Payments</h1><div class="sub">Send wages, monthly salary or advances to workers</div></div>
+      </div>
+      <div class="section-title">Balance by worker</div>
+      <div class="card table-wrap"><div id="payments-balance-table"></div></div>
+      <div class="section-title">Payment history</div>
+      <div class="card table-wrap"><div id="payments-history-table"></div></div>
+    </div>
+
+    <!-- Workers -->
+    <div id="view-workers" class="hidden">
+      <div class="topbar">
+        <div><h1>Workers</h1><div class="sub">Add and manage crew accounts</div></div>
+        <button
+    id="addWorkerBtn"
+    class="btn btn-primary"
+    type="button"
+>
+    + Add worker
+</button>
+      </div>
+      <div class="card table-wrap"><div id="workers-table"></div></div>
+    </div>
+
+    <!-- Account -->
+    <div id="view-account" class="hidden">
+      <div class="topbar">
+        <div><h1>Account</h1><div class="sub">Your admin profile and worker sign-in activity</div></div>
+      </div>
+      <div class="card" style="padding:22px 24px; max-width:420px; margin-bottom:26px;">
+        <div class="field"><label>Name</label><input id="admin-account-name" placeholder="Your name"></div>
+        <div class="field"><label>Username</label><input id="admin-account-username" disabled style="background:var(--tan-light); color:var(--tan);"></div>
+        <button
+    id="saveAdminAccountBtn"
+    class="btn btn-primary"
+    type="button">
+    Save changes
+</button>
+      </div>
+      <div class="section-title">Worker sign-in activity</div>
+      <div class="card table-wrap"><div id="admin-sessions-table"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= WORKER APP ================= -->
+<div class="app" id="app-worker">
+  <div class="worker-shell">
+    <div class="worker-top">
+      <button
+    id="logoutBtn"
+    class="logout"
+    type="button"
+>
+    Sign out
+</button>
+      <div class="greet">Welcome back</div>
+      <h2 id="worker-greet-name">—</h2>
+    </div>
+    <div class="worker-body">
+      <div class="card punch-card">
+        <div class="punch-date" id="worker-today-date"></div>
+        <div class="field" style="text-align:left; margin-bottom:18px;">
+          <label>Project</label>
+          <select id="punch-project-select"></select>
+        </div>
+       <button
+    class="punch-btn"
+    id="punch-btn"
+    type="button"
+>
+    <span class="ic">✓</span>
+    <span id="punch-label">MARK ATTENDANCE</span>
+</button>
+        <div class="punch-status" id="punch-status">You haven't checked in today.</div>
+        <div id="punch-geo" class="hidden"></div>
+      </div>
+
+      <div class="tab-row">
+        <button
+    class="tab-btn active"
+    id="wtab-salary"
+    type="button"
+>
+    Salary
+</button>
+
+<button
+    class="tab-btn"
+    id="wtab-attendance"
+    type="button"
+>
+    Attendance
+</button>
+
+<button
+    class="tab-btn"
+    id="wtab-account"
+    type="button"
+>
+    Account
+</button>
+      </div>
+
+      <div id="worker-panel-salary">
+        <div class="wk-stat-row">
+          <div class="card wk-stat"><div class="value" id="wk-due">₹0</div><div class="label">Balance due</div></div>
+          <div class="card wk-stat"><div class="value" id="wk-paid">₹0</div><div class="label">Paid this month</div></div>
+        </div>
+        <div class="card" style="padding:16px 18px; margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--tan); margin-bottom:6px;">
+            <span>Wage type</span><span class="mono" id="wk-wagetype" style="color:var(--walnut); font-weight:600;">—</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--tan);">
+            <span>Rate</span><span class="mono" id="wk-rate" style="color:var(--walnut); font-weight:600;">—</span>
+          </div>
+        </div>
+        <div class="section-title">Payment history</div>
+        <div class="card" id="wk-payment-list"></div>
+      </div>
+
+      <div id="worker-panel-attendance" class="hidden">
+        <div class="section-title">This month <span class="mono" id="wk-att-count" style="font-size:12px; color:var(--tan);"></span></div>
+        <div class="card" id="wk-attendance-list"></div>
+      </div>
+
+      <div id="worker-panel-account" class="hidden">
+        <div class="card" style="padding:18px 20px; margin-bottom:16px;">
+          <div class="field"><label>Name</label><input id="worker-account-name" placeholder="Your name"></div>
+          <div class="field"><label>Phone</label><input id="worker-account-phone" disabled style="background:var(--tan-light); color:var(--tan);"></div>
+        <button
+    id="saveWorkerAccountBtn"
+    class="btn btn-primary btn-block"
+    type="button"
+>
+    Save changes
+</button>
+        </div>
+        <div class="section-title">Your sign-in history</div>
+        <div class="card" id="worker-sessions-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+<div class="modal-backdrop" id="worker-modal-backdrop">
+  <div class="modal">
+    <h3 id="worker-modal-title">Add worker</h3>
+    <input type="hidden" id="wm-id">
+    <div class="field"><label>Full name</label><input id="wm-name" placeholder="e.g. Suresh Yadav"></div>
+    <div class="field"><label>Phone number</label><input id="wm-phone" placeholder="10-digit phone" inputmode="numeric"></div>
+    <div class="field"><label>Login password</label><input id="wm-pass" placeholder="Set a password"></div>
+    <div class="field">
+      <label>Wage type</label>
+      <div class="wage-toggle">
+   <button
+    type="button"
+    id="wm-wage-daily"
+    class="active"
+>
+    Daily wage
+</button>
+
+<button
+    type="button"
+    id="wm-wage-monthly"
+>
+    Monthly salary
+</button>
+      </div>
+    </div>
+    <div class="field"><label id="wm-rate-label">Daily rate (₹)</label><input id="wm-rate" type="number" placeholder="800"></div>
+    <div class="modal-actions">
+      <button
+    id="cancelWorkerBtn"
+    class="btn btn-ghost"
+    type="button"
+>
+    Cancel
+</button>
+
+<button
+    id="saveWorkerBtn"
+    class="btn btn-primary"
+    type="button"
+>
+    Save worker
+</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="project-modal-backdrop">
+  <div class="modal" style="max-width:480px;">
+    <h3 id="project-modal-title">Add project</h3>
+    <input type="hidden" id="pjm-id">
+    <div class="field"><label>Project name</label><input id="pjm-name" placeholder="e.g. Sharma Residence Site"></div>
+    <div class="field">
+      <label>Site location</label>
+      <div id="pjm-map"></div>
+      <div style="font-size:11.5px; color:var(--tan); margin:8px 0 10px;">Click the map or drag the pin to set the exact spot.</div>
+      <button
+    type="button"
+    id="useProjectLocationBtn"
+    class="btn btn-ghost btn-sm btn-block"
+>
+    📍 Use my current location
+</button>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <div class="field" style="flex:1;"><label>Latitude</label><input id="pjm-lat" type="number" step="any" placeholder="e.g. 28.6139"></div>
+      <div class="field" style="flex:1;"><label>Longitude</label><input id="pjm-lng" type="number" step="any" placeholder="e.g. 77.2090"></div>
+    </div>
+    <div class="field"><label>Check-in radius (meters)</label><input id="pjm-radius" type="number" placeholder="e.g. 150"></div>
+    <div class="modal-actions">
+     <button
+    id="cancelProjectBtn"
+    class="btn btn-ghost"
+    type="button"
+>
+    Cancel
+</button>
+
+<button
+    id="saveProjectBtn"
+    class="btn btn-primary"
+    type="button"
+>
+    Save project
+</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="attendance-map-backdrop">
+  <div class="modal" style="max-width:520px;">
+    <h3 id="attendance-map-title">Check-in location</h3>
+    <div id="attendance-map"></div>
+    <div id="attendance-map-info" style="font-size:12.5px; color:var(--tan); line-height:1.7; margin:12px 0 4px;"></div>
+    <div class="modal-actions">
+      <button
+    id="closeAttendanceMapBtn"
+    class="btn btn-primary btn-block"
+    type="button"
+>
+    Close
+</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="pay-modal-backdrop">
+  <div class="modal">
+    <h3>Send payment</h3>
+    <input type="hidden" id="pm-worker-id">
+    <div class="field"><label>Worker</label><div class="mono" id="pm-worker-name" style="font-weight:600; padding:6px 0;"></div></div>
+    <div class="field">
+      <label>Payment type</label>
+      <select id="pm-type">
+        <option value="wage">Wage payment</option>
+        <option value="monthly">Monthly salary</option>
+        <option value="advance">Advance</option>
+      </select>
+    </div>
+    <div class="field"><label>Amount (₹)</label><input id="pm-amount" type="number" placeholder="0"></div>
+    <div class="field"><label>Note (optional)</label><input id="pm-note" placeholder="e.g. October wages"></div>
+    <div class="modal-actions">
+     <button
+    id="cancelPayBtn"
+    class="btn btn-ghost"
+    type="button"
+>
+    Cancel
+</button>
+
+<button
+    id="confirmPayBtn"
+    class="btn btn-sage"
+    type="button"
+>
+    Confirm &amp; send
+</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../dist/js/workshop-ledger-api.min.js"></script>
+</body>
+</html>
