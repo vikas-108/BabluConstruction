@@ -7,7 +7,10 @@
    - Workshop worker: wl_worker_token (separate worker JWT)
    ============================================================ */
 
-const API_BASE = 'https://api.buildskil.com/api';
+const API_BASE = ['localhost', '127.0.0.1'].includes(location.hostname)
+  ? 'http://localhost:5000/api'
+  : 'https://api.buildskil.com/api';
+
 const BUILD_TOKEN_KEY = 'cb_token';
 const WORKER_TOKEN_KEY = 'wl_worker_token';
 const LEDGER_SESSION_KEY = 'workshop_ledger_session';
@@ -583,7 +586,7 @@ function renderOverview() {
 
   const todays = DATA.attendance
     .filter(a => a.date === todayStr())
-    .sort((a, b) => String(b.time).localeCompare(String(a.time)));
+    .sort((a, b) => String(a.time).localeCompare(String(b.time)));
 
   const attHtml = todays.length
     ? `<table><thead><tr><th>Worker</th><th>Project</th><th>Session</th><th>Check-in</th><th>Location</th></tr></thead><tbody>` +
@@ -690,8 +693,10 @@ function renderAttendanceView() {
   if (workerF) rows = rows.filter(a => String(a.workerId) === String(workerF));
   if (projectF) rows = rows.filter(a => String(a.projectId) === String(projectF));
 
-  rows.sort((a, b) => (String(b.date) + String(b.time)).localeCompare(String(a.date) + String(a.time)));
-
+ // rows.sort((a, b) => (String(b.date) + String(b.time)).localeCompare(String(a.date) + String(a.time)));
+rows.sort((a, b) => a.date !== b.date
+  ? String(b.date).localeCompare(String(a.date))   // newest date on top
+  : String(a.time).localeCompare(String(b.time))); // morning above afternoon
   if (!rows.length) {
     document.getElementById('attendance-table').innerHTML = emptyState('◷', 'No attendance records match');
     return;
@@ -1761,6 +1766,10 @@ function renderWorkerAttendance() {
         </div>`;
       }).join('')
     : emptyState('◷', 'No attendance recorded yet');
+    
+    recs.sort((a, b) => a.date !== b.date
+  ? String(b.date).localeCompare(String(a.date))
+  : String(a.time).localeCompare(String(b.time)));
 }
 
 function renderWorkerAccountView() {
