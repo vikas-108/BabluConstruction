@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routine Pay — Labour & Payments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../css/routineentry.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+    <div><h1>Labour & Payments</h1><p>Projects, contractors, today's work and payments</p></div>
+  </div>
+  <div class="top-actions">
+    <select id="projectSelect" class="project-select" aria-label="Select project"></select>
+    <button class="btn btn-light" id="projectsBtn"><i class="fa-solid fa-building"></i> Projects</button>
+    <button class="btn btn-light" id="historyBtn"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
+    <button class="btn btn-primary" id="createContractorBtn"><i class="fa-solid fa-plus"></i> Create Contractor</button>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page-heading">
+    <div><h2>Daily Labour</h2><p id="activeProjectLabel"></p></div>
+  </div>
+
+  <section class="section-card">
+    <div class="section-body">
+      <div class="date-row">
+        <div class="form-group"><label>Work Date</label><input type="date" id="workDate"></div>
+        <button class="btn btn-primary" id="saveWorkBtn"><i class="fa-solid fa-floppy-disk"></i> Save Today's Work</button>
+      </div>
+      <div id="contractorGrid" class="contractor-grid"></div>
+    </div>
+  </section>
+
+  <!-- PAYMENT CYCLES TEMPORARILY COMMENTED OUT FOR FUTURE CHANGE.
+       IMPORTANT: do not add executable JS that references these commented IDs
+       unless the UI is enabled again. -->
+
+  <!--
+  <section class="section-card" id="paymentCyclesSection">
+    <div class="section-head"><h3>Payment Cycles</h3></div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Cycle</label><select id="cycleDays"><option value="7">7 Days</option><option value="15">15 Days</option><option value="30">30 Days</option></select></div>
+        <div class="form-group"><label>Start</label><input id="cycleStart" type="date"></div>
+        <div class="form-group"><label>End</label><input id="cycleEnd" type="date"></div>
+      </div>
+    </div>
+  </section>
+  -->
+</main>
+
+<!-- PROJECTS -->
+<div class="modal" id="projectModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Projects / Sites</h3><button class="icon-btn" data-action="close-modal" data-target="projectModal"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="projectIdEdit">
+      <div class="form-grid">
+        <div class="form-group full"><label>Project / Site Name</label><input id="projectName" placeholder="Example: Sharma Residence"></div>
+        <div class="form-group"><label>Location</label><input id="projectLocation" placeholder="Example: Karnal"></div>
+        <div class="form-group"><label>Project Code</label><input id="projectCode" placeholder="Optional"></div>
+        <div class="form-group"><label>Latitude</label><input id="projectLat" type="number" step="any" placeholder="29.66808"></div>
+        <div class="form-group"><label>Longitude</label><input id="projectLng" type="number" step="any" placeholder="77.00967"></div>
+        <div class="form-group"><label>Check-in Radius (m)</label><input id="projectRadius" type="number" min="1" value="150"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn btn-light" id="useProjectLocationBtn"><i class="fa-solid fa-location-crosshairs"></i> Use Current Location</button>
+        <span style="font-size:10px;color:#858f97;align-self:center">Coordinates and radius can be used by worker GPS check-in.</span>
+      </div>
+      <div style="margin-top:16px;font-size:13px;font-weight:800;margin-bottom:9px">Your Projects</div>
+      <div id="projectList"></div>
+      <div class="modal-actions">
+        <button class="btn btn-light" data-action="close-modal" data-target="projectModal">Close</button>
+        <button class="btn btn-primary" id="saveProjectBtn"><i class="fa-solid fa-plus"></i> Save Project</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRACTOR -->
+<div class="modal" id="contractorModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="contractorModalTitle">Create Contractor</h3><button class="icon-btn" data-action="close-modal" data-target="contractorModal"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="contractorId">
+      <div class="form-grid">
+        <div class="form-group full"><label>Contractor / Supplier Name</label><input id="contractorName" placeholder="Example: ABC Builder"></div>
+        <div class="form-group"><label>Category</label><input id="contractorCategory" placeholder="Builder, Lohar, Plumber..."></div>
+        <div class="form-group"><label>Phone</label><input id="contractorPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="9876543210"></div>
+      </div>
+      <div style="margin-top:17px;font-size:13px;font-weight:800">Workforce</div>
+      <div style="font-size:11px;color:#838d96;margin:4px 0 9px">Add Technician, Helper, Guider, Supervisor or any custom role.</div>
+      <div id="roleEditors"></div>
+      <button class="btn btn-light" id="addRoleBtn" style="margin-top:10px"><i class="fa-solid fa-plus"></i> Add Role</button>
+      <div class="modal-actions">
+        <button class="btn btn-light" data-action="close-modal" data-target="contractorModal">Cancel</button>
+        <button class="btn btn-primary" id="saveContractorBtn">Save Contractor</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORK -->
+<div class="modal" id="workModal">
+  <div class="modal-box">
+    <div class="modal-head"><div><h3>Today's Work Detail</h3><div id="workModalSub" style="font-size:11px;color:#818b94;margin-top:3px"></div></div><button class="icon-btn" data-action="close-modal" data-target="workModal"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div id="workEditor"></div>
+      <div class="modal-actions">
+        <button class="btn btn-light" data-action="close-modal" data-target="workModal">Cancel</button>
+        <button class="btn btn-primary" id="saveWorkDetailBtn"><i class="fa-solid fa-check"></i> Save Work</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT -->
+<div class="modal" id="paymentModal">
+  <div class="modal-box">
+    <div class="modal-head"><div><h3>Payment Client</h3><div id="paymentModalSub" style="font-size:11px;color:#818b94;margin-top:3px"></div></div><button class="icon-btn" data-action="close-modal" data-target="paymentModal"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Date</label><input id="paymentDate" type="date"></div>
+        <div class="form-group"><label>Amount</label><input id="paymentAmount" type="number" min="0" placeholder="₹"></div>
+        <div class="form-group"><label>Method</label><select id="paymentMethod"><option>Cash</option><option>UPI</option><option>Bank Transfer</option><option>Other</option></select></div>
+        <div class="form-group"><label>Build's Member / Client</label><input id="paymentBy" placeholder="Member or client name"></div>
+        <div class="form-group full"><label>Payment Details</label><input id="paymentDetails" placeholder="Example: labour payment / advance / work payment"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-light" data-action="close-modal" data-target="paymentModal">Cancel</button>
+        <button class="btn btn-success" id="savePaymentBtn"><i class="fa-solid fa-check"></i> Save Payment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="modal" id="historyModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>History</h3><button class="icon-btn" data-action="close-modal" data-target="historyModal"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="filter-row">
+        <select id="historyFilter"><option value="all">All activity</option><option value="work">Work details</option><option value="payment">Payments</option></select>
+        <select id="historyProjectFilter"></select>
+        <select id="historyContractorFilter"><option value="all">All contractors</option></select>
+      </div>
+      <div style="border-top:1px solid #edf0f2;padding-top:13px;margin-top:4px">
+        <div style="font-size:12px;font-weight:800">Share project history</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <input id="historySharePhone" type="tel" inputmode="numeric" maxlength="10" placeholder="Enter 10-digit phone" style="flex:1;padding:11px 12px;border:1px solid #dce1e5;border-radius:9px;outline:none">
+          <button class="btn btn-light" id="shareHistoryBtn"><i class="fa-solid fa-phone"></i> Share</button>
+        </div>
+        <div id="historyShareList" class="share-list"></div>
+      </div>
+      <div id="historyList" style="margin-top:13px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<script src="../js/routineentry.js"></script>
+</body>
+</html>
