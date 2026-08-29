@@ -4,18 +4,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Routine Pay — Labour & Payments</title>
+<title>Manage Routine Pay & other</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="../css/routineentry.css">
+<link rel="stylesheet" href="../../dist/css/routineentry.min.css">
+ <!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
 <header class="topbar">
   <div class="brand">
     <div class="brand-icon"><i class="fa-solid fa-helmet-safety"></i></div>
-    <div><h1>Labour & Payments</h1><p>Projects, contractors, today's work and payments</p></div>
+    <div><h1>Manage & Payments</h1><p>Projects, contractors, today's work and payments</p></div>
   </div>
   <div class="top-actions">
     <select id="projectSelect" class="project-select" aria-label="Select project"></select>
@@ -169,6 +176,6 @@
 <div class="toast" id="toast"></div>
 
 
-<script src="../js/routineentry.js"></script>
+<script src="../../dist/js/routineentry.min.js"></script>
 </body>
 </html>
