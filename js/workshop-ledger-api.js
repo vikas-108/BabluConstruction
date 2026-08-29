@@ -7,9 +7,7 @@
    - Workshop worker: wl_worker_token (separate worker JWT)
    ============================================================ */
 
-const API_BASE = ['localhost', '127.0.0.1'].includes(location.hostname)
-  ? 'http://localhost:5000/api'
-  : 'https://api.buildskil.com/api';
+const API_BASE = "https://api.buildskil.com/api";
 
 const BUILD_TOKEN_KEY = 'cb_token';
 const WORKER_TOKEN_KEY = 'wl_worker_token';
@@ -1956,4 +1954,3 @@ async function initWorkshopLedger() {
 
 initWorkshopLedger();
 
-initWorkshopLedger();
