@@ -1,12 +1,12 @@
-"use strict";
-
+//"use strict";
+let activeRequests = 0;
 /* =========================================================
    ROUTINE PAY API
 ========================================================= */
 
 const ROUTINE_PAY_BASE =
   window.ROUTINE_PAY_BASE ||
-  "http://localhost:5000/api/routinepay/buiders";
+  "https://api.buildskil.com/api/routinepay/buiders";
 
 const BUILD_TOKEN_KEY = "cb_token";
 
@@ -928,7 +928,21 @@ function totalWorkers(c, date) {
     0
   );
 }
+//current date value
+function setCurrentWorkDate() {
+  const input = document.getElementById("workDate");
 
+  if (!input) return;
+
+  const now = new Date();
+
+  input.value =
+    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setCurrentWorkDate();
+});
 function renderContractors() {
   const grid = $("contractorGrid");
   const date = $("workDate").value || todayISO();
@@ -1969,3 +1983,23 @@ init().then(() => {
   refreshHistoryFilters();
   renderHistory();
 });
+
+
+const originalFetch = window.fetch;
+
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
+
+

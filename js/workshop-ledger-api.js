@@ -6,7 +6,7 @@
    - BuildSkil owner/admin: existing cb_token
    - Workshop worker: wl_worker_token (separate worker JWT)
    ============================================================ */
-
+let activeRequests = 0;
 const API_BASE = "https://api.buildskil.com/api";
 
 const BUILD_TOKEN_KEY = 'cb_token';
@@ -1954,3 +1954,19 @@ async function initWorkshopLedger() {
 
 initWorkshopLedger();
 
+const originalFetch = window.fetch;
+
+
+window.fetch = async (...args) => {
+    if (activeRequests++ === 0) {
+        showLoader();
+    }
+
+    try {
+        return await originalFetch(...args);
+    } finally {
+        if (--activeRequests === 0) {
+            hideLoader();
+        }
+    }
+};
