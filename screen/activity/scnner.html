@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0,
+             maximum-scale=1.0, viewport-fit=cover"
+>
+
+<title> Project Media</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="stylesheet" href="../../dist/css/scnnr.min.css"/>
+<!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- =====================================================
+         PROJECT LIST PAGE
+    ====================================================== -->
+
+    <section
+        id="projectPage"
+        class="project-page"
+    >
+
+        <div class="topbar">
+
+            <button
+                id="backMainBtn"
+                class="back-btn"
+                type="button">
+                ←
+            </button>
+
+            <div class="top-title">
+
+                <h1>My Projects</h1>
+
+                <p>
+                    Manage your construction projects
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="page-heading">
+
+            <h2>
+                Projects
+            </h2>
+
+            <button
+                id="addProjectBtn"
+                class="btn btn-primary"
+                type="button">
+                + Add Project
+            </button>
+
+        </div>
+
+
+        <div class="search-box">
+
+            <input
+                id="projectSearch"
+                type="search"
+                placeholder="Search project, code or client..."
+                autocomplete="off">
+
+        </div>
+
+<div class="project-tabs">
+
+  <button
+    id="myProjectsTab"
+    class="project-tab active"
+    type="button">
+    My Projects
+  </button>
+
+  <button
+    id="sharedProjectsTab"
+    class="project-tab"
+    type="button">
+    Shared With Me
+  </button>
+
+</div>
+        <div
+            id="projectsList"
+            class="projects-list">
+        </div>
+
+        <div
+            id="projectsEmpty"
+            class="empty"
+            style="display:none;">
+
+            <strong>No projects found</strong>
+
+            Add your first construction project.
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         MEDIA PAGE
+    ====================================================== -->
+
+    <section
+        id="mediaPage"
+        class="media-page hidden"
+    >
+
+        <div class="topbar">
+
+            <button
+                id="backProjectsBtn"
+                class="back-btn"
+                type="button">
+                ←
+            </button>
+
+            <div class="top-title">
+
+                <h1 id="mediaPageTitle">
+                    Project Media
+                </h1>
+
+                <p id="mediaPageSubtitle">
+                    Photos and videos
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="selected-project">
+
+            <div
+                id="selectedProjectName"
+                class="selected-project-name">
+            </div>
+
+            <div
+                id="selectedProjectMeta"
+                class="selected-project-meta">
+            </div>
+
+        </div>
+
+
+        <div class="media-toolbar">
+
+            <button
+                id="mediaUploadBtn"
+                class="btn btn-primary"
+                type="button">
+                + Upload
+            </button>
+
+        </div>
+
+
+        <!-- Upload -->
+        <section class="upload-card">
+
+            <div
+                id="dropZone"
+                class="drop-zone"
+                role="button"
+                tabindex="0">
+
+                <div class="drop-icon">
+                    ↑
+                </div>
+
+                <h3>
+                    Upload project photos or videos
+                </h3>
+
+                <p>
+                    Select multiple files from your phone or computer.
+                </p>
+
+            </div>
+
+            <input
+                id="mediaInput"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime"
+                multiple>
+
+
+            <div
+                id="previewSection"
+                class="preview-section">
+
+                <div class="section-heading">
+
+                    <h2>
+                        Selected files
+                    </h2>
+
+                    <button
+                        id="uploadSelectedBtn"
+                        class="btn btn-primary"
+                        type="button">
+                        Upload
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="previewList"
+                    class="preview-list">
+                </div>
+
+            </div>
+        </section>
+
+
+        <div class="section-heading">
+
+            <h2>
+                Media
+            </h2>
+
+            <span
+                id="mediaCount"
+                class="media-count">
+                0 items
+            </span>
+
+        </div>
+
+
+        <div
+            id="mediaGrid"
+            class="media-grid">
+        </div>
+
+
+        <div
+            id="mediaEmpty"
+            class="empty"
+            style="display:none;">
+
+            <strong>No media yet</strong>
+
+            Upload the first photo or video.
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     ADD PROJECT MODAL
+========================================================= -->
+
+<div
+    id="projectOverlay"
+    class="overlay"
+    aria-hidden="true">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3>
+                Add Project
+            </h3>
+
+            <button
+                id="projectCloseBtn"
+                class="close-btn"
+                type="button">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="projectNameInput">
+                Project name
+            </label>
+
+            <input
+                id="projectNameInput"
+                class="form-control"
+                type="text"
+                maxlength="100"
+                placeholder="e.g. Sharma House">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="clientNameInput">
+                Client name
+            </label>
+
+            <input
+                id="clientNameInput"
+                class="form-control"
+                type="text"
+                maxlength="100"
+                placeholder="e.g. Rajesh Sharma">
+
+        </div>
+
+
+        <div
+            id="projectFormError"
+            class="form-error">
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                id="projectCancelBtn"
+                class="btn btn-secondary"
+                type="button">
+                Cancel
+            </button>
+
+            <button
+                id="saveProjectBtn"
+                class="btn btn-primary"
+                type="button">
+                Add Project
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SHARE MODAL
+========================================================= -->
+
+<!-- =========================================================
+     SHARE PROJECT MODAL
+========================================================= -->
+
+<div
+    id="shareOverlay"
+    class="overlay"
+    aria-hidden="true">
+
+    <div class="modal share-modal">
+
+        <div class="modal-header">
+
+            <div>
+                <h3>Share Project</h3>
+                <p class="share-subtitle">
+                    Enter a BuildSkil user's phone number
+                </p>
+            </div>
+
+            <button
+                id="shareCloseBtn"
+                class="close-btn"
+                type="button"
+                aria-label="Close">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- ADD USER -->
+        <div class="form-group">
+
+            <label for="sharePhoneInput">
+                Phone number
+            </label>
+
+            <div class="share-input-row">
+
+                <input
+                    id="sharePhoneInput"
+                    class="form-control"
+                    type="tel"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    maxlength="10"
+                    placeholder="10-digit mobile number">
+
+                <button
+                    id="confirmShareBtn"
+                    class="btn btn-primary"
+                    type="button">
+                    Share
+                </button>
+
+            </div>
+
+            <div
+                id="shareFormError"
+                class="form-error"
+                role="alert">
+            </div>
+
+        </div>
+
+
+        <!-- SHARED USERS -->
+        <div class="shared-section">
+
+            <div class="shared-section-header">
+
+                <h4>
+                    Shared with
+                </h4>
+
+                <span
+                    id="shareCount"
+                    class="share-count">
+                    0
+                </span>
+
+            </div>
+
+
+            <div
+                id="shareList"
+                class="share-list">
+
+                <!-- JS adds shared users here -->
+
+                <div
+                    id="noShares"
+                    class="no-shares">
+                    This project has not been shared yet.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =========================================================
+     MEDIA VIEWER
+========================================================= -->
+
+<div
+    id="viewer"
+    class="viewer"
+    aria-hidden="true"
+    inert>
+
+    <button
+        id="viewerCloseBtn"
+        class="viewer-close"
+        type="button" 
+         aria-label="Close">
+        ×
+    </button>
+
+    <div
+        id="viewerContent"
+        class="viewer-content">
+    </div>
+
+</div>
+
+<button
+  id="howToToggle"
+  class="how-to-toggle"
+  type="button"
+  aria-expanded="false"
+  aria-controls="howToContent">
+
+  <span>
+    How to use / कैसे उपयोग करें
+  </span>
+
+  <span
+    id="howToArrow"
+    class="how-to-arrow">
+    ⌄
+  </span>
+
+</button>
+
+
+<section
+  id="howToContent"
+  class="how-to-content">
+
+  <div class="how-language">
+
+    <h3>English</h3>
+
+    <ul>
+      <li>
+        <strong>Create a project:</strong>
+        Add the project name and client name.
+      </li>
+
+      <li>
+        <strong>Project code:</strong>
+        A unique code is created automatically.
+      </li>
+
+      <li>
+        <strong>Upload:</strong>
+        Open the project and select photos or videos.
+      </li>
+
+      <li>
+        <strong>Comment:</strong>
+        Add an optional note before uploading.
+      </li>
+
+      <li>
+        <strong>Share:</strong>
+        Share the project with another BuildSkil user.
+      </li>
+
+      <li>
+        <strong>Offline:</strong>
+        Viewed media can be stored in the browser cache.
+      </li>
+
+      <li>
+        <strong>Online storage:</strong>
+        Online media is temporary and is automatically removed after the retention period.
+      </li>
+    </ul>
+
+  </div>
+
+
+  <div class="how-language">
+
+    <h3>हिंदी</h3>
+
+    <ul>
+      <li>
+        <strong>प्रोजेक्ट बनाएं:</strong>
+        प्रोजेक्ट का नाम और क्लाइंट का नाम दर्ज करें।
+      </li>
+
+      <li>
+        <strong>प्रोजेक्ट कोड:</strong>
+        यूनिक कोड अपने आप बनाया जाएगा।
+      </li>
+
+      <li>
+        <strong>अपलोड करें:</strong>
+        प्रोजेक्ट खोलें और फोटो या वीडियो चुनें।
+      </li>
+
+      <li>
+        <strong>कमेंट:</strong>
+        अपलोड करने से पहले वैकल्पिक कमेंट लिख सकते हैं।
+      </li>
+
+      <li>
+        <strong>शेयर करें:</strong>
+        दूसरे BuildSkil यूज़र के साथ प्रोजेक्ट शेयर करें।
+      </li>
+
+      <li>
+        <strong>ऑफलाइन:</strong>
+        देखी गई मीडिया ब्राउज़र कैश में सेव हो सकती है।
+      </li>
+
+      <li>
+        <strong>ऑनलाइन स्टोरेज:</strong>
+        ऑनलाइन मीडिया निर्धारित समय के बाद अपने आप हटा दी जाती है।
+      </li>
+    </ul>
+
+  </div>
+
+</section>
+<div
+    id="toast"
+    class="toast">
+</div>
+
+<script src="../../dist/js/config.min.js"></script>
+<script src="../../dist/js/scnner.min.js"></script>
+
+</body>
+</html>
