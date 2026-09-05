@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BuildSkil Camera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171a; --panel:#1c2024; --panel-2:#20252a; --ring:#2b3136;
+    --text:#eceef0; --text-dim:#8b9298;
+    --yellow:#f2c230; --green:#31d17a; --amber:#ffb020; --red:#ff5347;
+    --maxw:460px; --header-h:70px;
+  }
+  @media (min-width:640px){ :root{ --maxw:640px; } }
+  @media (min-width:1024px){ :root{ --maxw:760px; } }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif;
+    min-height:100vh; display:flex; justify-content:center; padding:0 0 90px;
+  }
+  .app{ width:100%; max-width:var(--maxw); padding:calc(var(--header-h) + 10px) 14px 0; }
+
+  .site-header{
+    position:fixed; top:0; left:0; right:0; z-index:30;
+    background:rgba(20,23,26,.94); backdrop-filter:blur(8px); border-bottom:1px solid var(--ring);
+  }
+  .header-inner{ max-width:var(--maxw); margin:0 auto; padding:10px 14px; display:flex; align-items:center; gap:10px; }
+  .icon-btn{
+    width:34px;height:34px;border-radius:9px; background:var(--panel-2); border:1px solid var(--ring);
+    color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; flex:none;
+    position:relative;
+  }
+  .icon-btn svg{ width:17px; height:17px; }
+  .icon-btn .badge{
+    position:absolute; top:-4px; right:-4px; background:var(--yellow); color:#1c1a0d;
+    font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; min-width:15px; height:15px;
+    border-radius:8px; display:flex; align-items:center; justify-content:center; padding:0 3px;
+  }
+  .mark{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(155deg,var(--yellow),#c99a12);
+    display:flex;align-items:center;justify-content:center; flex:none;
+  }
+  .mark svg{width:18px;height:18px;}
+  .header-titles{ flex:1; min-width:0; }
+  h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:15.5px; letter-spacing:.5px; margin:0; text-transform:uppercase; }
+  .sub{ font-size:10.5px; color:var(--text-dim); margin-top:1px; letter-spacing:.3px; }
+
+  /* ---- viewfinder ---- */
+  .viewfinder{
+    position:relative; width:100%; aspect-ratio:3/4; background:#000;
+    border-radius:18px; overflow:hidden; border:1px solid var(--ring);
+  }
+  .viewfinder video, .viewfinder canvas{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  }
+  .viewfinder canvas{ touch-action:none; }
+
+  .vf-loader{
+    position:absolute; inset:0; z-index:10; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:10px; background:rgba(20,23,26,.9); text-align:center; padding:20px;
+  }
+  .spinner{
+    width:32px;height:32px;border-radius:50%; border:3px solid rgba(242,194,48,.25); border-top-color:var(--yellow);
+    animation:spin .7s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .vf-loader span{ font-family:'Oswald',sans-serif; font-size:11.5px; letter-spacing:.6px; text-transform:uppercase; color:var(--text-dim); }
+  .vf-loader button{
+    margin-top:6px; background:var(--yellow); color:#1c1a0d; border:none; padding:10px 18px; border-radius:10px;
+    font-family:'Oswald',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:.4px; text-transform:uppercase; cursor:pointer;
+  }
+
+  .mode-chip{
+    position:absolute; top:10px; left:10px; z-index:6;
+    background:rgba(20,23,26,.75); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,.1);
+    border-radius:8px; padding:5px 10px; font-family:'Oswald',sans-serif; font-weight:700; font-size:11px;
+    letter-spacing:.7px; text-transform:uppercase; color:var(--yellow);
+  }
+  .gps-chip{
+    position:absolute; top:10px; right:10px; z-index:6;
+    background:rgba(20,23,26,.75); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,.1);
+    border-radius:8px; padding:5px 8px; display:flex; align-items:center; gap:4px;
+  }
+  .gps-chip svg{ width:11px;height:11px; color:var(--text-dim); }
+  .gps-chip.on svg{ color:var(--green); }
+
+  .readout-strip{
+    position:absolute; bottom:10px; left:10px; right:10px; z-index:6;
+    background:rgba(20,23,26,.78); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,.1);
+    border-radius:10px; padding:9px 12px; text-align:center;
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; color:var(--text);
+    min-height:16px;
+  }
+  .readout-strip.good{ color:var(--green); }
+  .readout-strip.warn{ color:var(--amber); }
+
+  /* ---- calibration modal ---- */
+  .calib-modal{
+    position:absolute; inset:0; z-index:20; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.6); padding:20px;
+  }
+  .calib-modal.show{ display:flex; }
+  .calib-card{
+    background:var(--panel); border:1px solid var(--ring); border-radius:16px; padding:18px; width:100%; max-width:280px;
+  }
+  .calib-card h3{ font-family:'Oswald',sans-serif; font-size:13.5px; text-transform:uppercase; margin:0 0 8px; letter-spacing:.4px; }
+  .calib-card p{ font-size:12px; color:var(--text-dim); line-height:1.5; margin:0 0 12px; }
+  .calib-row{ display:flex; gap:8px; }
+  .calib-row input{
+    flex:1.3; background:var(--panel-2); border:1px solid var(--ring); color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; padding:9px 10px; border-radius:9px;
+  }
+  .calib-row select{
+    flex:1; background:var(--panel-2); border:1px solid var(--ring); color:var(--text);
+    font-size:12.5px; padding:9px 6px; border-radius:9px;
+  }
+  .calib-actions{ display:flex; gap:8px; margin-top:14px; }
+  .calib-actions button{
+    flex:1; padding:10px; border-radius:9px; border:none; font-family:'Oswald',sans-serif; font-weight:600;
+    font-size:12px; letter-spacing:.4px; text-transform:uppercase; cursor:pointer;
+  }
+  .calib-cancel{ background:var(--panel-2); color:var(--text); border:1px solid var(--ring) !important; }
+  .calib-ok{ background:var(--yellow); color:#1c1a0d; }
+
+  /* ---- mode grid ---- */
+  .mode-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+  .mode-btn{
+    background:var(--panel); border:1px solid var(--ring); border-radius:12px; padding:12px 8px;
+    display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer;
+    color:var(--text-dim); transition:.15s;
+  }
+  .mode-btn svg{ width:19px;height:19px; }
+  .mode-btn span{ font-family:'Oswald',sans-serif; font-weight:600; font-size:11px; letter-spacing:.4px; text-transform:uppercase; }
+  .mode-btn.full{ grid-column:1 / -1; flex-direction:row; justify-content:center; }
+  .mode-btn.active{ border-color:var(--yellow); background:rgba(242,194,48,.1); color:var(--yellow); }
+
+  /* ---- action bar ---- */
+  .action-bar{ margin-top:14px; display:flex; gap:10px; align-items:center; }
+  .note-input{
+    flex:1; background:var(--panel); border:1px solid var(--ring); color:var(--text);
+    font-family:'Inter',sans-serif; font-size:13px; padding:12px 14px; border-radius:12px; display:none;
+  }
+  .note-input.show{ display:block; }
+  .shutter{
+    width:60px;height:60px; border-radius:50%; background:var(--yellow); border:4px solid #3a3011;
+    color:#1c1a0d; display:flex; align-items:center; justify-content:center; cursor:pointer; flex:none;
+    box-shadow:0 4px 0 #a9840f;
+  }
+  .shutter:active{ transform:translateY(3px); box-shadow:0 1px 0 #a9840f; }
+  .shutter svg{ width:24px;height:24px; }
+  .shutter.recording{ background:var(--red); border-color:#5c1f1a; animation:rec-pulse 1s ease-in-out infinite; }
+  @keyframes rec-pulse{ 0%,100%{ box-shadow:0 4px 0 #a9840f, 0 0 0 0 rgba(255,83,71,.5);} 50%{ box-shadow:0 4px 0 #a9840f, 0 0 0 10px rgba(255,83,71,0);} }
+  .secondary-btn{
+    flex:none; background:var(--panel-2); border:1px solid var(--ring); color:var(--text);
+    padding:12px 14px; border-radius:12px; font-family:'Oswald',sans-serif; font-weight:600; font-size:11.5px;
+    letter-spacing:.3px; text-transform:uppercase; cursor:pointer; display:none;
+  }
+  .secondary-btn.show{ display:block; }
+
+  /* ---- gallery ---- */
+  #galleryView{ display:none; }
+  .back-link{ font-size:13px; color:var(--yellow); margin:0 2px 14px; cursor:pointer; display:inline-block; }
+  .gallery-item{
+    display:flex; gap:12px; background:var(--panel); border:1px solid var(--ring); border-radius:14px;
+    padding:12px; margin-bottom:10px; align-items:center;
+  }
+  .gallery-thumb{
+    width:56px;height:56px;border-radius:10px; background:var(--panel-2); flex:none; overflow:hidden;
+    display:flex; align-items:center; justify-content:center; color:var(--text-dim);
+  }
+  .gallery-thumb img{ width:100%;height:100%;object-fit:cover; }
+  .gallery-info{ flex:1; min-width:0; }
+  .gallery-mode{ font-family:'Oswald',sans-serif; font-weight:700; font-size:11.5px; text-transform:uppercase; color:var(--yellow); letter-spacing:.4px; }
+  .gallery-value{ font-family:'JetBrains Mono',monospace; font-size:13px; margin-top:2px; }
+  .gallery-meta{ font-size:10.5px; color:var(--text-dim); margin-top:3px; }
+  .gallery-del{
+    width:30px;height:30px;border-radius:8px; background:rgba(255,83,71,.1); border:1px solid rgba(255,83,71,.3);
+    color:var(--red); display:flex; align-items:center; justify-content:center; cursor:pointer; flex:none; font-size:14px;
+  }
+  .gallery-empty{ text-align:center; padding:50px 20px; color:var(--text-dim); font-size:13px; line-height:1.6; }
+  audio{ width:100%; height:32px; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="icon-btn" id="backBtn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3"/></svg></div>
+      <div class="header-titles">
+        <h1>BuildSkil Camera</h1>
+        <div class="sub">All processing stays on this device</div>
+      </div>
+      <button class="icon-btn" id="galleryBtn" aria-label="Saved">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="badge" id="savedBadge" style="display:none;">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ CAMERA VIEW ============ -->
+  <div id="cameraView">
+    <div class="viewfinder" id="viewfinder">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="overlay"></canvas>
+
+      <div class="mode-chip" id="modeChip">Camera</div>
+      <div class="gps-chip" id="gpsChip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </div>
+      <div class="readout-strip" id="readoutStrip"></div>
+
+      <div class="vf-loader" id="vfLoader">
+        <div class="spinner"></div>
+        <span id="vfLoaderText">Starting camera…</span>
+      </div>
+
+      <div class="calib-modal" id="calibModal">
+        <div class="calib-card">
+          <h3>Calibrate scale</h3>
+          <p>What's the real-world distance between the two points you just tapped? (Tap two ends of something known — a tile, a brick, a tape measure.)</p>
+          <div class="calib-row">
+            <input type="number" id="calibValue" placeholder="e.g. 12" min="0" step="0.01">
+            <select id="calibUnit">
+              <option value="ft">ft</option>
+              <option value="in">in</option>
+              <option value="m">m</option>
+              <option value="cm">cm</option>
+            </select>
+          </div>
+          <div class="calib-actions">
+            <button class="calib-cancel" id="calibCancel">Cancel</button>
+            <button class="calib-ok" id="calibOk">Set Scale</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mode-grid">
+      <div class="mode-btn full" data-mode="measure">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L17 3M6 20l14-14M4 14l6 6M10 8l6 6M8 6l2 2M14 12l2 2"/></svg>
+        <span>&nbsp;Measure</span>
+      </div>
+
+      <div class="mode-btn" data-mode="level">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="10" width="18" height="4" rx="1"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+        <span>Level</span>
+      </div>
+      <div class="mode-btn" data-mode="plumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="10" y="3" width="4" height="18" rx="1"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+        <span>Plumb</span>
+      </div>
+
+      <div class="mode-btn" data-mode="angle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M4 20L16 6"/><path d="M4 14a6 6 0 016 6" stroke-dasharray="2 2"/></svg>
+        <span>Angle</span>
+      </div>
+      <div class="mode-btn" data-mode="slope">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M3 20L15 6l6 14"/></svg>
+        <span>Slope</span>
+      </div>
+
+      <div class="mode-btn" data-mode="crack">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3l3 5-2 3 4 4-1 3 4 3 4-6-2-3 3-4-2-3"/></svg>
+        <span>Crack</span>
+      </div>
+      <div class="mode-btn" data-mode="grid">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+        <span>Grid</span>
+      </div>
+
+      <div class="mode-btn" data-mode="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <span>Mark</span>
+      </div>
+      <div class="mode-btn" data-mode="photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.4"/></svg>
+        <span>Photo</span>
+      </div>
+
+      <div class="mode-btn full" data-mode="voice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4"/></svg>
+        <span>&nbsp;Voice</span>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <input type="text" class="note-input" id="noteInput" placeholder="Add a short note…">
+      <button class="secondary-btn" id="secondaryBtn">Retake</button>
+      <div class="shutter" id="shutterBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GALLERY VIEW ============ -->
+  <div id="galleryView">
+    <div class="back-link" id="closeGalleryBtn">← Back to camera</div>
+    <div id="galleryList"></div>
+    <div class="gallery-empty" id="galleryEmpty" style="display:none;">Nothing saved yet — readings, photos and notes you save will show up here.</div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // ============================================================
+  // IndexedDB — all entries live only on this device.
+  // ============================================================
+  const DB_NAME = 'buildskilCamera';
+  const STORE = 'entries';
+  let dbPromise = new Promise((resolve, reject)=>{
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = ()=>{
+      const db = req.result;
+      if(!db.objectStoreNames.contains(STORE)){
+        db.createObjectStore(STORE, { keyPath:'id', autoIncrement:true });
+      }
+    };
+    req.onsuccess = ()=> resolve(req.result);
+    req.onerror = ()=> reject(req.error);
+  });
+
+  async function dbAdd(entry){
+    const db = await dbPromise;
+    return new Promise((resolve, reject)=>{
+      const tx = db.transaction(STORE, 'readwrite');
+      const r = tx.objectStore(STORE).add(entry);
+      r.onsuccess = ()=> resolve(r.result);
+      r.onerror = ()=> reject(r.error);
+    });
+  }
+  async function dbAll(){
+    const db = await dbPromise;
+    return new Promise((resolve, reject)=>{
+      const tx = db.transaction(STORE, 'readonly');
+      const r = tx.objectStore(STORE).getAll();
+      r.onsuccess = ()=> resolve(r.result.sort((a,b)=> b.id - a.id));
+      r.onerror = ()=> reject(r.error);
+    });
+  }
+  async function dbDelete(id){
+    const db = await dbPromise;
+    return new Promise((resolve, reject)=>{
+      const tx = db.transaction(STORE, 'readwrite');
+      const r = tx.objectStore(STORE).delete(id);
+      r.onsuccess = ()=> resolve();
+      r.onerror = ()=> reject(r.error);
+    });
+  }
+  async function dbCount(){ return (await dbAll()).length; }
+
+  // ============================================================
+  // Elements
+  // ============================================================
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('overlay');
+  const ctx = canvas.getContext('2d');
+  const viewfinder = document.getElementById('viewfinder');
+  const vfLoader = document.getElementById('vfLoader');
+  const vfLoaderText = document.getElementById('vfLoaderText');
+  const modeChip = document.getElementById('modeChip');
+  const gpsChip = document.getElementById('gpsChip');
+  const readoutStrip = document.getElementById('readoutStrip');
+  const shutterBtn = document.getElementById('shutterBtn');
+  const secondaryBtn = document.getElementById('secondaryBtn');
+  const noteInput = document.getElementById('noteInput');
+  const calibModal = document.getElementById('calibModal');
+  const calibValue = document.getElementById('calibValue');
+  const calibUnit = document.getElementById('calibUnit');
+
+  const cameraView = document.getElementById('cameraView');
+  const galleryView = document.getElementById('galleryView');
+  const savedBadge = document.getElementById('savedBadge');
+
+  const MODE_LABEL = {
+    camera:'Camera', measure:'Measure', level:'Level', plumb:'Plumb',
+    angle:'Angle', slope:'Slope', crack:'Crack', grid:'Grid', mark:'Mark',
+    photo:'Photo', voice:'Voice'
+  };
+
+  let currentMode = 'camera';
+  let frozen = false;       // true = canvas shows a captured frame, video hidden
+  let stream = null;
+  let lastPos = null;       // { lat, lng }
+  let calibration = null;   // { unitsPerPixel, unit }
+  try{ calibration = JSON.parse(localStorage.getItem('bsCalibration')) || null; }catch(e){}
+
+  // ============================================================
+  // Camera
+  // ============================================================
+  async function startCamera(){
+    try{
+      stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:'environment' } }, audio:false });
+      video.srcObject = stream;
+      await new Promise(res=> video.onloadedmetadata = res);
+      resizeCanvas();
+      vfLoader.style.display = 'none';
+    }catch(err){
+      vfLoaderText.textContent = 'Camera access denied — check site permissions.';
+      const btn = document.createElement('button');
+      btn.textContent = 'Try again';
+      btn.addEventListener('click', startCamera);
+      vfLoader.appendChild(btn);
+    }
+  }
+  function resizeCanvas(){
+    const rect = viewfinder.getBoundingClientRect();
+    canvas.width = Math.round(rect.width);
+    canvas.height = Math.round(rect.height);
+  }
+  window.addEventListener('resize', resizeCanvas);
+
+  // ============================================================
+  // Orientation sensors (Level / Plumb / Slope) — same math as Site Leveling
+  // ============================================================
+  const sensor = { beta:0, gamma:0, ready:false };
+  const ALPHA = 0.18;
+  function handleOrientation(e){
+    if(e.beta === null || e.gamma === null) return;
+    sensor.beta += (e.beta - sensor.beta) * ALPHA;
+    sensor.gamma += (e.gamma - sensor.gamma) * ALPHA;
+    sensor.ready = true;
+  }
+  function needsIOSPermission(){
+    return typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function';
+  }
+  if(!needsIOSPermission() && window.DeviceOrientationEvent){
+    window.addEventListener('deviceorientation', handleOrientation, true);
+  }
+  let iosSensorRequested = false;
+  function ensureSensorPermission(){
+    if(needsIOSPermission() && !iosSensorRequested){
+      iosSensorRequested = true;
+      DeviceOrientationEvent.requestPermission().then(res=>{
+        if(res === 'granted') window.addEventListener('deviceorientation', handleOrientation, true);
+      }).catch(()=>{});
+    }
+  }
+
+  // ============================================================
+  // GPS — best-effort, never blocks anything
+  // ============================================================
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      pos=>{ lastPos = { lat: pos.coords.latitude, lng: pos.coords.longitude }; gpsChip.classList.add('on'); },
+      ()=>{}, { enableHighAccuracy:false, timeout:8000 }
+    );
+  }
+
+  // ============================================================
+  // Mode-specific point state
+  // ============================================================
+  let tapPoints = [];   // canvas-space points for measure/angle/crack
+  let pins = [];         // {x,y,note} for mark mode
+  let frozenImage = null;
+
+  function canvasPointFromEvent(evt){
+    const rect = canvas.getBoundingClientRect();
+    const cx = (evt.touches ? evt.touches[0].clientX : evt.clientX) - rect.left;
+    const cy = (evt.touches ? evt.touches[0].clientY : evt.clientY) - rect.top;
+    return { x: cx * (canvas.width/rect.width), y: cy * (canvas.height/rect.height) };
+  }
+  function dist(a,b){ return Math.hypot(b.x-a.x, b.y-a.y); }
+
+  function freezeFrame(){
+    resizeCanvas();
+    const off = document.createElement('canvas');
+    off.width = canvas.width; off.height = canvas.height;
+    off.getContext('2d').drawImage(video, 0,0, off.width, off.height);
+    frozenImage = off;
+    frozen = true;
+    video.style.visibility = 'hidden';
+  }
+  function unfreezeFrame(){
+    frozen = false;
+    frozenImage = null;
+    video.style.visibility = 'visible';
+    tapPoints = []; pins = [];
+    noteInput.value = ''; noteInput.classList.remove('show');
+  }
+
+  // ============================================================
+  // Mode switching
+  // ============================================================
+  const FREEZE_MODES = ['measure','angle','crack','mark'];
+
+  function setMode(mode){
+    currentMode = mode;
+    modeChip.textContent = MODE_LABEL[mode] || 'Camera';
+    document.querySelectorAll('.mode-btn').forEach(b=> b.classList.toggle('active', b.dataset.mode === mode));
+
+    tapPoints = []; pins = [];
+    noteInput.classList.remove('show'); noteInput.value = '';
+    secondaryBtn.classList.remove('show');
+    readoutStrip.className = 'readout-strip';
+    readoutStrip.textContent = '';
+
+    if(FREEZE_MODES.includes(mode)){
+      freezeFrame();
+      secondaryBtn.textContent = 'Retake';
+      secondaryBtn.classList.add('show');
+    } else {
+      unfreezeFrame();
+    }
+
+    if(mode === 'level' || mode === 'plumb' || mode === 'slope'){
+      ensureSensorPermission();
+    }
+    if(mode === 'mark'){
+      noteInput.classList.add('show');
+      noteInput.placeholder = 'Tap the photo to drop a pin, then describe it here…';
+    }
+    if(mode === 'crack'){
+      noteInput.classList.add('show');
+      noteInput.placeholder = 'Severity / note (e.g. "hairline, near window sill")';
+    }
+    if(mode === 'voice'){
+      readoutStrip.textContent = 'Tap the shutter to start recording';
+      noteInput.classList.add('show');
+      noteInput.placeholder = 'Optional note for this recording…';
+    }
+  }
+
+  document.querySelectorAll('.mode-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> setMode(btn.dataset.mode));
+  });
+
+  // ============================================================
+  // Draw loop
+  // ============================================================
+  function classify(mag){ return mag<=0.5 ? 'good' : mag<=2 ? 'warn' : ''; }
+
+  function draw(){
+    requestAnimationFrame(draw);
+    if(canvas.width === 0) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    if(frozen && frozenImage){ ctx.drawImage(frozenImage, 0,0, canvas.width, canvas.height); }
+
+    switch(currentMode){
+      case 'level': drawLevel(); break;
+      case 'plumb': drawPlumb(); break;
+      case 'slope': drawSlope(); break;
+      case 'grid': drawGrid(); break;
+      case 'measure': drawMeasure(); break;
+      case 'angle': drawAngle(); break;
+      case 'crack': drawCrack(); break;
+      case 'mark': drawMark(); break;
+      default: drawCrosshair();
+    }
+  }
+
+  function drawCrosshair(){
+    const cx = canvas.width/2, cy = canvas.height/2;
+    ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx-14,cy); ctx.lineTo(cx+14,cy); ctx.moveTo(cx,cy-14); ctx.lineTo(cx,cy+14); ctx.stroke();
+  }
+
+  function drawLevel(){
+    const cx = canvas.width/2, cy = canvas.height/2, R = Math.min(canvas.width,canvas.height)*0.16;
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+
+    const bx = sensor.gamma, by = sensor.beta;
+    const mag = Math.sqrt(bx*bx+by*by);
+    const cls = classify(mag);
+    let dx = bx*6, dy = by*6;
+    const d = Math.hypot(dx,dy);
+    if(d > R*0.8){ const k=(R*0.8)/d; dx*=k; dy*=k; }
+    const color = cls==='good' ? '#31d17a' : cls==='warn' ? '#ffb020' : '#ff5347';
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(cx+dx, cy+dy, 12, 0, Math.PI*2); ctx.fill();
+
+    readoutStrip.className = 'readout-strip ' + (cls==='good'?'good':cls==='warn'?'warn':'');
+    readoutStrip.textContent = sensor.ready ? (cls==='good' ? 'LEVEL' : mag.toFixed(1)+'° off') : 'Reading sensors…';
+  }
+
+  function drawPlumb(){
+    const cx = canvas.width/2, cy = canvas.height/2, H = canvas.height*0.32;
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy-H); ctx.lineTo(cx, cy+H); ctx.stroke();
+
+    const lean = sensor.gamma;
+    const mag = Math.abs(lean);
+    const cls = classify(mag);
+    let dx = lean*6;
+    if(Math.abs(dx) > canvas.width*0.3) dx = Math.sign(dx)*canvas.width*0.3;
+    const color = cls==='good' ? '#31d17a' : cls==='warn' ? '#ffb020' : '#ff5347';
+    ctx.strokeStyle = color; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(cx+dx, cy-H); ctx.lineTo(cx+dx, cy+H); ctx.stroke();
+
+    readoutStrip.className = 'readout-strip ' + (cls==='good'?'good':cls==='warn'?'warn':'');
+    readoutStrip.textContent = sensor.ready ? (cls==='good' ? 'PLUMB' : mag.toFixed(1)+'° off') : 'Reading sensors…';
+  }
+
+  function drawSlope(){
+    const angle = sensor.beta;
+    const rad = angle*Math.PI/180;
+    const gradePct = Math.tan(rad)*100;
+    const ratio = Math.abs(Math.tan(rad))>0.0001 ? 1/Math.abs(Math.tan(rad)) : Infinity;
+    const cx = canvas.width*0.1, cy = canvas.height*0.6, len = canvas.width*0.6;
+    ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+len,cy); ctx.stroke();
+    const clamped = Math.max(-45,Math.min(45,angle));
+    const rad2 = -clamped*Math.PI/180;
+    ctx.strokeStyle = '#f2c230'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+len*Math.cos(rad2), cy+len*Math.sin(rad2)); ctx.stroke();
+
+    readoutStrip.textContent = sensor.ready
+      ? angle.toFixed(1)+'°  ·  '+gradePct.toFixed(1)+'%  ·  1:'+(isFinite(ratio)?ratio.toFixed(1):'∞')
+      : 'Reading sensors…';
+  }
+
+  function drawGrid(){
+    ctx.strokeStyle = 'rgba(255,255,255,.4)'; ctx.lineWidth = 1;
+    for(let i=1;i<3;i++){
+      const x = canvas.width*i/3, y = canvas.height*i/3;
+      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+    }
+    readoutStrip.textContent = 'Framing grid — line up edges before you shoot';
+  }
+
+  function realDistance(pxDist){
+    if(!calibration) return null;
+    return pxDist * calibration.unitsPerPixel;
+  }
+
+  function drawMeasure(){
+    tapPoints.forEach(p=>{ ctx.fillStyle='#f2c230'; ctx.beginPath(); ctx.arc(p.x,p.y,6,0,Math.PI*2); ctx.fill(); });
+    if(tapPoints.length === 2){
+      const a = tapPoints[0], b = tapPoints[1];
+      ctx.strokeStyle = '#f2c230'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      const px = dist(a,b);
+      const real = realDistance(px);
+      readoutStrip.textContent = real !== null
+        ? real.toFixed(2) + ' ' + calibration.unit + ' (tap Retake to remeasure)'
+        : 'Tap "Set Scale" to calibrate this measurement';
+    } else {
+      readoutStrip.textContent = calibration
+        ? 'Tap two points to measure (scale set: ' + calibration.unit + ')'
+        : 'Tap two points on something of known size';
+    }
+  }
+
+  function drawAngle(){
+    tapPoints.forEach(p=>{ ctx.fillStyle='#f2c230'; ctx.beginPath(); ctx.arc(p.x,p.y,6,0,Math.PI*2); ctx.fill(); });
+    if(tapPoints.length >= 2){
+      ctx.strokeStyle = '#f2c230'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(tapPoints[0].x,tapPoints[0].y); ctx.lineTo(tapPoints[1].x,tapPoints[1].y); ctx.stroke();
+    }
+    if(tapPoints.length === 3){
+      const a = tapPoints[0], vertex = tapPoints[1], c = tapPoints[2];
+      ctx.beginPath(); ctx.moveTo(vertex.x,vertex.y); ctx.lineTo(c.x,c.y); ctx.stroke();
+      const v1 = { x:a.x-vertex.x, y:a.y-vertex.y };
+      const v2 = { x:c.x-vertex.x, y:c.y-vertex.y };
+      const dot = v1.x*v2.x + v1.y*v2.y;
+      const mag = Math.hypot(v1.x,v1.y) * Math.hypot(v2.x,v2.y);
+      const angleDeg = mag ? Math.acos(Math.max(-1,Math.min(1, dot/mag))) * 180/Math.PI : 0;
+      readoutStrip.textContent = angleDeg.toFixed(1) + '°';
+    } else {
+      readoutStrip.textContent = 'Tap: line start → vertex → line end (' + tapPoints.length + '/3)';
+    }
+  }
+
+  function drawCrack(){
+    tapPoints.forEach(p=>{ ctx.fillStyle='#ff5347'; ctx.beginPath(); ctx.arc(p.x,p.y,6,0,Math.PI*2); ctx.fill(); });
+    if(tapPoints.length === 2){
+      const a = tapPoints[0], b = tapPoints[1];
+      ctx.strokeStyle = '#ff5347'; ctx.lineWidth = 3; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); ctx.setLineDash([]);
+      const px = dist(a,b);
+      const real = realDistance(px);
+      readoutStrip.className = 'readout-strip warn';
+      readoutStrip.textContent = real !== null
+        ? 'Crack length: ' + real.toFixed(2) + ' ' + calibration.unit
+        : 'Tap "Set Scale" to calibrate';
+    } else {
+      readoutStrip.textContent = 'Tap the two ends of the crack';
+    }
+  }
+
+  function drawMark(){
+    pins.forEach((p,i)=>{
+      ctx.fillStyle = '#f2c230';
+      ctx.beginPath(); ctx.arc(p.x,p.y,11,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#1c1a0d'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(String(i+1), p.x, p.y);
+    });
+    readoutStrip.textContent = pins.length ? pins.length + ' pin(s) marked' : 'Tap the photo to drop a numbered pin';
+  }
+
+  // ---- tap handling ----
+  canvas.addEventListener('pointerdown', (evt)=>{
+    if(!FREEZE_MODES.includes(currentMode)) return;
+    const p = canvasPointFromEvent(evt);
+
+    if(currentMode === 'measure'){
+      if(tapPoints.length >= 2) tapPoints = [];
+      tapPoints.push(p);
+      if(tapPoints.length === 2 && !calibration) openCalibModal();
+    } else if(currentMode === 'angle'){
+      if(tapPoints.length >= 3) tapPoints = [];
+      tapPoints.push(p);
+    } else if(currentMode === 'crack'){
+      if(tapPoints.length >= 2) tapPoints = [];
+      tapPoints.push(p);
+      if(tapPoints.length === 2 && !calibration) openCalibModal();
+    } else if(currentMode === 'mark'){
+      pins.push({ x:p.x, y:p.y });
+    }
+  });
+
+  // ---- calibration modal ----
+  function openCalibModal(){ calibModal.classList.add('show'); }
+  function closeCalibModal(){ calibModal.classList.remove('show'); calibValue.value=''; }
+  document.getElementById('calibCancel').addEventListener('click', ()=>{
+    tapPoints = [];
+    closeCalibModal();
+  });
+  document.getElementById('calibOk').addEventListener('click', ()=>{
+    const val = Number(calibValue.value);
+    if(!val || val <= 0 || tapPoints.length < 2){ closeCalibModal(); return; }
+    const px = dist(tapPoints[0], tapPoints[1]);
+    calibration = { unitsPerPixel: val / px, unit: calibUnit.value };
+    try{ localStorage.setItem('bsCalibration', JSON.stringify(calibration)); }catch(e){}
+    closeCalibModal();
+  });
+
+  // ============================================================
+  // Save flow
+  // ============================================================
+  async function composeImageBlob(){
+    const off = document.createElement('canvas');
+    off.width = canvas.width; off.height = canvas.height;
+    const octx = off.getContext('2d');
+    if(frozen && frozenImage){ octx.drawImage(frozenImage,0,0); }
+    else { octx.drawImage(video,0,0, off.width, off.height); }
+    octx.drawImage(canvas, 0,0);
+    return new Promise(res=> off.toBlob(res, 'image/jpeg', 0.85));
+  }
+
+  function currentValueSummary(){
+    if(currentMode === 'level'){ const mag=Math.hypot(sensor.gamma,sensor.beta); return mag<=0.5?'Level':(mag.toFixed(1)+'° off level'); }
+    if(currentMode === 'plumb'){ const mag=Math.abs(sensor.gamma); return mag<=0.5?'Plumb':(mag.toFixed(1)+'° off plumb'); }
+    if(currentMode === 'slope'){ const g=Math.tan(sensor.beta*Math.PI/180)*100; return sensor.beta.toFixed(1)+'° / '+g.toFixed(1)+'%'; }
+    if(currentMode === 'grid'){ return 'Framed photo'; }
+    if(currentMode === 'measure'){
+      if(tapPoints.length===2 && calibration) return realDistance(dist(tapPoints[0],tapPoints[1])).toFixed(2)+' '+calibration.unit;
+      return 'Not measured';
+    }
+    if(currentMode === 'angle'){
+      if(tapPoints.length===3){
+        const a=tapPoints[0], vertex=tapPoints[1], c=tapPoints[2];
+        const v1={x:a.x-vertex.x,y:a.y-vertex.y}, v2={x:c.x-vertex.x,y:c.y-vertex.y};
+        const dot=v1.x*v2.x+v1.y*v2.y, mag=Math.hypot(v1.x,v1.y)*Math.hypot(v2.x,v2.y);
+        const deg = mag ? Math.acos(Math.max(-1,Math.min(1,dot/mag)))*180/Math.PI : 0;
+        return deg.toFixed(1)+'°';
+      }
+      return 'Not measured';
+    }
+    if(currentMode === 'crack'){
+      if(tapPoints.length===2 && calibration) return 'Crack '+realDistance(dist(tapPoints[0],tapPoints[1])).toFixed(2)+' '+calibration.unit;
+      return 'Not measured';
+    }
+    if(currentMode === 'mark'){ return pins.length + ' pin(s)'; }
+    if(currentMode === 'photo'){ return 'Evidence photo'; }
+    return '';
+  }
+
+  async function saveEntry(extra){
+    const imageBlob = await composeImageBlob();
+    const entry = Object.assign({
+      mode: currentMode,
+      timestamp: new Date().toISOString(),
+      lat: lastPos ? lastPos.lat : null,
+      lng: lastPos ? lastPos.lng : null,
+      note: noteInput.value.trim(),
+      value: currentValueSummary(),
+      image: imageBlob
+    }, extra || {});
+    await dbAdd(entry);
+    await refreshBadge();
+    flashShutter();
+  }
+
+  function flashShutter(){
+    viewfinder.style.filter = 'brightness(1.6)';
+    setTimeout(()=> viewfinder.style.filter = '', 120);
+  }
+
+  async function refreshBadge(){
+    const n = await dbCount();
+    savedBadge.style.display = n ? 'flex' : 'none';
+    savedBadge.textContent = n > 99 ? '99+' : n;
+  }
+
+  // ---- shutter button: behaviour depends on mode ----
+  let mediaRecorder = null, audioChunks = [], recording = false, micStream = null;
+
+  shutterBtn.addEventListener('click', async ()=>{
+    if(currentMode === 'photo'){
+      await saveEntry();
+      return;
+    }
+    if(currentMode === 'voice'){
+      if(!recording) await startRecording(); else await stopRecordingAndSave();
+      return;
+    }
+    if(currentMode === 'mark' && pins.length === 0){
+      readoutStrip.textContent = 'Tap the photo to drop at least one pin first';
+      return;
+    }
+    if((currentMode === 'measure' || currentMode === 'crack') && tapPoints.length < 2){
+      readoutStrip.textContent = 'Tap both points first';
+      return;
+    }
+    if(currentMode === 'angle' && tapPoints.length < 3){
+      readoutStrip.textContent = 'Tap all three points first';
+      return;
+    }
+    const extra = {};
+    if(currentMode === 'mark'){
+      if(pins.length && noteInput.value.trim()) pins[pins.length-1].note = noteInput.value.trim();
+      extra.pins = pins;
+    }
+    await saveEntry(extra);
+    if(FREEZE_MODES.includes(currentMode)) freezeFrame(); // fresh frame + clear taps for next capture in same mode
+    tapPoints = []; pins = [];
+  });
+
+  secondaryBtn.addEventListener('click', ()=>{
+    tapPoints = []; pins = [];
+    freezeFrame();
+  });
+
+  async function startRecording(){
+    try{
+      if(!micStream) micStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(micStream);
+      mediaRecorder.ondataavailable = e=> audioChunks.push(e.data);
+      mediaRecorder.start();
+      recording = true;
+      shutterBtn.classList.add('recording');
+      readoutStrip.className = 'readout-strip warn';
+      readoutStrip.textContent = 'Recording… tap to stop';
+    }catch(err){
+      readoutStrip.textContent = 'Microphone access denied.';
+    }
+  }
+  function stopRecordingAndSave(){
+    return new Promise(resolve=>{
+      mediaRecorder.onstop = async ()=>{
+        recording = false;
+        shutterBtn.classList.remove('recording');
+        const audioBlob = new Blob(audioChunks, { type:'audio/webm' });
+        const imageBlob = await composeImageBlob();
+        await dbAdd({
+          mode:'voice', timestamp:new Date().toISOString(),
+          lat: lastPos?lastPos.lat:null, lng: lastPos?lastPos.lng:null,
+          note: noteInput.value.trim(), value:'Voice note', image: imageBlob, audio: audioBlob
+        });
+        await refreshBadge();
+        flashShutter();
+        readoutStrip.textContent = 'Saved. Tap the shutter to record another.';
+        resolve();
+      };
+      mediaRecorder.stop();
+    });
+  }
+
+  // ============================================================
+  // Gallery
+  // ============================================================
+  document.getElementById('galleryBtn').addEventListener('click', openGallery);
+  document.getElementById('closeGalleryBtn').addEventListener('click', closeGallery);
+
+  function openGallery(){
+    cameraView.style.display = 'none';
+    galleryView.style.display = 'block';
+    renderGallery();
+  }
+  function closeGallery(){
+    galleryView.style.display = 'none';
+    cameraView.style.display = 'block';
+  }
+
+  async function renderGallery(){
+    const list = document.getElementById('galleryList');
+    const empty = document.getElementById('galleryEmpty');
+    const all = await dbAll();
+    list.innerHTML = '';
+    empty.style.display = all.length ? 'none' : 'block';
+
+    all.forEach(entry=>{
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      const imgUrl = entry.image ? URL.createObjectURL(entry.image) : null;
+
+      item.innerHTML =
+        '<div class="gallery-thumb">' + (imgUrl ? '<img src="'+imgUrl+'">' : '') + '</div>' +
+        '<div class="gallery-info">' +
+          '<div class="gallery-mode">'+ (MODE_LABEL[entry.mode]||entry.mode) +'</div>' +
+          '<div class="gallery-value">'+ escHtml(entry.value||'') +'</div>' +
+          '<div class="gallery-meta">'+ new Date(entry.timestamp).toLocaleString() + (entry.lat ? ' · GPS tagged' : '') +'</div>' +
+          (entry.note ? '<div class="gallery-meta">"'+escHtml(entry.note)+'"</div>' : '') +
+          (entry.audio ? '<audio controls src="'+URL.createObjectURL(entry.audio)+'"></audio>' : '') +
+        '</div>' +
+        '<div class="gallery-del">✕</div>';
+
+      item.querySelector('.gallery-del').addEventListener('click', async ()=>{
+        if(!confirm('Delete this saved item?')) return;
+        await dbDelete(entry.id);
+        await refreshBadge();
+        renderGallery();
+      });
+      list.appendChild(item);
+    });
+  }
+
+  function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+  // ============================================================
+  // Header back button
+  // ============================================================
+  document.getElementById('backBtn').addEventListener('click', ()=> window.history.back());
+
+  // ============================================================
+  // Boot
+  // ============================================================
+  startCamera();
+  refreshBadge();
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>

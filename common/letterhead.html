@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Letterhead Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --cream:#F5EFE3; --panel:#FFFDF8; --walnut:#2B2118; --walnut-2:#3B2E20; --ink:#241A11;
+  --tan:#9C8768; --tan-light:#E4D8C2; --rust:#C1440E; --rust-dark:#9C3609;
+  --sage:#4A5D43; --line:#E1D5BE; --shadow:0 2px 10px rgba(43,33,24,0.08); --radius:10px;
+  --font-display:'Zilla Slab', serif; --font-body:'Inter', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;padding:0;}
+html,body{background:var(--cream); color:var(--ink); font-family:var(--font-body); min-height:100vh; -webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:var(--font-display); margin:0; color:var(--walnut);}
+button{font-family:inherit; cursor:pointer;}
+:focus-visible{outline:2px solid var(--rust); outline-offset:2px;}
+[contenteditable]:focus{outline:1.5px dashed var(--rust); outline-offset:2px; border-radius:2px;}
+[contenteditable]:empty:before{content:attr(data-placeholder); color:#B9AC94;}
+
+/* ---------- toolbar ---------- */
+.toolbar{
+  position:sticky; top:0; z-index:50; background:var(--walnut); color:#EFE6D6;
+  display:flex; align-items:center; gap:10px; padding:12px 20px; flex-wrap:wrap;
+  box-shadow:0 2px 12px rgba(0,0,0,0.15);
+}
+.toolbar .brand{font-family:var(--font-display); font-weight:600; font-size:16px; color:#fff; margin-right:auto; display:flex; align-items:center; gap:8px;}
+.toolbar .brand .mark{width:26px; height:26px; border-radius:6px; background:var(--rust); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff;}
+.btn{border:none; border-radius:7px; padding:9px 14px; font-weight:600; font-size:13px; transition:transform .12s ease, background .15s ease;}
+.btn:active{transform:scale(0.96);}
+.btn-tool{background:rgba(255,255,255,0.1); color:#fff;}
+.btn-tool:hover{background:rgba(255,255,255,0.18);}
+.btn-primary{background:var(--rust); color:#fff;}
+.btn-primary:hover{background:var(--rust-dark);}
+.btn-danger-ghost{background:transparent; color:#D9A98F; border:1.5px solid rgba(217,169,143,0.4);}
+.btn-danger-ghost:hover{background:rgba(217,169,143,0.12);}
+.format-select{
+  background:rgba(255,255,255,0.1); color:#fff; border:1.5px solid rgba(255,255,255,0.2); border-radius:7px;
+  padding:8px 10px; font-size:13px; font-family:inherit; font-weight:600;
+}
+.format-select option{color:#1c1c1c;}
+
+/* ---------- page stage (scales the document to fit the viewport) ---------- */
+.stage-outer{padding:28px 16px 60px; display:flex; justify-content:center;}
+#page-stage{position:relative;}
+.page{
+  width:210mm; min-height:297mm; padding:16mm 16mm 20mm;
+  box-shadow:0 10px 40px rgba(43,33,24,0.18); transform-origin:top left; color:#1c1c1c;
+  /* default (Workshop Rust) theme values — overridden by .theme-* classes below */
+  --lh-accent:#C1440E; --lh-accent-dark:#9C3609; --lh-accent-soft:#F4EEDF; --lh-band-bg:#2B2118; --lh-page-bg:#FFFDF8;
+  background:var(--lh-page-bg);
+}
+
+/* ---------- color themes — set the palette any format above draws from ---------- */
+.page.theme-rust{ --lh-accent:#C1440E; --lh-accent-dark:#9C3609; --lh-accent-soft:#F4EEDF; --lh-band-bg:#2B2118; --lh-page-bg:#FFFDF8; }
+.page.theme-navy{ --lh-accent:#1F3A5F; --lh-accent-dark:#16283F; --lh-accent-soft:#E4EBF6; --lh-band-bg:#12233B; --lh-page-bg:#FBFCFE; }
+.page.theme-charcoal{ --lh-accent:#C8A45C; --lh-accent-dark:#A8863F; --lh-accent-soft:#F3ECDD; --lh-band-bg:#1C1C1C; --lh-page-bg:#FFFDF9; }
+.page.theme-forest{ --lh-accent:#2F5D45; --lh-accent-dark:#234432; --lh-accent-soft:#E3EDE7; --lh-band-bg:#1D3327; --lh-page-bg:#FBFDFC; }
+.page.theme-burgundy{ --lh-accent:#7A2436; --lh-accent-dark:#5C1A28; --lh-accent-soft:#F3E2E4; --lh-band-bg:#3A1119; --lh-page-bg:#FEFAFA; }
+.page.theme-slate{ --lh-accent:#46607A; --lh-accent-dark:#33475C; --lh-accent-soft:#E7ECF0; --lh-band-bg:#24313D; --lh-page-bg:#FBFCFD; }
+.page.theme-amber{ --lh-accent:#B8860B; --lh-accent-dark:#8A640A; --lh-accent-soft:#F6ECD2; --lh-band-bg:#3D2F0D; --lh-page-bg:#FFFCF6; }
+.page.theme-mono{ --lh-accent:#2C2C2C; --lh-accent-dark:#000000; --lh-accent-soft:#ECECEC; --lh-band-bg:#1A1A1A; --lh-page-bg:#FFFFFF; }
+
+/* ---------- letterhead header ---------- */
+.lh-header{display:flex; align-items:flex-start; gap:18px; border-bottom:3px solid var(--rust); padding-bottom:16px; margin-bottom:22px;}
+.logo-box{
+  width:88px; height:88px; border:1.5px dashed #C9BCA3; border-radius:8px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer; background:#FAF7F0;
+  text-align:center; font-size:11px; color:#A8967A; padding:6px; line-height:1.3;
+}
+.logo-box img{width:100%; height:100%; object-fit:contain;}
+.logo-box:hover{border-color:var(--rust); color:var(--rust);}
+.header-fields{flex:1; min-width:0;}
+.company-name{font-family:var(--font-display); font-weight:700; font-size:28px; color:#1c1c1c; line-height:1.15;}
+.tagline{font-size:13px; color:#7a6b56; margin-top:3px; font-style:italic;}
+.contact-line{font-size:12px; color:#4a4a4a; margin-top:8px; font-family:var(--font-mono);}
+.logo-remove{font-size:10.5px; color:var(--rust); background:none; border:none; margin-top:4px; padding:0; text-align:center; width:100%;}
+
+/* ---------- content blocks ---------- */
+#blocks-container{min-height:120px;}
+.block{position:relative; margin-bottom:18px;}
+.block-toolbar{
+  position:absolute; top:-14px; right:0; display:flex; gap:4px; background:var(--walnut); border-radius:6px; padding:3px;
+  box-shadow:0 3px 8px rgba(0,0,0,.2); z-index:5;
+}
+.block-toolbar button{background:none; border:none; color:#EFE6D6; font-size:12px; padding:4px 7px; border-radius:4px;}
+.block-toolbar button:hover{background:rgba(255,255,255,0.15);}
+.text-block{font-size:14px; line-height:1.7; color:#232323; min-height:1.7em;}
+.text-block p{margin:0 0 10px;}
+.image-block{text-align:center;}
+.image-block img{max-width:100%; border-radius:4px;}
+.image-size-row{display:flex; justify-content:center; gap:6px; margin-top:6px;}
+.image-size-row button{font-size:10.5px; padding:3px 8px; border-radius:5px; border:1px solid var(--line); background:#fff; color:var(--tan);}
+.image-size-row button.active{background:var(--rust); color:#fff; border-color:var(--rust);}
+.lh-table{width:100%; border-collapse:collapse; font-size:12.5px;}
+.lh-table td{border:1px solid #cfc3ab; padding:7px 10px; min-width:60px;}
+.lh-table tr:first-child td{background:#F4EEDF; font-weight:700; color:#3B2E20;}
+.table-controls{display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;}
+.table-controls button{font-size:11px; padding:5px 9px; border-radius:5px; border:1px solid var(--line); background:#fff; color:var(--walnut);}
+.table-controls button:hover{background:var(--tan-light);}
+
+/* ---------- footer ---------- */
+.lh-footer{border-top:1px solid #E0D6C2; margin-top:26px; padding-top:10px; font-size:11px; color:#8a7c65; text-align:center;}
+
+/* ---------- print / export: hide chrome ---------- */
+.no-export{}
+.exporting-hide{ display:none !important; }
+
+/* =========================================================
+   FORMAT VARIANTS — 10 selectable letterhead layouts.
+   Each restyles the header/accent/table via CSS only, drawing its
+   accent color from the --lh-* theme variables (set by .theme-* below) —
+   so any format can be recolored into any theme. Content never changes.
+   ========================================================= */
+
+/* 1. Classic — logo left, accent rule under header (the default look) */
+.page.format-classic .lh-header{ border-bottom:3px solid var(--lh-accent); }
+.page.format-classic .lh-table tr:first-child td{ background:var(--lh-accent-soft); color:var(--lh-accent-dark); }
+
+/* 2. Centered — everything stacked and centered, double rule below */
+.page.format-centered .lh-header{ flex-direction:column; align-items:center; text-align:center; border-bottom:3px double var(--lh-accent); padding-bottom:20px; }
+.page.format-centered .logo-box{ margin-bottom:10px; }
+.page.format-centered .company-name{ font-size:26px; letter-spacing:.02em; }
+.page.format-centered .contact-line{ margin-top:6px; }
+.page.format-centered .lh-table tr:first-child td{ background:var(--lh-accent-soft); color:var(--lh-accent-dark); }
+
+/* 3. Modern Split — logo on the right, accent bar down the page edge */
+.page.format-split{ border-left:6px solid var(--lh-accent); padding-left:calc(16mm - 6px); }
+.page.format-split .lh-header{ flex-direction:row-reverse; border-bottom:1px solid var(--line); }
+.page.format-split .header-fields{ text-align:left; }
+.page.format-split .lh-table tr:first-child td{ background:var(--lh-accent-soft); color:var(--lh-accent-dark); }
+
+/* 4. Minimal — no border, small logo, quiet type, one thin accent rule */
+.page.format-minimal .lh-header{ border-bottom:none; padding-bottom:8px; align-items:center; }
+.page.format-minimal .logo-box{ width:48px; height:48px; font-size:9px; border-style:solid; border-color:#e2dccf; }
+.page.format-minimal .company-name{ font-weight:500; font-size:19px; font-family:var(--font-body); }
+.page.format-minimal .tagline{ font-style:normal; text-transform:uppercase; letter-spacing:.08em; font-size:10.5px; }
+.page.format-minimal .lh-table td{ border-left:none; border-right:none; border-color:#e5e0d3; }
+.page.format-minimal .lh-table tr:first-child td{ background:transparent; border-bottom:2px solid var(--lh-accent); }
+
+/* 5. Formal Bordered — full page border, heavy serif, formal double rule */
+.page.format-formal{ border:2px solid var(--lh-accent-dark); }
+.page.format-formal .lh-header{ flex-direction:column; align-items:center; text-align:center; border-bottom:none; }
+.page.format-formal .company-name{ font-size:24px; text-transform:uppercase; letter-spacing:.06em; }
+.page.format-formal .header-fields::after{ content:""; display:block; width:120px; height:3px; background:var(--lh-accent-dark); margin:10px auto 0; }
+.page.format-formal .lh-table td{ border-color:var(--lh-accent-dark); }
+.page.format-formal .lh-table tr:first-child td{ background:transparent; border-bottom:2px solid var(--lh-accent-dark); }
+
+/* 6. Bold Band — header becomes a full-bleed colored band */
+.page.format-band .lh-header{
+  background:var(--lh-band-bg); color:#fff; border-bottom:4px solid var(--lh-accent);
+  margin:-16mm -16mm 22px; padding:16mm 16mm 16px;
+}
+.page.format-band .company-name{ color:#fff; }
+.page.format-band .tagline{ color:#D9CDB8; }
+.page.format-band .contact-line{ color:#C9BCA3; }
+.page.format-band .logo-box{ background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.3); color:#D9CDB8; }
+.page.format-band .lh-table tr:first-child td{ background:var(--lh-band-bg); color:#fff; }
+
+/* 7. Two-Column — compact masthead, name left / contact right, tagline hidden */
+.page.format-twocol .lh-header{ border-bottom:2px solid var(--lh-accent); align-items:center; }
+.page.format-twocol .header-fields{ display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.page.format-twocol .tagline{ display:none; }
+.page.format-twocol .contact-line{ margin-top:0; text-align:right; }
+.page.format-twocol .lh-table tr:first-child td{ background:var(--lh-accent-dark); color:#fff; }
+
+/* 8. Corporate Navy — restrained, right-weighted corporate letterhead */
+.page.format-navy .lh-header{ border-bottom:3px double var(--lh-accent); padding-bottom:14px; }
+.page.format-navy .logo-box{ border-color:var(--lh-accent); border-style:solid; color:var(--lh-accent); }
+.page.format-navy .company-name{ color:var(--lh-accent); }
+.page.format-navy .tagline{ color:var(--lh-accent); opacity:0.75; font-style:normal; text-transform:uppercase; font-size:11px; letter-spacing:.06em; }
+.page.format-navy .contact-line{ color:var(--lh-accent-dark); }
+.page.format-navy .lh-table td{ border-color:var(--lh-accent-soft); }
+.page.format-navy .lh-table tr:first-child td{ background:var(--lh-accent); color:#fff; }
+.page.format-navy .lh-footer{ border-top-color:var(--lh-accent); color:var(--lh-accent); }
+
+/* 9. Executive Charcoal — full-bleed dark band with a thin accent line */
+.page.format-charcoal .lh-header{
+  background:var(--lh-band-bg); color:#fff; border-bottom:2px solid var(--lh-accent); text-align:center;
+  flex-direction:column; align-items:center; margin:-16mm -16mm 22px; padding:16mm 16mm 18px;
+}
+.page.format-charcoal .logo-box{ background:rgba(255,255,255,0.06); border-color:var(--lh-accent); color:var(--lh-accent); margin-bottom:10px; }
+.page.format-charcoal .company-name{ color:#fff; letter-spacing:.05em; text-transform:uppercase; font-size:22px; }
+.page.format-charcoal .tagline{ color:var(--lh-accent); font-style:normal; font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin-top:4px; }
+.page.format-charcoal .contact-line{ color:#bbb; margin-top:8px; }
+.page.format-charcoal .lh-table tr:first-child td{ background:var(--lh-band-bg); color:var(--lh-accent); }
+.page.format-charcoal .lh-footer{ color:#8a8a8a; }
+
+/* 10. Elegant Legal — quiet serif letterhead in the style of a law/finance office */
+.page.format-legal{ border-top:4px solid var(--lh-accent-dark); }
+.page.format-legal .lh-header{ border-bottom:1px solid #999; flex-direction:column; align-items:flex-start; }
+.page.format-legal .company-name{ font-weight:600; letter-spacing:.03em; }
+.page.format-legal .tagline{ font-style:italic; color:#666; }
+.page.format-legal .contact-line{ font-family:var(--font-mono); letter-spacing:.02em; color:#444; }
+.page.format-legal .lh-table td{ border-color:#999; }
+.page.format-legal .lh-table tr:first-child td{ background:transparent; border-bottom:1px solid var(--lh-accent-dark); font-style:italic; }
+.page.format-legal .lh-footer{ font-family:var(--font-mono); font-size:10px; letter-spacing:.03em; }
+
+@media (max-width: 767px){
+  .toolbar{padding:10px 12px; gap:6px;}
+  .toolbar .brand{width:100%; margin-bottom:4px;}
+  .btn{padding:8px 11px; font-size:12px;}
+  .stage-outer{padding:18px 8px 40px;}
+  .company-name{font-size:22px;}
+  .logo-box{width:64px; height:64px; font-size:9.5px;}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="brand"><span class="mark">LH</span> Letterhead Studio</div>
+  <select class="format-select" id="format-select" onchange="setFormat(this.value)">
+    <option value="classic">Format: Classic</option>
+    <option value="centered">Format: Centered</option>
+    <option value="split">Format: Modern Split</option>
+    <option value="minimal">Format: Minimal</option>
+    <option value="formal">Format: Formal Bordered</option>
+    <option value="band">Format: Bold Band</option>
+    <option value="twocol">Format: Two-Column</option>
+    <option value="navy">Format: Corporate Navy</option>
+    <option value="charcoal">Format: Executive Charcoal</option>
+    <option value="legal">Format: Elegant Legal</option>
+  </select>
+  <select class="format-select" id="theme-select" onchange="setTheme(this.value)">
+    <option value="rust">Theme: Workshop Rust</option>
+    <option value="navy">Theme: Corporate Navy</option>
+    <option value="charcoal">Theme: Charcoal &amp; Gold</option>
+    <option value="forest">Theme: Forest Green</option>
+    <option value="burgundy">Theme: Burgundy</option>
+    <option value="slate">Theme: Slate Blue</option>
+    <option value="amber">Theme: Amber Gold</option>
+    <option value="mono">Theme: Monochrome</option>
+  </select>
+  <button class="btn btn-tool" onclick="addTextBlock()">+ Text</button>
+  <button class="btn btn-tool" onclick="triggerImageUpload()">+ Image</button>
+  <button class="btn btn-tool" onclick="addTableBlock()">+ Table</button>
+  <button class="btn btn-danger-ghost" onclick="resetLetterhead()">Reset</button>
+  <button class="btn btn-primary" id="download-btn" onclick="downloadPdf()">⬇ Download PDF</button>
+</div>
+
+<div class="stage-outer">
+  <div id="page-stage">
+    <div class="page format-classic theme-rust" id="page">
+
+      <div class="lh-header">
+        <div class="logo-box" id="logo-box" onclick="triggerLogoUpload()">Click to<br>add logo</div>
+        <div class="header-fields">
+          <div class="company-name" contenteditable="true" id="hf-company" data-placeholder="Your Company Name"></div>
+          <div class="tagline" contenteditable="true" id="hf-tagline" data-placeholder="Tagline or department name"></div>
+          <div class="contact-line" contenteditable="true" id="hf-contact" data-placeholder="Address • Phone • Email • Website"></div>
+        </div>
+      </div>
+
+      <div id="blocks-container"></div>
+
+      <div class="lh-footer" contenteditable="true" id="lh-footer-text" data-placeholder="Footer note — registration number, disclaimer, or contact line"></div>
+
+    </div>
+  </div>
+</div>
+
+<input type="file" id="logo-input" accept="image/*" class="hidden" style="display:none;">
+<input type="file" id="image-input" accept="image/*" class="hidden" style="display:none;">
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+let state = {
+  logo: null,
+  blocks: [
+    { id: uid(), type:'text', html:'<p>Start typing your letter here. Use the toolbar above to add more paragraphs, an image, or a table of data.</p>' }
+  ]
+};
+
+function uid(){ return 'b' + Math.random().toString(36).slice(2,9); }
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+function triggerLogoUpload(){ document.getElementById('logo-input').click(); }
+document.getElementById('logo-input').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    state.logo = ev.target.result;
+    renderLogo();
+    scheduleRescale();
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+function renderLogo(){
+  const box = document.getElementById('logo-box');
+  if(state.logo){
+    box.innerHTML = `<img src="${state.logo}" alt="Company logo">`;
+    box.onclick = null;
+    box.style.cursor = 'default';
+  } else {
+    box.innerHTML = 'Click to<br>add logo';
+    box.onclick = triggerLogoUpload;
+    box.style.cursor = 'pointer';
+  }
+}
+
+/* ============================================================
+   BLOCKS
+   ============================================================ */
+function addTextBlock(){
+  state.blocks.push({ id:uid(), type:'text', html:'<p>New paragraph…</p>' });
+  renderBlocks();
+}
+function triggerImageUpload(){ document.getElementById('image-input').click(); }
+document.getElementById('image-input').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    state.blocks.push({ id:uid(), type:'image', src:ev.target.result, size:'medium' });
+    renderBlocks();
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+function addTableBlock(){
+  state.blocks.push({ id:uid(), type:'table', rows: [
+    ['Item', 'Description', 'Amount'],
+    ['', '', ''],
+    ['', '', '']
+  ]});
+  renderBlocks();
+}
+function findBlock(id){ return state.blocks.find(b=>b.id===id); }
+function findBlockIndex(id){ return state.blocks.findIndex(b=>b.id===id); }
+function removeBlock(id){
+  state.blocks = state.blocks.filter(b=>b.id!==id);
+  renderBlocks();
+}
+function moveBlock(id, dir){
+  const i = findBlockIndex(id);
+  const j = i + dir;
+  if(j < 0 || j >= state.blocks.length) return;
+  [state.blocks[i], state.blocks[j]] = [state.blocks[j], state.blocks[i]];
+  renderBlocks();
+}
+
+function renderBlocks(){
+  const container = document.getElementById('blocks-container');
+  container.innerHTML = state.blocks.map(b=>{
+    const toolbar = `<div class="block-toolbar no-export">
+      <button onclick="moveBlock('${b.id}',-1)" title="Move up">↑</button>
+      <button onclick="moveBlock('${b.id}',1)" title="Move down">↓</button>
+      <button onclick="removeBlock('${b.id}')" title="Delete">✕</button>
+    </div>`;
+
+    if(b.type === 'text'){
+      return `<div class="block" data-id="${b.id}">${toolbar}
+        <div class="text-block" contenteditable="true" data-placeholder="Type here…"
+             oninput="onTextBlockInput('${b.id}', this)">${b.html}</div>
+      </div>`;
+    }
+    if(b.type === 'image'){
+      const sizeMap = { small:'30%', medium:'55%', large:'80%', full:'100%' };
+      const w = sizeMap[b.size] || '55%';
+      return `<div class="block image-block" data-id="${b.id}">${toolbar}
+        <img src="${b.src}" style="width:${w};">
+        <div class="image-size-row no-export">
+          ${['small','medium','large','full'].map(s=>`<button class="${b.size===s?'active':''}" onclick="setImageSize('${b.id}','${s}')">${s}</button>`).join('')}
+        </div>
+      </div>`;
+    }
+    if(b.type === 'table'){
+      const rowsHtml = b.rows.map((row, r)=>
+        `<tr>${row.map((cell,c)=>`<td contenteditable="true" oninput="onTableCellInput('${b.id}',${r},${c},this)">${escapeHtml(cell)}</td>`).join('')}</tr>`
+      ).join('');
+      return `<div class="block" data-id="${b.id}">${toolbar}
+        <table class="lh-table">${rowsHtml}</table>
+        <div class="table-controls no-export">
+          <button onclick="tableAddRow('${b.id}')">+ Row</button>
+          <button onclick="tableRemoveRow('${b.id}')">− Row</button>
+          <button onclick="tableAddCol('${b.id}')">+ Column</button>
+          <button onclick="tableRemoveCol('${b.id}')">− Column</button>
+        </div>
+      </div>`;
+    }
+    return '';
+  }).join('');
+  scheduleRescale();
+}
+function escapeHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function onTextBlockInput(id, el){
+  const b = findBlock(id);
+  if(b) b.html = el.innerHTML;
+  scheduleRescale();
+}
+function setImageSize(id, size){
+  const b = findBlock(id);
+  if(b) b.size = size;
+  renderBlocks();
+}
+function onTableCellInput(id, r, c, el){
+  const b = findBlock(id);
+  if(b) b.rows[r][c] = el.innerText;
+}
+function tableAddRow(id){
+  const b = findBlock(id);
+  b.rows.push(new Array(b.rows[0].length).fill(''));
+  renderBlocks();
+}
+function tableRemoveRow(id){
+  const b = findBlock(id);
+  if(b.rows.length > 1) b.rows.pop();
+  renderBlocks();
+}
+function tableAddCol(id){
+  const b = findBlock(id);
+  b.rows.forEach(row=>row.push(''));
+  renderBlocks();
+}
+function tableRemoveCol(id){
+  const b = findBlock(id);
+  if(b.rows[0].length > 1) b.rows.forEach(row=>row.pop());
+  renderBlocks();
+}
+
+/* ============================================================
+   FORMAT — 10 selectable letterhead layouts (CSS-only; content unaffected)
+   ============================================================ */
+const FORMATS = ['classic','centered','split','minimal','formal','band','twocol','navy','charcoal','legal'];
+function setFormat(name){
+  const page = document.getElementById('page');
+  FORMATS.forEach(f=>page.classList.remove('format-'+f));
+  page.classList.add('format-'+name);
+  scheduleRescale();
+}
+
+/* ============================================================
+   THEME — 8 selectable color palettes, independent of format.
+   Recolors whichever format is active via CSS variables.
+   ============================================================ */
+const THEMES = ['rust','navy','charcoal','forest','burgundy','slate','amber','mono'];
+function setTheme(name){
+  const page = document.getElementById('page');
+  THEMES.forEach(t=>page.classList.remove('theme-'+t));
+  page.classList.add('theme-'+name);
+  scheduleRescale();
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+function resetLetterhead(){
+  if(!confirm('Clear the logo, header text, all content blocks, and the chosen format/theme?')) return;
+  state = { logo:null, blocks:[ { id:uid(), type:'text', html:'<p>Start typing your letter here.</p>' } ] };
+  document.getElementById('hf-company').innerHTML = '';
+  document.getElementById('hf-tagline').innerHTML = '';
+  document.getElementById('hf-contact').innerHTML = '';
+  document.getElementById('lh-footer-text').innerHTML = '';
+  document.getElementById('format-select').value = 'classic';
+  document.getElementById('theme-select').value = 'rust';
+  setFormat('classic');
+  setTheme('rust');
+  renderLogo();
+  renderBlocks();
+}
+
+/* ============================================================
+   RESPONSIVE SCALING — shrinks the A4 page to fit narrow screens
+   without changing its actual layout or print dimensions
+   ============================================================ */
+let rescaleTimer = null;
+function scheduleRescale(){
+  clearTimeout(rescaleTimer);
+  rescaleTimer = setTimeout(rescalePage, 60);
+}
+function rescalePage(){
+  const page = document.getElementById('page');
+  const stage = document.getElementById('page-stage');
+  page.style.transform = 'scale(1)';
+  const naturalWidth = page.offsetWidth;
+  const naturalHeight = page.offsetHeight;
+  const available = stage.parentElement.clientWidth - 16;
+  const scale = Math.min(1, available / naturalWidth);
+  page.style.transform = `scale(${scale})`;
+  stage.style.width = (naturalWidth * scale) + 'px';
+  stage.style.height = (naturalHeight * scale) + 'px';
+}
+window.addEventListener('resize', scheduleRescale);
+new MutationObserver(scheduleRescale).observe(document.getElementById('page'), { childList:true, subtree:true, characterData:true });
+
+/* ============================================================
+   DOWNLOAD PDF
+   ============================================================ */
+async function downloadPdf(){
+  const btn = document.getElementById('download-btn');
+  const page = document.getElementById('page');
+  const originalLabel = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Preparing PDF…';
+
+  const hiddenEls = document.querySelectorAll('.no-export');
+  hiddenEls.forEach(el=>el.classList.add('exporting-hide'));
+  const prevTransform = page.style.transform;
+  page.style.transform = 'none';
+
+  try{
+    const canvas = await html2canvas(page, { scale:2, backgroundColor:'#ffffff', useCORS:true });
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pdfWidth;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight;
+    while(heightLeft > 0){
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+    }
+
+    const companyName = document.getElementById('hf-company').innerText.trim();
+    const filename = (companyName ? companyName.replace(/[^a-z0-9]+/gi,'-').toLowerCase() : 'letterhead') + '.pdf';
+    pdf.save(filename);
+  }catch(err){
+    alert("Couldn't generate the PDF — please try again.");
+  }finally{
+    hiddenEls.forEach(el=>el.classList.remove('exporting-hide'));
+    page.style.transform = prevTransform;
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+    scheduleRescale();
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderLogo();
+renderBlocks();
+window.addEventListener('load', scheduleRescale);
+</script>
+</body>
+</html>

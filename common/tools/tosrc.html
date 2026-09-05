@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Field Toolbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F7FB; --panel:#FFFFFF; --ink:#14161F; --muted:#6B7280; --muted-2:#9CA3AF;
+  --line:#E7E9F0; --line-soft:#EFF1F6;
+  --accent:#4F46E5; --accent-dark:#4338CA; --accent-soft:#EEF0FF;
+  --success:#059669; --success-soft:#E7F6EF;
+  --amber:#B45309; --amber-soft:#FDF1DD;
+  --shadow-sm:0 1px 2px rgba(20,22,31,0.05), 0 1px 1px rgba(20,22,31,0.03);
+  --shadow-md:0 8px 24px rgba(20,22,31,0.08);
+  --radius:14px;
+  --font-display:'Plus Jakarta Sans', sans-serif; --font-body:'Inter', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;padding:0;}
+html,body{background:var(--bg); color:var(--ink); font-family:var(--font-body); min-height:100vh; -webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:var(--font-display); margin:0; color:var(--ink); letter-spacing:-0.01em;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+.hidden{display:none !important;}
+
+/* ---------- header (fixed) ---------- */
+.hero{
+  background:
+    radial-gradient(720px 320px at 12% -10%, rgba(79,70,229,0.10), transparent 60%),
+    radial-gradient(600px 300px at 90% 0%, rgba(79,70,229,0.06), transparent 55%),
+    var(--panel);
+  border-bottom:1px solid var(--line);
+  padding:20px 24px 26px;
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  box-shadow:var(--shadow-md);
+}
+.hero-inner{max-width:1100px; margin:0 auto; position:relative;}
+.hero-top-row{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+.back-btn{
+  width:38px; height:38px; border-radius:10px; background:var(--panel); border:1.5px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--ink); flex-shrink:0;
+  box-shadow:var(--shadow-sm); transition:background .15s ease, border-color .15s ease;
+}
+.back-btn:hover{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent-dark); }
+.hero .mark{
+  width:38px; height:38px; border-radius:10px; background:var(--accent); display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:800; font-size:14px; color:#fff; box-shadow:0 8px 20px rgba(79,70,229,.28); flex-shrink:0;
+}
+.hero-top-row h1{font-size:19px; font-weight:800;}
+.hero p{color:var(--muted); font-size:13.5px; line-height:1.5; max-width:520px; margin-bottom:16px;}
+.search-box{position:relative; max-width:440px;}
+.search-box input{
+  width:100%; padding:12px 16px 12px 42px; border-radius:11px; border:1.5px solid var(--line); font-size:14px;
+  background:var(--panel); color:var(--ink); font-family:inherit; box-shadow:var(--shadow-sm); transition:border-color .15s ease, box-shadow .15s ease;
+}
+.search-box input::placeholder{color:var(--muted-2);}
+.search-box input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft);}
+.search-box .ic{position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--muted-2); font-size:14px;}
+
+/* ---------- body ---------- */
+.body-wrap{max-width:1100px; margin:0 auto; padding:0 24px 60px;}
+.section{margin-bottom:16px;}
+.section-head{
+  display:flex; align-items:center; gap:10px; width:100%; background:var(--panel); border:1px solid var(--line);
+  border-radius:var(--radius); padding:14px 14px 14px 18px;
+  box-shadow:var(--shadow-sm); transition:border-color .15s ease, box-shadow .15s ease;
+}
+.section-head:hover{ border-color:#D7DAE6; box-shadow:var(--shadow-md); }
+.section-toggle{
+  display:flex; align-items:center; gap:14px; flex:1; min-width:0; background:none; border:none; padding:0;
+  font-family:inherit; cursor:pointer; text-align:left; color:inherit;
+}
+.section-head .sic{
+  width:38px; height:38px; border-radius:10px; background:var(--accent-soft); color:var(--accent-dark);
+  display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
+}
+.section-head h2{font-size:16.5px; font-weight:700;}
+.section-head .count{font-size:12px; color:var(--muted); font-family:var(--font-mono); white-space:nowrap; margin-left:auto;}
+.section-head .chevron{font-size:13px; color:var(--muted-2); margin-left:4px; transition:transform .2s ease; flex-shrink:0;}
+.section-toggle[aria-expanded="true"] .chevron{ transform:rotate(90deg); color:var(--accent); }
+.section-head:has(.section-toggle[aria-expanded="true"]){ border-color:var(--accent-soft); }
+
+.reorder-btns{display:flex; gap:4px; flex-shrink:0; margin-left:6px;}
+.reorder-btns button{
+  width:30px; height:30px; border-radius:8px; border:1.5px solid var(--line); background:var(--panel); color:var(--muted);
+  display:flex; align-items:center; justify-content:center; font-size:13px; transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+.reorder-btns button:hover:not(:disabled){ background:var(--accent-soft); border-color:var(--accent); color:var(--accent-dark); }
+.reorder-btns button:disabled{ opacity:.32; cursor:not-allowed; }
+
+.section-content{ overflow:hidden; max-height:2000px; opacity:1; padding-top:14px; transition:max-height .3s ease, opacity .25s ease; }
+.section-content.collapsed{ max-height:0; opacity:0; padding-top:0; }
+.section-content.collapsed.force-open{ max-height:2000px; opacity:1; padding-top:14px; }
+
+.tools-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:14px;}
+.tool-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-sm);
+  padding:20px; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.tool-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:#D7DAE6;}
+.tool-card .top-row{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px;}
+.tool-card .ticon{
+  width:38px; height:38px; border-radius:10px; background:var(--accent-soft); color:var(--accent-dark);
+  display:flex; align-items:center; justify-content:center; font-size:17px;
+}
+.badge{display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:.02em; white-space:nowrap;}
+.badge-ready{background:var(--success-soft); color:var(--success);}
+.badge-soon{background:var(--amber-soft); color:var(--amber);}
+.tool-card h3{font-size:16px; font-weight:700; margin-bottom:6px;}
+.tool-card p{font-size:13.5px; color:var(--muted); line-height:1.6; margin:0 0 16px; flex:1;}
+.tool-card .tag{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); margin-bottom:12px; display:block;}
+.btn{border:none; border-radius:9px; padding:10px 15px; font-weight:600; font-size:13.5px; text-align:center; transition:transform .12s ease, background .15s ease;}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--accent); color:#fff;}
+.btn-primary:hover{background:var(--accent-dark);}
+.btn-disabled{background:var(--line-soft); color:var(--muted-2); cursor:not-allowed;}
+
+.empty-section{
+  background:var(--panel); border:1.5px dashed var(--line); border-radius:var(--radius);
+  padding:26px 20px; text-align:center; color:var(--muted); font-size:13.5px; line-height:1.6;
+}
+
+.no-results{ text-align:center; padding:70px 20px; color:var(--muted); }
+.no-results .ic{font-size:30px; margin-bottom:10px; opacity:.6;}
+
+footer{text-align:center; padding:24px; font-size:12px; color:var(--muted-2); border-top:1px solid var(--line);}
+
+@media (max-width: 700px){
+  .hero{padding:14px 16px 18px;}
+  .hero-top-row h1{font-size:17px;}
+  .hero p{display:none;}
+  .body-wrap{padding:0 14px 50px;}
+  .tools-grid{grid-template-columns:1fr 1fr; gap:12px;}
+  .tool-card{padding:16px;}
+}
+@media (max-width: 460px){
+  .tools-grid{grid-template-columns:1fr;}
+  .section-head h2{font-size:15px;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-top-row">
+      <button class="back-btn" onclick="goBack()" aria-label="Go back" title="Go back">←</button>
+      <div class="mark">FT</div>
+      <h1>Field Toolbox</h1>
+    </div>
+    <p>Every tool you've built, in one place — organized by trade. Open any tool below, and new ones will show up here as they're added.</p>
+    <div class="search-box">
+      <span class="ic">🔍</span>
+      <input type="text" id="tool-search" placeholder="Search tools…" oninput="filterTools()">
+    </div>
+  </div>
+</div>
+
+<div class="body-wrap" id="sections-container"></div>
+
+<div class="no-results hidden" id="no-results">
+  <div class="ic">🔍</div>
+  No tools match your search.
+</div>
+
+<footer>Field Toolbox — add a new tool anytime and it'll show up here.</footer>
+
+<script>
+/* ============================================================
+   TOOL REGISTRY — add a new tool by adding one object here.
+   status: 'ready' (has a url, opens the tool) or 'soon' (placeholder, no url yet)
+   ============================================================ */
+const TOOL_SECTIONS = [
+    {
+    id: 'upload',
+    name: 'media&upload Tools',
+    icon: '🔧',
+    tools: [
+        {
+            name: 'Media Uploader',
+            desc: 'Upload photos, videos, and documents to your project — with optional captions and tags.',
+            tag: 'Web App · Admin + Worker',
+            url: '../../screen/activity/scnner.html',
+            status: 'ready'
+        },
+         {
+            name: 'Project media Uploader',
+            desc: 'Upload photos, videos, and documents to your project — with optional captions and tags.',
+            tag: 'Web App · Admin + Worker',
+            url: '../../screen/projects-reports.html',
+            status: 'ready'
+        },
+        {
+            name: 'T.E.R',
+            desc: 'Upload photos, DURING WORK.',
+            tag: 'Web App · Worker',
+            url: '../../screen/tmr.html',
+            status: 'ready'
+        },
+        {
+            name: 'T.Data',
+            desc: 'daily works records.',
+            tag: 'Web App · user',
+            url: '../../screen/table.html',
+            status: 'ready'
+        }
+    ]
+  },
+  {
+    id: 'carpentry',
+    name: 'Carpentry & Site Management',
+    icon: '🪚',
+    tools: [
+      {
+        name: 'Workshop Ledger',
+        desc: 'Attendance, payroll, and project geofencing for your crew — multi-company sign-up, admin and worker apps, location-verified check-ins.',
+        tag: 'Web App · Admin + Worker',
+        url: 'workshop-ledger-saas.html',
+        status: 'ready'
+      }
+    ]
+  },
+  {    id: 'Desa-chitra',
+    name: 'Desa Chitra',
+    icon: '🪚',
+    tools: [
+      {
+        name: 'Desa Chitra',
+        desc: 'share, add shop locations, and manges location.',
+        tag: 'Web App · Users',
+        url: '../../screen/bhūgolapaṭa.html',
+        status: 'ready'
+      }
+    ]
+  },
+  {
+    id: 'plumbing',
+    name: 'Plumbing Tools',
+    icon: '🔧',
+    tools: []
+  },
+  {
+    id: 'electrical',
+    name: 'Electrical Tools',
+    icon: '⚡',
+    tools: []
+  },
+   {
+    id: 'billing',
+    name: 'Billing Tools',
+    icon: '⚡',
+    tools: [
+      {
+        name: 'Invoice',
+        desc: 'make invoices pdf.',
+        tag: 'Web App · Users',
+        url: '../../screen/invoice.html',
+        status: 'ready'
+      },
+      {
+        name: 'B.C.D.',
+        desc: 'Manage all type product invoice .',
+        tag: 'Web App · Users',
+        url: '../../screen/billu.html',
+        status: 'ready'
+      },
+      
+      {
+        name: 'B.U.S.',
+        desc: 'Project base biling system. with select time period payment and share to client.',
+        tag: 'Web App · Users',
+        url: '../../screen/trackpay.html',
+        status: 'ready'
+      }
+    ]
+  },
+  {
+    id: 'sensor',
+    name: 'Sensor Tools',
+    icon: '📡',
+    tools: [
+      {
+        name: 'Universal Scanner',
+        desc: 'Live camera scanning for QR codes and barcodes, plus on-device document OCR — get instant details from anything you point the camera at.',
+        tag: 'Camera · OCR',
+        url: 'universal-scanner.html',
+        status: 'ready'
+      },
+      {
+        name: 'Digital Spirit Level',
+        desc: 'Accelerometer-based level for a quick on-site check without a physical tool.',
+        tag: 'Motion sensor',
+        status: 'soon'
+      },
+      {
+        name: 'Compass / Site Orientation',
+        desc: 'Magnetometer heading to confirm building orientation against drawings.',
+        tag: 'Magnetometer',
+        status: 'soon'
+      },
+      {
+        name: 'Voice Memo Notes',
+        desc: 'Hands-free audio notes recorded and tied to a project while walking a site.',
+        tag: 'Microphone',
+        status: 'soon'
+      }
+    ]
+  },
+  {
+    id: 'documents',
+    name: 'Business & Documents',
+    icon: '📄',
+    tools: [
+      {
+        name: 'Letterhead Studio',
+        desc: 'Fully editable letterhead builder — logo, images, tables, 10 layouts across 8 color themes, and multi-page PDF download.',
+        tag: 'Document Builder',
+        url: '../../common/letterhead.html',
+        status: 'ready'
+      }
+    ]
+  }
+];
+
+/* ============================================================
+   RENDER — each section is a click-to-open accordion; every
+   section starts collapsed until the user taps its header.
+   ============================================================ */
+let collapsedSections = new Set(TOOL_SECTIONS.map(s=>s.id));
+
+function renderSections(){
+  const container = document.getElementById('sections-container');
+  container.innerHTML = TOOL_SECTIONS.map((section, index)=>{
+    const isCollapsed = collapsedSections.has(section.id);
+    const cardsHtml = section.tools.length
+      ? `<div class="tools-grid">${section.tools.map(renderCard).join('')}</div>`
+      : `<div class="empty-section">No tools here yet — this section is ready whenever you need one.</div>`;
+    const isFirst = index === 0;
+    const isLast = index === TOOL_SECTIONS.length - 1;
+    return `
+      <div class="section" data-section-id="${section.id}">
+        <div class="section-head">
+          <button class="section-toggle" onclick="toggleSection('${section.id}')" aria-expanded="${!isCollapsed}" aria-controls="content-${section.id}">
+            <div class="sic">${section.icon}</div>
+            <h2>${section.name}</h2>
+            <span class="count">${section.tools.length} tool${section.tools.length===1?'':'s'}</span>
+            <span class="chevron">▸</span>
+          </button>
+          <div class="reorder-btns">
+            <button onclick="moveSection('${section.id}',-1)" ${isFirst?'disabled':''} aria-label="Move ${section.name} up" title="Move up">▲</button>
+            <button onclick="moveSection('${section.id}',1)" ${isLast?'disabled':''} aria-label="Move ${section.name} down" title="Move down">▼</button>
+          </div>
+        </div>
+        <div class="section-content${isCollapsed ? ' collapsed' : ''}" id="content-${section.id}">
+          ${cardsHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+  adjustBodyPadding();
+}
+
+function toggleSection(id){
+  const contentEl = document.getElementById('content-'+id);
+  const toggleEl = document.querySelector(`.section[data-section-id="${id}"] .section-toggle`);
+  const nowCollapsed = !collapsedSections.has(id);
+  if(nowCollapsed){
+    collapsedSections.add(id);
+  } else {
+    collapsedSections.delete(id);
+  }
+  contentEl.classList.toggle('collapsed', nowCollapsed);
+  toggleEl.setAttribute('aria-expanded', String(!nowCollapsed));
+}
+
+function moveSection(id, direction){
+  const idx = TOOL_SECTIONS.findIndex(s=>s.id===id);
+  const newIdx = idx + direction;
+  if(newIdx < 0 || newIdx >= TOOL_SECTIONS.length) return;
+  [TOOL_SECTIONS[idx], TOOL_SECTIONS[newIdx]] = [TOOL_SECTIONS[newIdx], TOOL_SECTIONS[idx]];
+  renderSections();
+}
+
+function goBack(){
+  if(window.history.length > 1){ history.back(); }
+  else { window.close(); }
+}
+
+function adjustBodyPadding(){
+  const hero = document.getElementById('hero');
+  const bodyWrap = document.getElementById('sections-container');
+  if(hero && bodyWrap){
+    bodyWrap.style.paddingTop = (hero.offsetHeight + 24) + 'px';
+  }
+}
+window.addEventListener('resize', adjustBodyPadding);
+window.addEventListener('load', adjustBodyPadding);
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(adjustBodyPadding); }
+
+function renderCard(tool){
+  const isReady = tool.status === 'ready' && tool.url;
+  const badge = isReady ? `<span class="badge badge-ready">Ready</span>` : `<span class="badge badge-soon">Coming soon</span>`;
+  const button = isReady
+    ? `<a class="btn btn-primary" href="${tool.url}" >Open tool ↗</a>`
+    : `<button class="btn btn-disabled" disabled>Coming soon</button>`;
+  return `
+    <div class="tool-card" data-name="${tool.name.toLowerCase()}" data-desc="${(tool.desc||'').toLowerCase()}">
+      <div class="top-row">
+        <div class="ticon">${isReady ? '🧰' : '🕑'}</div>
+        ${badge}
+      </div>
+      <h3>${tool.name}</h3>
+      ${tool.tag ? `<span class="tag">${tool.tag}</span>` : ''}
+      <p>${tool.desc || ''}</p>
+      ${button}
+    </div>
+  `;
+}
+
+/* ============================================================
+   SEARCH / FILTER
+   ============================================================ */
+function filterTools(){
+  const q = document.getElementById('tool-search').value.trim().toLowerCase();
+  let anyVisible = false;
+
+  document.querySelectorAll('.section').forEach(sectionEl=>{
+    const id = sectionEl.dataset.sectionId;
+    const contentEl = document.getElementById('content-'+id);
+    const cards = sectionEl.querySelectorAll('.tool-card');
+    let sectionHasMatch = cards.length === 0; // empty sections (placeholders) always show when there's no query
+    cards.forEach(card=>{
+      const matches = !q || card.dataset.name.includes(q) || card.dataset.desc.includes(q) || card.querySelector('.tag')?.textContent.toLowerCase().includes(q);
+      card.classList.toggle('hidden', !matches);
+      if(matches) sectionHasMatch = true;
+    });
+    // when searching, hide empty-placeholder sections entirely (nothing there to match anyway)
+    const sectionVisible = q ? (cards.length > 0 && sectionHasMatch) : true;
+    sectionEl.classList.toggle('hidden', !sectionVisible);
+    if(sectionVisible) anyVisible = true;
+
+    // while searching, force open any visible (matching) section regardless of its
+    // manually-toggled collapsed state; once the search is cleared, that state returns
+    contentEl.classList.toggle('force-open', !!q && sectionVisible);
+  });
+
+  document.getElementById('no-results').classList.toggle('hidden', anyVisible);
+}
+
+renderSections();
+</script>
+</body>
+</html>
