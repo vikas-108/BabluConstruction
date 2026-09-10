@@ -427,7 +427,7 @@ function stopButtonLoading(button, text) {
         console.error(err);
         alert("Server error");
       }finally{
-         stopButtonLoading(verifyBtn, "verifing");
+         stopButtonLoading(verifyBtn, "verify otp");
       }
     };
   }

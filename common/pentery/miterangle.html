@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miter & Angle Finder</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/miterangle.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M4 20h16M4 20L16 6"/></svg></div>
+      <div class="header-titles">
+        <h1>Miter &amp; Angle Finder</h1>
+        <div class="sub">Set your saw for any corner</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Corner</div>
+    <div class="card">
+      <div class="corner-tabs">
+        <div class="corner-tab active" data-type="inside">Inside Corner</div>
+        <div class="corner-tab" data-type="outside">Outside Corner</div>
+      </div>
+
+      <div class="angle-input-row">
+        <div class="angle-big"><span id="angleVal">90</span>°</div>
+        <input type="range" id="angleSlider" min="1" max="179" value="90">
+      </div>
+
+      <div class="preset-row" id="presetRow"></div>
+
+      <div class="diagram">
+        <svg viewBox="0 0 180 120" id="diagramSvg">
+          <path id="wallA" stroke="#8b9298" stroke-width="4" fill="none"/>
+          <path id="wallB" stroke="#8b9298" stroke-width="4" fill="none"/>
+          <path id="miterLine" stroke="#f2c230" stroke-width="2" stroke-dasharray="4 3" fill="none"/>
+        </svg>
+      </div>
+
+      <div class="result-box">
+        <div class="result-stat"><div class="k">Miter Angle</div><div class="v" id="miterVal">45.0°</div></div>
+        <div class="result-stat"><div class="k">Bevel Angle</div><div class="v" id="bevelVal">0°</div></div>
+      </div>
+      <div class="result-note">Set your miter saw to <b id="miterNote">45.0°</b> on both pieces (flat, on-the-flat trim like baseboard or standard crown laid flat).</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Quick Reference</div>
+    <div class="ref-table" id="refTable"></div>
+  </section>
+
+  <footer class="note">
+    Miter angle = corner angle ÷ 2 — correct for flat trim and baseboard.<br>
+    Compound miters for tilted crown molding need a spring-angle table and aren't covered here yet.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/miteranfle.min.js">
+</script>
+</body>
+</html>

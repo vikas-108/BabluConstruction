@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Quotation Generator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/quatgenz.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="back-btn" id="homeBtn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M4 19h16"/><path d="M6 19V9l6-4 6 4v10"/><path d="M10 19v-5h4v5"/></svg></div>
+    <div>
+      <h1>Quotation Generator</h1>
+      <div class="sub">Build &amp; save contractor quotes</div>
+    </div>
+    <button class="icon-btn" id="settingsBtn" title="Your business details">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.23.5.7.85 1.25 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+  </header>
+
+  <!-- ============ LIST VIEW ============ -->
+  <div id="listView">
+    <div class="search-wrap"><input type="text" id="searchInput" placeholder="Search by client name…"></div>
+    <div id="quoteList"></div>
+  </div>
+
+  <!-- ============ EDITOR VIEW ============ -->
+  <div id="editorView" style="display:none;">
+    <div class="back-link" id="closeEditorBtn">← Back to quotations</div>
+
+    <div class="section-title">Choose a template</div>
+    <div class="tpl-grid" id="tplGrid"></div>
+
+    <div class="section-title">Client &amp; site</div>
+    <div class="row2">
+      <div class="field"><label>Client name</label><input type="text" id="fClient" placeholder="e.g. Mr. Verma"></div>
+      <div class="field"><label>Phone</label><input type="text" id="fPhone" placeholder="98xxxxxxxx"></div>
+    </div>
+    <div class="field"><label>Site address</label><input type="text" id="fAddress" placeholder="Site location"></div>
+    <div class="row2">
+      <div class="field"><label>Quotation no.</label><input type="text" id="fQuoteNo"></div>
+      <div class="field"><label>Date</label><input type="date" id="fDate"></div>
+    </div>
+
+    <div class="section-title">Line items</div>
+    <div class="items-wrap">
+      <div class="col-labels"><span>Item</span><span>Unit</span><span>Qty</span><span>Rate ₹</span><span>Amount</span><span></span></div>
+      <div id="itemRows"></div>
+    </div>
+    <button class="add-item-btn" id="addItemBtn">+ Add line item</button>
+
+    <div class="totals-card">
+      <div class="t-row"><span>Subtotal</span><span class="val" id="sumSubtotal">₹0</span></div>
+      <div class="t-row"><span>Discount (%)</span><input type="number" id="fDiscount" value="0" min="0"></div>
+      <div class="t-row"><span>GST / Tax (%)</span><input type="number" id="fTax" value="0" min="0"></div>
+      <div class="t-row grand"><span>Grand total</span><span class="val" id="sumGrand">₹0</span></div>
+    </div>
+
+    <div class="field" style="margin-top:14px;">
+      <label>Terms &amp; notes</label>
+      <textarea id="fNotes"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-ghost" id="printBtn">Print / PDF</button>
+      <button class="btn-yellow" id="saveQuoteBtn">Save quotation</button>
+    </div>
+    <button class="btn-red" id="deleteQuoteBtn" style="margin-top:10px; display:none;">Delete this quotation</button>
+  </div>
+
+  <button class="fab" id="fabAdd">+</button>
+</div>
+
+<!-- SETTINGS DRAWER -->
+<div class="drawer-backdrop" id="settingsBackdrop"></div>
+<div class="drawer" id="settingsDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Your business details</div>
+  <div class="field"><label>Business / contractor name</label><input type="text" id="bizName" placeholder="e.g. Verma Construction Co."></div>
+  <div class="field"><label>Phone</label><input type="text" id="bizPhone" placeholder="98xxxxxxxx"></div>
+  <div class="field"><label>Address</label><input type="text" id="bizAddress" placeholder="Business address"></div>
+  <div class="field"><label>GSTIN (optional)</label><input type="text" id="bizGst" placeholder="22AAAAA0000A1Z5"></div>
+  <button class="btn-yellow" id="saveBizBtn">Save details</button>
+</div>
+
+<!-- SHARE DRAWER -->
+<div class="drawer-backdrop" id="shareBackdrop"></div>
+<div class="drawer" id="shareDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Share quotation</div>
+  <div class="field">
+    <label>Phone number</label>
+    <div class="share-row">
+      <input type="tel" id="sharePhone" placeholder="98xxxxxxxx">
+      <button class="btn-yellow" id="shareSendBtn">Share</button>
+    </div>
+  </div>
+  <div class="section-title" style="margin-top:16px;">Shared with</div>
+  <div id="sharedList"></div>
+</div>
+
+<!-- printable quotation, hidden on screen -->
+<div id="printArea"></div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/quatgenz.min.js">
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magnetic Stud/Nail Finder</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/magnetfin.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M4 15a4 4 0 004 4h1v-6H8a4 4 0 00-4 4z"/><path d="M20 15a4 4 0 01-4 4h-1v-6h1a4 4 0 014 4z"/><path d="M9 13V9M15 13V9"/></svg></div>
+      <div class="header-titles">
+        <h1>Magnetic Stud Finder</h1>
+        <div class="sub">Spots nails/screws behind a wall</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="support-msg" id="supportMsg"></div>
+    <div class="card gauge-wrap">
+      <div class="radial">
+        <svg viewBox="0 0 220 220">
+          <circle cx="110" cy="110" r="95" fill="none" stroke="#2b3136" stroke-width="10"/>
+          <circle id="ring" cx="110" cy="110" r="95" fill="none" stroke="#f2c230" stroke-width="10" stroke-dasharray="0 597" stroke-linecap="round" transform="rotate(-90 110 110)"/>
+        </svg>
+        <div class="radial-center">
+          <div class="radial-val" id="deltaVal">0%</div>
+          <div class="radial-unit">above baseline</div>
+        </div>
+      </div>
+      <div class="status-pill" id="statusPill">Reading magnetic field…</div>
+
+      <div class="btn-row">
+        <button class="gbtn ghost" id="baselineBtn">Reset Baseline</button>
+        <button class="gbtn primary" id="startBtn">Start</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">
+    Works by watching for spikes in your phone's own compass sensor as it passes near ferrous metal (nails,<br>
+    screws, metal studs). Hold the phone flat against the wall and sweep slowly. Android Chrome only — iOS<br>
+    Safari doesn't expose raw magnetometer data to web pages at all.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/magnetfin.min.js">
+</script>
+</body>
+</html>

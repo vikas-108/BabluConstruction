@@ -6,7 +6,7 @@ async function buyPlan(plan) {
   }
   try {
     const response = await fetch(
-      "https://api.buildskil.com/api/membership/update",
+      "http://localhost:5000/api/membership/update",
       {
         method: "PUT",
         headers: {

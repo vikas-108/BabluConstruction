@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paper / Print Scale Calculator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/paperscale.min.css" >
+<!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div>
+      <div class="header-titles">
+        <h1>Paper / Print Scale</h1>
+        <div class="sub">What sheet size fits your drawing</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Drawing Extents</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Width (m)</label><input type="number" id="realW" value="20" min="0" step="0.1"></div>
+        <div class="field"><label>Depth (m)</label><input type="number" id="realD" value="12" min="0" step="0.1"></div>
+      </div>
+      <div class="field">
+        <label>Drawing scale</label>
+        <select id="scaleSelect">
+          <option value="20">1:20</option>
+          <option value="50" selected>1:50</option>
+          <option value="100">1:100</option>
+          <option value="200">1:200</option>
+          <option value="500">1:500</option>
+        </select>
+      </div>
+
+      <div class="result-box">
+        <div class="k">Drawing footprint at this scale</div>
+        <div class="v" id="drawingSize">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Fits On (ISO sheet, portrait or landscape)</div>
+    <div id="sheetList"></div>
+  </section>
+
+  <footer class="note">Excludes title block / margin — leave extra room around the drawing when picking a sheet.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/papersacle.min.js">
+</script>
+</body>
+</html>

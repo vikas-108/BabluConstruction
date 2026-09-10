@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guard Shift & Patrol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/gaurdsit.min.css" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M12 2l7 3v6c0 5-3 8.5-7 10-4-1.5-7-5-7-10V5z"/></svg></div>
+      <div class="header-titles">
+        <h1>Guard Shift &amp; Patrol</h1>
+        <div class="sub">Track shifts and checkpoint rounds</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="shift">Shift</div>
+    <div class="tab" data-tab="patrol">Patrol Round</div>
+    <div class="tab" data-tab="history">History</div>
+  </div>
+
+  <!-- SHIFT TAB -->
+  <div id="shiftTab">
+    <section class="block">
+      <div class="block-title">Current Shift</div>
+      <div class="card" id="shiftCard"></div>
+    </section>
+  </div>
+
+  <!-- PATROL TAB -->
+  <div id="patrolTab" style="display:none;">
+    <section class="block">
+      <div class="block-title">Checkpoints</div>
+      <div class="card">
+        <div class="round-progress" id="roundProgress">0 / 0 checked</div>
+        <div id="checkpointsList"></div>
+        <div class="add-cp-row">
+          <input type="text" id="newCpName" placeholder="Add a checkpoint (e.g. Main Gate)">
+          <button id="addCpBtn">Add</button>
+        </div>
+        <button class="gbtn start" id="completeRoundBtn" style="margin-top:14px;">Complete Round</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div id="historyTab" style="display:none;">
+    <section class="block">
+      <div class="block-title">Past Shifts &amp; Rounds</div>
+      <div id="historyList"></div>
+      <div id="historyEmpty" style="display:none; text-align:center; color:var(--text-dim); font-size:13px; padding:30px 10px;">Nothing logged yet.</div>
+    </section>
+  </div>
+
+  <footer class="note">Saved on this device only.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/gaurdsit.min.js">
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08111f">
+<title>BuildSkil Construction Camera</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="stylesheet" href="../../dist/css/construction-camera.min.css">
+</head>
+<body>
+<main class="camera-app">
+<header class="topbar">
+<button id="backBtn" class="icon-btn" type="button">←</button>
+<div><strong>Construction Camera</strong><small id="modeLabel">Level</small></div>
+<button id="switchCameraBtn" class="icon-btn" type="button" aria-label="Switch camera">↻</button>
+</header>
+<section class="viewfinder" id="viewfinder">
+<video id="cameraVideo" autoplay playsinline muted></video>
+<canvas id="overlayCanvas"></canvas>
+<div id="cameraMessage" class="camera-message"><h2>Construction Camera</h2><p>Camera + phone sensors.</p><button id="startCameraBtn" class="primary-btn" type="button">Start Camera</button></div>
+<div id="sensorMessage" class="sensor-message hidden"><span id="sensorMessageText">Motion access is needed.</span><button id="enableSensorsBtn" class="secondary-btn" type="button">Enable</button></div>
+<div class="readout"><strong id="readoutValue">—</strong><span id="readoutLabel">Start camera</span></div>
+</section>
+<div class="quick-actions">
+<button id="torchBtn" class="round-btn" type="button">☼</button>
+<button id="captureBtn" class="capture-btn" type="button" aria-label="Capture photo"><span></span></button>
+<button id="saveReadingBtn" class="round-btn" type="button">＋</button>
+</div>
+<nav class="mode-bar" aria-label="Camera modes">
+<button class="mode-btn active" data-mode="level" type="button">Level</button>
+<button class="mode-btn" data-mode="plumb" type="button">Plumb</button>
+<button class="mode-btn" data-mode="angle" type="button">Angle</button>
+<button class="mode-btn" data-mode="slope" type="button">Slope</button>
+<button class="mode-btn" data-mode="grid" type="button">Grid</button>
+<button class="mode-btn" data-mode="mark" type="button">Mark</button>
+</nav>
+<section class="panel">
+<div class="panel-head"><div><h3 id="toolTitle">Digital Level</h3><p id="toolDescription">Place the phone flat on the surface.</p></div><button id="calibrateBtn" class="secondary-btn" type="button">Calibrate</button></div>
+<div class="metrics"><div><small>X</small><strong id="metricX">0.0°</strong></div><div><small>Y</small><strong id="metricY">0.0°</strong></div><div><small>Status</small><strong id="metricStatus">—</strong></div></div>
+<div id="markTools" class="mark-tools hidden"><button id="clearMarksBtn" class="secondary-btn" type="button">Clear marks</button><label>Reference<input id="referenceDistanceInput" type="number" min="0.0001" step="any" placeholder="1"></label><select id="referenceUnit"><option value="m">m</option><option value="cm">cm</option><option value="ft">ft</option><option value="in">in</option></select></div>
+</section>
+<section class="panel"><div class="panel-head"><div><h3>Local history</h3><p>Saved on this device only.</p></div><button id="clearHistoryBtn" class="text-btn" type="button">Clear</button></div><div id="historyList"></div></section>
+<div id="toast" class="toast" aria-live="polite"></div>
+</main>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/construction-camera.min.js" defer></script>
+</body>
+</html>

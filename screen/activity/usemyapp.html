@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to use — Finybu</title>
+<style>
+  /*
+    Self-hosting note: this page uses the visitor's system fonts,
+    so there is no third-party network call at all.
+    If you want the exact Finybu brand fonts (Plus Jakarta Sans + Inter),
+    download the .woff2 files and add this before the :root block,
+    pointing src at your own hosted files:
+
+    @font-face{
+      font-family:'Plus Jakarta Sans';
+      src:url('/fonts/plus-jakarta-sans-700.woff2') format('woff2');
+      font-weight:700; font-display:swap;
+    }
+    @font-face{
+      font-family:'Inter';
+      src:url('/fonts/inter-400.woff2') format('woff2');
+      font-weight:400; font-display:swap;
+    }
+    Then change the font-family values below from the system stack
+    back to 'Plus Jakarta Sans', sans-serif and 'Inter', sans-serif.
+
+    Hindi text uses the same system stack — browsers automatically
+    substitute a Devanagari system font (Nirmala UI, Noto Sans
+    Devanagari, Kohinoor Devanagari, etc.) for those glyphs, so no
+    extra font call is needed for Hindi either.
+  */
+  :root{
+    --blue:#3D6FE0;
+    --blue-hover:#3260CB;
+    --blue-dark:#1F3A66;
+    --blue-tint:#EAF1FF;
+    --bg:#F6F9FE;
+    --card:#FFFFFF;
+    --text:#1F2A44;
+    --muted:#6B7A99;
+    --border:#E4EAF5;
+
+    --mint-bg:#DFF5EA; --mint-fg:#1C8C63;
+    --peach-bg:#FFE9DD; --peach-fg:#D97A3F;
+    --lav-bg:#EAE3FB;  --lav-fg:#6B4FC9;
+    --sky-bg:#DCE9FF;  --sky-fg:#2F5FD1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    color:var(--text);
+    min-height:100vh;
+  }
+
+  .hero{
+    position:relative;
+    overflow:hidden;
+    padding:24px 24px 84px;
+    text-align:center;
+    background:linear-gradient(180deg, var(--blue-tint) 0%, var(--bg) 100%);
+  }
+  .blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(2px);
+    opacity:0.55;
+  }
+  .blob.b1{ width:220px; height:220px; background:var(--sky-bg); top:-70px; left:-60px; }
+  .blob.b2{ width:160px; height:160px; background:var(--mint-bg); bottom:-50px; right:6%; }
+  .blob.b3{ width:120px; height:120px; background:var(--lav-bg); top:20px; right:-30px; }
+
+  .topbar{
+    position:relative;
+    z-index:1;
+    max-width:920px;
+    margin:0 auto 30px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--blue-dark);
+    font-size:13.5px;
+    font-weight:500;
+    padding:8px 15px 8px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .back-btn:hover{ border-color:var(--blue); }
+  .back-btn svg{ width:16px; height:16px; }
+  .lang-toggle{
+    display:inline-flex;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:3px;
+  }
+  .lang-btn{
+    border:none;
+    background:transparent;
+    font-size:12.5px;
+    font-weight:600;
+    padding:6px 13px;
+    border-radius:999px;
+    cursor:pointer;
+    color:var(--muted);
+    font-family:inherit;
+  }
+  .lang-btn.active{ background:var(--blue); color:#fff; }
+
+  .brand{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:26px;
+  }
+  .brand-mark{
+    width:38px; height:38px;
+    background:var(--blue);
+    border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;
+    color:#fff;
+    font-size:18px;
+  }
+  .brand-name{
+    font-weight:700;
+    font-size:19px;
+    color:var(--blue-dark);
+    letter-spacing:-0.01em;
+  }
+  .hero h1{
+    position:relative;
+    font-weight:700;
+    font-size:clamp(30px,4.4vw,46px);
+    color:var(--blue-dark);
+    margin:0 0 12px;
+    letter-spacing:-0.02em;
+  }
+  .hero p{
+    position:relative;
+    font-size:16.5px;
+    color:var(--muted);
+    max-width:46ch;
+    margin:0 auto;
+  }
+
+  .onboard{
+    max-width:920px;
+    margin:-46px auto 0;
+    padding:0 24px;
+    position:relative;
+  }
+  .onboard-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  .onboard-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px 20px;
+    box-shadow:0 12px 28px rgba(31,58,102,0.08);
+  }
+  .onboard-num{
+    width:28px; height:28px;
+    background:var(--blue-tint);
+    color:var(--blue);
+    border-radius:9px;
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:12px;
+  }
+  .onboard-card h3{
+    font-weight:700;
+    font-size:15.5px;
+    margin:0 0 5px;
+    color:var(--blue-dark);
+  }
+  .onboard-card p{
+    font-size:13.5px;
+    color:var(--muted);
+    line-height:1.55;
+    margin:0;
+  }
+
+  .section-head{
+    max-width:920px;
+    margin:54px auto 18px;
+    padding:0 24px;
+  }
+  .section-head h2{
+    font-weight:700;
+    font-size:22px;
+    color:var(--blue-dark);
+    margin:0 0 4px;
+  }
+  .section-head p{
+    font-size:14px;
+    color:var(--muted);
+    margin:0;
+  }
+
+  .index-wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 24px 50px;
+  }
+  .tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:18px;
+  }
+  .tab-btn{
+    font-size:13.5px;
+    font-weight:500;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:9px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background 0.15s, color 0.15s, border-color 0.15s;
+    font-family:inherit;
+  }
+  .tab-btn:hover{ border-color:var(--blue); color:var(--blue); }
+  .tab-btn.active{
+    background:var(--blue);
+    border-color:var(--blue);
+    color:#fff;
+    font-weight:600;
+  }
+
+  .pages{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:0 16px 34px rgba(31,58,102,0.09);
+    overflow:hidden;
+  }
+  .page{ display:none; padding:34px 38px 38px; }
+  .page.active{ display:block; }
+
+  .page-top{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:16px;
+  }
+  .icon-badge{
+    width:46px;
+    height:46px;
+    min-width:46px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .icon-badge svg{ width:22px; height:22px; }
+  .page-top h3{
+    font-weight:700;
+    font-size:21px;
+    color:var(--blue-dark);
+    margin:0;
+  }
+  .page-top .tag{
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.03em;
+  }
+  .page p.lede{
+    font-size:15.5px;
+    line-height:1.75;
+    color:var(--text);
+    max-width:60ch;
+    margin:0 0 18px;
+  }
+  .steps{
+    list-style:none;
+    padding:0;
+    margin:0 0 20px;
+    display:grid;
+    gap:11px;
+  }
+  .steps li{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    font-size:14px;
+    color:var(--text);
+    line-height:1.6;
+  }
+  .steps li .dot{
+    width:18px; height:18px; min-width:18px;
+    border-radius:50%;
+    background:var(--blue-tint);
+    display:flex;align-items:center;justify-content:center;
+    margin-top:1px;
+  }
+  .steps li .dot svg{ width:11px; height:11px; stroke:var(--blue); }
+  .note{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--blue-tint);
+    color:var(--blue-dark);
+    font-size:12.5px;
+    font-weight:500;
+    padding:8px 14px;
+    border-radius:10px;
+  }
+
+  .faq-wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 24px 60px;
+  }
+  .faq-item{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:18px 22px;
+    margin-bottom:12px;
+  }
+  .faq-item h4{
+    margin:0 0 6px;
+    font-size:15px;
+    font-weight:700;
+    color:var(--blue-dark);
+  }
+  .faq-item p{
+    margin:0;
+    font-size:13.5px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+
+  footer{
+    text-align:center;
+    padding:36px 24px 54px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  footer a{ color:var(--blue); text-decoration:none; font-weight:500; }
+
+  @media (max-width:640px){
+    .hero{padding:18px 18px 70px;}
+    .onboard-grid{grid-template-columns:1fr;}
+    .page{padding:26px 22px;}
+    .tab-btn{padding:8px 13px; font-size:12.5px;}
+    .topbar{margin-bottom:22px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+
+    <div class="topbar">
+      <button class="back-btn" id="backBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span id="backLabel">Back</span>
+      </button>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="langEnBtn" type="button">EN</button>
+        <button class="lang-btn" id="langHiBtn" type="button">हिंदी</button>
+      </div>
+    </div>
+
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div class="brand-name">Finybu</div>
+    </div>
+    <h1 id="heroTitle">How to use Finybu</h1>
+    <p id="heroSub">Everything for your work, run simply — billing, records, updates, and the people you work with, all in one place.</p>
+  </div>
+
+  <div class="onboard">
+    <div class="onboard-grid">
+      <div class="onboard-card">
+        <div class="onboard-num">1</div>
+        <h3 id="ob1-title">Set up your profile</h3>
+        <p id="ob1-desc">Add your trade, area, and contact details so clients or workers can find you.</p>
+      </div>
+      <div class="onboard-card">
+        <div class="onboard-num">2</div>
+        <h3 id="ob2-title">Open a tool</h3>
+        <p id="ob2-desc">Pick from invoices, records, updates, and more — listed below.</p>
+      </div>
+      <div class="onboard-card">
+        <div class="onboard-num">3</div>
+        <h3 id="ob3-title">Start working</h3>
+        <p id="ob3-desc">Everything you create is saved automatically and stays in your account.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2 id="sectionTitle">The tools</h2>
+    <p id="sectionSub">Tap a tool below to see how it works.</p>
+  </div>
+
+  <div class="index-wrap">
+    <div class="tabs" id="tabs"></div>
+    <div class="pages" id="pages"></div>
+  </div>
+
+  <div class="section-head">
+    <h2 id="faqTitle">Common questions</h2>
+  </div>
+  <div class="faq-wrap" id="faqWrap"></div>
+
+  <footer>
+    <span id="footerText">Still stuck on something?</span> <a href="#" id="footerLink">Contact support</a>
+  </footer>
+
+<script>
+const backLabels = { en:'Back', hi:'वापस' };
+
+const staticText = {
+  heroTitle:   { en:'How to use Finybu', hi:'Finybu का उपयोग कैसे करें' },
+  heroSub:     { en:'Everything for your work, run simply — billing, records, updates, and the people you work with, all in one place.',
+                 hi:'आपके सारे काम का हिसाब, एक ही जगह — बिलिंग, रिकॉर्ड, अपडेट और वे लोग जिनके साथ आप काम करते हैं।' },
+  ob1Title:    { en:'Set up your profile', hi:'अपनी प्रोफ़ाइल बनाएं' },
+  ob1Desc:     { en:'Add your trade, area, and contact details so clients or workers can find you.',
+                 hi:'अपना काम, इलाका और संपर्क जानकारी जोड़ें ताकि ग्राहक या कारीगर आपको ढूंढ सकें।' },
+  ob2Title:    { en:'Open a tool', hi:'कोई टूल खोलें' },
+  ob2Desc:     { en:'Pick from invoices, records, updates, and more — listed below.',
+                 hi:'इनवॉइस, रिकॉर्ड, अपडेट और बाकी टूल में से चुनें — नीचे सूची में हैं।' },
+  ob3Title:    { en:'Start working', hi:'काम शुरू करें' },
+  ob3Desc:     { en:'Everything you create is saved automatically and stays in your account.',
+                 hi:'आप जो भी बनाते हैं वह अपने आप सेव हो जाता है और आपके खाते में रहता है।' },
+  sectionTitle:{ en:'The tools', hi:'टूल्स' },
+  sectionSub:  { en:'Tap a tool below to see how it works.', hi:'काम समझने के लिए नीचे किसी टूल पर टैप करें।' },
+  faqTitle:    { en:'Common questions', hi:'आम सवाल' },
+  footerText:  { en:'Still stuck on something?', hi:'अब भी कोई दिक्कत है?' },
+  footerLink:  { en:'Contact support', hi:'सहायता से संपर्क करें' }
+};
+
+const faqs = [
+  { q:{en:'Is my data safe?', hi:'क्या मेरा डेटा सुरक्षित है?'},
+    a:{en:'Yes — everything you save stays in your account and is backed up automatically.',
+       hi:'हां — आप जो भी सेव करते हैं वह आपके खाते में रहता है और अपने आप बैकअप हो जाता है।'} },
+  { q:{en:'Can I use Finybu without internet?', hi:'क्या मैं बिना इंटरनेट के Finybu इस्तेमाल कर सकता हूं?'},
+    a:{en:'Tools like Notebook work offline; billing and messages need an internet connection to sync.',
+       hi:'नोटबुक जैसे टूल बिना इंटरनेट के भी काम करते हैं; बिलिंग और मैसेज को सिंक करने के लिए इंटरनेट चाहिए।'} },
+  { q:{en:'Is there a cost to use these tools?', hi:'इन टूल का इस्तेमाल करने का कोई शुल्क है?'},
+    a:{en:'Check your plan under Settings — most tools are included, some advanced features may need an upgrade.',
+       hi:'अपनी योजना सेटिंग्स में देखें — ज़्यादातर टूल शामिल हैं, कुछ एडवांस फीचर के लिए अपग्रेड की ज़रूरत हो सकती है।'} },
+  { q:{en:'How do I contact support?', hi:'सहायता से कैसे संपर्क करें?'},
+    a:{en:'Tap Contact support at the bottom of this page, any time.',
+       hi:'इस पेज के नीचे "सहायता से संपर्क करें" पर कभी भी टैप करें।'} }
+];
+
+const icons = {
+  invoice: '<path d="M6 2h9l3 3v17H6z"/><path d="M15 2v3h3"/><path d="M9 11h6M9 15h6M9 19h4"/>',
+  ledger: '<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 3v18M12 8h8M12 12h8M12 16h6"/>',
+  billing: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  notebook: '<path d="M5 3h13a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5z"/><path d="M5 3v18M9 8h6M9 12h6M9 16h4"/>',
+  report: '<rect x="4" y="4" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 15l4-3 3 2 5-4 4 3"/>',
+  message: '<path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/>',
+  directory: '<circle cx="9" cy="8" r="3"/><path d="M4 20a5 5 0 0 1 10 0"/><circle cx="18" cy="9" r="2.4"/><path d="M15 20a4 4 0 0 1 7.4-2.2"/>',
+  convert: '<path d="M7 7h10l-3-3M17 17H7l3 3M17 7v10M7 7v10"/>',
+  weather: '<circle cx="9" cy="9" r="4"/><path d="M13 15h5a3 3 0 0 0 0-6 5 5 0 0 0-9.6-1.6"/><path d="M15 15v3M11 15v3M7 15v2"/>'
+};
+
+const groups = {
+  blue:{bg:'var(--sky-bg)', fg:'var(--sky-fg)'},
+  mint:{bg:'var(--mint-bg)', fg:'var(--mint-fg)'},
+  peach:{bg:'var(--peach-bg)', fg:'var(--peach-fg)'},
+  lav:{bg:'var(--lav-bg)', fg:'var(--lav-fg)'}
+};
+
+const tools = [
+  {
+    key:'invoice', group:'blue',
+    tag:{en:'billing', hi:'बिलिंग'},
+    title:{en:'Invoices', hi:'इनवॉइस'},
+    lede:{en:'Make a proper invoice in seconds and send it straight to your client.',
+          hi:'कुछ ही सेकंड में सही इनवॉइस बनाएं और सीधे अपने ग्राहक को भेजें।'},
+    steps:[
+      {en:'Open Invoices and choose the client — or add a new one on the spot.',
+       hi:'इनवॉइस खोलें और ग्राहक चुनें — या तुरंत नया ग्राहक जोड़ें।'},
+      {en:'List what you did or sold, and the amount for each line.',
+       hi:'आपने क्या काम किया या क्या बेचा, वह और हर लाइन की राशि लिखें।'},
+      {en:'Save it. Send it as a PDF or straight through Messages.',
+       hi:'सेव करें। इसे PDF के रूप में या सीधे मैसेज से भेजें।'}
+    ],
+    note:{en:'Every invoice you send is kept in your records automatically.',
+          hi:'आपके भेजे हर इनवॉइस का रिकॉर्ड अपने आप रखा जाता है।'}
+  },
+  {
+    key:'ledger', group:'blue',
+    tag:{en:'accounts', hi:'हिसाब-किताब'},
+    title:{en:'Tally sheet', hi:'हिसाब शीट'},
+    lede:{en:'Keep track of who owes you money, and who you owe — without doing the maths yourself.',
+          hi:'किसका आप पर पैसा बकाया है और आपका किस पर बकाया है, यह बिना खुद हिसाब लगाए ट्रैक करें।'},
+    steps:[
+      {en:'Open Tally Sheet and pick the person or job.',
+       hi:'हिसाब शीट खोलें और व्यक्ति या काम चुनें।'},
+      {en:'Add an entry every time money moves, in or out.',
+       hi:'जब भी पैसा आए या जाए, एक एंट्री जोड़ें।'},
+      {en:'The running total updates on its own, so you always know where you stand.',
+       hi:'कुल जोड़ अपने आप अपडेट होता रहता है, इसलिए आपको हमेशा पता रहता है कि हिसाब कहां है।'}
+    ],
+    note:{en:'Good for daily accounts with regular clients or suppliers.',
+          hi:'रोज़ के ग्राहकों या सप्लायर के हिसाब के लिए अच्छा है।'}
+  },
+  {
+    key:'billing', group:'blue',
+    tag:{en:'point of sale', hi:'तुरंत बिलिंग'},
+    title:{en:'Live billing', hi:'लाइव बिलिंग'},
+    lede:{en:'Bill a customer while you\'re standing right in front of them.',
+          hi:'ग्राहक के सामने खड़े-खड़े ही बिल बनाएं।'},
+    steps:[
+      {en:'Open Live Billing and add items or work as you go.',
+       hi:'लाइव बिलिंग खोलें और जैसे-जैसे काम करें, आइटम जोड़ते जाएं।'},
+      {en:'Watch the total update live as you add each one.',
+       hi:'हर आइटम जोड़ने पर कुल राशि तुरंत अपडेट होते देखें।'},
+      {en:'Close the bill when they\'re ready to pay — it\'s saved to your records automatically.',
+       hi:'जब वे भुगतान के लिए तैयार हों, बिल बंद करें — यह अपने आप आपके रिकॉर्ड में सेव हो जाता है।'}
+    ],
+    note:{en:'Built for the moment of sale, not for planning ahead.',
+          hi:'यह बिक्री के समय के लिए बना है, पहले से योजना बनाने के लिए नहीं।'}
+  },
+  {
+    key:'notebook', group:'lav',
+    tag:{en:'quick notes', hi:'छोटे नोट्स'},
+    title:{en:'Notebook', hi:'नोटबुक'},
+    lede:{en:'Jot down anything you don\'t want to forget — no formatting, no fuss.',
+          hi:'जो भी याद रखना है, बस लिख दें — कोई फॉर्मेटिंग या झंझट नहीं।'},
+    steps:[
+      {en:'Open Notebook and start typing — a note is saved the moment you write it.',
+       hi:'नोटबुक खोलें और लिखना शुरू करें — लिखते ही नोट सेव हो जाता है।'},
+      {en:'Use it for measurements, a client\'s request, or a reminder for tomorrow.',
+       hi:'माप, ग्राहक की मांग या कल के लिए याद दिलाने वाली बात लिखने के लिए इस्तेमाल करें।'},
+      {en:'Find old notes by searching a word or scrolling back by date.',
+       hi:'किसी शब्द को खोजकर या तारीख अनुसार स्क्रॉल करके पुराने नोट ढूंढें।'}
+    ],
+    note:{en:'Nothing to save manually — it\'s already there when you come back.',
+          hi:'कुछ भी अलग से सेव नहीं करना पड़ता — वापस आने पर यह पहले से ही वहां होता है।'}
+  },
+  {
+    key:'report', group:'lav',
+    tag:{en:'live updates', hi:'लाइव अपडेट'},
+    title:{en:'Project report', hi:'प्रोजेक्ट रिपोर्ट'},
+    lede:{en:'Share progress on a job with live photo updates as you work, so clients see it without asking.',
+          hi:'काम करते समय लाइव फोटो अपडेट के साथ प्रगति साझा करें, ताकि ग्राहक बिना पूछे देख सकें।'},
+    steps:[
+      {en:'Open Project Report and select the job.',
+       hi:'प्रोजेक्ट रिपोर्ट खोलें और काम चुनें।'},
+      {en:'Add a photo each time you finish a stage of the work.',
+       hi:'काम का हर चरण पूरा होने पर एक फोटो जोड़ें।'},
+      {en:'Your client gets notified and can view every update, any time.',
+       hi:'आपके ग्राहक को सूचना मिलती है और वे कभी भी हर अपडेट देख सकते हैं।'}
+    ],
+    note:{en:'Great for jobs that run over several days — everyone stays in the loop.',
+          hi:'कई दिनों तक चलने वाले काम के लिए बढ़िया — सब कुछ सबको पता रहता है।'}
+  },
+  {
+    key:'message', group:'peach',
+    tag:{en:'stay in touch', hi:'संपर्क में रहें'},
+    title:{en:'Messages', hi:'मैसेज'},
+    lede:{en:'Send a note, a photo, or a quick update to anyone in your contacts.',
+          hi:'अपने संपर्कों में किसी को भी नोट, फोटो या जल्दी अपडेट भेजें।'},
+    steps:[
+      {en:'Open Messages and pick who it\'s for — a client, supplier, or co-worker.',
+       hi:'मैसेज खोलें और चुनें किसे भेजना है — ग्राहक, सप्लायर या साथी कारीगर।'},
+      {en:'Type your message, or attach a photo or file if you need to.',
+       hi:'अपना मैसेज लिखें, या ज़रूरत हो तो फोटो या फ़ाइल जोड़ें।'},
+      {en:'Send. They\'ll get it the same way you would.',
+       hi:'भेजें। उन्हें वैसे ही मिलेगा जैसे आपको मिलता है।'}
+    ],
+    note:{en:'Use this to share an invoice or an update directly, without leaving the app.',
+          hi:'इनवॉइस या अपडेट सीधे यहीं से भेजने के लिए इसका इस्तेमाल करें, ऐप छोड़ने की ज़रूरत नहीं।'}
+  },
+  {
+    key:'directory', group:'peach',
+    tag:{en:'find each other', hi:'एक-दूसरे को ढूंढें'},
+    title:{en:'Profiles and directory', hi:'प्रोफ़ाइल और डायरेक्टरी'},
+    lede:{en:'Set up a profile so clients and workers can find each other and connect directly.',
+          hi:'प्रोफ़ाइल बनाएं ताकि ग्राहक और कारीगर एक-दूसरे को ढूंढकर सीधे जुड़ सकें।'},
+    steps:[
+      {en:'Open your Profile and add your trade or the work you need, your area, and contact details.',
+       hi:'अपनी प्रोफ़ाइल खोलें और अपना काम या जिस काम की ज़रूरत है, अपना इलाका और संपर्क जानकारी जोड़ें।'},
+      {en:'Search the directory by trade or area to find who you need.',
+       hi:'जिसकी ज़रूरत है उसे ढूंढने के लिए काम या इलाके के अनुसार डायरेक्टरी में खोजें।'},
+      {en:'Tap Contact on their profile to reach out — no middleman.',
+       hi:'उनकी प्रोफ़ाइल पर "संपर्क करें" दबाकर सीधे बात करें — कोई बिचौलिया नहीं।'}
+    ],
+    note:{en:'Keep your profile current so the right people can find you.',
+          hi:'अपनी प्रोफ़ाइल अपडेट रखें ताकि सही लोग आपको ढूंढ सकें।'}
+  },
+  {
+    key:'convert', group:'mint',
+    tag:{en:'on the spot', hi:'तुरंत'},
+    title:{en:'Unit conversion', hi:'यूनिट कन्वर्ज़न'},
+    lede:{en:'Convert between units without reaching for a separate calculator.',
+          hi:'अलग कैलकुलेटर के बिना यूनिट्स को आपस में बदलें।'},
+    steps:[
+      {en:'Open Unit Convert and choose a category — length, weight, volume, and more.',
+       hi:'यूनिट कन्वर्ट खोलें और कैटेगरी चुनें — लंबाई, वज़न, मात्रा और बाकी।'},
+      {en:'Type the number you have.',
+       hi:'अपना नंबर टाइप करें।'},
+      {en:'Pick the units on both sides and read off the answer.',
+       hi:'दोनों तरफ यूनिट चुनें और जवाब देखें।'}
+    ],
+    note:{en:'Handy mid-job, right from the same app you\'re already using.',
+          hi:'काम के बीच में ही, उसी ऐप से काम आता है जिसे आप पहले से इस्तेमाल कर रहे हैं।'}
+  },
+  {
+    key:'weather', group:'mint',
+    tag:{en:'plan the day', hi:'दिन की योजना'},
+    title:{en:'Weather', hi:'मौसम'},
+    lede:{en:'Check the day\'s weather before you head out for a job.',
+          hi:'काम पर निकलने से पहले दिन का मौसम देख लें।'},
+    steps:[
+      {en:'Open the home screen — today\'s forecast for your area shows automatically.',
+       hi:'होम स्क्रीन खोलें — आपके इलाके का आज का मौसम अपने आप दिखता है।'},
+      {en:'Tap it for an hour-by-hour view if you need more detail.',
+       hi:'ज़्यादा जानकारी के लिए उस पर टैप करें और घंटे के हिसाब से मौसम देखें।'},
+      {en:'Use it to decide whether outdoor work should wait.',
+       hi:'इससे तय करें कि बाहर का काम रोकना चाहिए या नहीं।'}
+    ],
+    note:{en:'Set your area once in your profile and it stays updated.',
+          hi:'अपने प्रोफ़ाइल में एक बार इलाका सेट करें, यह अपडेट रहता है।'}
+  }
+];
+
+const checkPath = '<polyline points="4 9 7 12 12 5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+
+let lang = 'en';
+let activeKey = tools[0].key;
+
+const tabsEl = document.getElementById('tabs');
+const pagesEl = document.getElementById('pages');
+const faqEl = document.getElementById('faqWrap');
+
+function renderStatic(){
+  document.getElementById('backLabel').textContent = backLabels[lang];
+  document.getElementById('heroTitle').textContent = staticText.heroTitle[lang];
+  document.getElementById('heroSub').textContent = staticText.heroSub[lang];
+  document.getElementById('ob1-title').textContent = staticText.ob1Title[lang];
+  document.getElementById('ob1-desc').textContent = staticText.ob1Desc[lang];
+  document.getElementById('ob2-title').textContent = staticText.ob2Title[lang];
+  document.getElementById('ob2-desc').textContent = staticText.ob2Desc[lang];
+  document.getElementById('ob3-title').textContent = staticText.ob3Title[lang];
+  document.getElementById('ob3-desc').textContent = staticText.ob3Desc[lang];
+  document.getElementById('sectionTitle').textContent = staticText.sectionTitle[lang];
+  document.getElementById('sectionSub').textContent = staticText.sectionSub[lang];
+  document.getElementById('faqTitle').textContent = staticText.faqTitle[lang];
+  document.getElementById('footerText').textContent = staticText.footerText[lang];
+  document.getElementById('footerLink').textContent = staticText.footerLink[lang];
+  document.documentElement.lang = lang;
+}
+
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  pagesEl.innerHTML = '';
+  tools.forEach((t) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (t.key === activeKey ? ' active' : '');
+    btn.textContent = t.title[lang];
+    btn.dataset.key = t.key;
+    btn.addEventListener('click', () => { activeKey = t.key; renderTabs(); });
+    tabsEl.appendChild(btn);
+
+    const g = groups[t.group];
+    const page = document.createElement('div');
+    page.className = 'page' + (t.key === activeKey ? ' active' : '');
+    page.innerHTML = `
+      <div class="page-top">
+        <div class="icon-badge" style="background:${g.bg};">
+          <svg viewBox="0 0 24 24" fill="none" stroke="${g.fg}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${icons[t.key]}</svg>
+        </div>
+        <div>
+          <div class="tag" style="color:${g.fg};">${t.tag[lang]}</div>
+          <h3>${t.title[lang]}</h3>
+        </div>
+      </div>
+      <p class="lede">${t.lede[lang]}</p>
+      <ul class="steps">${t.steps.map(s => `<li><span class="dot"><svg viewBox="0 0 16 16">${checkPath}</svg></span>${s[lang]}</li>`).join('')}</ul>
+      <span class="note">${t.note[lang]}</span>
+    `;
+    pagesEl.appendChild(page);
+  });
+}
+
+function renderFaq(){
+  faqEl.innerHTML = faqs.map(f => `
+    <div class="faq-item">
+      <h4>${f.q[lang]}</h4>
+      <p>${f.a[lang]}</p>
+    </div>
+  `).join('');
+}
+
+function setLang(newLang){
+  lang = newLang;
+  document.getElementById('langEnBtn').classList.toggle('active', lang === 'en');
+  document.getElementById('langHiBtn').classList.toggle('active', lang === 'hi');
+  renderStatic();
+  renderTabs();
+  renderFaq();
+}
+
+document.getElementById('langEnBtn').addEventListener('click', () => setLang('en'));
+document.getElementById('langHiBtn').addEventListener('click', () => setLang('hi'));
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (window.history.length > 1) { window.history.back(); }
+  else { window.location.href = '/'; }
+});
+
+renderStatic();
+renderTabs();
+renderFaq();
+</script>
+<script src="/dist/js/tt.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency SOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/sos.min.css" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 2l2.5 6.5L21 9l-5 4.5 1.5 8L12 18l-5.5 3.5L8 13.5 3 9l6.5-.5z"/></svg></div>
+      <div class="header-titles">
+        <h1>Emergency SOS</h1>
+        <div class="sub">One tap in a crisis</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="card sos-wrap">
+      <button class="sos-btn" id="sosBtn">SOS</button>
+      <div class="sos-hint">Sends your GPS location by SMS to your primary emergency contact. Set one below first.</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Quick Dial</div>
+    <div class="quick-grid">
+      <a class="quick-card" href="tel:100"><div class="qn">Police</div><div class="qd">100</div></a>
+      <a class="quick-card" href="tel:101"><div class="qn">Fire</div><div class="qd">101</div></a>
+      <a class="quick-card" href="tel:108"><div class="qn">Ambulance</div><div class="qd">108</div></a>
+      <a class="quick-card" href="tel:112"><div class="qn">All-in-One</div><div class="qd">112</div></a>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Site Contacts</div>
+    <div class="card">
+      <div id="contactsList"></div>
+      <div class="add-contact-row">
+        <input type="text" class="ac-name" id="acName" placeholder="Name">
+        <input type="text" class="ac-role" id="acRole" placeholder="Role">
+        <input type="tel" class="ac-phone" id="acPhone" placeholder="Phone">
+      </div>
+      <button class="add-contact-btn" id="addContactBtn">+ Add Contact</button>
+    </div>
+  </section>
+
+  <footer class="note">
+    Quick-dial numbers shown are common Indian emergency numbers — double check what's correct for your
+    location. The SOS button uses your device's native SMS app; nothing is sent automatically without you
+    tapping send in that app.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/sos.min.js">
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit & Area Converter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="stylesheet" href="../../dist/css/unitareea.min.css">
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h16"/></svg></div>
+      <div class="header-titles">
+        <h1>Unit &amp; Area Converter</h1>
+        <div class="sub">Metric ↔ imperial, all at once</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Length</div>
+    <div class="card">
+      <div class="conv-row">
+        <input type="number" id="lenVal" value="1" step="0.01">
+        <select id="lenUnit"></select>
+      </div>
+      <div class="results-list" id="lenResults"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Feet-Inches ↔ Meters</div>
+    <div class="card">
+      <div class="ftin-row">
+        <input type="number" id="ftIn" value="5" min="0"><span>ft</span>
+        <input type="number" id="inIn" value="6" min="0" max="11.99" step="0.01"><span>in</span>
+        <span style="margin-left:auto; font-family:'JetBrains Mono',monospace; color:var(--yellow); font-weight:700;" id="ftinResult">—</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Area</div>
+    <div class="card">
+      <div class="conv-row">
+        <input type="number" id="areaVal" value="1000" step="1">
+        <select id="areaUnit"></select>
+      </div>
+      <div class="results-list" id="areaResults"></div>
+    </div>
+  </section>
+
+  <footer class="note">All conversions are exact using standard factors (1 in = 25.4 mm, 1 acre = 43,560 sqft).</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/unitarea.min.js">
+</script>
+</body>
+</html>

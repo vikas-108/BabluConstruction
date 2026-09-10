@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resistor Color Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/colorcode.min.css" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#062226" stroke-width="1.8"><path d="M2 12h4l2-5 3 10 3-10 2 5h6"/></svg></div>
+      <div class="header-titles">
+        <h1>Resistor Color Code</h1>
+        <div class="sub">Bands to value, or value to bands</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="card">
+      <div class="mode-tabs">
+        <div class="mode-tab active" data-mode="bands">Bands → Value</div>
+        <div class="mode-tab" data-mode="value">Value → Bands</div>
+      </div>
+
+      <div id="bandsPanel">
+        <div class="band-tabs">
+          <div class="band-tab active" data-count="4">4-Band</div>
+          <div class="band-tab" data-count="5">5-Band</div>
+        </div>
+
+        <div class="resistor-visual">
+          <div class="resistor-body" id="resistorBody"></div>
+        </div>
+
+        <div class="band-selectors" id="bandSelectors"></div>
+      </div>
+
+      <div id="valuePanel" style="display:none;">
+        <div class="value-input-row">
+          <input type="number" id="targetValue" value="4700" min="0">
+          <select id="targetUnit">
+            <option value="1">Ω</option>
+            <option value="1000" selected>kΩ</option>
+            <option value="1000000">MΩ</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="result-box">
+        <div class="v" id="resultValue">—</div>
+        <div class="sub2" id="resultTolerance"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">Standard 4-band and 5-band resistor color code — a fixed universal reference, not jurisdiction-dependent.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/colorcode.min.js">
+</script>
+</body>
+</html>

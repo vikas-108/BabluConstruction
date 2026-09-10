@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knock Test</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/hoowall.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="header-titles">
+        <h1>Knock Test</h1>
+        <div class="sub">Compare two knocks side by side</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="experimental-tag">⚠ Experimental — visual aid only, not a hollow/solid detector</div>
+
+    <div class="permission" id="permBox">
+      This tool listens through your microphone — nothing is recorded or sent anywhere.
+      <button id="permBtn">Enable Microphone</button>
+    </div>
+
+    <div class="card">
+      <div class="knock-slot">
+        <div class="slot-label">A — Reference knock (somewhere known, e.g. a stud)</div>
+        <div class="knock-canvas-wrap"><canvas id="canvasA"></canvas></div>
+        <button class="knock-btn a" id="btnA">Record Knock A</button>
+      </div>
+
+      <div class="knock-slot">
+        <div class="slot-label">B — Test knock (the spot you're checking)</div>
+        <div class="knock-canvas-wrap"><canvas id="canvasB"></canvas></div>
+        <button class="knock-btn b" id="btnB">Record Knock B</button>
+      </div>
+
+      <div class="compare-note">
+        Generally: a shorter, higher-pitched, quickly-fading trace often means a hollow cavity behind that
+        spot; a longer, lower, more sustained trace often means something solid — but this is a rule of
+        thumb, not a measurement. Compare the shapes visually; don't treat either trace as a verdict.
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">
+    A real stud finder uses capacitance or radar sensing your phone doesn't have. This just lets you see
+    and compare the sound of two knocks — the interpretation is still yours, the same as listening by ear.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/hoowall.min.js">
+</script>
+</body>
+</html>

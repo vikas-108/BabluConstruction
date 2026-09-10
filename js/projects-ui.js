@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const API_BASE = "https://api.buildskil.com/api/projects";
   const SERVER_BASE = "https://api.buildskil.com";
   const ACCESSIBLE_API = "https://api.buildskil.com/api/projects/accessible";
-  //const API_BASE = "http://localhost:5000/api/projects"; // change if using domain
+ // const API_BASE = "http://localhost:5000/api/projects"; // change if using domain
   //const SERVER_BASE = "http://localhost:5000";
   //const ACCESSIBLE_API = `${API_BASE}/accessible`;
   

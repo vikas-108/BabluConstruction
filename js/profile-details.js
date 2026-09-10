@@ -4,7 +4,7 @@ const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
 
 const SERVER_BASE = "https://api.buildskil.com";
-//const SERVER_BASE = "http://localhost:5000"; // change if using domain
+
 async function loadProfile() {
   if (!profileId) {
     container.innerHTML = "<p>Profile not found</p>";

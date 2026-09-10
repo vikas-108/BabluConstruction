@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fraction ↔ Decimal Converter</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/fractional.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M6 4h5v6H6zM13 14h5v6h-5z"/><path d="M4 20L20 4"/></svg></div>
+      <div class="header-titles">
+        <h1>Fraction ↔ Decimal</h1>
+        <div class="sub">Convert measurements both ways</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="card">
+      <div class="mode-tabs">
+        <div class="mode-tab active" data-mode="f2d">Fraction → Decimal</div>
+        <div class="mode-tab" data-mode="d2f">Decimal → Fraction</div>
+      </div>
+
+      <div id="f2dPanel">
+        <div class="frac-row">
+          <input type="number" id="wholeIn" value="0" min="0" style="width:52px;">
+          <div class="frac-stack">
+            <input type="number" id="numIn" value="3" min="0">
+            <div class="bar"></div>
+            <input type="number" id="denIn" value="8" min="1">
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:22px; color:var(--text-dim);">in</span>
+        </div>
+        <div class="frac-label">Whole &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Numerator / Denominator</div>
+      </div>
+
+      <div id="d2fPanel" style="display:none;">
+        <div class="dec-row">
+          <input type="number" id="decIn" value="0.375" step="0.001">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--text-dim);">in</span>
+        </div>
+        <div class="precision-row" id="precRow"></div>
+      </div>
+
+      <div class="result-box">
+        <div class="result-stat"><div class="k">Decimal (in)</div><div class="v" id="resDecimal">0.000</div></div>
+        <div class="result-stat"><div class="k">Fraction (in)</div><div class="v" id="resFraction">0</div></div>
+        <div class="result-stat"><div class="k">Millimeters</div><div class="v" id="resMM">0.0</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Quick Reference (16ths)</div>
+    <div class="ref-grid" id="refGrid"></div>
+  </section>
+
+  <footer class="note">All conversions are exact — 1 inch = 25.4 mm.</footer>
+</div>
+<script src="../.../dist/js/tt.min.js"></script>
+<script src="../../dist/js/fractional.min.js">
+</script>
+</body>
+</html>

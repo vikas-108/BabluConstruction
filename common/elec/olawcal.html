@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ohm's Law Calculator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/olaw.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#052824" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 8l3 4-3 4M15 8v8"/></svg></div>
+      <div class="header-titles">
+        <h1>Ohm's Law Calculator</h1>
+        <div class="sub">Fill any two, get the rest</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="card">
+      <div class="input-grid">
+        <div class="in-field"><label>Voltage <span class="unit">V</span></label><input type="number" id="inV" placeholder="—"></div>
+        <div class="in-field"><label>Current <span class="unit">A</span></label><input type="number" id="inI" placeholder="—"></div>
+        <div class="in-field"><label>Resistance <span class="unit">Ω</span></label><input type="number" id="inR" placeholder="—"></div>
+        <div class="in-field"><label>Power <span class="unit">W</span></label><input type="number" id="inP" placeholder="—"></div>
+      </div>
+      <div class="hint-note" id="hintNote">Type values into any two fields — the other two fill in automatically.</div>
+      <button class="clear-btn" id="clearBtn">Clear All</button>
+    </div>
+  </section>
+
+  <footer class="note">V = I × R &nbsp;·&nbsp; P = V × I &nbsp;·&nbsp; P = I² × R &nbsp;·&nbsp; P = V² ÷ R</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/olawcl.min.js">
+</script>
+</body>
+</html>

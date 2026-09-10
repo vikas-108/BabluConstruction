@@ -1,11 +1,3 @@
-/* ============================================================
-   Workshop Ledger — API-backed frontend
-   Business data is no longer stored in localStorage.
-
-   Authentication:
-   - BuildSkil owner/admin: existing cb_token
-   - Workshop worker: wl_worker_token (separate worker JWT)
-   ============================================================ */
 let activeRequests = 0;
 const API_BASE = "https://api.buildskil.com/api";
 

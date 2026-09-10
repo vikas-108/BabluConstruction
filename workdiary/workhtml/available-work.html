@@ -1,0 +1,2362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Buildskil - Available Work</title>
+
+<link
+    rel="stylesheet"
+    href="../workcss/available.css"
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="page-header">
+
+        <div class="header-left">
+
+            <button
+                class="back-btn"
+                onclick="goBack()"
+            >
+                ←
+            </button>
+
+            <div class="brand-mark">
+                B
+            </div>
+
+            <div class="page-title">
+
+                <h1>Available Client Work</h1>
+
+                <p>
+                    Find work suitable for your team.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div id="availableContent"></div>
+
+<div id="toast" class="toast"></div>
+
+
+<script src="../workjs/team-requirement.js"></script>
+
+<script>
+
+/* =========================================================
+   TEAM WORKFLOW
+
+   OPEN
+      ↓
+   ACCEPTED
+      ↓
+   ASSIGNING
+      ↓
+   READY
+========================================================= */
+
+/* =========================================================
+   LEAFLET MAP INSTANCES
+========================================================= */
+
+const workingMaps = {};
+
+let clientWorkMap = null;
+
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const selectedId =
+    params.get("id");
+
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        renderAvailableWork();
+
+    }
+);
+
+/* =========================================================
+   MAIN RENDER
+========================================================= */
+
+function renderAvailableWork() {
+
+    const container =
+        document.getElementById(
+            "availableContent"
+        );
+
+    /*
+       If an ID exists, show the
+       accepted team's workflow.
+    */
+
+    if (selectedId) {
+
+        renderTeamWorkflow(
+            selectedId
+        );
+
+        return;
+
+    }
+
+    /*
+       Otherwise show:
+       1. Under Working
+       2. Available Client Requirements
+    */
+
+    renderOpenRequirements();
+
+}
+
+/* =========================================================
+   AVAILABLE + UNDER WORKING
+========================================================= */
+
+function renderOpenRequirements() {
+
+    const container =
+        document.getElementById(
+            "availableContent"
+        );
+
+    const requirements =
+        getRequirements();
+
+
+    /*
+       -------------------------------------------------------
+       UNDER WORKING
+       -------------------------------------------------------
+    */
+
+    const working =
+        requirements.filter(
+            requirement =>
+                requirement.status === "ASSIGNING" ||
+                requirement.status === "READY"
+        );
+
+
+    /*
+       -------------------------------------------------------
+       AVAILABLE
+       -------------------------------------------------------
+    */
+
+    const available =
+        requirements.filter(
+            requirement =>
+                requirement.status === "OPEN"
+        );
+
+
+    let html = "";
+
+/* =====================================================
+   UNDER WORKING TOGGLE
+===================================================== */
+
+if (working.length) {
+
+    html += `
+
+        <div class="under-working-section">
+
+            <button
+                type="button"
+                class="under-working-toggle"
+                onclick="toggleUnderWorking()"
+            >
+
+                <div class="under-working-toggle-left">
+
+                    <span class="under-working-icon">
+                        🛠️
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Under Working
+                        </strong>
+
+                        <small>
+                            ${working.length}
+                            ${working.length === 1
+                                ? "active work"
+                                : "active works"}
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    id="underWorkingArrow"
+                    class="under-working-arrow"
+                >
+                    ▼
+                </span>
+
+            </button>
+
+
+            <div
+                id="underWorkingContent"
+                class="under-working-content"
+            >
+
+                ${
+                    working.map(
+                        requirement =>
+                            renderUnderWorkingCard(
+                                requirement
+                            )
+                    ).join("")
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+    /* =====================================================
+       AVAILABLE SECTION
+    ===================================================== */
+
+    if (!available.length) {
+
+        if (!working.length) {
+
+            container.innerHTML = `
+
+                <div class="card">
+
+                    <div
+                        class="card-body"
+                        style="
+                            text-align:center;
+                            padding:55px 20px;
+                        "
+                    >
+
+                        <div style="
+                            font-size:42px;
+                            margin-bottom:14px;
+                        ">
+                            🔎
+                        </div>
+
+                        <h2 style="
+                            font-size:17px;
+                        ">
+                            No Client Requirements
+                        </h2>
+
+                        <p style="
+                            max-width:420px;
+                            margin:8px auto 0;
+                            color:#6b7280;
+                            font-size:11px;
+                            line-height:1.6;
+                        ">
+                            New client team requirements
+                            that match your team will
+                            appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        html += `
+
+            <div
+                class="card"
+                style="margin-top:22px;"
+            >
+
+                <div class="card-body">
+
+                    <strong>
+                        No New Available Work
+                    </strong>
+
+                    <p style="
+                        color:#6b7280;
+                        font-size:10px;
+                        margin-top:5px;
+                    ">
+                        New client requirements will
+                        appear here when available.
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+destroyWorkingMaps();
+        container.innerHTML = html;
+setTimeout(
+    initializeWorkingMaps,
+    100
+);
+        return;
+
+    }
+
+
+    html += `
+
+        <div
+            class="filter-bar"
+            style="margin-top:22px;"
+        >
+
+            <input
+                id="workSearch"
+                class="search"
+                type="text"
+                placeholder="Search client work..."
+                oninput="filterClientWork()"
+            >
+
+            <select
+                id="workDistance"
+                class="filter-select"
+            >
+
+                <option value="10">
+                    Within 10 km
+                </option>
+
+                <option value="25">
+                    Within 25 km
+                </option>
+
+                <option value="50">
+                    Within 50 km
+                </option>
+
+                <option value="100">
+                    Within 100 km
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="clientWorkList"
+            class="request-list"
+        >
+
+            ${
+                available.map(
+                    requirement =>
+                        renderClientRequirement(
+                            requirement
+                        )
+                ).join("")
+            }
+
+        </div>
+
+    `;
+
+
+    container.innerHTML = html;
+
+}
+
+/* =========================================================
+   DESTROY WORKING MAPS
+========================================================= */
+
+function destroyWorkingMaps() {
+
+    Object.keys(
+        workingMaps
+    ).forEach(
+        mapId => {
+
+            const map =
+                workingMaps[mapId];
+
+
+            if (map) {
+
+                map.remove();
+
+            }
+
+
+            delete workingMaps[
+                mapId
+            ];
+
+        }
+    );
+
+}
+
+/* =========================================================
+   TOGGLE UNDER WORKING
+========================================================= */
+
+function toggleUnderWorking() {
+
+    const content =
+        document.getElementById(
+            "underWorkingContent"
+        );
+
+    const arrow =
+        document.getElementById(
+            "underWorkingArrow"
+        );
+
+
+    if (!content) return;
+
+
+    const isOpen =
+        content.classList.contains(
+            "open"
+        );
+
+
+    if (isOpen) {
+
+        content.classList.remove(
+            "open"
+        );
+
+        if (arrow) {
+
+            arrow.classList.remove(
+                "open"
+            );
+
+        }
+
+    } else {
+
+        content.classList.add(
+            "open"
+        );
+
+        if (arrow) {
+
+            arrow.classList.add(
+                "open"
+            );
+
+        }
+
+
+        /*
+           Initialize maps after
+           the section becomes visible.
+        */
+
+        setTimeout(
+            initializeWorkingMaps,
+            150
+        );
+
+    }
+
+}
+
+/* =========================================================
+   INITIALIZE UNDER WORKING MAPS
+========================================================= */
+
+function initializeWorkingMaps() {
+
+    const requirements =
+        getRequirements();
+
+
+    const working =
+        requirements.filter(
+            requirement =>
+                requirement.status === "ASSIGNING" ||
+                requirement.status === "READY"
+        );
+
+
+    working.forEach(
+        requirement => {
+
+            const mapId =
+                `working-map-${requirement.id}`;
+
+
+            const mapElement =
+                document.getElementById(
+                    mapId
+                );
+
+
+            if (!mapElement) {
+
+                return;
+
+            }
+
+
+            const latitude =
+                Number(
+                    requirement.location?.latitude
+                );
+
+
+            const longitude =
+                Number(
+                    requirement.location?.longitude
+                );
+
+
+            if (
+                !Number.isFinite(latitude) ||
+                !Number.isFinite(longitude)
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+               IMPORTANT:
+               Do not initialize the same
+               Leaflet container twice.
+            */
+
+            if (workingMaps[mapId]) {
+
+                /*
+                   Container may have been resized
+                   after opening the toggle.
+                */
+
+                setTimeout(
+                    () => {
+
+                        workingMaps[
+                            mapId
+                        ].invalidateSize();
+
+                    },
+                    100
+                );
+
+                return;
+
+            }
+
+
+            /*
+               Create map only once.
+            */
+
+            const map =
+                L.map(
+                    mapElement
+                ).setView(
+                    [
+                        latitude,
+                        longitude
+                    ],
+                    15
+                );
+
+
+            workingMaps[mapId] =
+                map;
+
+
+            /*
+               OpenStreetMap tiles
+            */
+
+            L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+
+                    maxZoom: 19,
+
+                    attribution:
+                        "&copy; OpenStreetMap contributors"
+
+                }
+            ).addTo(map);
+
+
+            /*
+               Client location
+            */
+
+            L.marker(
+                [
+                    latitude,
+                    longitude
+                ]
+            )
+            .addTo(map)
+            .bindPopup(
+                "Client Work Location"
+            );
+
+
+            /*
+               Requested radius
+            */
+
+            const radiusKm =
+                Number(
+                    requirement.location?.radiusKm
+                );
+
+
+            if (
+                Number.isFinite(radiusKm) &&
+                radiusKm > 0
+            ) {
+
+                L.circle(
+                    [
+                        latitude,
+                        longitude
+                    ],
+                    {
+
+                        radius:
+                            radiusKm * 1000
+
+                    }
+                ).addTo(map);
+
+            }
+
+
+            /*
+               Fix map size after
+               the section becomes visible.
+            */
+
+            setTimeout(
+                () => {
+
+                    map.invalidateSize();
+
+                },
+                150
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   UNDER WORKING CARD
+========================================================= */
+
+function renderUnderWorkingCard(
+    requirement
+) {
+
+    const isReady =
+        requirement.status === "READY";
+
+
+    const assignments =
+        requirement.assignments || [];
+
+
+    const total =
+        requirement.requiredMembers?.total || 0;
+
+
+    const latitude =
+        Number(
+            requirement.location?.latitude
+        );
+
+
+    const longitude =
+        Number(
+            requirement.location?.longitude
+        );
+
+
+    return `
+
+        <div class="working-card">
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:10px;
+                    align-items:flex-start;
+                "
+            >
+
+                <div>
+
+                    <div class="request-title">
+                        ${escapeHtml(
+                            requirement.work.name
+                        )}
+                    </div>
+
+                    <div class="request-type">
+                        ${escapeHtml(
+                            requirement.work.type
+                        )}
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="
+                        working-status
+                        ${isReady ? "ready" : ""}
+                    "
+                >
+                    ${
+                        isReady
+                            ? "✓ TEAM READY"
+                            : "● ASSIGNING"
+                    }
+                </span>
+
+            </div>
+
+
+            <p style="
+                color:#6b7280;
+                font-size:10px;
+                line-height:1.6;
+                margin:10px 0;
+            ">
+                ${escapeHtml(
+                    requirement.work.description
+                )}
+            </p>
+
+             <div class="state">
+                   📍: ${requirement.location.state},${requirement.location.district}, ${requirement.location.townVillage}
+                </div>
+                <div class="state">
+                   Address: ${requirement.location.address}
+                    </div>
+            <div class="requirement-summary">
+
+                <div>
+
+                    <strong>
+                        ${assignments.length}
+                    </strong>
+
+                    <span>
+                        Assigned
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        ${total}
+                    </strong>
+
+                    <span>
+                        Required
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        ${requirement.location?.radiusKm || 0}
+                    </strong>
+
+                    <span>
+                        KM Radius
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            ${
+                Number.isFinite(latitude) &&
+                Number.isFinite(longitude)
+                    ? `
+                        <div
+                            id="working-map-${escapeHtml(
+                                requirement.id
+                            )}"
+                            class="working-map-preview"
+                        ></div>
+                    `
+                    : `
+                        <div style="
+                            padding:12px;
+                            background:#fef2f2;
+                            color:#b91c1c;
+                            border-radius:9px;
+                            font-size:10px;
+                            margin-top:10px;
+                        ">
+                            Work location coordinates
+                            are not available.
+                        </div>
+                    `
+            }
+
+
+            <div class="work-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="
+                        openWorkingRequirement(
+                            '${requirement.id}'
+                        )
+                    "
+                >
+                    Open Work
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+/* =========================================================
+   OPEN UNDER WORKING
+========================================================= */
+
+function openWorkingRequirement(id) {
+
+    const requirement =
+        getRequirement(id);
+
+
+    if (!requirement) {
+
+        showToast(
+            "Work not found."
+        );
+
+        return;
+
+    }
+
+
+    window.location.href =
+        "available-work.html?id=" +
+        encodeURIComponent(id);
+
+}
+
+/* =========================================================
+   CLIENT REQUIREMENT CARD
+========================================================= */
+
+function renderClientRequirement(
+    requirement
+) {
+
+    return `
+
+        <div
+            class="work-card client-work-card"
+            data-search="
+                ${escapeHtml(
+                    requirement.work.name
+                )}
+                ${escapeHtml(
+                    requirement.work.type
+                )}
+                ${escapeHtml(
+                    requirement.work.description
+                )}
+            "
+        >
+
+            <div class="request-top">
+
+                <div>
+
+                    <div class="request-title">
+                        ${escapeHtml(
+                            requirement.work.name
+                        )}
+                    </div>
+
+                    <div class="request-type">
+                        ${escapeHtml(
+                            requirement.work.type
+                        )}
+                    </div>
+
+                </div>
+                
+                  <div class="distance">
+                    📍: ${requirement.location.state},${requirement.location.district}, ${requirement.location.townVillage}
+                
+                 <div class="state">
+                    Address: ${requirement.location.address}
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div style="
+                margin-top:13px;
+                color:#6b7280;
+                font-size:10px;
+                line-height:1.6;
+            ">
+
+                ${escapeHtml(
+                    requirement.work.description
+                )}
+
+            </div>
+
+
+            <div class="requirement-summary">
+
+                <div>
+
+                    <strong>
+                        ${requirement.requiredMembers.total}
+                    </strong>
+
+                    <span>
+                        Total
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        ${requirement.requiredMembers.technicians}
+                    </strong>
+
+                    <span>
+                        Technicians
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        ${requirement.requiredMembers.workers}
+                    </strong>
+
+                    <span>
+                        Workers
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        ${requirement.requiredMembers.teamLeader}
+                    </strong>
+
+                    <span>
+                        Leader
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:7px;
+                margin-bottom:15px;
+            ">
+
+                <div class="stat">
+                    📅
+                    ${formatDate(
+                        requirement.schedule.startDate
+                    )}
+                </div>
+
+
+                <div class="stat">
+                    ⭕
+                    ${requirement.location.radiusKm}
+                    km radius
+                </div>
+
+            </div>
+
+
+            <div class="work-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="
+                        showRequirementDetails(
+                            '${requirement.id}'
+                        )
+                    "
+                >
+                    View Details
+                </button>
+
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    onclick="
+                        acceptClientWork(
+                            '${requirement.id}'
+                        )
+                    "
+                >
+                    Accept Work
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+   ACCEPT WORK
+========================================================= */
+
+function acceptClientWork(id) {
+
+    const requirement =
+        getRequirement(id);
+
+
+    if (!requirement) {
+
+        showToast(
+            "Client requirement not found."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        requirement.status !== "OPEN"
+    ) {
+
+        showToast(
+            "This work is no longer available."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Accept the work.
+
+       IMPORTANT:
+       Accepting work does NOT make
+       the team ready.
+    */
+
+    updateRequirement(
+        id,
+        {
+
+            status: "ASSIGNING",
+
+            acceptedTeam: {
+
+                teamId: "TEAM-001",
+
+                name:
+                    "Buildskil Verified Team",
+
+                leader:
+                    "Raj Kumar",
+
+                acceptedAt:
+                    new Date().toISOString()
+
+            },
+
+            assignments: []
+
+        }
+    );
+
+
+    showToast(
+        "Work accepted. Work location is now available."
+    );
+
+
+    /*
+       Open accepted work workflow.
+    */
+
+    setTimeout(
+        () => {
+
+            window.location.href =
+                "available-work.html?id=" +
+                encodeURIComponent(id);
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   TEAM WORKFLOW SCREEN
+========================================================= */
+
+function renderTeamWorkflow(id) {
+
+    const container =
+        document.getElementById(
+            "availableContent"
+        );
+
+
+    const requirement =
+        getRequirement(id);
+
+
+    if (!requirement) {
+
+        container.innerHTML = `
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    Requirement not found.
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+       READY
+    */
+
+    if (
+        requirement.status ===
+        "READY"
+    ) {
+
+        renderReadyScreen(
+            requirement
+        );
+
+        return;
+
+    }
+
+
+    /*
+       ACCEPTED / ASSIGNING
+    */
+
+    renderAssignmentScreen(
+        requirement
+    );
+
+}
+
+
+/* =========================================================
+   ASSIGNMENT SCREEN
+========================================================= */
+
+function renderAssignmentScreen(
+    requirement
+) {
+
+    const container =
+        document.getElementById(
+            "availableContent"
+        );
+
+
+    const assignments =
+        requirement.assignments || [];
+
+
+    const rows = [];
+
+
+    /* TEAM LEADER */
+
+    for (
+        let i = 0;
+        i <
+        requirement.requiredMembers.teamLeader;
+        i++
+    ) {
+
+        rows.push(
+            createAssignmentRow(
+                requirement,
+                "leader",
+                i,
+                "Team Leader"
+            )
+        );
+
+    }
+
+
+    /* TECHNICIANS */
+
+    for (
+        let i = 0;
+        i <
+        requirement.requiredMembers.technicians;
+        i++
+    ) {
+
+        rows.push(
+            createAssignmentRow(
+                requirement,
+                "technician",
+                i,
+                "Technician"
+            )
+        );
+
+    }
+
+
+    /* WORKERS */
+
+    for (
+        let i = 0;
+        i <
+        requirement.requiredMembers.workers;
+        i++
+    ) {
+
+        rows.push(
+            createAssignmentRow(
+                requirement,
+                "worker",
+                i,
+                "Worker"
+            )
+        );
+
+    }
+
+
+    /* SPECIALISTS */
+
+    for (
+        let i = 0;
+        i <
+        requirement.requiredMembers.specialists;
+        i++
+    ) {
+
+        rows.push(
+            createAssignmentRow(
+                requirement,
+                "specialist",
+                i,
+                "Specialist"
+            )
+        );
+
+    }
+
+
+    const assignedCount =
+        assignments.length;
+
+
+    const total =
+        requirement.requiredMembers.total;
+
+
+    const percent =
+        total > 0
+            ? Math.round(
+                assignedCount /
+                total *
+                100
+            )
+            : 0;
+
+
+    container.innerHTML = `
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+                    ✓ Work Accepted
+                </h2>
+
+                <p>
+                    ${escapeHtml(
+                        requirement.work.name
+                    )}
+                </p>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <!-- STATUS -->
+
+                <div style="
+                    background:#eff6ff;
+                    border:1px solid #bfdbfe;
+                    border-radius:12px;
+                    padding:15px;
+                    margin-bottom:20px;
+                ">
+
+                    <strong style="
+                        display:block;
+                        color:#1d4ed8;
+                        font-size:12px;
+                    ">
+                        TEAM ASSIGNMENT REQUIRED
+                    </strong>
+
+
+                    <span style="
+                        display:block;
+                        color:#64748b;
+                        font-size:10px;
+                        margin-top:5px;
+                        line-height:1.6;
+                    ">
+                        The client needs
+                        ${total}
+                        members.
+                        Select your actual Buildskil
+                        members for every required position.
+                    </span>
+
+                </div>
+
+                <!-- STEP INDICATOR -->
+
+                <div class="team-stepper">
+
+                    <div class="team-step active">
+                        <span>✓</span>
+                        <small>Accepted</small>
+                    </div>
+
+
+                    <div class="step-line active"></div>
+
+
+                    <div class="team-step active">
+                        <span>2</span>
+                        <small>Assign Team</small>
+                    </div>
+
+
+                    <div class="step-line"></div>
+
+
+                    <div class="team-step">
+                        <span>3</span>
+                        <small>Confirm</small>
+                    </div>
+
+
+                    <div class="step-line"></div>
+
+
+                    <div class="team-step">
+                        <span>4</span>
+                        <small>Ready</small>
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    margin-top:22px;
+                ">
+
+                    ${rows.join("")}
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div class="progress-box">
+
+                    <div class="progress-top">
+
+                        <span>
+                            TEAM ASSIGNMENT
+                        </span>
+
+                        <span
+                            id="progressText"
+                        >
+                            ${assignedCount}
+                            /
+                            ${total}
+                            assigned
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-track">
+
+                        <div
+                            id="progressFill"
+                            class="progress-fill"
+                            style="
+                                width:${percent}%;
+                            "
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-footer">
+
+            <div class="footer-note">
+
+                <strong>
+                    ${
+                        assignedCount >= total
+                            ? "All members assigned"
+                            : "Assignment in progress"
+                    }
+                </strong>
+
+                <br>
+
+                ${
+                    assignedCount >= total
+                        ? "You can now confirm the complete team."
+                        : "Assign every required position before confirming."
+                }
+
+            </div>
+
+
+            <button
+                type="button"
+                class="primary-btn"
+                ${
+                    assignedCount >= total
+                        ? ""
+                        : "disabled"
+                }
+                onclick="
+                    confirmTeamReady(
+                        '${requirement.id}'
+                    )
+                "
+            >
+                Confirm Team
+            </button>
+
+        </div>
+<!-- =====================================================
+     CLIENT WORK LOCATION
+===================================================== -->
+
+<div class="card work-location-card">
+
+    <div class="work-location-header">
+
+        <h3>
+            📍 Client Work Location
+        </h3>
+
+        <p>
+            Reach the location shown below.
+            The circle represents the client's
+            requested work radius.
+        </p>
+
+    </div>
+
+
+    <div
+        id="clientWorkMap"
+        class="work-location-map"
+    ></div>
+
+
+    <div class="location-info">
+
+        <div class="location-info-item">
+
+            <span>
+                Latitude
+            </span>
+
+            <strong>
+                ${Number(
+                    requirement.location?.latitude
+                ).toFixed(6)}
+            </strong>
+
+        </div>
+
+
+        <div class="location-info-item">
+
+            <span>
+                Longitude
+            </span>
+
+            <strong>
+                ${Number(
+                    requirement.location?.longitude
+                ).toFixed(6)}
+            </strong>
+
+        </div>
+
+
+        <div class="location-info-item">
+
+            <span>
+                Altitude
+            </span>
+
+            <strong>
+                ${
+                    requirement.location?.altitude ??
+                    "—"
+                }
+                m
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+    `;
+
+}
+
+/* =========================================================
+   CLIENT WORK LOCATION MAP
+========================================================= */
+
+function initializeClientWorkMap(
+    requirement
+) {
+
+    const mapElement =
+        document.getElementById(
+            "clientWorkMap"
+        );
+
+
+    if (!mapElement) {
+
+        return;
+
+    }
+
+
+    const latitude =
+        Number(
+            requirement.location?.latitude
+        );
+
+
+    const longitude =
+        Number(
+            requirement.location?.longitude
+        );
+
+
+    if (
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude)
+    ) {
+
+        mapElement.innerHTML = `
+
+            <div style="
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#6b7280;
+                font-size:11px;
+                background:#f1f5f9;
+            ">
+
+                📍 Work location coordinates
+                unavailable
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+       Create map
+    */
+
+    const map =
+        L.map(
+            mapElement
+        ).setView(
+            [
+                latitude,
+                longitude
+            ],
+            15
+        );
+
+
+    /*
+       OpenStreetMap
+    */
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+
+    /*
+       Client location marker
+    */
+
+    const marker =
+        L.marker(
+            [
+                latitude,
+                longitude
+            ]
+        )
+        .addTo(map);
+
+
+    marker.bindPopup(`
+
+        <strong>
+            Client Work Location
+        </strong>
+
+        <br>
+
+        ${escapeHtml(
+            requirement.work.name
+        )}
+
+    `);
+
+
+    marker.openPopup();
+
+
+    /*
+       Requested work radius
+    */
+
+    const radiusKm =
+        Number(
+            requirement.location?.radiusKm
+        );
+
+
+    if (
+        Number.isFinite(radiusKm) &&
+        radiusKm > 0
+    ) {
+
+        L.circle(
+            [
+                latitude,
+                longitude
+            ],
+            {
+
+                radius:
+                    radiusKm * 1000
+
+            }
+        ).addTo(map);
+
+    }
+
+
+    /*
+       Force Leaflet to recalculate
+       container dimensions.
+    */
+
+    setTimeout(
+        () => {
+
+            map.invalidateSize();
+
+        },
+        200
+    );
+
+}
+
+/* =========================================================
+   ASSIGNMENT ROW
+========================================================= */
+
+function createAssignmentRow(
+    requirement,
+    role,
+    index,
+    label
+) {
+
+    const existing =
+        requirement.assignments?.find(
+            item =>
+                item.role === role &&
+                item.position === index
+        );
+
+
+    const members =
+        demoMembers[role] || [];
+
+
+    return `
+
+        <div class="assignment-row">
+
+            <div class="role-label">
+
+                ${label}
+
+                <br>
+
+                <span style="
+                    color:#9ca3af;
+                    font-size:9px;
+                ">
+                    Position ${index + 1}
+                </span>
+
+            </div>
+
+
+            <select
+                onchange="
+                    saveTeamMember(
+                        '${requirement.id}',
+                        '${role}',
+                        this.value,
+                        ${index}
+                    )
+                "
+            >
+
+                <option value="">
+                    Select Buildskil member
+                </option>
+
+
+                ${
+                    members.map(
+                        member => `
+
+                        <option
+                            value="${escapeHtml(member)}"
+                            ${
+                                existing?.memberName === member
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            ${escapeHtml(member)}
+                        </option>
+
+                        `
+                    ).join("")
+                }
+
+            </select>
+
+
+            <span class="assigned">
+
+                ${
+                    existing
+                        ? "✓ Assigned"
+                        : "Required"
+                }
+
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SAVE TEAM MEMBER
+========================================================= */
+
+function saveTeamMember(
+    requirementId,
+    role,
+    memberName,
+    position
+) {
+
+    if (!memberName) {
+
+        return;
+
+    }
+
+
+    const requirement =
+        getRequirement(
+            requirementId
+        );
+
+
+    if (!requirement) return;
+
+
+    let assignments =
+        requirement.assignments || [];
+
+
+    const existingIndex =
+        assignments.findIndex(
+            item =>
+                item.role === role &&
+                item.position === position
+        );
+
+
+    const assignment = {
+
+        memberId:
+            memberName
+                .toLowerCase()
+                .replace(/\s+/g, "-"),
+
+        memberName,
+
+        role,
+
+        position,
+
+        assignedAt:
+            new Date().toISOString()
+
+    };
+
+
+    if (
+        existingIndex >= 0
+    ) {
+
+        assignments[
+            existingIndex
+        ] = assignment;
+
+    } else {
+
+        assignments.push(
+            assignment
+        );
+
+    }
+
+
+    updateRequirement(
+        requirementId,
+        {
+            assignments
+        }
+    );
+
+
+    /*
+       Re-render so the progress and
+       assigned status update immediately.
+    */
+
+    renderAssignmentScreen(
+        getRequirement(
+            requirementId
+        )
+    );
+
+}
+
+
+/* =========================================================
+   CONFIRM TEAM
+========================================================= */
+
+function confirmTeamReady(id) {
+
+    const requirement =
+        getRequirement(id);
+
+
+    if (!requirement) {
+
+        showToast(
+            "Requirement not found."
+        );
+
+        return;
+
+    }
+
+
+    const required =
+        requirement.requiredMembers.total;
+
+
+    const assigned =
+        requirement.assignments?.length || 0;
+
+
+    if (
+        assigned < required
+    ) {
+
+        showToast(
+            `Assign all ${required} members first.`
+        );
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANT STATUS CHANGE
+
+       ASSIGNING → READY
+    */
+
+    updateRequirement(
+        id,
+        {
+
+            status: "READY",
+
+            readyAt:
+                new Date().toISOString()
+
+        }
+    );
+
+
+    showToast(
+        "Team is ready to reach the client."
+    );
+
+
+    setTimeout(
+        () => {
+
+            renderTeamWorkflow(
+                id
+            );
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   READY SCREEN
+========================================================= */
+
+function renderReadyScreen(
+    requirement
+) {
+
+    const container =
+        document.getElementById(
+            "availableContent"
+        );
+
+
+    const assignments =
+        requirement.assignments || [];
+
+
+    container.innerHTML = `
+
+        <div class="team-ready-screen">
+
+
+            <!-- SUCCESS -->
+
+            <div class="ready-icon">
+                ✓
+            </div>
+
+
+            <h1>
+                Team Ready
+            </h1>
+
+
+            <p class="ready-message">
+
+                Your complete team is ready to reach
+                the client's work location.
+
+            </p>
+
+
+            <!-- WORK -->
+
+            <div class="ready-work">
+
+                <strong>
+                    ${escapeHtml(
+                        requirement.work.name
+                    )}
+                </strong>
+
+                <span>
+                    ${escapeHtml(
+                        requirement.work.type
+                    )}
+                </span>
+
+            </div>
+
+
+            <!-- TEAM COUNT -->
+
+            <div class="ready-count">
+
+                <strong>
+                    ${assignments.length}
+                    /
+                    ${requirement.requiredMembers.total}
+                </strong>
+
+                <span>
+                    Members Assigned
+                </span>
+
+            </div>
+
+
+            <!-- STEPS -->
+
+            <div class="team-stepper ready-stepper">
+
+                <div class="team-step completed">
+                    <span>✓</span>
+                    <small>Accepted</small>
+                </div>
+
+
+                <div class="step-line completed"></div>
+
+
+                <div class="team-step completed">
+                    <span>✓</span>
+                    <small>Assigned</small>
+                </div>
+
+
+                <div class="step-line completed"></div>
+
+
+                <div class="team-step completed">
+                    <span>✓</span>
+                    <small>Confirmed</small>
+                </div>
+
+
+                <div class="step-line completed"></div>
+
+
+                <div class="team-step completed">
+                    <span>✓</span>
+                    <small>Ready</small>
+                </div>
+
+            </div>
+
+
+            <!-- NEXT ACTION -->
+
+            <div class="ready-next">
+
+                <strong>
+                    Next Step
+                </strong>
+
+                <p>
+                    The client can now see that your team
+                    is ready to reach the work location.
+                </p>
+
+            </div>
+
+
+            <div class="ready-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="renderAvailableWork()"
+                >
+                    ← Available Work
+                </button>
+
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    onclick="
+                        showToast(
+                            'Travelling status will be added next.'
+                        )
+                    "
+                >
+                    Start Travelling
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function filterClientWork() {
+
+    const search =
+        document
+            .getElementById(
+                "workSearch"
+            )
+            ?.value
+            .toLowerCase() || "";
+
+
+    document
+        .querySelectorAll(
+            ".client-work-card"
+        )
+        .forEach(card => {
+
+            const text =
+                card.dataset.search
+                    .toLowerCase();
+
+
+            card.style.display =
+                text.includes(search)
+                    ? ""
+                    : "none";
+
+        });
+
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+function showRequirementDetails(id) {
+
+    const requirement =
+        getRequirement(id);
+
+
+    if (!requirement) {
+
+        return;
+
+    }
+
+
+    showToast(
+        `${requirement.requiredMembers.total} members required`
+    );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+</script>
+
+
+</body>
+</html>

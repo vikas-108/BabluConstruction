@@ -6,7 +6,7 @@ let selectedColor = "#2c3e50";
 let saveTimeout = null; // Used to control saving animation states
 let targetShareNotebookId = null;
 // API Config Base URL
-//const NOTEBOOK_API = "http://localhost:5000/api/notebooks"; // Update with your actual server URL
+
 const NOTEBOOK_API = 'https://api.buildskil.com/api/notebooks'; // Uncomment for production
 // DOM References
 const dashboardView = document.getElementById("dashboard-view");

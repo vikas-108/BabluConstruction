@@ -3,8 +3,7 @@ let NEW_PHOTO_FILE = null;
 let activeRequests = 0;
 const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
 const SERVER_BASE = "https://api.buildskil.com";
-//const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
-//const SERVER_BASE = "http://localhost:5000"; // change if using domain
+
 function authHeaders() {
   return {
     "Content-Type": "application/json",
@@ -37,6 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const profile = await res.json();
 
   renderProfile(profile);
+  
   //const membershipButton = document.getElementById("membershipButton");
   const subscriptionSection = document.getElementById("subscriptionSection");
   const closeDrawer = document.getElementById("closeDrawer");
@@ -535,7 +535,6 @@ async function loadMembershipCard() {
 }
 
 loadMembershipCard();
-
 //window.previewPhoto = previewPhoto;
 //window.openEditProfile = openEditProfile;
 //window.saveProfile = saveProfile;

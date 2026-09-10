@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cut List Optimizer</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/cutlist.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><rect x="3" y="10" width="18" height="4"/><path d="M8 10V6M14 10V6M8 18v-4M14 18v-4"/></svg></div>
+      <div class="header-titles">
+        <h1>Cut List Optimizer</h1>
+        <div class="sub">Pack every cut, minimize waste</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Stock &amp; Settings</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Stock board length (in)</label><input type="number" id="stockLen" value="96" min="1"></div>
+        <div class="field"><label>Blade kerf (in)</label><input type="number" id="kerf" value="0.125" step="0.0625" min="0"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Pieces Needed</div>
+    <div class="card">
+      <div class="col-head"><span>Length (in)</span><span>Qty</span><span></span></div>
+      <div id="piecesList"></div>
+      <button class="add-row" id="addPieceBtn">+ Add Cut</button>
+      <button id="optimizeBtn">Optimize Cut List</button>
+    </div>
+  </section>
+
+  <section class="block" id="resultsSection" style="display:none;">
+    <div class="block-title">Result</div>
+    <div class="card">
+      <div class="totals-box">
+        <div class="total-stat"><div class="k">Boards Needed</div><div class="v" id="boardsNeeded">0</div></div>
+        <div class="total-stat"><div class="k">Waste</div><div class="v" id="wastePct">0%</div></div>
+      </div>
+      <div style="margin-top:16px;" id="boardBars"></div>
+    </div>
+  </section>
+
+  <footer class="note">Uses first-fit-decreasing packing — a fast, reliable heuristic, not guaranteed mathematically optimal.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/cutist.min.js">
+</script>
+</body>
+</html>

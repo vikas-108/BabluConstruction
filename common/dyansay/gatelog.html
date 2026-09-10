@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visitor Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/gatelog.min.css" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+<style>
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M9 21V12h6v9M4 10l8-7 8 7v9a2 2 0 01-2 2H6a2 2 0 01-2-2z"/></svg></div>
+      <div class="header-titles">
+        <h1>Visitor Log</h1>
+        <div class="sub">Who's on site right now</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <div id="mainView">
+    <div class="histlink" id="openHistBtn">View exited visitors →</div>
+    <div class="onsite-badge"><span class="k">Currently On Site</span><span class="v" id="onsiteCount">0</span></div>
+    <section class="block">
+      <div id="visitorsList"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">No visitors on site. Tap "Log Visitor" to check someone in.</div>
+    </section>
+  </div>
+
+  <div id="histView">
+    <div class="back-link" id="closeHistBtn">← Back</div>
+    <div id="histList"></div>
+    <div class="empty-state" id="histEmpty" style="display:none;">No exited visitors yet.</div>
+  </div>
+
+  <div class="cta-bar" id="ctaBar"><div class="inner"><button id="addBtn">+ Log Visitor</button></div></div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="addDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Log Visitor</div>
+
+    <div class="photo-zone" id="photoZone">
+      <div id="photoPlaceholder">📷 Tap to take a photo</div>
+    </div>
+    <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;">
+
+    <div class="field"><label>Name</label><input type="text" id="visName" placeholder="Visitor's name"></div>
+    <div class="field-row">
+      <div class="field"><label>Phone (optional)</label><input type="tel" id="visPhone" placeholder="10-digit number"></div>
+      <div class="field"><label>Vehicle no. (optional)</label><input type="text" id="visVehicle" placeholder="e.g. DL01AB1234"></div>
+    </div>
+    <div class="field"><label>Purpose of visit</label><input type="text" id="visPurpose" placeholder="e.g. Material delivery, Inspection"></div>
+    <div class="field"><label>Meeting / Host (optional)</label><input type="text" id="visHost" placeholder="Who they're here to see"></div>
+
+    <button id="saveVisitorBtn">Check In</button>
+  </div>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/gateog.min.js">
+</script>
+</body>
+</html>

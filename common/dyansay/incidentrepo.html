@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Incident Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/incidentrepo.min.css" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M12 8v5M12 16v.1"/></svg></div>
+      <div class="header-titles">
+        <h1>Incident Report</h1>
+        <div class="sub">Log theft, damage &amp; security events</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div id="incidentsList"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">No incidents logged. Tap "Report Incident" if something needs recording.</div>
+  </section>
+
+  <div class="cta-bar"><div class="inner"><button id="addBtn">⚠ Report Incident</button></div></div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="addDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Report Incident</div>
+
+    <div class="field"><label>Type</label></div>
+    <div class="type-grid" id="typeGrid"></div>
+
+    <div class="field"><label>Description</label><textarea id="incDesc" rows="3" placeholder="What happened?"></textarea></div>
+    <div class="field"><label>Reported by</label><input type="text" id="incReporter" placeholder="Your name"></div>
+    <div class="gps-note" id="gpsNote">Getting location…</div>
+
+    <div class="photo-zone" id="photoZone">📷 Tap to add evidence photos</div>
+    <input type="file" id="photoInput" accept="image/*" capture="environment" multiple style="display:none;">
+    <div class="photo-thumbs" id="photoThumbs"></div>
+
+    <button id="saveIncidentBtn" style="margin-top:14px;">Save Incident</button>
+  </div>
+
+  <div class="drawer-backdrop" id="shareBackdrop"></div>
+  <div class="drawer share-drawer" id="shareDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Share Incident</div>
+    <label style="display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;">Phone number</label>
+    <input type="tel" id="sharePhone" placeholder="e.g. 98765 43210">
+    <button id="shareSendBtn" style="width:100%;margin-top:14px;padding:12px;border:none;border-radius:10px;background:var(--yellow);color:#1c1a0d;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;">Share via Messages</button>
+    <div class="copied-flag" id="shareNote"></div>
+  </div>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/incidentrepo.min.js">
+</script>
+</body>
+</html>

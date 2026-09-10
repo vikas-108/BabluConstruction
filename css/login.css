@@ -441,11 +441,20 @@ button:disabled .btn-loader { display: inline-block; }
   animation: fade-slide var(--dur-med) var(--ease-out);
 }
 
-#forgotBox { align-items: center; }
+#forgotBox {
+  align-items: center;
+}
 
 @keyframes fade-slide {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 #otpBox,
@@ -464,12 +473,17 @@ button:disabled .btn-loader { display: inline-block; }
   font-size: 0.95rem;
   color: var(--ink-900);
   letter-spacing: 0.02em;
-  transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out),
+
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
     box-shadow var(--dur-fast) var(--ease-out);
 }
 
 #otpInput::placeholder,
-#newusername::placeholder { color: var(--ink-400); }
+#newusername::placeholder {
+  color: var(--ink-400);
+}
 
 #otpInput:focus,
 #newusername:focus {
@@ -494,11 +508,16 @@ button:disabled .btn-loader { display: inline-block; }
   margin-bottom: 2px;
 }
 
-/* ---------------------------------------------------------------------- 
-   9. RESPONSIVE
+/* ----------------------------------------------------------------------
+   RESPONSIVE
    ---------------------------------------------------------------------- */
+
 @media (max-width: 480px) {
-  body { padding: 16px; align-items: flex-start; padding-top: clamp(28px, 8vh, 56px); }
+  body {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: clamp(28px, 8vh, 56px);
+  }
 
   .login-container {
     max-width: 100%;
@@ -506,15 +525,26 @@ button:disabled .btn-loader { display: inline-block; }
     border-radius: var(--radius-md);
   }
 
-  .logo-box { margin-bottom: 24px; }
+  .logo-box {
+    margin-bottom: 24px;
+  }
 
-  .phone-group #countryCode { width: 92px; font-size: 0.8rem; }
+  .phone-group #countryCode {
+    width: 92px;
+    font-size: 0.8rem;
+  }
 
-  #otpInput { letter-spacing: 0.3em; font-size: 1.05rem; }
+  #otpInput {
+    letter-spacing: 0.3em;
+    font-size: 1.05rem;
+  }
 }
 
 @media (max-width: 360px) {
-  .phone-group { flex-direction: column; gap: 10px; }
+  .phone-group {
+    flex-direction: column;
+    gap: 10px;
+  }
 
   .phone-group #countryCode,
   .phone-group #phone {
@@ -525,99 +555,82 @@ button:disabled .btn-loader { display: inline-block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
 }
+
 .input-group {
-    width: 100%;
+  width: 100%;
 }
 
 .password-input {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .password-input input {
-    width: 100%;
-    height: 46px;
+  width: 100%;
+  height: 46px;
+  padding: 0 48px 0 14px;
+  border: 1px solid #d5d9df;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fff;
+  color: #111827;
 
-    padding: 0 48px 0 14px;
-
-    border: 1px solid #d5d9df;
-    border-radius: 8px;
-
-    outline: none;
-
-    font-size: 14px;
-    font-family: inherit;
-
-    background: #fff;
-    color: #111827;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .password-input input:focus {
-    border-color: #2563eb;
-
-    box-shadow:
-        0 0 0 3px rgba(37, 99, 235, .10);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
 }
-
 
 /* Eye button */
 
 #togglePasscode {
-    position: absolute;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
 
-    right: 5px;
-    top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    transform: translateY(-50%);
-
-    width: 36px;
-    height: 36px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: none;
-    border-radius: 7px;
-
-    background: transparent;
-
-    color: #6b7280;
-
-    cursor: pointer;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
 }
 
 #togglePasscode:hover {
-    background: #f1f5f9;
-    color: #2563eb;
+  background: #f1f5f9;
+  color: #2563eb;
 }
+
 #eyeIcon {
-
-    display: block;
-
-    font-size: 20px;
-
-    line-height: 1;
-
-    pointer-events: none;
+  display: block;
+  font-size: 20px;
+  line-height: 1;
+  pointer-events: none;
 }
+
 .password-input + small {
-    display: block;
-
-    margin-top: 6px;
-
-    color: #6b7280;
-
-    font-size: 11px;
-
-    line-height: 16px;
+  display: block;
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 11px;
+  line-height: 16px;
 }

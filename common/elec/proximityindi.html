@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMF Proximity Indicator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/proximity.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#062226" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></div>
+      <div class="header-titles">
+        <h1>EMF Proximity Indicator</h1>
+        <div class="sub">Novelty magnetic-field reading only</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="safety-banner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+      <div class="txt">
+        <b>This is not a voltage tester</b>
+        It reads fluctuations in your phone's magnetometer — the same sensor used for a compass — as a
+        rough novelty indicator only. It cannot tell you whether a wire is live or dead, and it is not
+        rated, calibrated, or certified for electrical safety work. Never use it to decide whether a
+        circuit is safe to touch. Always de-energize circuits at the panel, verify with a properly rated
+        non-contact voltage tester, and follow lockout/tagout procedure before working on any wiring.
+      </div>
+    </div>
+
+    <div class="permission" id="permBox">
+      This needs access to your phone's magnetometer. Tap below once to allow it.
+      <button id="permBtn">Enable Sensor</button>
+    </div>
+    <div class="unsupported-box" id="unsupportedBox">
+      Your browser doesn't expose raw magnetometer data (mainly missing on iOS Safari and many desktop
+      browsers). This tool needs it and can't fall back to anything else.
+    </div>
+
+    <div class="card meter-wrap" id="meterCard">
+      <div class="big-readout"><span id="fieldVal">—</span><span class="unit"> µT</span></div>
+      <div class="readout-label">magnetic field reading — not a voltage measurement</div>
+      <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+      <button class="calib-btn" id="calibBtn">Set Current Reading as Baseline</button>
+    </div>
+  </section>
+
+  <footer class="note">
+    Even for its intended novelty use, readings are affected by your phone's own components, nearby
+    metal, and other magnetic sources — not just wiring. Treat any change as "worth a second look with
+    a real tester," never as a result on its own.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/proximity.min.js">
+</script>
+</body>
+</html>

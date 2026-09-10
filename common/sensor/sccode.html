@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barcode Scanner</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/sccode.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 5v14M7 5v14M10 5v14M14 5v14M17 5v14M21 5v14"/></svg></div>
+      <div class="header-titles">
+        <h1>Barcode Scanner</h1>
+        <div class="sub">Scan, see the details, keep a history</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="unsupported-box" id="unsupportedBox">
+      Your browser doesn't support live barcode scanning (the BarcodeDetector API — mainly missing on
+      iOS Safari and older browsers). Use the manual entry field below instead — everything else on
+      this page still works.
+    </div>
+
+    <div class="viewfinder" id="viewfinder">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="overlay"></canvas>
+      <div class="scan-frame"></div>
+      <div class="scan-line" id="scanLine"></div>
+      <div class="vf-loader" id="vfLoader">
+        <div class="spinner"></div>
+        <span id="vfLoaderText">Starting camera…</span>
+      </div>
+    </div>
+
+    <div class="manual-row">
+      <input type="text" id="manualInput" placeholder="Or type a code manually">
+      <button id="manualBtn">Add</button>
+    </div>
+
+    <div class="card" id="lastScanCard">
+      <div class="detail-top">
+        <div class="detail-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div style="font-family:'Oswald',sans-serif; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.4px;">Scanned</div>
+        <div class="detail-format" id="detailFormat">CODE</div>
+      </div>
+      <div class="detail-value" id="detailValue">—</div>
+      <div class="detail-time" id="detailTime"></div>
+      <div class="detail-actions">
+        <button id="copyBtn">Copy</button>
+        <button id="scanAgainBtn">Scan Next</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">
+      History
+      <span class="count" id="histCount">0 scans</span>
+    </div>
+    <div id="historyList"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">No scans yet — they'll show up here as you scan.</div>
+    <div style="text-align:right; margin-top:4px;">
+      <span class="clear-link" id="clearAllBtn" style="display:none;">Clear all history</span>
+    </div>
+  </section>
+
+  <footer class="note">
+    Scanning happens entirely on this device using your browser's built-in decoder — nothing is uploaded.
+    This reads the code itself; it doesn't look up product details from any external database.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/sccode.min.js">
+</script>
+</body>
+</html>

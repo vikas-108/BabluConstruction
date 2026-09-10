@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Invoice Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="../../dist/css/busiinvoice.min.css">
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back-btn" onclick="goBack()" aria-label="Go back">←</button>
+  <div class="mark">IN</div>
+  <h1>Invoice Generator</h1>
+  <div class="topbar-actions">
+    <select class="format-select" id="format-select" onchange="setFormat(this.value)" title="Invoice format">
+      <option value="classic">Classic</option>
+      <option value="centered">Centered</option>
+      <option value="split">Modern Split</option>
+      <option value="minimal">Minimal</option>
+      <option value="formal">Formal Bordered</option>
+      <option value="band">Bold Band</option>
+      <option value="twocol">Two-Column</option>
+      <option value="boxed">Boxed</option>
+      <option value="statement">Statement</option>
+      <option value="ledger">Ledger</option>
+    </select>
+    <select class="format-select" id="theme-select" onchange="setTheme(this.value)" title="Color theme">
+      <option value="rust">Rust</option>
+      <option value="navy">Corporate Navy</option>
+      <option value="charcoal">Charcoal &amp; Gold</option>
+      <option value="forest">Forest Green</option>
+      <option value="burgundy">Burgundy</option>
+      <option value="slate">Slate Blue</option>
+      <option value="amber">Amber Gold</option>
+      <option value="mono">Monochrome</option>
+    </select>
+    <button class="btn btn-ghost btn-icon" onclick="openPreview()" title="Preview invoice" aria-label="Preview invoice">👁</button>
+    <button class="btn btn-ghost btn-icon" onclick="resetInvoice()" title="Reset invoice" aria-label="Reset invoice">↺</button>
+    <button class="btn btn-primary btn-icon" onclick="downloadInvoice()" title="Download PDF" aria-label="Download PDF">⬇</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h2>Your business</h2>
+    <div style="display:flex; gap:16px; align-items:flex-start;">
+      <div class="logo-box" id="logo-box" onclick="triggerLogoUpload()">Add logo<br><span style="font-size:9.5px;">(optional)</span></div>
+      <div style="flex:1;">
+        <div class="row2">
+          <div class="field"><label>Business name</label><input id="biz-name" placeholder="e.g. Sharma Painting Co."></div>
+          <div class="field"><label>Phone / Email</label><input id="biz-contact" placeholder="e.g. 98765 43210 · hello@company.com"></div>
+        </div>
+        <div class="field"><label>Address</label><input id="biz-address" placeholder="Business address"></div>
+      </div>
+    </div>
+  </div>
+  <input type="file" id="logo-input" accept="image/*" style="display:none;">
+
+  <div class="card">
+    <h2>Bill to</h2>
+    <div class="row2">
+      <div class="field"><label>Client name</label><input id="client-name" placeholder="Client or company name"></div>
+      <div class="field"><label>Client address</label><input id="client-address" placeholder="Client address"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Invoice details</h2>
+    <div class="row2">
+      <div class="field"><label>Invoice number</label>
+        <div style="display:flex; gap:6px;">
+          <input id="invoice-number" value="INV-001" style="flex:1;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="regenerateInvoiceNumber()" title="Generate new number">🔄</button>
+        </div>
+      </div>
+      <div class="field"><label>Invoice date</label><input id="invoice-date" type="date"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Due date</label><input id="due-date" type="date"></div>
+      <div class="field">
+        <label>Payment status</label>
+        <div class="status-row">
+          <button type="button" class="status-btn" id="status-unpaid" onclick="setStatus('unpaid')">Unpaid</button>
+          <button type="button" class="status-btn" id="status-partial" onclick="setStatus('partial')">Partial</button>
+          <button type="button" class="status-btn" id="status-paid" onclick="setStatus('paid')">Paid</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Line items</h2>
+    <table class="items-table">
+      <thead><tr><th class="desc-col">Description</th><th class="qty-col">Qty</th><th class="rate-col">Rate (₹)</th><th>Amount</th><th></th></tr></thead>
+      <tbody id="items-body"></tbody>
+    </table>
+    <button class="btn btn-ghost" onclick="addItem()">+ Add line item</button>
+
+    <div class="totals" style="margin-top:18px;">
+      <div class="total-row"><span>Subtotal</span><span class="tv" id="t-subtotal">₹0</span></div>
+      <div class="total-row"><span>Tax (%)</span><input id="tax-pct" type="number" value="0" oninput="calculate()"></div>
+      <div class="total-row"><span>Tax amount</span><span class="tv" id="t-tax">₹0</span></div>
+      <div class="total-row grand"><span>Total due</span><span class="tv" id="t-total">₹0</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Notes / terms</h2>
+    <div class="field"><textarea id="notes" placeholder="e.g. Payment due within 15 days. Thank you for your business!"></textarea></div>
+  </div>
+</div>
+
+<div id="invoice-sheet" class="format-classic theme-rust">
+  <div class="is-head">
+    <div class="is-biz">
+      <img id="is-logo" class="is-logo hidden" alt="Business logo">
+      <h2 id="is-biz-name">Business Name</h2>
+      <p id="is-biz-address"></p>
+      <p id="is-biz-contact"></p>
+    </div>
+    <div class="is-meta">
+      <h3>INVOICE</h3>
+      <p id="is-invoice-number"></p>
+      <p id="is-invoice-date"></p>
+      <p id="is-due-date"></p>
+    </div>
+  </div>
+  <div class="is-bill-to"><b>Bill to</b><span id="is-client-name"></span><br><span id="is-client-address"></span></div>
+  <table>
+    <thead><tr><th>Description</th><th style="text-align:right;">Qty</th><th style="text-align:right;">Rate</th><th style="text-align:right;">Amount</th></tr></thead>
+    <tbody id="is-items"></tbody>
+  </table>
+  <div class="is-totals">
+    <div><span>Subtotal</span><span id="is-subtotal"></span></div>
+    <div><span>Tax</span><span id="is-tax"></span></div>
+    <div class="is-grand"><span>Total due</span><span id="is-total"></span></div>
+  </div>
+  <div id="is-status" class="is-status"></div>
+  <p id="is-notes" style="margin-top:24px; font-size:11.5px; color:#666; white-space:pre-wrap;"></p>
+</div>
+
+<div class="modal-backdrop" id="preview-backdrop">
+  <div class="preview-modal">
+    <div class="preview-modal-head">
+      <h3>Invoice preview</h3>
+      <button class="preview-close" onclick="closePreview()">Close ✕</button>
+    </div>
+    <div id="preview-stage" style="overflow:auto;"></div>
+  </div>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/bussinvoice.min.js">
+</script>
+</body>
+</html>

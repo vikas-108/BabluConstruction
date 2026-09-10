@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conduit Fill Calculator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/conduitfil.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#0d211f" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div class="header-titles">
+        <h1>Conduit Fill Calculator</h1>
+        <div class="sub">Check wires against conduit capacity</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="card">
+      <div class="field">
+        <label>Conduit trade size (EMT)</label>
+        <select id="conduitSize"></select>
+      </div>
+
+      <div class="block-title" style="margin-top:6px;">Conductors</div>
+      <div id="wiresList"></div>
+      <button class="add-row" id="addWireBtn">+ Add Conductor</button>
+
+      <div class="fill-bar-track"><div class="fill-bar-fill" id="fillBar"></div></div>
+      <div class="result-row"><span>Fill used</span><b id="fillPct">0%</b></div>
+      <div class="result-row"><span>Allowed for this many conductors</span><b id="allowedPct">40%</b></div>
+      <div class="result-row"><span>Wire area / conduit area</span><b id="areaRatio">0 / 0 mm²</b></div>
+
+      <div class="verdict ok" id="verdictBox">Within allowed fill</div>
+    </div>
+  </section>
+
+  <footer class="note">
+    Uses NEC-style fill rules (53% for 1 conductor, 31% for 2, 40% for 3+) and approximate THHN/THWN
+    insulated conductor areas — a common reference in many countries but not universal. Always confirm
+    against your local electrical code before pulling wire.
+  </footer>
+</div>
+<script src="../..//dist/js/tt.min.js"></script>
+<script src="../../dist/js/conduitfill.min.js">
+</script>
+</body>
+</html>

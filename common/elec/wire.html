@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wire Size &amp; Voltage Drop</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/wire.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#0d211f" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></div>
+      <div class="header-titles">
+        <h1>Wire Size &amp; Voltage Drop</h1>
+        <div class="sub">Check a size, or find the minimum</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="card">
+      <div class="mode-tabs">
+        <div class="mode-tab active" data-unit="metric">mm² (Metric)</div>
+        <div class="mode-tab" data-unit="awg">AWG (US)</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field"><label>Load current (A)</label><input type="number" id="loadA" value="20" min="0" step="0.1"></div>
+        <div class="field"><label>Voltage (V)</label><input type="number" id="voltage" value="230" min="1"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>One-way length (m)</label><input type="number" id="lengthM" value="30" min="0" step="0.5"></div>
+        <div class="field">
+          <label>Phase</label>
+          <select id="phase"><option value="1">Single-phase</option><option value="3">Three-phase</option></select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Conductor</label>
+          <select id="material"><option value="cu">Copper</option><option value="al">Aluminum</option></select>
+        </div>
+        <div class="field">
+          <label>Wire size</label>
+          <select id="wireSize"></select>
+        </div>
+      </div>
+
+      <div class="result-box" id="resultBox">
+        <span class="k">Voltage Drop</span>
+        <span class="v" id="vdVal">—</span>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><div class="k">Drop (V)</div><div class="v" id="vdVolts">—</div></div>
+        <div class="stat"><div class="k">At Load</div><div class="v" id="voltAtLoad">—</div></div>
+      </div>
+
+      <div class="recommend-box" id="recommendBox"></div>
+    </div>
+  </section>
+
+  <footer class="note">
+    Uses standard conductor resistance values and a simplified resistive-load voltage-drop formula
+    (ignores reactance) — good for sizing checks, not a substitute for a full engineering calc on
+    long or highly inductive runs. Always verify against your local electrical code.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/wire.min.js">
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Wall Area Deduction Calculator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/areadetec.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="back-btn" id="homeBtn" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M9 4v16M4 9h16"/><rect x="10.2" y="10.2" width="3.6" height="3.6" rx="0.5" fill="#1c1a0d" stroke="none"/></svg></div>
+    <div>
+      <h1>Wall Deduction Calc</h1>
+      <div class="sub">Net plaster/paint area, minus openings</div>
+    </div>
+  </header>
+
+  <!-- ============ LIST VIEW ============ -->
+  <div id="listView">
+    <div class="search-wrap"><input type="text" id="searchInput" placeholder="Search by room name…"></div>
+    <div id="calcList"></div>
+  </div>
+
+  <!-- ============ EDITOR VIEW ============ -->
+  <div id="editorView" style="display:none;">
+    <div class="back-link" id="closeEditorBtn">← Back to calculations</div>
+
+    <div class="section-title">Room / area</div>
+    <div class="row2">
+      <div class="field"><label>Room name</label><input type="text" id="fRoom" placeholder="e.g. Living room"></div>
+      <div class="field"><label>Date</label><input type="date" id="fDate"></div>
+    </div>
+
+    <div class="section-title">Walls &amp; their openings</div>
+    <div id="wallCards"></div>
+    <button class="add-row-btn" id="addWallBtn">+ Add wall</button>
+
+    <div class="summary-card">
+      <div class="s-row"><span>Gross wall area</span><span class="val" id="sumGross">0 sqft</span></div>
+      <div class="s-row neg"><span>Door deduction</span><span class="val" id="sumDoor">− 0 sqft</span></div>
+      <div class="s-row neg"><span>Window deduction</span><span class="val" id="sumWindow">− 0 sqft</span></div>
+      <div class="s-row neg" id="otherRow" style="display:none;"><span>Other deduction</span><span class="val" id="sumOther">− 0 sqft</span></div>
+      <div class="s-row grand"><span>Net plaster area</span><span class="val" id="sumNet">0 sqft</span></div>
+    </div>
+
+    <div class="section-title">Reuse in plaster / paint estimate</div>
+    <div class="rate-card">
+      <div class="rate-row"><span>Plastering rate (₹/sqft)</span><input type="number" id="fPlasterRate" value="45" min="0"></div>
+      <div class="rate-row"><span>Plastering cost</span><span class="val" id="plasterCost">₹0</span></div>
+      <div class="rate-row"><span>Painting rate (₹/sqft)</span><input type="number" id="fPaintRate" value="28" min="0"></div>
+      <div class="rate-row"><span>Painting cost</span><span class="val" id="paintCost">₹0</span></div>
+      <div class="rate-row grand"><span>Combined total</span><span class="val" id="combinedTotal">₹0</span></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-ghost" id="copyNetBtn">Copy net area</button>
+      <button class="btn-ghost" id="sendEstimateBtn">Send to Estimate</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn-yellow" id="saveCalcBtn">Save calculation</button>
+    </div>
+    <button class="btn-red" id="deleteCalcBtn" style="margin-top:10px; display:none;">Delete this calculation</button>
+  </div>
+
+  <button class="fab" id="fabAdd">+</button>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/areadeteec.min.js">
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAR & Setback Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/farset.min.css">
+<!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
+      <div class="header-titles">
+        <h1>FAR &amp; Setback</h1>
+        <div class="sub">Buildable area from lot &amp; zoning</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Lot Dimensions</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Lot width (ft)</label><input type="number" id="lotWidth" value="50" min="0"></div>
+        <div class="field"><label>Lot depth (ft)</label><input type="number" id="lotDepth" value="100" min="0"></div>
+      </div>
+      <div class="field"><label>Floor Area Ratio (FAR)</label><input type="number" id="farVal" value="1.5" step="0.05" min="0"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Setbacks (ft)</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Front</label><input type="number" id="setFront" value="10" min="0"></div>
+        <div class="field"><label>Rear</label><input type="number" id="setRear" value="10" min="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Left side</label><input type="number" id="setLeft" value="5" min="0"></div>
+        <div class="field"><label>Right side</label><input type="number" id="setRight" value="5" min="0"></div>
+      </div>
+
+      <div class="diagram-wrap"><svg id="lotSvg" viewBox="0 0 220 170"></svg></div>
+
+      <div class="result-grid">
+        <div class="result-stat"><div class="k">Lot Area</div><div class="v" id="lotArea">—</div></div>
+        <div class="result-stat"><div class="k">Max Floor Area</div><div class="v" id="maxFloorArea">—</div></div>
+        <div class="result-stat"><div class="k">Buildable Footprint</div><div class="v" id="footprint">—</div></div>
+        <div class="result-stat"><div class="k">Site Coverage</div><div class="v" id="coverage">—</div></div>
+        <div class="result-stat full"><div class="k">Max Stories (footprint × n ≤ max floor area)</div><div class="v" id="maxStories">—</div></div>
+      </div>
+
+      <div class="warn-box">FAR, setbacks, and coverage limits vary enormously by jurisdiction — this uses the numbers you enter, not any actual zoning database. Confirm against your local zoning code before relying on it.</div>
+    </div>
+  </section>
+
+  <footer class="note">Max stories assumes the full buildable footprint is used on every floor — real designs are rarely that literal.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/farset.min.js">
+</script>
+</body>
+</html>

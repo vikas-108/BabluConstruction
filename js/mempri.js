@@ -6,7 +6,7 @@ async function loadMembership() {
   if (!token) return;
   try {
     const res = await fetch(
-      "https://api.buildskil.com/api/membership/my-membership",
+      "http://localhost:5000/api/membership/my-membership",
       {
         headers: {
           Authorization: `Bearer ${token}`,

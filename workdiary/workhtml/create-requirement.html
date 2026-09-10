@@ -1,0 +1,1540 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Buildskil - Team Requirement</title>
+
+    <link
+        rel="stylesheet"
+        href="../workcss/team-requirement.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="page-header">
+
+        <div class="header-left">
+
+            <button
+                class="back-btn"
+                onclick="goBack()"
+            >
+                ←
+            </button>
+
+            <div class="brand-mark">
+                B
+            </div>
+
+            <div class="page-title">
+
+                <h1>Team Requirement</h1>
+
+                <p>
+                    Create and manage the team you need.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ADD REQUIREMENT TOGGLE
+    ====================================================== -->
+
+    <div class="requirement-toolbar">
+
+        <div>
+
+            <strong>
+                My Team Requirements
+            </strong>
+
+            <span>
+                Create a requirement and let Buildskil find
+                the right team.
+            </span>
+
+        </div>
+
+        <button
+            id="toggleFormBtn"
+            class="primary-btn add-requirement-btn"
+            onclick="toggleRequirementForm()"
+        >
+            + Add Requirement
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         CREATE FORM
+    ====================================================== -->
+
+    <div
+        id="requirementForm"
+        class="requirement-form"
+    >
+
+        <!-- WORK DETAILS -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>Work Details</h2>
+
+                <p>
+                    Give the team enough information to understand
+                    your work.
+                </p>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Work / Project Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="workName"
+                            type="text"
+                            placeholder="Residential Building"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Work Type
+                            <span class="required">*</span>
+                        </label>
+
+                        <select id="workType">
+
+                            <option value="">
+                                Select work type
+                            </option>
+
+                            <option>
+                                Construction
+                            </option>
+
+                            <option>
+                                Civil Work
+                            </option>
+
+                            <option>
+                                Electrical
+                            </option>
+
+                            <option>
+                                Plumbing
+                            </option>
+
+                            <option>
+                                Painting
+                            </option>
+
+                            <option>
+                                Fabrication
+                            </option>
+
+                            <option>
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Work Description
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="description"
+                            placeholder="Describe what the team needs to do..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TEAM MEMBERS
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>Team Requirement</h2>
+
+                <p>
+                    Specify how many people you need.
+                </p>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="member-grid">
+
+
+                    <!-- TECHNICIANS -->
+
+                    <div class="member-box">
+
+                        <small>
+                            Technicians
+                        </small>
+
+                        <div class="counter">
+
+                            <button
+                                type="button"
+                                onclick="changeMember('technicians', -1)"
+                            >
+                                −
+                            </button>
+
+                            <input
+                                id="technicians"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="updateMemberTotal()"
+                            >
+
+                            <button
+                                type="button"
+                                onclick="changeMember('technicians', 1)"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- WORKERS -->
+
+                    <div class="member-box">
+
+                        <small>
+                            Workers
+                        </small>
+
+                        <div class="counter">
+
+                            <button
+                                type="button"
+                                onclick="changeMember('workers', -1)"
+                            >
+                                −
+                            </button>
+
+                            <input
+                                id="workers"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="updateMemberTotal()"
+                            >
+
+                            <button
+                                type="button"
+                                onclick="changeMember('workers', 1)"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TEAM LEADER -->
+
+                    <div class="member-box">
+
+                        <small>
+                            Team Leader
+                        </small>
+
+                        <div class="counter">
+
+                            <button
+                                type="button"
+                                onclick="changeMember('leader', -1)"
+                            >
+                                −
+                            </button>
+
+                            <input
+                                id="leader"
+                                type="number"
+                                value="1"
+                                min="0"
+                                max="1"
+                                oninput="updateMemberTotal()"
+                            >
+
+                            <button
+                                type="button"
+                                onclick="changeMember('leader', 1)"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SPECIALISTS -->
+
+                    <div class="member-box">
+
+                        <small>
+                            Specialists
+                        </small>
+
+                        <div class="counter">
+
+                            <button
+                                type="button"
+                                onclick="changeMember('specialists', -1)"
+                            >
+                                −
+                            </button>
+
+                            <input
+                                id="specialists"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="updateMemberTotal()"
+                            >
+
+                            <button
+                                type="button"
+                                onclick="changeMember('specialists', 1)"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="total-members">
+
+                    <span>
+                        TOTAL MEMBERS REQUIRED
+                    </span>
+
+                    <strong id="totalMembers">
+                        1
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOCATION
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+                    Work Location
+                </h2>
+
+                <p>
+                    Buildskil will find teams around this location.
+                </p>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="location-box">
+
+                    <div class="location-head">
+
+                        <div class="location-info">
+
+                            <div class="location-icon">
+                                📍
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Site Location
+                                </strong>
+
+                                <small>
+                                    Use GPS or enter coordinates.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="gps-btn"
+                            onclick="useLocation()"
+                        >
+                            Use My Location
+                        </button>
+
+                    </div>
+<!-- =====================================================
+     ADDRESS
+===================================================== -->
+
+<div class="address-section">
+
+    <div class="address-title">
+        <strong>Site Address</strong>
+
+        <small>
+            Select the location where the work will be performed.
+        </small>
+    </div>
+
+
+    <div class="form-grid">
+
+
+        <!-- STATE -->
+
+        <div class="form-group">
+
+            <label>
+                State
+                <span class="required">*</span>
+            </label>
+
+            <select
+                id="state"
+                onchange="handleStateChange()"
+            >
+
+                <option value="">
+                    Select State
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- DISTRICT -->
+
+        <div class="form-group">
+
+            <label>
+                District
+                <span class="required">*</span>
+            </label>
+
+            <select
+                id="district"
+                onchange="handleDistrictChange()"
+                disabled
+            >
+
+                <option value="">
+                    Select District
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- TOWN / VILLAGE -->
+
+        <div class="form-group">
+
+            <label>
+                Town / Village
+                <span class="required">*</span>
+            </label>
+
+            <select
+                id="townVillage"
+                disabled
+            >
+
+                <option value="">
+                    Select Town / Village
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="form-group full">
+
+            <label>
+                Address / Area / Street
+                <span class="required">*</span>
+            </label>
+
+            <textarea
+                id="address"
+                rows="2"
+                placeholder="House / Plot No., Street, Area, Landmark..."
+            ></textarea>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+                    <div class="coordinates">
+
+                        <div class="form-group">
+
+                            <label>
+                                Latitude
+                            </label>
+
+                            <input
+                                id="latitude"
+                                type="number"
+                                step="any"
+                                placeholder="28.6139"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Longitude
+                            </label>
+
+                            <input
+                                id="longitude"
+                                type="number"
+                                step="any"
+                                placeholder="77.2090"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Altitude
+                            </label>
+
+                            <input
+                                id="altitude"
+                                type="number"
+                                step="any"
+                                placeholder="216"
+                            >
+
+                            <span class="helper">
+                                metres
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="radius-section">
+
+                        <div class="radius-line">
+
+                            <label>
+                                TEAM SEARCH RADIUS
+                            </label>
+
+                            <span
+                                id="radiusValue"
+                                class="radius-number"
+                            >
+                                10 km
+                            </span>
+
+                        </div>
+
+
+                        <input
+                            id="radius"
+                            type="range"
+                            min="1"
+                            max="100"
+                            value="10"
+                            oninput="updateRadius()"
+                        >
+
+                    </div>
+
+
+                    <div class="map">
+
+                        <div class="map-radius"></div>
+
+                        <div class="map-point"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SCHEDULE
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+                    Work Schedule
+                </h2>
+
+                <p>
+                    Tell the team when you need them.
+                </p>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Expected Start Date
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="startDate"
+                            type="date"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Expected Duration
+                        </label>
+
+                        <select id="duration">
+
+                            <option>
+                                1 Day
+                            </option>
+
+                            <option>
+                                2–7 Days
+                            </option>
+
+                            <option>
+                                1–4 Weeks
+                            </option>
+
+                            <option>
+                                1–3 Months
+                            </option>
+
+                            <option>
+                                3+ Months
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Additional Requirements
+                        </label>
+
+                        <textarea
+                            id="additional"
+                            placeholder="Accommodation, transport, tools, experience, working hours..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CREATE BUTTON
+        ================================================== -->
+
+        <div class="form-footer">
+
+            <div class="footer-note">
+
+                <strong>
+                    Buildskil Team Matching
+                </strong>
+
+                <br>
+
+                Your requirement will be shown to suitable
+                teams within your selected radius.
+
+            </div>
+
+
+            <button
+                type="button"
+                class="primary-btn"
+                onclick="createTeamRequirement()"
+            >
+                Create Team Requirement
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CREATED REQUESTS
+    ====================================================== -->
+
+    <div
+        id="createdRequirements"
+        class="created-requirements"
+    ></div>
+
+
+</div>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+<script  src="../workjs/indlocation.js"></script>
+<script src="../workjs/team-requirement.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+ loadStates();
+        updateMemberTotal();
+
+        updateRadius();
+
+        renderCreatedRequirements();
+
+    }
+);
+
+
+/* =========================================================
+   TOGGLE CREATE FORM
+========================================================= */
+
+function toggleRequirementForm() {
+
+    const form =
+        document.getElementById(
+            "requirementForm"
+        );
+
+    const button =
+        document.getElementById(
+            "toggleFormBtn"
+        );
+
+
+    const hidden =
+        form.style.display === "none";
+
+
+    if (hidden) {
+
+        form.style.display = "block";
+
+        button.innerHTML =
+            "− Hide Form";
+
+    } else {
+
+        form.style.display = "none";
+
+        button.innerHTML =
+            "+ Add Requirement";
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE REQUIREMENT
+========================================================= */
+
+/*
+   We wrap the original create function so that after
+   successful creation we stay on this page.
+*/
+
+const originalCreateTeamRequirement =
+    window.createTeamRequirement;
+
+
+window.createTeamRequirement =
+    function () {
+
+        const before =
+            getRequirements().length;
+
+
+        originalCreateTeamRequirement();
+
+
+        setTimeout(
+            function () {
+
+                const after =
+                    getRequirements().length;
+
+
+                if (after > before) {
+
+                    resetRequirementForm();
+
+                    renderCreatedRequirements();
+
+                    const form =
+                        document.getElementById(
+                            "requirementForm"
+                        );
+
+                    const button =
+                        document.getElementById(
+                            "toggleFormBtn"
+                        );
+
+                    form.style.display =
+                        "none";
+
+                    button.innerHTML =
+                        "+ Add Requirement";
+
+
+                    document
+                        .getElementById(
+                            "createdRequirements"
+                        )
+                        .scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+                }
+
+            },
+            100
+        );
+
+    };
+
+
+/* =========================================================
+   RESET FORM
+========================================================= */
+
+function resetRequirementForm() {
+
+    const ids = [
+
+        "workName",
+        "description",
+        "latitude",
+        "longitude",
+        "altitude",
+        "additional",
+        "startDate",
+        "state",
+        "district",
+        "townVillage",
+        "address"
+
+    ];
+
+
+    ids.forEach(
+        id => {
+
+            const element =
+                document.getElementById(id);
+
+            if (element) {
+
+                element.value = "";
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "workType"
+    ).value = "";
+
+
+    document.getElementById(
+        "duration"
+    ).selectedIndex = 0;
+
+
+    document.getElementById(
+        "technicians"
+    ).value = 0;
+
+
+    document.getElementById(
+        "workers"
+    ).value = 0;
+
+
+    document.getElementById(
+        "leader"
+    ).value = 1;
+
+
+    document.getElementById(
+        "specialists"
+    ).value = 0;
+
+
+    document.getElementById(
+        "radius"
+    ).value = 10;
+
+const state =
+    document.getElementById("state");
+
+const district =
+    document.getElementById("district");
+
+const townVillage =
+    document.getElementById("townVillage");
+
+const address =
+    document.getElementById("address");
+
+if (state) {
+    state.value = "";
+}
+
+if (district) {
+
+    district.innerHTML =
+        `<option value="">Select District</option>`;
+
+    district.disabled = true;
+
+}
+
+if (townVillage) {
+
+    townVillage.innerHTML =
+        `<option value="">Select Town / Village</option>`;
+
+    townVillage.disabled = true;
+
+}
+
+if (address) {
+    address.value = "";
+}
+    updateMemberTotal();
+
+    updateRadius();
+
+}
+
+
+/* =========================================================
+   RENDER CREATED REQUIREMENTS
+========================================================= */
+
+function renderCreatedRequirements() {
+
+    const container =
+        document.getElementById(
+            "createdRequirements"
+        );
+
+
+    const requirements =
+        getRequirements();
+
+
+    if (!requirements.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-requirements">
+
+                <div class="empty-icon">
+                    👥
+                </div>
+
+                <strong>
+                    No team requirement yet
+                </strong>
+
+                <p>
+                    Add your first requirement and
+                    Buildskil will help you find a team.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="created-header">
+
+            <div>
+
+                <h2>
+                    Your Requirements
+                </h2>
+
+                <p>
+                    ${requirements.length}
+                    requirement${requirements.length > 1 ? "s" : ""}
+                    created
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="request-list">
+
+            ${
+                requirements.map(
+                    requirement =>
+                        renderRequirementCard(
+                            requirement
+                        )
+                ).join("")
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   REQUIREMENT CARD
+========================================================= */
+
+function renderRequirementCard(
+    requirement
+) {
+
+    let statusClass =
+        "open";
+
+    let statusText =
+        "Looking for Team";
+
+
+    if (
+        requirement.status ===
+        "ACCEPTED"
+    ) {
+
+        statusClass =
+            "accepted";
+
+        statusText =
+            "Team Accepted";
+
+    }
+
+
+    if (
+        requirement.status ===
+        "READY"
+    ) {
+
+        statusClass =
+            "ready";
+
+        statusText =
+            "Team Ready";
+
+    }
+
+
+    const location =
+        requirement.location || {};
+
+
+    return `
+
+        <div class="request-card">
+
+            <div class="request-top">
+
+                <div>
+
+                    <div class="request-title">
+
+                        ${escapeRequirementHtml(
+                            requirement.work.name
+                        )}
+
+                    </div>
+
+                    <div class="request-type">
+
+                        ${escapeRequirementHtml(
+                            requirement.work.type
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="status ${statusClass}">
+
+                    ${statusText}
+
+                </div>
+
+            </div>
+
+
+            <div class="request-stats">
+
+                <div class="stat">
+
+                    👥
+                    ${requirement.requiredMembers.total}
+                    Members
+
+                </div>
+
+
+                <div class="stat">
+
+                    🛠
+                    ${requirement.requiredMembers.technicians}
+                    Technicians
+
+                </div>
+
+
+                <div class="stat">
+
+                    👷
+                    ${requirement.requiredMembers.workers}
+                    Workers
+
+                </div>
+
+
+                <div class="stat">
+
+                    👤
+                    ${requirement.requiredMembers.teamLeader}
+                    Leader
+
+                </div>
+
+
+                <div class="stat">
+
+                    📍
+                    ${location.radiusKm || 10}
+                    km
+
+                </div>
+
+            </div>
+
+
+            <div class="request-description">
+
+                ${escapeRequirementHtml(
+                    requirement.work.description
+                )}
+
+            </div>
+
+
+            <!-- WORK LOCATION -->
+
+            <div class="request-location">
+
+                <div class="request-location-title">
+
+                    📍 Work Location
+
+                </div>
+
+
+                <div class="request-location-place">
+
+                    <strong>
+
+                        ${escapeRequirementHtml(
+                            location.townVillage ||
+                            "-"
+                        )}
+
+                    </strong>
+
+
+                    <span>
+
+                        ${escapeRequirementHtml(
+                            location.district ||
+                            "-"
+                        )}
+
+                        ,
+
+                        ${escapeRequirementHtml(
+                            location.state ||
+                            "-"
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <div class="request-address">
+
+                    🏠
+
+                    <span>
+
+                        ${escapeRequirementHtml(
+                            location.address ||
+                            "Address not provided"
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <div class="request-coordinates">
+
+                    <span>
+
+                        Lat:
+                        ${location.latitude ?? "-"}
+
+                    </span>
+
+
+                    <span>
+
+                        Lng:
+                        ${location.longitude ?? "-"}
+
+                    </span>
+
+
+                    ${
+                        location.altitude !== null &&
+                        location.altitude !== undefined &&
+                        location.altitude !== ""
+
+                        ? `
+
+                            <span>
+
+                                Alt:
+                                ${location.altitude} m
+
+                            </span>
+
+                        `
+
+                        : ""
+
+                    }
+
+                </div>
+
+            </div>
+
+
+            ${
+                requirement.status ===
+                "ACCEPTED"
+
+                ? `
+
+                    <div class="team-accepted-box">
+
+                        <strong>
+                            ✓ Team accepted your requirement
+                        </strong>
+
+                        <span>
+                            ${
+                                escapeRequirementHtml(
+                                    requirement.acceptedTeam?.name ||
+                                    "Buildskil Team"
+                                )
+                            }
+                        </span>
+
+                    </div>
+
+                `
+
+                : ""
+
+            }
+
+
+            ${
+                requirement.status ===
+                "READY"
+
+                ? `
+
+                    <div class="team-ready-box">
+
+                        <strong>
+                            ✓ Team Ready
+                        </strong>
+
+                        <span>
+                            Your team is ready to reach
+                            your work location.
+                        </span>
+
+                    </div>
+
+                `
+
+                : ""
+
+            }
+
+
+            <div class="request-bottom">
+
+                <div class="request-date">
+
+                    Start:
+                    ${formatDate(
+                        requirement.schedule.startDate
+                    )}
+
+                    <br>
+
+                    Created:
+                    ${formatDate(
+                        requirement.createdAt
+                    )}
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="
+                        showRequirementDetails(
+                            '${requirement.id}'
+                        )
+                    "
+                >
+                    View Details →
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+function showRequirementDetails(id) {
+
+    const requirement =
+        getRequirement(id);
+
+
+    if (!requirement) {
+
+        showToast(
+            "Requirement not found."
+        );
+
+        return;
+
+    }
+
+
+    const members =
+        requirement.requiredMembers;
+
+
+    showToast(
+        `${members.total} members required • ${requirement.status}`
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeRequirementHtml(
+    value
+) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+</script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

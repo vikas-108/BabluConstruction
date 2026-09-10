@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Buildskil - Team Details</title>
+
+<link
+    rel="stylesheet"
+    href="../workcss/team-requirement.css"
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="page-header">
+
+        <div class="header-left">
+
+            <button
+                class="back-btn"
+                onclick="goBack()"
+            >
+                ←
+            </button>
+
+            <div class="brand-mark">
+                B
+            </div>
+
+            <div class="page-title">
+
+                <h1>Team Details</h1>
+
+                <p>
+                    Your Buildskil team assignment.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="teamContent"></div>
+
+</div>
+
+
+<script src="../workjs/team-requirement.js"></script>
+
+<script>
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const requirementId =
+    params.get("id");
+
+
+function renderTeam() {
+
+    const container =
+        document.getElementById(
+            "teamContent"
+        );
+
+    const requirement =
+        getRequirement(requirementId);
+
+    if (!requirement) {
+
+        container.innerHTML = `
+
+            <div class="card">
+
+                <div class="card-body">
+                    Requirement not found.
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const isReady =
+        requirement.status === "READY";
+
+
+    const assignments =
+        requirement.assignments || [];
+
+
+    const technicians =
+        assignments.filter(
+            x => x.role === "technician"
+        );
+
+    const workers =
+        assignments.filter(
+            x => x.role === "worker"
+        );
+
+    const leader =
+        assignments.filter(
+            x => x.role === "leader"
+        );
+
+    const specialists =
+        assignments.filter(
+            x => x.role === "specialist"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="team-banner">
+
+            <div class="team-banner-top">
+
+                <div class="check-circle">
+                    ✓
+                </div>
+
+                <div>
+
+                    <h2>
+                        ${
+                            isReady
+                                ? "Team Ready to Reach You"
+                                : "Team Accepted"
+                        }
+                    </h2>
+
+                    <p>
+                        ${
+                            isReady
+                                ? "Your complete team has been assigned."
+                                : "The team has accepted your work and is preparing."
+                        }
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+                    ${escapeHtml(
+                        requirement.work.name
+                    )}
+                </h2>
+
+                <p>
+                    ${escapeHtml(
+                        requirement.work.type
+                    )}
+                </p>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="team-profile">
+
+                    <div class="team-avatar">
+                        B
+                    </div>
+
+                    <div class="team-name">
+
+                        <h3>
+                            ${
+                                escapeHtml(
+                                    requirement.acceptedTeam?.name ||
+                                    "Buildskil Team"
+                                )
+                            }
+                        </h3>
+
+                        <p>
+                            Team Leader:
+                            ${
+                                escapeHtml(
+                                    requirement.acceptedTeam?.leader ||
+                                    "Assigned Team Leader"
+                                )
+                            }
+                        </p>
+
+                    </div>
+
+                    <div class="verified">
+                        ✓ BUILDSKIL VERIFIED
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+                    Assigned Team
+                </h2>
+
+                <p>
+                    ${
+                        assignments.length
+                    }
+                    /
+                    ${
+                        requirement.requiredMembers.total
+                    }
+                    members assigned
+                </p>
+
+            </div>
+
+            <div class="card-body">
+
+                ${renderMemberSection(
+                    "Team Leader",
+                    leader
+                )}
+
+                ${renderMemberSection(
+                    "Technicians",
+                    technicians
+                )}
+
+                ${renderMemberSection(
+                    "Workers",
+                    workers
+                )}
+
+                ${renderMemberSection(
+                    "Specialists",
+                    specialists
+                )}
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+                    Work Location
+                </h2>
+
+            </div>
+
+            <div class="card-body">
+
+                <div style="
+                    background:#f6f7f9;
+                    border-radius:11px;
+                    padding:15px;
+                    font-size:11px;
+                    line-height:1.7;
+                ">
+
+                    📍 Latitude:
+                    <strong>
+                        ${requirement.location.latitude}
+                    </strong>
+
+                    <br>
+
+                    📍 Longitude:
+                    <strong>
+                        ${requirement.location.longitude}
+                    </strong>
+
+                    <br>
+
+                    ⭕ Team Radius:
+                    <strong>
+                        ${requirement.location.radiusKm} km
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        ${
+            isReady
+
+            ? `
+
+            <div class="form-footer">
+
+                <div class="footer-note">
+
+                    <strong>
+                        ✓ Team Ready
+                    </strong>
+
+                    <br>
+
+                    Your Buildskil team is ready to reach
+                    your work location.
+
+                </div>
+
+                <button
+                    class="primary-btn"
+                    onclick="showToast('Team tracking will be available here.')"
+                >
+                    Team Status
+                </button>
+
+            </div>
+
+            `
+
+            : `
+
+            <div class="form-footer">
+
+                <div class="footer-note">
+
+                    <strong>
+                        Team assignment in progress
+                    </strong>
+
+                    <br>
+
+                    The team is selecting members according
+                    to your requirement.
+
+                </div>
+
+            </div>
+
+            `
+        }
+
+    `;
+
+}
+
+
+function renderMemberSection(
+    title,
+    members
+) {
+
+    if (!members.length) {
+
+        return "";
+
+    }
+
+    return `
+
+        <div style="
+            margin-bottom:18px;
+        ">
+
+            <div style="
+                font-size:11px;
+                font-weight:800;
+                margin-bottom:9px;
+            ">
+                ${title}
+            </div>
+
+            <div class="member-list">
+
+                ${
+                    members.map(
+                        member => `
+
+                        <div class="member-row">
+
+                            <div class="member-avatar">
+                                ${member.memberName
+                                    .split(" ")
+                                    .map(
+                                        x => x[0]
+                                    )
+                                    .join("")
+                                    .substring(0,2)
+                                    .toUpperCase()
+                                }
+                            </div>
+
+                            <div class="member-info">
+
+                                <strong>
+                                    ${escapeHtml(
+                                        member.memberName
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ${
+                                        member.role === "leader"
+                                            ? "Team Leader"
+                                            : member.role === "technician"
+                                                ? "Technician"
+                                                : member.role === "worker"
+                                                    ? "Worker"
+                                                    : "Specialist"
+                                    }
+                                </span>
+
+                            </div>
+
+                            <button
+                                class="call-btn"
+                                onclick="showToast('Calling member...')"
+                            >
+                                ☎
+                            </button>
+
+                        </div>
+
+                        `
+                    ).join("")
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+renderTeam();
+
+</script>
+
+</body>
+</html>

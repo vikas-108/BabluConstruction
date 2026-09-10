@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Angle Gauge</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/analog.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M4 18a10 10 0 0116 0"/><path d="M12 18L17 9"/></svg></div>
+      <div class="header-titles">
+        <h1>Digital Angle Gauge</h1>
+        <div class="sub">Measure or match any angle</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <div class="permission" id="permBox">
+    This gauge reads your phone's tilt sensor. Tap below once to allow it.
+    <button id="permBtn">Enable Sensor</button>
+  </div>
+
+  <section class="block">
+    <div class="block-title">Which way is the phone resting?</div>
+    <div class="card">
+      <div class="axis-tabs">
+        <div class="axis-tab active" data-axis="beta">Flat on surface</div>
+        <div class="axis-tab" data-axis="gamma">Standing upright</div>
+      </div>
+
+      <div class="gauge-wrap">
+        <svg class="gauge-arc" viewBox="0 0 240 130">
+          <path d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke="#2b3136" stroke-width="10"/>
+          <path id="gaugeFill" d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke="#f2c230" stroke-width="10" stroke-dasharray="0 400"/>
+          <line id="needle" x1="120" y1="120" x2="120" y2="30" stroke="#eceef0" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="120" cy="120" r="7" fill="#eceef0"/>
+        </svg>
+        <div class="readout-big normal" id="readoutBig">0.0°</div>
+        <div class="readout-sub" id="readoutSub">Reading sensor…</div>
+
+        <div class="btn-row">
+          <button class="gbtn ghost" id="zeroBtn">Zero Here</button>
+          <button class="gbtn ghost hold" id="holdBtn">Hold</button>
+          <button class="gbtn primary" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="mode-note" id="modeNote">
+          "Zero Here" sets the current angle as 0° — lay it against one face of a joint, zero it, then place it against the other face. The reading is how far off square you are.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">Works like a standard digital angle gauge — good for bevel setups, squareness checks, and copying an existing angle. Accuracy is limited by your phone's own sensor, typically ±0.3–0.5°.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/analog.min.js">
+</script>
+</body>
+</html>

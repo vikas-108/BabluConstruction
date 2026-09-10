@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sun Direction Finder</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/dirction.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2 2M17.8 17.8l2 2M2 12h3M19 12h3M4.2 19.8l2-2M17.8 6.2l2-2"/></svg></div>
+      <div class="header-titles">
+        <h1>Sun Direction Finder</h1>
+        <div class="sub">Where the sun sits relative to your site</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Location</div>
+    <div class="card">
+      <div class="loc-row">
+        <div class="loc-info">
+          <div class="loc-coords" id="locCoords">Getting location…</div>
+          <div class="loc-note" id="locNote">Used only on this device to work out sun position.</div>
+        </div>
+        <button class="loc-btn" id="refreshLocBtn">Refresh</button>
+      </div>
+      <span class="manual-toggle" id="manualToggle">Enter coordinates manually</span>
+      <div class="manual-row" id="manualRow">
+        <input type="number" id="manualLat" placeholder="Latitude" step="0.0001">
+        <input type="number" id="manualLng" placeholder="Longitude" step="0.0001">
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Date &amp; Time</div>
+    <div class="card">
+      <div class="dt-tabs">
+        <div class="dt-tab active" data-dt="now">Now</div>
+        <div class="dt-tab" data-dt="custom">Pick date &amp; time</div>
+      </div>
+      <div class="dt-now-readout" id="nowReadout">—</div>
+      <div class="dt-custom" id="dtCustom">
+        <input type="datetime-local" id="customDT">
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Plan View (looking down)</div>
+    <div class="card compass-wrap">
+      <div class="compass-dial" id="compassDial">
+        <svg viewBox="0 0 250 250">
+          <circle cx="125" cy="125" r="112" fill="none" stroke="#2b3136" stroke-width="2"/>
+          <circle cx="125" cy="125" r="80" fill="none" stroke="#2b3136" stroke-width="1"/>
+          <g id="tickGroup" stroke="#3a4147" stroke-width="2"></g>
+          <g id="labelGroup" fill="#8b9298" font-family="Oswald, sans-serif" font-weight="700" font-size="13"></g>
+          <line id="sunLine" x1="125" y1="125" x2="125" y2="125" stroke="#f2c230" stroke-width="2" stroke-dasharray="4 3"/>
+          <polygon id="headingMarker" points="125,20 119,32 131,32" fill="#5aa9ff" style="display:none;"/>
+        </svg>
+        <div class="house-icon">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h12v-9"/></svg>
+        </div>
+        <div class="sun-marker" id="sunMarker">☀</div>
+      </div>
+      <div class="compass-toggle">
+        <div class="switch" id="compassSwitch"></div>
+        <span id="compassLabel">Use device compass (align dial to true north)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Elevation View</div>
+    <div class="card elev-card">
+      <div class="elev-label">Sun</div>
+      <div class="elev-track" id="elevTrack">
+        <div class="horizon-line" id="horizonLine"></div>
+        <div class="elev-arrow" id="elevArrow"></div>
+        <div class="elev-sun" id="elevSun">☀</div>
+        <div class="elev-house">HOUSE</div>
+      </div>
+
+      <div class="readouts">
+        <div class="readout"><div class="k">Azimuth</div><div class="v" id="azimuthVal">—</div></div>
+        <div class="readout"><div class="k">Altitude</div><div class="v" id="altitudeVal">—</div></div>
+      </div>
+      <div class="sun-times">
+        <div>Sunrise <b id="sunriseVal">—</b></div>
+        <div>Sunset <b id="sunsetVal">—</b></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">
+    Sun position uses a standard simplified solar formula (~0.5° accuracy) —<br>
+    fine for site orientation, not survey-grade shadow engineering.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/direction.min.js">
+</script>
+</body>
+</html>

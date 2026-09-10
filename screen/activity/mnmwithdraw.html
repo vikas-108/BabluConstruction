@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet — Finybu</title>
+<style>
+  /*
+    Same system-font approach as the How to Use screen — no
+    third-party network calls. Hindi renders via the browser's
+    own Devanagari system font automatically.
+  */
+  :root{
+    --blue:#3D6FE0;
+    --blue-hover:#3260CB;
+    --blue-dark:#1F3A66;
+    --blue-tint:#EAF1FF;
+    --bg:#F6F9FE;
+    --card:#FFFFFF;
+    --text:#1F2A44;
+    --muted:#6B7A99;
+    --border:#E4EAF5;
+
+    --mint-bg:#DFF5EA; --mint-fg:#1C8C63;
+    --peach-bg:#FFE9DD; --peach-fg:#D97A3F;
+    --lav-bg:#EAE3FB;  --lav-fg:#6B4FC9;
+    --sky-bg:#DCE9FF;  --sky-fg:#2F5FD1;
+    --amber-bg:#FFF3D6; --amber-fg:#B4790C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    color:var(--text);
+    min-height:100vh;
+  }
+
+  .page-wrap{ max-width:640px; margin:0 auto; padding:20px 20px 60px; }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:22px;
+  }
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--border);
+    color:var(--blue-dark); font-size:13.5px; font-weight:500;
+    padding:8px 15px 8px 12px; border-radius:999px; cursor:pointer;
+    font-family:inherit;
+  }
+  .back-btn:hover{ border-color:var(--blue); }
+  .back-btn svg{ width:16px; height:16px; }
+  .lang-toggle{
+    display:inline-flex; background:var(--card); border:1px solid var(--border);
+    border-radius:999px; padding:3px;
+  }
+  .lang-btn{
+    border:none; background:transparent; font-size:12.5px; font-weight:600;
+    padding:6px 13px; border-radius:999px; cursor:pointer; color:var(--muted);
+    font-family:inherit;
+  }
+  .lang-btn.active{ background:var(--blue); color:#fff; }
+
+  h1.page-title{
+    font-weight:700; font-size:26px; color:var(--blue-dark);
+    margin:0 0 4px; letter-spacing:-0.01em;
+  }
+  p.page-sub{ font-size:14.5px; color:var(--muted); margin:0 0 22px; }
+
+  /* Balance card */
+  .balance-card{
+    background:linear-gradient(135deg, var(--blue) 0%, #2A4FB0 100%);
+    border-radius:20px;
+    padding:26px 24px;
+    color:#fff;
+    box-shadow:0 16px 34px rgba(31,58,102,0.25);
+    margin-bottom:14px;
+  }
+  .balance-label{ font-size:13px; opacity:0.85; margin-bottom:6px; }
+  .balance-amount{ font-weight:700; font-size:38px; letter-spacing:-0.02em; margin-bottom:2px; }
+  .balance-sub{ font-size:12.5px; opacity:0.8; margin-bottom:20px; }
+  .balance-sub.updating{ opacity:0.65; }
+  .withdraw-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:#fff; color:var(--blue-dark);
+    border:none; font-size:14.5px; font-weight:700;
+    padding:12px 22px; border-radius:12px; cursor:pointer;
+    font-family:inherit;
+  }
+  .withdraw-btn:hover{ background:#F1F5FF; }
+  .withdraw-btn svg{ width:17px; height:17px; }
+  .min-note{ font-size:12px; opacity:0.85; margin-top:10px; }
+
+  /* Demo controls */
+  .demo-box{
+    border:1.5px dashed #C7D3EE;
+    background:#FBFCFF;
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:28px;
+  }
+  .demo-title{
+    font-size:11.5px; font-weight:700; color:var(--muted);
+    text-transform:uppercase; letter-spacing:0.05em; margin-bottom:9px;
+  }
+  .demo-buttons{ display:flex; gap:8px; flex-wrap:wrap; }
+  .demo-btn{
+    font-size:12.5px; font-weight:600; padding:7px 13px;
+    border-radius:999px; border:1px solid var(--border);
+    background:#fff; color:var(--text); cursor:pointer; font-family:inherit;
+  }
+  .demo-btn.active{ background:var(--blue-tint); border-color:var(--blue); color:var(--blue-dark); }
+
+  /* Section cards */
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px 22px 24px;
+    margin-bottom:16px;
+    box-shadow:0 10px 24px rgba(31,58,102,0.06);
+  }
+  .card-head{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .card-icon{
+    width:38px; height:38px; min-width:38px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card-icon svg{ width:19px; height:19px; }
+  .card-head h3{ font-weight:700; font-size:16.5px; color:var(--blue-dark); margin:0; }
+
+  .steps{ list-style:none; padding:0; margin:0; display:grid; gap:11px; }
+  .steps li{ display:flex; gap:11px; align-items:flex-start; font-size:14px; line-height:1.6; }
+  .steps li .dot{
+    width:18px; height:18px; min-width:18px; border-radius:50%;
+    background:var(--blue-tint); display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .steps li .dot svg{ width:11px; height:11px; stroke:var(--blue); }
+
+  .earn-body{ font-size:14px; line-height:1.7; color:var(--text); margin:0 0 12px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--amber-bg); color:var(--amber-fg);
+    font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:999px;
+    margin-bottom:8px;
+  }
+  .badge-note{ font-size:12.5px; color:var(--muted); margin:0; }
+
+  .activity-list{ display:grid; gap:2px; }
+  .activity-row{
+    display:flex; align-items:center; gap:12px;
+    padding:11px 0; border-bottom:1px solid var(--border);
+  }
+  .activity-row:last-child{ border-bottom:none; }
+  .act-icon{
+    width:34px; height:34px; min-width:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .act-icon svg{ width:16px; height:16px; }
+  .act-title{ font-size:13.5px; font-weight:600; color:var(--text); }
+  .act-date{ font-size:12px; color:var(--muted); }
+  .act-amount{ margin-left:auto; font-size:14px; font-weight:700; white-space:nowrap; }
+  .act-amount.credit{ color:var(--mint-fg); }
+  .act-amount.debit{ color:var(--sky-fg); }
+
+  /* Modal */
+  .overlay{
+    position:fixed; inset:0; background:rgba(20,30,50,0.45);
+    display:none; align-items:center; justify-content:center; padding:20px; z-index:50;
+  }
+  .overlay.show{ display:flex; }
+  .modal{
+    background:#fff; border-radius:20px; padding:26px 24px 24px;
+    max-width:360px; width:100%; text-align:center;
+    box-shadow:0 24px 50px rgba(20,30,50,0.3);
+  }
+  .modal-icon{
+    width:52px; height:52px; border-radius:50%; margin:0 auto 14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-icon svg{ width:26px; height:26px; }
+  .modal h3{ font-weight:700; font-size:18px; color:var(--blue-dark); margin:0 0 8px; }
+  .modal p{ font-size:14px; color:var(--muted); line-height:1.6; margin:0 0 20px; }
+  .modal-ok{
+    background:var(--blue); color:#fff; border:none; font-weight:700; font-size:14px;
+    padding:11px 0; width:100%; border-radius:12px; cursor:pointer; font-family:inherit;
+  }
+  .modal-ok:hover{ background:var(--blue-hover); }
+
+  /* Payout details modal */
+  .details-modal{ max-width:400px; text-align:left; position:relative; }
+  .modal-close{
+    position:absolute; top:16px; right:16px;
+    width:28px; height:28px; border-radius:50%;
+    background:var(--bg); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--muted);
+  }
+  .modal-close svg{ width:15px; height:15px; }
+  .details-title{ font-weight:700; font-size:17px; color:var(--blue-dark); margin:0 0 16px; text-align:center; }
+  .method-tabs{
+    display:flex; background:var(--bg); border:1px solid var(--border);
+    border-radius:999px; padding:3px; margin-bottom:18px;
+  }
+  .method-tab{
+    flex:1; border:none; background:transparent; font-size:13px; font-weight:600;
+    padding:8px 0; border-radius:999px; cursor:pointer; color:var(--muted); font-family:inherit;
+  }
+  .method-tab.active{ background:var(--blue); color:#fff; }
+  .method-panel{ display:none; }
+  .method-panel.active{ display:block; }
+  .form-group{ margin-bottom:14px; }
+  .form-group label{
+    display:block; font-size:12.5px; font-weight:600; color:var(--text); margin-bottom:6px;
+  }
+  .form-group input{
+    width:100%; padding:11px 13px; border:1px solid var(--border); border-radius:10px;
+    font-size:14px; color:var(--text); font-family:inherit; background:#fff;
+  }
+  .form-group input:focus{ outline:none; border-color:var(--blue); }
+  .demo-form-note{
+    font-size:11.5px; color:var(--muted); text-align:center; margin:2px 0 16px;
+  }
+  .submit-btn{
+    background:var(--blue); color:#fff; border:none; font-weight:700; font-size:14px;
+    padding:12px 0; width:100%; border-radius:12px; cursor:pointer; font-family:inherit;
+  }
+  .submit-btn:disabled{ background:#C7D3EE; cursor:not-allowed; }
+  .submit-btn:not(:disabled):hover{ background:var(--blue-hover); }
+
+  @media (max-width:480px){
+    .balance-amount{ font-size:32px; }
+    .card{ padding:18px 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <div class="topbar">
+    <button class="back-btn" id="backBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span id="backLabel">Back</span>
+    </button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="langEnBtn" type="button">EN</button>
+      <button class="lang-btn" id="langHiBtn" type="button">हिंदी</button>
+    </div>
+  </div>
+
+  <h1 class="page-title" id="pageTitle">Wallet</h1>
+  <p class="page-sub" id="pageSub">See what you've earned and withdraw it any time.</p>
+
+  <div class="balance-card">
+    <div class="balance-label" id="balanceLabel">Available balance</div>
+    <div class="balance-amount" id="balanceAmount">₹2,450</div>
+    <div class="balance-sub" id="balanceSub">Ready to withdraw</div>
+    <button class="withdraw-btn" id="withdrawBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      <span id="withdrawLabel">Withdraw</span>
+    </button>
+    <div class="min-note" id="minNote">Minimum withdrawal: ₹1,000</div>
+  </div>
+
+  <div class="demo-box">
+    <div class="demo-title" id="demoTitle">Demo controls (for testing)</div>
+    <div class="demo-buttons">
+      <button class="demo-btn active" id="demoHighBtn" type="button">₹2,450</button>
+      <button class="demo-btn" id="demoLowBtn" type="button">₹450</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon" style="background:var(--sky-bg);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--sky-fg)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M4 6h16v12H4z"/><path d="M8 14h4"/></svg>
+      </div>
+      <h3 id="guideTitle">How to withdraw</h3>
+    </div>
+    <ul class="steps" id="guideSteps"></ul>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon" style="background:var(--lav-bg);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--lav-fg)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 15l4-3 3 2 5-4 4 3"/></svg>
+      </div>
+      <h3 id="earnTitle">How earnings reach your wallet</h3>
+    </div>
+    <p class="earn-body" id="earnBody">Earnings show up here automatically when you finish a job. Open the job, upload your work photos in Project Report, and tap Finish — the payment will appear in your wallet.</p>
+    <div class="badge" id="comingSoonBadge">
+      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span id="comingSoonText">Coming soon</span>
+    </div>
+    <p class="badge-note" id="comingSoonNote">Automatic sync from Project Report is being connected — for now, earnings are added manually.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon" style="background:var(--mint-bg);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--mint-fg)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+      </div>
+      <h3 id="activityTitle">Recent activity</h3>
+    </div>
+    <div class="activity-list" id="activityList"></div>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon"></div>
+    <h3 id="modalTitle"></h3>
+    <p id="modalBody"></p>
+    <button class="modal-ok" id="modalOkBtn"></button>
+  </div>
+</div>
+
+<div class="overlay" id="detailsOverlay">
+  <div class="modal details-modal">
+    <button class="modal-close" id="detailsCloseBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h3 class="details-title" id="detailsTitle">Choose how to receive money</h3>
+
+    <div class="method-tabs">
+      <button class="method-tab active" id="upiTabBtn" type="button">UPI</button>
+      <button class="method-tab" id="bankTabBtn" type="button">Bank Account</button>
+    </div>
+
+    <div class="method-panel active" id="upiPanel">
+      <div class="form-group">
+        <label id="upiLabel">UPI ID</label>
+        <input type="text" id="upiInput" placeholder="yourname@upi">
+      </div>
+    </div>
+
+    <div class="method-panel" id="bankPanel">
+      <div class="form-group">
+        <label id="holderLabel">Account holder name</label>
+        <input type="text" id="holderInput" placeholder="As per bank records">
+      </div>
+      <div class="form-group">
+        <label id="acctLabel">Account number</label>
+        <input type="text" inputmode="numeric" id="acctInput" placeholder="Enter account number">
+      </div>
+      <div class="form-group">
+        <label id="ifscLabel">IFSC code</label>
+        <input type="text" id="ifscInput" placeholder="e.g. HDFC0001234" style="text-transform:uppercase;">
+      </div>
+    </div>
+
+    <p class="demo-form-note" id="demoFormNote">This is a demo — no real money moves.</p>
+    <button class="submit-btn" id="submitDetailsBtn" disabled>Withdraw</button>
+  </div>
+</div>
+
+<script>
+const backLabels = { en:'Back', hi:'वापस' };
+
+const T = {
+  pageTitle:   { en:'Wallet', hi:'वॉलेट' },
+  pageSub:     { en:'See what you\'ve earned and withdraw it any time.', hi:'देखें कि आपने कितना कमाया है और कभी भी निकालें।' },
+  balanceLabel:{ en:'Available balance', hi:'उपलब्ध बैलेंस' },
+  balanceSub:  { en:'Ready to withdraw', hi:'निकालने के लिए तैयार' },
+  balanceUpdating:{ en:'Updating…', hi:'अपडेट हो रहा है…' },
+  withdrawLabel:{ en:'Withdraw', hi:'निकालें' },
+  minNote:     { en:'Minimum withdrawal: ₹1,000', hi:'न्यूनतम निकासी: ₹1,000' },
+  demoTitle:   { en:'Demo controls — overrides live balance (for testing)', hi:'डेमो कंट्रोल — असली बैलेंस को बदल देता है (टेस्ट के लिए)' },
+  guideTitle:  { en:'How to withdraw', hi:'पैसे कैसे निकालें' },
+  earnTitle:   { en:'How earnings reach your wallet', hi:'आपकी कमाई वॉलेट में कैसे आती है' },
+  earnBody:    { en:'Earnings show up here automatically when you finish a job. Open the job, upload your work photos in Project Report, and tap Finish — the payment will appear in your wallet.',
+                 hi:'जब आप कोई काम पूरा करते हैं, तो कमाई अपने आप यहां दिखने लगती है। काम खोलें, प्रोजेक्ट रिपोर्ट में अपने काम की फोटो अपलोड करें, और Finish पर टैप करें — भुगतान आपके वॉलेट में दिख जाएगा।' },
+  comingSoonText:{ en:'Coming soon', hi:'जल्द आ रहा है' },
+  comingSoonNote:{ en:'Automatic sync from Project Report is being connected — for now, earnings are added manually.',
+                   hi:'प्रोजेक्ट रिपोर्ट से अपने आप जुड़ने का काम चल रहा है — फिलहाल कमाई मैन्युअल रूप से जोड़ी जाती है।' },
+  activityTitle:{ en:'Recent activity', hi:'हाल की गतिविधि' },
+  modalOk:     { en:'Done', hi:'ठीक है' },
+  modalOkErr:  { en:'Got it', hi:'समझ गया' },
+  successTitle:{ en:'Withdrawal requested', hi:'निकासी का अनुरोध भेजा गया' },
+  errorTitle:  { en:'Can\'t withdraw yet', hi:'अभी निकासी नहीं हो सकती' },
+  detailsTitle:{ en:'Choose how to receive money', hi:'पैसे पाने का तरीका चुनें' },
+  upiTab:      { en:'UPI', hi:'यूपीआई' },
+  bankTab:     { en:'Bank Account', hi:'बैंक खाता' },
+  upiLabel:    { en:'UPI ID', hi:'यूपीआई आईडी' },
+  holderLabel: { en:'Account holder name', hi:'खाताधारक का नाम' },
+  acctLabel:   { en:'Account number', hi:'खाता संख्या' },
+  ifscLabel:   { en:'IFSC code', hi:'IFSC कोड' },
+  demoFormNote:{ en:'This is a demo — no real money moves.', hi:'यह एक डेमो है — असली पैसा नहीं जाता।' },
+  submitPrefix:{ en:'Withdraw', hi:'निकालें' },
+  upiPlaceholder:   { en:'yourname@upi', hi:'yourname@upi' },
+  holderPlaceholder:{ en:'As per bank records', hi:'बैंक रिकॉर्ड के अनुसार' },
+  acctPlaceholder:  { en:'Enter account number', hi:'खाता संख्या दर्ज करें' },
+  ifscPlaceholder:  { en:'e.g. HDFC0001234', hi:'जैसे HDFC0001234' }
+};
+
+const guideStepsData = [
+  { en:'Make sure your wallet balance is at least ₹1,000.', hi:'देखें कि आपके वॉलेट में कम से कम ₹1,000 हों।' },
+  { en:'Tap the Withdraw button above.', hi:'ऊपर दिए Withdraw बटन पर टैप करें।' },
+  { en:'Confirm the amount and your bank or UPI details.', hi:'राशि और अपनी बैंक या UPI जानकारी की पुष्टि करें।' },
+  { en:'Your money reaches your account within 24–48 hours.', hi:'आपका पैसा 24–48 घंटों में आपके खाते में पहुंच जाता है।' }
+];
+
+const activityData = [
+  { type:'credit', title:{en:'Job payment — Electrical repair', hi:'काम का भुगतान — इलेक्ट्रिकल मरम्मत'}, amount:'+₹850', date:{en:'2 days ago', hi:'2 दिन पहले'} },
+  { type:'debit',  title:{en:'Withdrawal to bank', hi:'बैंक में निकासी'}, amount:'-₹1,200', date:{en:'5 days ago', hi:'5 दिन पहले'} },
+  { type:'credit', title:{en:'Job payment — Plumbing fix', hi:'काम का भुगतान — प्लंबिंग ठीक करना'}, amount:'+₹600', date:{en:'6 days ago', hi:'6 दिन पहले'} }
+];
+
+const checkPath = '<polyline points="4 9 7 12 12 5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+const upArrow = '<path d="M12 19V5M6 11l6-6 6 6"/>';
+const downArrow = '<path d="M12 5v14M6 13l6 6 6-6"/>';
+const checkCircle = '<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>';
+const warnCircle = '<circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><circle cx="12" cy="16" r="0.7" fill="currentColor"/>';
+
+let lang = 'en';
+let demoBalance = 2450;
+const MIN_WITHDRAW = 1000;
+
+/* ============================================================
+   LIVE EARNINGS — connect this to your backend
+   ------------------------------------------------------------
+   Your work model has: earnings: Number
+   This fetches that value and uses it as the wallet balance.
+
+   1. Set EARNINGS_ENDPOINT to your real route.
+   2. Set getAuthToken() to however your app stores the token
+      after login (e.g. localStorage, a global app state, etc.)
+
+   Expected response JSON shape: { "earnings": 2450 }
+   ============================================================ */
+const EARNINGS_ENDPOINT = '/api/wallet/earnings'; // <-- replace with your real route
+
+function getAuthToken(){
+  // Replace this with wherever your app keeps the logged-in
+  // worker's token — e.g. localStorage.getItem('authToken'),
+  // a value passed in from your app shell, etc.
+  return localStorage.getItem('authToken') || '';
+}
+
+async function fetchEarnings(){
+  const subEl = document.getElementById('balanceSub');
+  subEl.textContent = T.balanceUpdating[lang];
+  subEl.classList.add('updating');
+  try {
+    const res = await fetch(EARNINGS_ENDPOINT, {
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`
+      }
+    });
+    if (!res.ok) throw new Error('Request failed: ' + res.status);
+    const data = await res.json();
+    if (typeof data.earnings === 'number'){
+      demoBalance = data.earnings;
+    } else {
+      throw new Error('Response did not include a numeric "earnings" field');
+    }
+  } catch (err) {
+    // No live backend connected yet (or the call failed) — keep showing
+    // the current demo balance so the screen still works standalone.
+    console.warn('Live earnings fetch failed, showing demo balance instead:', err);
+  } finally {
+    subEl.classList.remove('updating');
+    subEl.textContent = T.balanceSub[lang];
+    renderBalance();
+  }
+}
+
+function fmtRupee(n){ return '₹' + n.toLocaleString('en-IN'); }
+
+function renderStatic(){
+  document.getElementById('backLabel').textContent = backLabels[lang];
+  Object.keys(T).forEach(key => {
+    const map = {
+      pageTitle:'pageTitle', pageSub:'pageSub', balanceLabel:'balanceLabel',
+      balanceSub:'balanceSub', withdrawLabel:'withdrawLabel', minNote:'minNote',
+      demoTitle:'demoTitle', guideTitle:'guideTitle', earnTitle:'earnTitle',
+      earnBody:'earnBody', comingSoonText:'comingSoonText', comingSoonNote:'comingSoonNote',
+      activityTitle:'activityTitle'
+    };
+    if (map[key] && document.getElementById(map[key])) {
+      document.getElementById(map[key]).textContent = T[key][lang];
+    }
+  });
+  document.documentElement.lang = lang;
+}
+
+function renderBalance(){
+  document.getElementById('balanceAmount').textContent = fmtRupee(demoBalance);
+}
+
+function renderGuide(){
+  const el = document.getElementById('guideSteps');
+  el.innerHTML = guideStepsData.map(s => `<li><span class="dot"><svg viewBox="0 0 16 16">${checkPath}</svg></span>${s[lang]}</li>`).join('');
+}
+
+function renderActivity(){
+  const el = document.getElementById('activityList');
+  el.innerHTML = activityData.map(a => {
+    const isCredit = a.type === 'credit';
+    const bg = isCredit ? 'var(--mint-bg)' : 'var(--sky-bg)';
+    const fg = isCredit ? 'var(--mint-fg)' : 'var(--sky-fg)';
+    const arrow = isCredit ? upArrow : downArrow;
+    return `
+      <div class="activity-row">
+        <div class="act-icon" style="background:${bg};">
+          <svg viewBox="0 0 24 24" fill="none" stroke="${fg}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${arrow}</svg>
+        </div>
+        <div>
+          <div class="act-title">${a.title[lang]}</div>
+          <div class="act-date">${a.date[lang]}</div>
+        </div>
+        <div class="act-amount ${a.type}">${a.amount}</div>
+      </div>`;
+  }).join('');
+}
+
+let payMethod = 'upi';
+
+function renderDetailsModal(){
+  document.getElementById('detailsTitle').textContent = T.detailsTitle[lang];
+  document.getElementById('upiTabBtn').textContent = T.upiTab[lang];
+  document.getElementById('bankTabBtn').textContent = T.bankTab[lang];
+  document.getElementById('upiLabel').textContent = T.upiLabel[lang];
+  document.getElementById('holderLabel').textContent = T.holderLabel[lang];
+  document.getElementById('acctLabel').textContent = T.acctLabel[lang];
+  document.getElementById('ifscLabel').textContent = T.ifscLabel[lang];
+  document.getElementById('demoFormNote').textContent = T.demoFormNote[lang];
+  document.getElementById('upiInput').placeholder = T.upiPlaceholder[lang];
+  document.getElementById('holderInput').placeholder = T.holderPlaceholder[lang];
+  document.getElementById('acctInput').placeholder = T.acctPlaceholder[lang];
+  document.getElementById('ifscInput').placeholder = T.ifscPlaceholder[lang];
+  document.getElementById('submitDetailsBtn').textContent = `${T.submitPrefix[lang]} ${fmtRupee(demoBalance)}`;
+  validateDetailsForm();
+}
+
+function validateDetailsForm(){
+  const btn = document.getElementById('submitDetailsBtn');
+  let valid = false;
+  if (payMethod === 'upi'){
+    valid = document.getElementById('upiInput').value.trim().includes('@');
+  } else {
+    const holder = document.getElementById('holderInput').value.trim();
+    const acct = document.getElementById('acctInput').value.trim();
+    const ifsc = document.getElementById('ifscInput').value.trim();
+    valid = holder.length > 1 && acct.length >= 6 && ifsc.length >= 6;
+  }
+  btn.disabled = !valid;
+}
+
+function setPayMethod(method){
+  payMethod = method;
+  document.getElementById('upiTabBtn').classList.toggle('active', method === 'upi');
+  document.getElementById('bankTabBtn').classList.toggle('active', method === 'bank');
+  document.getElementById('upiPanel').classList.toggle('active', method === 'upi');
+  document.getElementById('bankPanel').classList.toggle('active', method === 'bank');
+  validateDetailsForm();
+}
+
+['upiInput','holderInput','acctInput','ifscInput'].forEach(id => {
+  document.getElementById(id).addEventListener('input', validateDetailsForm);
+});
+document.getElementById('upiTabBtn').addEventListener('click', () => setPayMethod('upi'));
+document.getElementById('bankTabBtn').addEventListener('click', () => setPayMethod('bank'));
+document.getElementById('detailsCloseBtn').addEventListener('click', () => {
+  document.getElementById('detailsOverlay').classList.remove('show');
+});
+document.getElementById('detailsOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'detailsOverlay') document.getElementById('detailsOverlay').classList.remove('show');
+});
+document.getElementById('submitDetailsBtn').addEventListener('click', () => {
+  document.getElementById('detailsOverlay').classList.remove('show');
+  openModal({ success: true, amount: demoBalance });
+});
+
+function renderAll(){
+  renderStatic();
+  renderBalance();
+  renderGuide();
+  renderActivity();
+  renderDetailsModal();
+}
+
+function setLang(newLang){
+  lang = newLang;
+  document.getElementById('langEnBtn').classList.toggle('active', lang === 'en');
+  document.getElementById('langHiBtn').classList.toggle('active', lang === 'hi');
+  renderAll();
+}
+
+function setDemoBalance(amount, btnId){
+  demoBalance = amount;
+  document.getElementById('demoHighBtn').classList.toggle('active', btnId === 'demoHighBtn');
+  document.getElementById('demoLowBtn').classList.toggle('active', btnId === 'demoLowBtn');
+  renderBalance();
+}
+
+function openModal({ success, amount }){
+  const overlay = document.getElementById('overlay');
+  const icon = document.getElementById('modalIcon');
+  const title = document.getElementById('modalTitle');
+  const body = document.getElementById('modalBody');
+  const okBtn = document.getElementById('modalOkBtn');
+
+  if (success){
+    icon.style.background = 'var(--mint-bg)';
+    icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="var(--mint-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${checkCircle}</svg>`;
+    title.textContent = T.successTitle[lang];
+    const refId = 'FYB' + Math.floor(100000 + Math.random()*900000);
+    const msg = lang === 'en'
+      ? `${fmtRupee(amount)} will reach your bank account within 24–48 hours. Reference ID: ${refId}`
+      : `${fmtRupee(amount)} 24–48 घंटों में आपके बैंक खाते में पहुंच जाएगा। रेफरेंस आईडी: ${refId}`;
+    body.textContent = msg;
+    okBtn.textContent = T.modalOk[lang];
+  } else {
+    icon.style.background = 'var(--peach-bg)';
+    icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="var(--peach-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${warnCircle}</svg>`;
+    title.textContent = T.errorTitle[lang];
+    const msg = lang === 'en'
+      ? `You need at least ₹1,000 to withdraw. Your current balance is ${fmtRupee(demoBalance)}.`
+      : `निकासी के लिए कम से कम ₹1,000 होना ज़रूरी है। आपका मौजूदा बैलेंस ${fmtRupee(demoBalance)} है।`;
+    body.textContent = msg;
+    okBtn.textContent = T.modalOkErr[lang];
+  }
+  overlay.classList.add('show');
+}
+
+document.getElementById('withdrawBtn').addEventListener('click', () => {
+  if (demoBalance >= MIN_WITHDRAW){
+    setPayMethod('upi');
+    document.getElementById('upiInput').value = '';
+    document.getElementById('holderInput').value = '';
+    document.getElementById('acctInput').value = '';
+    document.getElementById('ifscInput').value = '';
+    renderDetailsModal();
+    document.getElementById('detailsOverlay').classList.add('show');
+  } else {
+    openModal({ success: false, amount: demoBalance });
+  }
+});
+document.getElementById('modalOkBtn').addEventListener('click', () => {
+  document.getElementById('overlay').classList.remove('show');
+});
+document.getElementById('overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'overlay') document.getElementById('overlay').classList.remove('show');
+});
+
+document.getElementById('langEnBtn').addEventListener('click', () => setLang('en'));
+document.getElementById('langHiBtn').addEventListener('click', () => setLang('hi'));
+document.getElementById('demoHighBtn').addEventListener('click', () => setDemoBalance(2450, 'demoHighBtn'));
+document.getElementById('demoLowBtn').addEventListener('click', () => setDemoBalance(450, 'demoLowBtn'));
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (window.history.length > 1) { window.history.back(); }
+  else { window.location.href = '/'; }
+});
+
+renderAll();
+fetchEarnings();
+</script>
+
+</body>
+</html>

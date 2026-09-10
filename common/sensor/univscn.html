@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Universal Scanner</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<link rel="stylesheet" href="../../dist/css/uniscn.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="mark">SC</span><span>Universal Scanner</span></div>
+  <div class="tab-row">
+    <button class="tab-btn active" id="tab-btn-code" onclick="switchTab('code')">Code Scanner</button>
+    <button class="tab-btn" id="tab-btn-ocr" onclick="switchTab('ocr')">Document OCR</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ CODE SCANNER TAB ============ -->
+  <div id="tab-code">
+    <div class="hero" id="scanner-hero">
+      <div class="scan-icon-frame">
+        <div class="doc-lines"><span></span><span></span><span></span><span></span></div>
+        <div class="scan-beam"></div>
+        <div class="scan-frame" style="display:block; inset:6%;"></div>
+      </div>
+      <h2>Scan anything, instantly</h2>
+      <p>Point your camera at a QR code, barcode, or printed document — Universal Scanner reads it and hands you the details right away: a link to open, a number to call, or the text pulled straight off the page.</p>
+      <button class="btn btn-primary btn-block" onclick="startScanningFromHero()">▶ Start Scanning</button>
+    </div>
+
+    <div class="camera-err" id="camera-err"></div>
+
+    <div class="scan-frame-wrap">
+      <video id="scan-video" muted playsinline></video>
+      <div class="scan-frame" id="scan-frame" style="display:none;"></div>
+      <div class="scan-idle-msg" id="scan-idle-msg">Tap "Start Camera" to scan a QR code or barcode.</div>
+    </div>
+
+    <div class="scan-controls">
+      <select id="camera-select" class="hidden"></select>
+      <button class="btn btn-primary btn-block" id="camera-toggle-btn" onclick="toggleCamera()">Start Camera</button>
+    </div>
+
+    <div class="card result-card hidden" id="scan-result-card"></div>
+
+    <div class="section-title">Recent scans</div>
+    <div class="card" id="scan-history"></div>
+  </div>
+
+  <!-- ============ DOCUMENT OCR TAB ============ -->
+  <div id="tab-ocr" class="hidden">
+    <div class="ocr-capture-row">
+      <button class="btn btn-ghost btn-block" onclick="triggerOcrCamera()">📷 Take Photo</button>
+      <button class="btn btn-ghost btn-block" onclick="triggerOcrUpload()">🖼 Upload Image</button>
+    </div>
+    <input type="file" id="ocr-camera-input" accept="image/*" capture="environment" style="display:none;">
+    <input type="file" id="ocr-upload-input" accept="image/*" style="display:none;">
+
+    <div class="ocr-preview-wrap hidden" id="ocr-preview-wrap">
+      <img id="ocr-preview-img" alt="Captured document">
+    </div>
+
+    <button class="btn btn-primary btn-block hidden" id="ocr-extract-btn" onclick="runOcr()">Extract text</button>
+
+    <div class="progress-wrap hidden" id="ocr-progress">
+      <div class="progress-track"><div class="progress-fill" id="ocr-progress-fill"></div></div>
+      <div class="progress-label" id="ocr-progress-label">Reading document…</div>
+    </div>
+
+    <div class="hidden" id="ocr-result-wrap">
+      <div class="section-title">Extracted text (editable)</div>
+      <div class="card">
+        <textarea id="ocr-text-output"></textarea>
+        <div style="margin-top:10px;"><button class="btn btn-ghost" onclick="copyOcrText()">Copy text</button></div>
+      </div>
+      <div class="section-title">Detected details</div>
+      <div class="card"><div class="chip-row" id="ocr-detected-chips"></div></div>
+    </div>
+  </div>
+
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/uniscn.min.js">
+</script>
+</body>
+</html>

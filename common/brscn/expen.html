@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Expense & Mileage Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/expen.min.css">
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back-btn" onclick="goBack()" aria-label="Go back">←</button>
+  <div class="mark">EX</div>
+  <h1>Expense &amp; Mileage Tracker</h1>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost" onclick="exportCsv()">⬇ Export CSV</button>
+    <button class="btn btn-ghost" onclick="clearAll()">Clear all</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="stat-grid">
+    <div class="stat-card"><div class="label">Total expenses</div><div class="value" id="stat-expenses">₹0</div></div>
+    <div class="stat-card"><div class="label">Total mileage</div><div class="value" id="stat-miles">0 mi</div></div>
+    <div class="stat-card"><div class="label">Mileage reimbursement</div><div class="value" id="stat-mileage-cost">₹0</div></div>
+    <div class="stat-card"><div class="label">Grand total</div><div class="value" id="stat-grand" style="color:var(--accent-dark);">₹0</div></div>
+  </div>
+
+  <div class="tab-row">
+    <button class="tab-btn active" id="tab-expenses-btn" onclick="setTab('expenses')">Expenses</button>
+    <button class="tab-btn" id="tab-mileage-btn" onclick="setTab('mileage')">Mileage</button>
+  </div>
+
+  <!-- EXPENSES -->
+  <div id="panel-expenses">
+    <div class="card">
+      <div class="form-row">
+        <div class="field"><label>Date</label><input type="date" id="exp-date"></div>
+        <div class="field"><label>Category</label>
+          <select id="exp-category">
+            <option>Materials</option><option>Fuel</option><option>Tools &amp; Equipment</option>
+            <option>Subcontractor</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Amount (₹)</label><input type="number" id="exp-amount" placeholder="0"></div>
+      </div>
+      <div class="field" style="margin-bottom:10px;"><label>Description / job</label><input id="exp-desc" placeholder="e.g. Paint from Sharma Hardware — Kumar residence job"></div>
+      <button class="btn btn-primary" onclick="addExpense()">+ Add expense</button>
+    </div>
+    <table>
+      <thead><tr><th>Date</th><th>Category</th><th>Description</th><th style="text-align:right;">Amount</th><th></th></tr></thead>
+      <tbody id="expenses-body"></tbody>
+    </table>
+  </div>
+
+  <!-- MILEAGE -->
+  <div id="panel-mileage" class="hidden">
+    <div class="card">
+      <div class="form-row mileage">
+        <div class="field"><label>Date</label><input type="date" id="mi-date"></div>
+        <div class="field"><label>From</label><input id="mi-from" placeholder="e.g. Shop"></div>
+        <div class="field"><label>To</label><input id="mi-to" placeholder="e.g. Kumar residence"></div>
+        <div class="field"><label>Miles</label><input type="number" id="mi-miles" placeholder="0"></div>
+      </div>
+      <div class="field" style="margin-bottom:10px; max-width:220px;"><label>Rate per mile (₹)</label><input type="number" id="mi-rate" value="12"></div>
+      <button class="btn btn-primary" onclick="addMileage()">+ Add trip</button>
+    </div>
+    <table>
+      <thead><tr><th>Date</th><th>Route</th><th style="text-align:right;">Miles</th><th style="text-align:right;">Reimbursement</th><th></th></tr></thead>
+      <tbody id="mileage-body"></tbody>
+    </table>
+  </div>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/expen.min.js">
+</script>
+</body>
+</html>

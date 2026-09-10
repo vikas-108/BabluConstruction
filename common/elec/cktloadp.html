@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circuit Load / Panel Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/cktload.min.css" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#0d211f" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+      <div class="header-titles">
+        <h1>Circuit Load / Panel</h1>
+        <div class="sub">Total the loads against panel capacity</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Panel</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Main breaker (A)</label><input type="number" id="mainA" value="100" min="1"></div>
+        <div class="field"><label>Voltage (V)</label><input type="number" id="panelV" value="230" min="1"></div>
+      </div>
+      <div class="field">
+        <label>Phase</label>
+        <select id="panelPhase"><option value="1">Single-phase</option><option value="3">Three-phase</option></select>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Loads on this panel</div>
+    <div class="card">
+      <div class="col-head"><span>Load</span><span>Watts</span><span>Qty</span><span></span></div>
+      <div id="loadsList"></div>
+      <button class="add-row" id="addLoadBtn">+ Add Load</button>
+
+      <div class="fill-bar-track"><div class="fill-bar-fill" id="fillBar"></div></div>
+
+      <div class="stats-row">
+        <div class="stat"><div class="k">Total Load</div><div class="v" id="totalW">0 W</div></div>
+        <div class="stat"><div class="k">Total Current</div><div class="v" id="totalA">0 A</div></div>
+        <div class="stat"><div class="k">Panel Capacity</div><div class="v" id="capW">0 W</div></div>
+      </div>
+
+      <div class="verdict ok" id="verdictBox">Within capacity</div>
+    </div>
+  </section>
+
+  <footer class="note">
+    Continuous loads (on 3+ hours) are typically limited to 80% of breaker rating by code in many
+    jurisdictions — this tool flags that threshold, but always confirm against your local code and
+    have panel work done or verified by a licensed electrician.
+  </footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/cktloadp.min.js">
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Quick-Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/quickcheck.min.css">
+<!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><circle cx="12" cy="5" r="2"/><path d="M12 8v5l4 5M12 13l-4 5M8 11h8"/></svg></div>
+      <div class="header-titles">
+        <h1>Accessibility Check</h1>
+        <div class="sub">Ramps, doors — quick reference</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="region-note">Based on US ADA guidelines — accessibility codes differ significantly by country (e.g. India's Harmonised Guidelines, UK Part M). Check your local equivalent.</div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Ramp Slope Checker</div>
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Rise (in)</label><input type="number" id="rampRise" value="24" min="0"></div>
+        <div class="field"><label>Run (in)</label><input type="number" id="rampRun" value="288" min="0"></div>
+      </div>
+      <div class="result-box" id="rampResult">
+        <span class="k">Slope</span><span class="v">—</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Door Clear Width Checker</div>
+    <div class="card">
+      <div class="field"><label>Actual clear width (in)</label><input type="number" id="doorWidth" value="34" min="0"></div>
+      <div class="result-box" id="doorResult">
+        <span class="k">vs 32" minimum</span><span class="v">—</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Quick Reference (US ADA)</div>
+    <div id="refTable"></div>
+  </section>
+
+  <footer class="note">Informational reference only — always verify against the accessibility code that applies to your project's jurisdiction.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/quickchek.min.js">
+</script>
+</body>
+</html>

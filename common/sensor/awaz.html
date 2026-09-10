@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Level Meter</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/awaz.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M3 10v4h4l5 5V5L7 10z"/><path d="M16 8a5 5 0 010 8M19 5a9 9 0 010 14"/></svg></div>
+      <div class="header-titles">
+        <h1>Sound Level Meter</h1>
+        <div class="sub">Relative loudness from the mic</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="caveat">Phone mics aren't calibrated SPL meters — this gives a relative loudness reading for a quick field check, not a certified measurement for legal or compliance purposes.</div>
+    <div class="card meter-wrap">
+      <div class="db-big moderate" id="dbBig">—</div>
+      <div class="db-unit">approx dB (uncalibrated)</div>
+
+      <div class="bar-track">
+        <div class="bar-fill" id="barFill"></div>
+        <div class="bar-peak" id="barPeak" style="left:0%;"></div>
+      </div>
+      <div class="zone-row"><span>Quiet</span><span>Moderate</span><span>Loud</span></div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="k">Peak</div><div class="v" id="peakVal">—</div></div>
+        <div class="stat"><div class="k">Average</div><div class="v" id="avgVal">—</div></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="gbtn ghost" id="resetPeakBtn">Reset Peak</button>
+        <button class="gbtn primary" id="startBtn">Start</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">Uses your phone's microphone only while this page is open — nothing is recorded or sent anywhere.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/awaz.min.js">
+</script>
+</body>
+</html>

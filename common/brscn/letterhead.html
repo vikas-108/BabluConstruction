@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Letterhead Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="stylesheet" href="../../dist/css/letterhead.min.css">
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="brand"><span class="mark">LH</span> Letterhead Studio</div>
+  <select class="format-select" id="format-select" onchange="setFormat(this.value)">
+    <option value="classic">Format: Classic</option>
+    <option value="centered">Format: Centered</option>
+    <option value="split">Format: Modern Split</option>
+    <option value="minimal">Format: Minimal</option>
+    <option value="formal">Format: Formal Bordered</option>
+    <option value="band">Format: Bold Band</option>
+    <option value="twocol">Format: Two-Column</option>
+    <option value="navy">Format: Corporate Navy</option>
+    <option value="charcoal">Format: Executive Charcoal</option>
+    <option value="legal">Format: Elegant Legal</option>
+  </select>
+  <select class="format-select" id="theme-select" onchange="setTheme(this.value)">
+    <option value="rust">Theme: Workshop Rust</option>
+    <option value="navy">Theme: Corporate Navy</option>
+    <option value="charcoal">Theme: Charcoal &amp; Gold</option>
+    <option value="forest">Theme: Forest Green</option>
+    <option value="burgundy">Theme: Burgundy</option>
+    <option value="slate">Theme: Slate Blue</option>
+    <option value="amber">Theme: Amber Gold</option>
+    <option value="mono">Theme: Monochrome</option>
+  </select>
+  <input type="color" id="bg-color-input" value="#FFFDF8" oninput="setPageBg(this.value)" title="Page background color" class="bg-color-input">
+  <button class="btn btn-tool" onclick="addTextBlock()">+ Text</button>
+  <button class="btn btn-tool" onclick="triggerImageUpload()">+ Image</button>
+  <button class="btn btn-tool" onclick="addTableBlock()">+ Table</button>
+  <button class="btn btn-danger-ghost" onclick="resetLetterhead()">Reset</button>
+  <button class="btn btn-primary" id="download-btn" onclick="downloadPdf()">⬇ Download PDF</button>
+</div>
+
+<div class="stage-outer">
+  <div id="page-stage">
+    <div class="page format-classic theme-rust" id="page">
+
+      <div class="lh-header">
+        <div class="logo-box" id="logo-box" onclick="triggerLogoUpload()">Click to<br>add logo</div>
+        <div class="header-fields">
+          <div class="company-name" contenteditable="true" id="hf-company" data-placeholder="Your Company Name"></div>
+          <div class="tagline" contenteditable="true" id="hf-tagline" data-placeholder="Tagline or department name"></div>
+          <div class="contact-line" contenteditable="true" id="hf-contact" data-placeholder="Address • Phone • Email • Website"></div>
+        </div>
+      </div>
+
+      <div id="blocks-container"></div>
+
+      <div class="lh-footer" contenteditable="true" id="lh-footer-text" data-placeholder="Footer note — registration number, disclaimer, or contact line"></div>
+
+    </div>
+  </div>
+</div>
+
+<input type="file" id="logo-input" accept="image/*" class="hidden" style="display:none;">
+<input type="file" id="image-input" accept="image/*" class="hidden" style="display:none;">
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/letterhead.min.js">
+</script>
+</body>
+</html>

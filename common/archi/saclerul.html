@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale Ruler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../../dist/css/saceru.min.css">
+<!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#0d1a2e" stroke-width="1.8"><path d="M3 17L21 17M3 17V7L21 7V17"/><path d="M6 17V13M10 17V11M14 17V13M18 17V11"/></svg></div>
+      <div class="header-titles">
+        <h1>Scale Ruler</h1>
+        <div class="sub">Drawing scale ↔ real-world size</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Scale</div>
+    <div class="card">
+      <div class="mode-tabs">
+        <div class="mode-tab active" data-mode="ratio">Ratio (1:N)</div>
+        <div class="mode-tab" data-mode="arch">Architectural (in = ft)</div>
+      </div>
+
+      <div id="ratioPanel">
+        <div class="scale-row">
+          <span>1 :</span>
+          <input type="number" id="ratioN" value="100" min="1">
+        </div>
+        <div class="preset-grid" id="ratioPresets"></div>
+      </div>
+
+      <div id="archPanel" style="display:none;">
+        <div class="scale-row">
+          <input type="text" id="archFrac" value="1/4" style="max-width:80px;">
+          <span>" = 1'-0"</span>
+        </div>
+        <div class="preset-grid" id="archPresets"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Convert</div>
+    <div class="card">
+      <div class="conv-row">
+        <div class="conv-field">
+          <label>On the drawing</label>
+          <div class="conv-input-row">
+            <input type="number" id="drawingVal" value="10" step="0.01">
+            <select id="drawingUnit">
+              <option value="mm">mm</option>
+              <option value="cm" selected>cm</option>
+              <option value="in">in</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="conv-row">
+        <div class="conv-field">
+          <label>Real world</label>
+          <div class="conv-input-row">
+            <input type="number" id="realVal" value="10" step="0.01">
+            <select id="realUnit">
+              <option value="m" selected>m</option>
+              <option value="ft">ft</option>
+              <option value="ftin">ft-in</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="k" id="resultLabel">Real world size</span>
+        <span class="v" id="resultVal">—</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">Type in either field — the other updates automatically using the scale above.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/saclerul.min.js">
+</script>
+</body>
+</html>

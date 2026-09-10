@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashlight</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/doop.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2 2M17.8 17.8l2 2M2 12h3M19 12h3M4.2 19.8l2-2M17.8 6.2l2-2"/></svg></div>
+      <div class="header-titles">
+        <h1>Flashlight</h1>
+        <div class="sub">Camera flash as a work light</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <div class="main-wrap">
+    <button class="torch-btn" id="torchBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 2h6l1 4H8z"/><path d="M8 6h8l-1 6H9z"/><path d="M9 12h6l-.7 8a1.3 1.3 0 01-1.3 1.2h-1.9A1.3 1.3 0 019.8 20z"/></svg>
+    </button>
+    <div class="status-label" id="statusLabel">Tap to turn on</div>
+    <div class="msg-box" id="msgBox"></div>
+  </div>
+
+  <footer class="note">Uses your rear camera's flash (torch mode) — this only works on browsers/devices that expose torch control, mainly Android Chrome. iOS Safari doesn't support this via the web, so use your phone's built-in flashlight there instead.</footer>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/doop.min.js">
+</script>
+</body>
+</html>

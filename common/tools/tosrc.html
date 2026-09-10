@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 <title>Field Toolbox</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="/favicon.png" />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -236,6 +238,68 @@ const TOOL_SECTIONS = [
       }
     ]
   },
+  {    id: 'Common-Tools',
+    name: 'Common Tools',
+    icon: '🪚',
+    tools: [
+      {
+        name: 'Ai chatbot',
+        desc: 'chat with ai and get answer for your question.currntly only for construction related question.',
+        tag: 'chat bot',
+        url: '../../screen/aichat.html',
+        status: 'ready'
+      },
+      {
+        name: 'Notebook',
+        desc: 'notebook for your project and work related notes.share by phonenumber.',
+        tag: 'Note book',
+        url: '../../screen/notebook.html',
+        status: 'ready'
+      },
+       {
+        name: 'U.C.',
+        desc: 'Units converter for your project and work related calculations.',
+        tag: 'UNITS CONVERTER',
+        url: '../../screen/conversion.html',
+        status: 'ready'
+      },
+      {
+        name: 'M.Y.O',
+        desc: 'Manage multiple projects, contractors and work related data in one place.',
+        tag: 'MULTIPLE PROJECTS',
+        url: '../../screen/activity/routinepay.html',
+        status: 'ready'
+      },
+       {
+        name: 'Deduction Calculator',
+        desc: 'Calculate deductions for your project and work related data in one place.',
+        tag: 'CALCULATOR',
+        url: '../../screen/activity/areadetec.html',
+        status: 'ready'
+      },
+        {
+        name: 'Quantity Calculator',
+        desc: 'Calculate quantities for your project and work related data in one place calacualte tile, skirtings etc .',
+        tag: 'quantity CALCULATOR',
+        url: '../../screen/activity/rocls.html',
+        status: 'ready'
+      },
+       {
+        name: 'Quotation Generator',
+        desc: 'Quotation Generator for your project and work related data in one place etc .',
+        tag: 'Quotation Generator',
+        url: '../../screen/activity/quatgenz.html',
+        status: 'ready'
+      },
+       {
+        name: 'Guidence',
+        desc: 'Get guidences for your project and work related data in one place and these feature work.',
+        tag: 'how to it work',
+        url: '../../screen/activity/usemyapp.html',
+        status: 'ready'
+      },
+    ]
+  },
   {
     id: 'plumbing',
     name: 'Plumbing Tools',
@@ -289,11 +353,19 @@ const TOOL_SECTIONS = [
         url: 'universal-scanner.html',
         status: 'ready'
       },
+       {
+        name: 'Levling',
+        desc: "Check level, plumb and slope with your phone's sensors.",
+        tag: 'leveling sites',
+        url:'../../screen/activity/sitelevling.html',
+        status: 'ready'
+      },
       {
-        name: 'Digital Spirit Level',
-        desc: 'Accelerometer-based level for a quick on-site check without a physical tool.',
-        tag: 'Motion sensor',
-        status: 'soon'
+        name: 'Direction finder',
+        desc: "Find directions using your phone\'s motion sensors.",
+        tag: 'Direction finder',
+        url: '../../screen/activity/direction.html',
+        status: 'ready'
       },
       {
         name: 'Compass / Site Orientation',
@@ -310,6 +382,41 @@ const TOOL_SECTIONS = [
     ]
   },
   {
+    id: 'field',
+    name: 'Field Tools',
+    icon: '📡',
+    tools: [
+      {
+        name: 'Daily site reports',
+        desc: 'Log workers, progress, materials and problems — every day.',
+        tag: 'Field tools',
+        url: '../../screen/activity/site-command.html',
+        status: 'ready'
+      },
+      {
+        name: 'Rental',
+        desc: 'Track rentals, billing, deposits and expiry alerts.',
+        tag: 'Rental tools',
+        url: '../../screen/activity/remborr.html',
+        status: 'ready'
+      },
+      {
+        name: 'MUSTEE',
+        desc: "Mark daily and track who's on site.",
+        tag: 'Attendance tools',
+        url: "../../screen/activity/Workshop-Ledger-2Punch.html",
+        status: 'ready'
+      },
+      {
+        name: 'Estimater',
+        desc: "Build category-wise project cost estimates with waste &amp; profit markup.",
+        tag: 'Estimating tools',
+        url: "../../screen/activity/estmiar.html",
+        status: 'ready'
+      }
+    ]
+  },
+  {
     id: 'documents',
     name: 'Business & Documents',
     icon: '📄',
@@ -318,7 +425,7 @@ const TOOL_SECTIONS = [
         name: 'Letterhead Studio',
         desc: 'Fully editable letterhead builder — logo, images, tables, 10 layouts across 8 color themes, and multi-page PDF download.',
         tag: 'Document Builder',
-        url: '../../common/letterhead.html',
+        url: '../../common/brscn/letterhead.html',
         status: 'ready'
       }
     ]

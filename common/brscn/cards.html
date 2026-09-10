@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Business Card Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/JsBarcode/3.11.5/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link rel="stylesheet" href="../../dist/css/cards.min.css">
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back-btn" onclick="goBack()" aria-label="Go back">←</button>
+  <div class="mark">BC</div>
+  <h1>Business Card Studio</h1>
+  <div class="topbar-actions">
+    <select class="format-select" id="format-select" onchange="setCardFormat(this.value)" title="Card format">
+      <option value="classic">Classic</option>
+      <option value="centered">Centered</option>
+      <option value="split">Split</option>
+      <option value="minimal">Minimal</option>
+      <option value="band">Bold Band</option>
+      <option value="compact">Compact</option>
+      <option value="stacked">Stacked</option>
+      <option value="corner">Corner Accent</option>
+      <option value="twotone">Two-Tone</option>
+      <option value="outline">Outline</option>
+    </select>
+    <select class="format-select" id="theme-select" onchange="setCardTheme(this.value)" title="Color theme">
+      <option value="indigo">Indigo</option>
+      <option value="rust">Rust</option>
+      <option value="navy">Corporate Navy</option>
+      <option value="charcoal">Charcoal &amp; Gold</option>
+      <option value="forest">Forest Green</option>
+      <option value="burgundy">Burgundy</option>
+      <option value="slate">Slate Blue</option>
+      <option value="amber">Amber Gold</option>
+      <option value="mono">Monochrome</option>
+    </select>
+    <button class="btn btn-ghost btn-icon" onclick="resetCard()" title="Reset" aria-label="Reset">↺</button>
+    <button class="btn btn-primary btn-icon" onclick="downloadCard()" title="Download PNG" aria-label="Download PNG">⬇</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div>
+    <div class="card">
+      <h2>Details</h2>
+      <div class="row2">
+        <div class="field"><label>Company name</label><input id="f-company" placeholder="e.g. Sharma Painting Co." oninput="render()"></div>
+        <div class="field"><label>Person name</label><input id="f-name" placeholder="e.g. Vikram Sharma" oninput="render()"></div>
+      </div>
+      <div class="field"><label>Address</label><input id="f-address" placeholder="Business address" oninput="render()"></div>
+      <div class="row2">
+        <div class="field"><label>Phone</label><input id="f-phone" placeholder="98765 43210" oninput="render()"></div>
+        <div class="field"><label>Email (optional)</label><input id="f-email" placeholder="you@company.com" oninput="render()"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Images</h2>
+      <div class="upload-row">
+        <div class="upload-box" id="logo-box" onclick="triggerUpload('logo')">Add logo</div>
+        <div class="upload-box" id="bg-box" onclick="triggerUpload('bg')">Add background photo</div>
+      </div>
+      <input type="file" id="logo-input" accept="image/*" style="display:none;">
+      <input type="file" id="bg-input" accept="image/*" style="display:none;">
+    </div>
+
+    <div class="card">
+      <h2>Scannable code</h2>
+      <div class="code-toggle">
+        <button type="button" id="code-qr-btn" class="active" onclick="setCodeType('qr')">QR Code</button>
+        <button type="button" id="code-barcode-btn" onclick="setCodeType('barcode')">Barcode</button>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); line-height:1.6; margin:0;">
+        The QR code stores all the card details as data — scan it with Universal Scanner (or any QR reader) to instantly pull up the name, company, phone, address and email. The barcode option encodes just the phone number.
+      </p>
+    </div>
+  </div>
+
+  <div class="preview-stage">
+    <div id="biz-card" class="format-classic theme-indigo">
+      <div class="bc-content">
+        <div class="bc-top">
+          <div class="bc-logo" id="bc-logo-wrap"></div>
+          <div class="bc-company" id="bc-company">Your Company</div>
+        </div>
+        <div class="bc-bottom">
+          <div>
+            <div class="bc-person" id="bc-person">Your Name</div>
+            <div class="bc-detail" id="bc-phone"></div>
+            <div class="bc-detail" id="bc-address"></div>
+          </div>
+          <div class="bc-code" id="bc-code"></div>
+        </div>
+      </div>
+    </div>
+    <div class="hint">Card size matches a standard 3.5″ × 2″ business card. Download exports it as a high-resolution PNG.</div>
+  </div>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/cards.min.js">
+</script>
+</body>
+</html>

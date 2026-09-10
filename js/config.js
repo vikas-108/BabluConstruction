@@ -15,7 +15,7 @@ window.ROUTINE_PAY_BASE = "https://api.buildskil.com/api/routinepay/buiders";
 
 window.APP_CONFIG = Object.freeze({
     //API_BASE_URL: "http://localhost:5000/api",
-    API_BASE_URL:"https://api.buildskil.com/api",
+     API_BASE_URL:"https://api.buildskil.com/api",
 
     AUTH_TOKEN_KEY:"cb_token"
 });

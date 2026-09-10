@@ -1,7 +1,6 @@
 const API_BASE = "https://api.buildskil.com/api/profiles";
 const SERVER_BASE = "https://api.buildskil.com";
-//const API_BASE = "http://localhost:5000/api/profiles"; // change if using domain
-//const SERVER_BASE = "http://localhost:5000"; // change if using domain
+
 let EDIT_PROFILE_ID = null;
 let ORIGINAL_MEDIA = null;
 let activeRequests = 0;
@@ -532,6 +531,8 @@ stateInput.addEventListener("change", () => {
       "Plumbing",
       "Electrician",
       "Carpentry",
+       "BlackSmith",
+      "Lohaar",
       "Masonry",
       "Painter",
       "Roofing",
@@ -549,7 +550,7 @@ stateInput.addEventListener("change", () => {
       "Plumbing Technician",
       "HVAC Technician",
       "Carpentry Technician",
-      "Raj Mistry",
+      "Raj Mistry", "Lohaar","BlackSmith",
       "Marble",
       "Painter",
       "POP",
@@ -592,19 +593,6 @@ stateInput.addEventListener("change", () => {
       "Aircraft Mechanic",
       "Industrial Mechanic",
     ],
-    client:[
-      "require Painter",
-      "PLumber",
-      "Havc",
-      "Raj Mistry",
-      "Technician",
-      "Machanic",
-      "Carpenter",
-      "renovation",
-      "Marble&Tiles",
-      "Electrician",
-      "Glass",
-    ]
   };
 
   // Update category dropdown when role changes

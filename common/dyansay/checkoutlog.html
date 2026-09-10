@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Check-Out Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/checkoutlog.min.css" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 015.4 5.4l-7 7-8-8 7-7a4 4 0 015.4 1.4"/><path d="M9 9l6 6"/></svg></div>
+      <div class="header-titles">
+        <h1>Tool Check-Out Log</h1>
+        <div class="sub">Who took what off-site, and when it's due back</div>
+      </div>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </header>
+
+  <div id="mainView">
+    <div class="histlink" id="openHistBtn">View returned items →</div>
+    <div id="toolsList"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="big">🧰</div>
+      Nothing checked out right now.<br>Tap "Check Out Item" when something leaves site.
+    </div>
+  </div>
+
+  <div id="histView">
+    <div class="back-link" id="closeHistBtn">← Back</div>
+    <div id="histList"></div>
+  </div>
+
+  <div class="cta-bar" id="ctaBar"><div class="inner"><button id="addBtn">+ Check Out Item</button></div></div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="addDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Check Out Item</div>
+
+    <div class="field"><label>Item / tool</label><input type="text" id="tItem" placeholder="e.g. Bosch drill, laser level"></div>
+    <div class="field"><label>Taken by</label><input type="text" id="tPerson" placeholder="Name"></div>
+    <div class="field-row">
+      <div class="field"><label>Taken out</label><input type="date" id="tOutDate"></div>
+      <div class="field"><label>Expected return</label><input type="date" id="tDueDate"></div>
+    </div>
+    <div class="field"><label>Notes</label><input type="text" id="tNote" placeholder="Optional — condition, purpose, etc."></div>
+
+    <button id="saveToolBtn">Log Check-Out</button>
+  </div>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/checkoutog.min.js">
+</script>
+</body>
+</html>

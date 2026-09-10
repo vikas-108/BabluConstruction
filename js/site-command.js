@@ -1,15 +1,8 @@
 (function(){
-  // ---------- Backend connection ----------
-  // Backend runs on a different port than this static file, so this must be
-  // an absolute URL, not a relative '/api' path. Update this if the backend's
-  // port/host ever changes (e.g. when you deploy, switch to your real domain).
- // const API_BASE = 'http://localhost:5000/api';
+
   const API_BASE = 'https://api.buildskil.com/api';
   async function apiFetch(path, options = {}) {
-    // Adjust 'token' to whatever localStorage key your login flow actually uses.
-    // Not sending credentials:'include' — this backend uses a Bearer token, not
-    // cookie sessions, and including it can trip CORS if the server doesn't
-    // explicitly allow credentials from this origin.
+
     const token = localStorage.getItem('cb_token');
     const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
     if (token) headers['Authorization'] = 'Bearer ' + token;

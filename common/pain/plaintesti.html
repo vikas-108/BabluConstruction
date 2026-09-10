@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Paint Job Estimator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="../../dist/css/plian.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <button class="back-btn" onclick="goBack()" aria-label="Go back" title="Go back">←</button>
+    <div class="mark">PJ</div>
+    <h1>Paint Job Estimator</h1>
+    <button class="btn btn-primary" onclick="downloadQuote()">⬇ Download Quote</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- ============ INPUTS ============ -->
+  <div>
+    <div class="card">
+      <h2>Job details</h2>
+      <div class="row2">
+        <div class="field"><label>Client name</label><input id="client-name" placeholder="e.g. Sharma Residence"></div>
+        <div class="field"><label>Job address / notes</label><input id="job-notes" placeholder="e.g. 2nd floor, interior walls"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Rooms / areas to paint</h2>
+      <div id="rooms-container"></div>
+      <button class="btn btn-ghost btn-block" onclick="addRoom()">+ Add room / area</button>
+    </div>
+
+    <div class="card">
+      <h2>Paint &amp; coverage</h2>
+      <div class="row3">
+        <div class="field"><label>Coats</label><input id="coats" type="number" value="2" min="1" oninput="calculate()"></div>
+        <div class="field"><label>Coverage (sq ft / gal)</label><input id="coverage-rate" type="number" value="350" oninput="calculate()"></div>
+        <div class="field"><label>Price / gallon (₹)</label><input id="paint-price" type="number" value="2200" oninput="calculate()"></div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="primer-toggle" onchange="calculate()">
+        <label for="primer-toggle">Include primer coat</label>
+      </div>
+      <div class="row2" id="primer-fields" style="display:none;">
+        <div class="field"><label>Primer coverage (sq ft / gal)</label><input id="primer-coverage" type="number" value="300" oninput="calculate()"></div>
+        <div class="field"><label>Primer price / gallon (₹)</label><input id="primer-price" type="number" value="1400" oninput="calculate()"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Labor &amp; pricing</h2>
+      <div class="row3">
+        <div class="field"><label>Sq ft per hour (per painter)</label><input id="productivity" type="number" value="120" oninput="calculate()"></div>
+        <div class="field"><label>Painters on crew</label><input id="crew-size" type="number" value="2" min="1" oninput="calculate()"></div>
+        <div class="field"><label>Hourly rate (₹)</label><input id="hourly-rate" type="number" value="250" oninput="calculate()"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Markup / overhead (%)</label><input id="markup-pct" type="number" value="20" oninput="calculate()"></div>
+        <div class="field"><label>Tax (%)</label><input id="tax-pct" type="number" value="0" oninput="calculate()"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div class="results">
+    <div class="card">
+      <h2>Estimate summary</h2>
+      <div class="result-row"><span class="rl">Total paintable area</span><span class="rv" id="r-area">0 sq ft</span></div>
+      <div class="result-row"><span class="rl">Paint needed</span><span class="rv" id="r-paint-gal">0 gal</span></div>
+      <div class="result-row hidden" id="r-primer-row"><span class="rl">Primer needed</span><span class="rv" id="r-primer-gal">0 gal</span></div>
+      <div class="result-row"><span class="rl">Labor hours (crew total)</span><span class="rv" id="r-labor-hours">0 hrs</span></div>
+      <div class="result-row"><span class="rl">Estimated days on site</span><span class="rv" id="r-days">0 days</span></div>
+      <div class="result-row"><span class="rl">Paint cost</span><span class="rv" id="r-paint-cost">₹0</span></div>
+      <div class="result-row hidden" id="r-primer-cost-row"><span class="rl">Primer cost</span><span class="rv" id="r-primer-cost">₹0</span></div>
+      <div class="result-row"><span class="rl">Labor cost</span><span class="rv" id="r-labor-cost">₹0</span></div>
+      <div class="result-row"><span class="rl">Markup</span><span class="rv" id="r-markup">₹0</span></div>
+      <div class="result-row"><span class="rl">Tax</span><span class="rv" id="r-tax">₹0</span></div>
+      <div class="grand-total">
+        <div class="gl">Total quote</div>
+        <div class="gv" id="r-grand-total">₹0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- printable quote sheet, built and captured only when Download is clicked -->
+<div id="quote-sheet">
+  <h2 id="qs-company">Your Painting Company</h2>
+  <div class="qs-sub" id="qs-client">Quote for —</div>
+  <table id="qs-table"></table>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/plainsheet.min.js">
+</script>
+</body>
+</html>

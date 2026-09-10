@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Room Quantity Calculator</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../dist/css/rocls.min.css" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+    <script src="../../dist/js/auth-guard.min.js"></script>
+
+</head>
+<body>
+<div class="app">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1a0d" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div>
+      <div class="header-titles">
+        <h1>Room Quantity Calculator</h1>
+        <div class="sub">Total every room, then size the materials</div>
+      </div>
+      <button class="icon-btn" id="helpBtn" aria-label="How to use">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.5 2.5 0 014.9.8c0 1.7-2.4 2-2.4 3.5"/><path d="M12 17.2v.1"/></svg>
+      </button>
+      <button class="icon-btn" id="exitBtn" aria-label="Exit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-title">Rooms</div>
+    <div class="card">
+      <div class="room-head">
+        <span>Room</span><span>L (ft)</span><span></span><span>W (ft)</span><span>Area</span><span></span>
+      </div>
+      <div id="roomsList"></div>
+      <button class="add-row" id="addRoomBtn">+ Add Room</button>
+    </div>
+
+    <div class="totals-box">
+      <div class="total-stat">
+        <div class="k">Total Floor Area</div>
+        <div class="v" id="totalArea">0 sqft</div>
+      </div>
+      <div class="total-stat">
+        <div class="k">Total Perimeter</div>
+        <div class="v" id="totalPerimeter">0 ft</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-title">Materials for the whole building</div>
+
+    <!-- Tiles -->
+    <div class="mat-card">
+      <div class="mat-head">
+        <div class="mat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg></div>
+        <h3>Flooring Tiles</h3>
+      </div>
+      <div class="settings-row">
+        <div class="settings-field">
+          <label>Tile size</label>
+          <select id="tileSize">
+            <option value="1">1 × 1 ft</option>
+            <option value="4" selected>2 × 2 ft</option>
+            <option value="6">2 × 3 ft</option>
+            <option value="8">2 × 4 ft</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="settings-field">
+          <label>Wastage %</label>
+          <input type="number" id="tileWastage" value="10" min="0">
+        </div>
+      </div>
+      <div class="settings-row" id="tileCustomRow" style="display:none;">
+        <div class="settings-field">
+          <label>Custom L (ft)</label>
+          <input type="number" id="tileCustomL" value="2" min="0.1" step="0.1">
+        </div>
+        <div class="settings-field">
+          <label>Custom W (ft)</label>
+          <input type="number" id="tileCustomW" value="2" min="0.1" step="0.1">
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="k">Tiles needed</span>
+        <span class="v" id="tilesResult">0</span>
+      </div>
+      <div class="result-note" id="tilesNote"></div>
+    </div>
+
+    <!-- Skirting -->
+    <div class="mat-card">
+      <div class="mat-head">
+        <div class="mat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20h18"/><path d="M3 16h18"/></svg></div>
+        <h3>Skirting</h3>
+      </div>
+      <div class="settings-row">
+        <div class="settings-field">
+          <label>Board length (ft)</label>
+          <input type="number" id="skirtBoardLen" value="8" min="0.5" step="0.5">
+        </div>
+        <div class="settings-field">
+          <label>Wastage %</label>
+          <input type="number" id="skirtWastage" value="10" min="0">
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="k">Boards needed</span>
+        <span class="v" id="skirtResult">0</span>
+      </div>
+      <div class="result-note" id="skirtNote"></div>
+    </div>
+
+    <!-- Paint -->
+    <div class="mat-card">
+      <div class="mat-head">
+        <div class="mat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 4H8z"/><path d="M8 7h8l-1 5H9z"/><path d="M9 12h6l-.6 7a1.4 1.4 0 01-1.4 1.3h-2a1.4 1.4 0 01-1.4-1.3z"/></svg></div>
+        <h3>Wall Paint</h3>
+      </div>
+      <div class="settings-row">
+        <div class="settings-field">
+          <label>Wall height (ft)</label>
+          <input type="number" id="paintHeight" value="9" min="1" step="0.5">
+        </div>
+        <div class="settings-field">
+          <label>Coats</label>
+          <input type="number" id="paintCoats" value="2" min="1">
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="settings-field">
+          <label>Openings deduction %</label>
+          <input type="number" id="paintOpenings" value="15" min="0">
+        </div>
+        <div class="settings-field">
+          <label>Coverage (sqft/L/coat)</label>
+          <input type="number" id="paintCoverage" value="140" min="1">
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="k">Paint needed</span>
+        <span class="v" id="paintResult">0 L</span>
+      </div>
+      <div class="result-note" id="paintNote"></div>
+    </div>
+  </section>
+
+  <div class="cta-bar"><div class="inner">
+    <button id="copyBtn">Copy Estimate</button>
+    <button id="shareBtn">Share</button>
+  </div></div>
+
+  <div class="drawer-backdrop" id="shareBackdrop"></div>
+  <div class="drawer" id="shareDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Share estimate</div>
+    <label style="display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;">Phone number</label>
+    <input type="tel" id="sharePhone" placeholder="e.g. 98765 43210">
+    <button class="add-row" id="shareSendBtn" style="border-style:solid;border-color:var(--yellow);color:var(--yellow);margin-top:14px;">Share via Messages</button>
+    <div class="copied-flag" id="shareNote"></div>
+  </div>
+
+  <div class="drawer-backdrop" id="helpBackdrop"></div>
+  <div class="drawer" id="helpDrawer" style="max-height:82vh; overflow-y:auto;">
+    <div class="drawer-handle"></div>
+    <div class="help-top">
+      <div class="drawer-title" style="margin-bottom:0;">How to use this</div>
+      <div class="lang-toggle">
+        <button type="button" class="lang-opt active" data-lang="en">English</button>
+        <button type="button" class="lang-opt" data-lang="hi">हिन्दी</button>
+      </div>
+    </div>
+
+    <ol class="help-list" id="helpEN">
+      <li>Add each room — type its name, then length × width in feet. Delete a row with ✕, or tap "+ Add Room" for more.</li>
+      <li>Floor area and perimeter at the top update automatically — no separate calculate button.</li>
+      <li>Tiles — pick your tile size and a wastage % (extra for cuts/breakage); the tile count updates instantly.</li>
+      <li>Skirting — set board length and wastage %; it converts the total perimeter into boards needed.</li>
+      <li>Paint — set wall height, coats, an openings deduction (doors/windows), and coverage; it gives you liters needed.</li>
+      <li>Tap "Copy Estimate" to copy the full list as text, or "Share" to send it straight to a supplier's phone.</li>
+    </ol>
+
+    <ol class="help-list" id="helpHI" style="display:none;">
+      <li>हर कमरे को जोड़ें — नाम लिखें, फिर लंबाई × चौड़ाई फीट में डालें। किसी पंक्ति को हटाने के लिए ✕ दबाएँ, और नया कमरा जोड़ने के लिए "+ Add Room" दबाएँ।</li>
+      <li>ऊपर फर्श का कुल क्षेत्रफल और परिधि अपने आप अपडेट होते हैं — किसी अलग "कैलकुलेट" बटन की ज़रूरत नहीं।</li>
+      <li>टाइल — अपनी टाइल का साइज़ और वेस्टेज % चुनें (कटाई/टूट-फूट के लिए अतिरिक्त); टाइलों की संख्या तुरंत अपडेट हो जाती है।</li>
+      <li>स्कर्टिंग — बोर्ड की लंबाई और वेस्टेज % सेट करें; यह कुल परिधि से ज़रूरी बोर्डों की संख्या निकाल देता है।</li>
+      <li>पेंट — दीवार की ऊँचाई, कोट्स की संख्या, दरवाज़े/खिड़की की कटौती %, और पेंट कवरेज सेट करें; यह ज़रूरी लीटर पेंट बता देता है।</li>
+      <li>पूरी सूची टेक्स्ट के रूप में कॉपी करने के लिए "Copy Estimate" दबाएँ, या सीधे सप्लायर को भेजने के लिए "Share" दबाएँ।</li>
+    </ol>
+  </div>
+</div>
+<script src="../../dist/js/tt.min.js"></script>
+<script src="../../dist/js/rocls.min.js">
+</script>
+</body>
+</html>

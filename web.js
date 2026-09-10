@@ -10,8 +10,7 @@ let lastSearchResults = [];
 let activeRequests = 0;
 const SERVER_BASE = "https://api.buildskil.com";
 const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
-//const SERVER_BASE = "http://localhost:5000";
-//const PROFILE_API = "http://localhost:5000/api/profiles/public";
+
 let API_PROFILES_CACHE = [];
 const states = [
   "Haryana",
@@ -416,6 +415,8 @@ function restoreSearchState() {
       "Carpentry",
       "Masonry",
       "Painter",
+      "BlackSmith",
+      "Lohaar",
       "Roofing",
       "Flooring",
       "HVAC",
@@ -431,7 +432,7 @@ function restoreSearchState() {
       "Plumbing Technician",
       "HVAC Technician",
       "Carpentry Technician",
-      "Raj Mistry",
+      "Raj Mistry", "Lohaar","BlackSmith",
       "Marble",
       "Painter",
       "POP",
@@ -542,7 +543,7 @@ function levenshtein(a, b) {
 // notification updates (could come from API or JSON file)
 const updates = [
   "🚀 New feature launched: search engine",
-  "📢 Scheduled maintenance on 29 August",
+  "📢 Scheduled maintenance on 28 December",
   "🎨 Updated design and notebook guidelines available",
   "📢 C.P. for contractor, tech, helper & others create profiles",
   "📢 A.P. for client add project profile ",
@@ -1409,3 +1410,173 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("nav-home").classList.add("active");
     }
 });
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function renderQuickTools() {
+
+    const container =
+        document.getElementById("quickTools");
+
+    if (!container) return;
+
+
+    const tools = getQuickTools();
+
+
+    if (!tools.length) {
+
+        container.innerHTML = `
+            <div class="quick-empty">
+
+                <i class="fa-solid fa-toolbox"></i>
+
+                <strong>
+                    No tools used yet
+                </strong>
+
+                <span>
+                    Your recently used tools
+                    will appear here.
+                </span>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        tools.map(tool => `
+
+            <article
+                class="quick-tool-card"
+                data-tool-url="${escapeHTML(tool.url)}"
+            >
+
+                <div class="quick-tool-icon">
+                    <i class="${escapeHTML(tool.icon)}"></i>
+                </div>
+
+
+                <div class="quick-tool-info">
+
+                    <strong>
+                        ${escapeHTML(tool.name)}
+                    </strong>
+
+                    <small>
+                        Recently used
+                    </small>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="quick-tool-open"
+                    aria-label="Open ${escapeHTML(tool.name)}"
+                >
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </article>
+
+        `).join("");
+}
+
+
+/* =========================================================
+   OPEN TOOL
+   ========================================================= */
+
+document
+    .getElementById("quickTools")
+    ?.addEventListener(
+        "click",
+        function (event) {
+
+            const card =
+                event.target.closest(
+                    ".quick-tool-card"
+                );
+
+            if (!card) return;
+
+
+            const url =
+                card.dataset.toolUrl;
+
+
+            if (!url) return;
+
+
+            window.location.href = url;
+        }
+    );
+
+
+/* =========================================================
+   CLEAR QUICK TOOLS
+   ========================================================= */
+
+document
+    .getElementById("clearQuickTools")
+    ?.addEventListener(
+        "click",
+        function () {
+
+            clearQuickTools();
+
+            renderQuickTools();
+        }
+    );
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+renderQuickTools();
+
+
+/* =========================================================
+   REFRESH WHEN RETURNING TO HOME
+   ========================================================= */
+
+window.addEventListener(
+    "pageshow",
+    function () {
+
+        renderQuickTools();
+
+    }
+);
+
+
+/* =========================================================
+   REFRESH WHEN PAGE BECOMES VISIBLE
+   ========================================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    function () {
+
+        if (
+            document.visibilityState === "visible"
+        ) {
+
+            renderQuickTools();
+        }
+    }
+);
