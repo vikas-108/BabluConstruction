@@ -3,17 +3,28 @@ let status = 'unpaid';
 let logoDataUrl = null;
 function uid(){ return 'i' + Math.random().toString(36).slice(2,8); }
 function fmtMoney(n){ return '₹' + Math.round(n||0).toLocaleString('en-IN'); }
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
+//function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 /* ============================================================
    AUTO-GENERATED INVOICE NUMBER
    ============================================================ */
+   document
+    .getElementById("regenerateInvoiceNumberBtn")
+    ?.addEventListener("click", regenerateInvoiceNumber);
 function generateInvoiceNumber(){
   const counter = Number(localStorage.getItem('invoice_number_counter') || '0') + 1;
   localStorage.setItem('invoice_number_counter', String(counter));
   const year = new Date().getFullYear();
   return `INV-${year}-${String(counter).padStart(4,'0')}`;
 }
+
 function regenerateInvoiceNumber(){
   document.getElementById('invoice-number').value = generateInvoiceNumber();
 }
@@ -21,6 +32,16 @@ function regenerateInvoiceNumber(){
 /* ============================================================
    LOGO UPLOAD (optional)
    ============================================================ */
+   const logoBox = document.getElementById("logo-box");
+
+logoBox?.addEventListener("click", triggerLogoUpload);
+
+logoBox?.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        triggerLogoUpload();
+    }
+});
 function triggerLogoUpload(){ document.getElementById('logo-input').click(); }
 document.getElementById('logo-input').addEventListener('change', e=>{
   const file = e.target.files[0];
@@ -39,6 +60,11 @@ document.getElementById('logo-input').addEventListener('change', e=>{
    FORMAT & THEME — 10 layouts × 8 color palettes for the printed
    invoice sheet. Purely visual — never touches the invoice data.
    ============================================================ */
+   const formatSelect = document.getElementById("format-select");
+
+formatSelect?.addEventListener("change", function () {
+    setFormat(this.value);
+});
 const INVOICE_FORMATS = ['classic','centered','split','minimal','formal','band','twocol','boxed','statement','ledger'];
 const INVOICE_THEMES = ['rust','navy','charcoal','forest','burgundy','slate','amber','mono'];
 function setFormat(name){
@@ -46,13 +72,19 @@ function setFormat(name){
   INVOICE_FORMATS.forEach(f=>sheet.classList.remove('format-'+f));
   sheet.classList.add('format-'+name);
 }
+const themeSelect =
+    document.getElementById("theme-select");
+
+themeSelect?.addEventListener("change", function (event) {
+    setTheme(event.target.value);
+});
 function setTheme(name){
   const sheet = document.getElementById('invoice-sheet');
   INVOICE_THEMES.forEach(t=>sheet.classList.remove('theme-'+t));
   sheet.classList.add('theme-'+name);
 }
 
-
+document.getElementById("addItemBtn")?.addEventListener("click", addItem);
 function addItem(){
   items.push({ id: uid(), desc:'', qty:1, rate:0 });
   renderItems();
@@ -70,18 +102,165 @@ function updateItem(id, field, value){
   // update just this row's amount cell without a full re-render, so focus isn't lost mid-typing
   document.getElementById('amt-'+id).textContent = fmtMoney(it.qty * it.rate);
 }
-function renderItems(){
-  document.getElementById('items-body').innerHTML = items.map(it=>`
-    <tr>
-      <td><input value="${it.desc}" placeholder="e.g. Interior wall painting" oninput="updateItem('${it.id}','desc',this.value)"></td>
-      <td><input type="number" value="${it.qty}" oninput="updateItem('${it.id}','qty',this.value)"></td>
-      <td><input type="number" value="${it.rate}" oninput="updateItem('${it.id}','rate',this.value)"></td>
-      <td class="amt-cell" id="amt-${it.id}">${fmtMoney(it.qty*it.rate)}</td>
-      <td><button class="remove-item" onclick="removeItem('${it.id}')">✕</button></td>
-    </tr>
-  `).join('');
-  calculate();
+function renderItems() {
+
+    const tbody =
+        document.getElementById("items-body");
+
+    if (!tbody) {
+        return;
+    }
+
+    tbody.innerHTML = items.map(it => `
+        <tr data-item-id="${escapeHtml(it.id)}">
+
+            <td>
+                <input
+                    class="item-desc"
+                    type="text"
+                    value="${escapeHtml(it.desc || "")}"
+                    placeholder="e.g. Interior wall painting"
+                >
+            </td>
+
+            <td>
+                <input
+                    class="item-qty"
+                    type="number"
+                    value="${Number(it.qty) || 0}"
+                    placeholder="itme-qty / service"
+                >
+            </td>
+
+            <td>
+                <input
+                    class="item-rate"
+                    type="number"
+                    value="${Number(it.rate) || 0}"
+                    placeholder="per item rate"
+                >
+            </td>
+
+            <td
+                class="amt-cell"
+                id="amt-${escapeHtml(it.id)}"
+            >
+                ${fmtMoney((Number(it.qty) || 0) * (Number(it.rate) || 0))}
+            </td>
+
+            <td>
+                <button
+                    class="remove-item"
+                    type="button"
+                    title="Remove item"
+                    aria-label="Remove item"
+                >
+                    ✕
+                </button>
+            </td>
+
+        </tr>
+    `).join("");
+
+
+    /* ========================================================
+       ATTACH EVENTS
+       ======================================================== */
+
+    tbody.querySelectorAll("tr[data-item-id]")
+        .forEach(row => {
+
+            const itemId =
+                row.dataset.itemId;
+
+
+            /* Description */
+
+            const descInput =
+                row.querySelector(".item-desc");
+
+            descInput?.addEventListener(
+                "input",
+                function (event) {
+
+                    updateItem(
+                        itemId,
+                        "desc",
+                        event.target.value
+                    );
+
+                }
+            );
+
+
+            /* Quantity */
+
+            const qtyInput =
+                row.querySelector(".item-qty");
+
+            qtyInput?.addEventListener(
+                "input",
+                function (event) {
+
+                    updateItem(
+                        itemId,
+                        "qty",
+                        event.target.value
+                    );
+
+                }
+            );
+
+
+            /* Rate */
+
+            const rateInput =
+                row.querySelector(".item-rate");
+
+            rateInput?.addEventListener(
+                "input",
+                function (event) {
+
+                    updateItem(
+                        itemId,
+                        "rate",
+                        event.target.value
+                    );
+
+                }
+            );
+
+
+            /* Remove */
+
+            const removeButton =
+                row.querySelector(".remove-item");
+
+            removeButton?.addEventListener(
+                "click",
+                function () {
+
+                    removeItem(itemId);
+
+                }
+            );
+
+        });
+
+
+    calculate();
 }
+document.getElementById("status-unpaid")?.addEventListener("click", () => {
+        setStatus("unpaid");
+    });
+
+document.getElementById("status-partial")?.addEventListener("click", () => {
+        setStatus("partial");
+    });
+
+document.getElementById("status-paid")?.addEventListener("click", () => {
+        setStatus("paid");
+    });
 
 function setStatus(s){
   status = s;
@@ -89,7 +268,9 @@ function setStatus(s){
     document.getElementById('status-'+k).classList.toggle('active-'+k, k===s);
   });
 }
-
+document
+    .getElementById("tax-pct")
+    ?.addEventListener("input", calculate);
 function calculate(){
   const subtotal = items.reduce((sum,it)=>sum + (it.qty*it.rate), 0);
   const taxPct = Number(document.getElementById('tax-pct').value) || 0;
@@ -100,7 +281,9 @@ function calculate(){
   document.getElementById('t-total').textContent = fmtMoney(total);
   return { subtotal, tax, total, taxPct };
 }
-
+document
+    .getElementById("resetInvoiceBtn")
+    ?.addEventListener("click", resetInvoice);
 function resetInvoice(){
   if(!confirm('Clear this invoice and start over?')) return;
   document.getElementById('biz-name').value='';
@@ -165,6 +348,9 @@ function populateInvoiceSheet(){
 /* ============================================================
    PREVIEW MODAL
    ============================================================ */
+   document
+    .getElementById("previewInvoiceBtn")
+    ?.addEventListener("click", openPreview);
 function openPreview(){
   if(items.length === 0){ alert('Add at least one line item first.'); return; }
   populateInvoiceSheet();
@@ -185,6 +371,7 @@ function openPreview(){
 
   document.getElementById('preview-backdrop').classList.add('show');
 }
+document.getElementById("previewCloseBtn")?.addEventListener("click", closePreview);
 function closePreview(){
   const sheet = document.getElementById('invoice-sheet');
   sheet.classList.remove('preview-mode');
@@ -192,7 +379,9 @@ function closePreview(){
   document.body.appendChild(sheet); // return it to the body for the next download/preview
   document.getElementById('preview-backdrop').classList.remove('show');
 }
-
+document
+    .getElementById("downloadInvoiceBtn")
+    ?.addEventListener("click", downloadInvoice);
 async function downloadInvoice(){
   if(items.length === 0){ alert('Add at least one line item first.'); return; }
   populateInvoiceSheet();
@@ -216,7 +405,9 @@ async function downloadInvoice(){
     sheet.style.left = prevLeft;
   }
 }
-
+document
+    .getElementById("backBtn")
+    ?.addEventListener("click", goBack);
 function goBack(){
   if(window.history.length > 1){ history.back(); }
   else { window.close(); }
