@@ -20,6 +20,13 @@ function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,
 /* ============================================================
    TABS
    ============================================================ */
+   document.getElementById("tab-expenses-btn")?.addEventListener("click", () => {
+        setTab("expenses");
+    });
+
+document.getElementById("tab-mileage-btn")?.addEventListener("click", () => {
+        setTab("mileage");
+    });
 function setTab(tab){
   document.getElementById('tab-expenses-btn').classList.toggle('active', tab==='expenses');
   document.getElementById('tab-mileage-btn').classList.toggle('active', tab==='mileage');
@@ -30,6 +37,7 @@ function setTab(tab){
 /* ============================================================
    EXPENSES
    ============================================================ */
+   document.getElementById("addexpensebtn")?.addEventListener("click", addExpense);
 function addExpense(){
   const date = document.getElementById('exp-date').value;
   const category = document.getElementById('exp-category').value;
@@ -66,6 +74,7 @@ function renderExpenses(){
 /* ============================================================
    MILEAGE
    ============================================================ */
+   document.getElementById("addMileageBtn")?.addEventListener("click", addMileage);
 function addMileage(){
   const date = document.getElementById('mi-date').value;
   const from = document.getElementById('mi-from').value.trim();
@@ -117,6 +126,7 @@ function renderStats(){
 /* ============================================================
    EXPORT / CLEAR
    ============================================================ */
+   document.getElementById("exportcsvbtn")?.addEventListener("click", exportCsv);
 function exportCsv(){
   if(!data.expenses.length && !data.mileage.length){ alert('Nothing to export yet.'); return; }
   let csv = 'Type,Date,Category/Route,Description,Amount\n';
@@ -136,6 +146,7 @@ function exportCsv(){
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+document.getElementById("clearallbtn")?.addEventListener("click", clearAll);
 function clearAll(){
   if(!confirm('Delete every expense and mileage entry? This cannot be undone.')) return;
   data = { expenses:[], mileage:[] };
@@ -144,7 +155,7 @@ function clearAll(){
   renderMileage();
   renderStats();
 }
-
+document.getElementById("backbtn")?.addEventListener("click", goBack);
 function goBack(){
   if(window.history.length > 1){ history.back(); }
   else { window.close(); }
