@@ -20,7 +20,7 @@
 
 <div class="toolbar">
   <div class="brand"><span class="mark">LH</span> Letterhead Studio</div>
-  <select class="format-select" id="format-select" onchange="setFormat(this.value)">
+  <select class="format-select" id="format-select">
     <option value="classic">Format: Classic</option>
     <option value="centered">Format: Centered</option>
     <option value="split">Format: Modern Split</option>
@@ -32,7 +32,7 @@
     <option value="charcoal">Format: Executive Charcoal</option>
     <option value="legal">Format: Elegant Legal</option>
   </select>
-  <select class="format-select" id="theme-select" onchange="setTheme(this.value)">
+  <select class="format-select" id="theme-select">
     <option value="rust">Theme: Workshop Rust</option>
     <option value="navy">Theme: Corporate Navy</option>
     <option value="charcoal">Theme: Charcoal &amp; Gold</option>
@@ -42,12 +42,12 @@
     <option value="amber">Theme: Amber Gold</option>
     <option value="mono">Theme: Monochrome</option>
   </select>
-  <input type="color" id="bg-color-input" value="#FFFDF8" oninput="setPageBg(this.value)" title="Page background color" class="bg-color-input">
-  <button class="btn btn-tool" onclick="addTextBlock()">+ Text</button>
-  <button class="btn btn-tool" onclick="triggerImageUpload()">+ Image</button>
-  <button class="btn btn-tool" onclick="addTableBlock()">+ Table</button>
-  <button class="btn btn-danger-ghost" onclick="resetLetterhead()">Reset</button>
-  <button class="btn btn-primary" id="download-btn" onclick="downloadPdf()">⬇ Download PDF</button>
+  <input type="color" id="bg-color-input" value="#FFFDF8" title="Page background color" class="bg-color-input">
+  <button class="btn btn-tool" id="addTextBlockBtn">+ Text</button>
+  <button class="btn btn-tool" id="triggerImageUploadBtn">+ Image</button>
+  <button class="btn btn-tool" id="addTableBlockBtn">+ Table</button>
+  <button class="btn btn-danger-ghost" id="resetLetterheadBtn">Reset</button>
+  <button class="btn btn-primary" id="download-btn">⬇ Download PDF</button>
 </div>
 
 <div class="stage-outer">
@@ -55,7 +55,7 @@
     <div class="page format-classic theme-rust" id="page">
 
       <div class="lh-header">
-        <div class="logo-box" id="logo-box" onclick="triggerLogoUpload()">Click to<br>add logo</div>
+        <div class="logo-box" id="logo-box">Click to<br>add logo</div>
         <div class="header-fields">
           <div class="company-name" contenteditable="true" id="hf-company" data-placeholder="Your Company Name"></div>
           <div class="tagline" contenteditable="true" id="hf-tagline" data-placeholder="Tagline or department name"></div>
