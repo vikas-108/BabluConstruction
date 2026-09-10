@@ -16,12 +16,12 @@
 <body>
 
 <div class="topbar">
-  <button class="back-btn" onclick="goBack()" aria-label="Go back">←</button>
+  <button class="back-btn" id="backbtn" type="button" aria-label="Go back">←</button>
   <div class="mark">EX</div>
   <h1>Expense &amp; Mileage Tracker</h1>
   <div class="topbar-actions">
-    <button class="btn btn-ghost" onclick="exportCsv()">⬇ Export CSV</button>
-    <button class="btn btn-ghost" onclick="clearAll()">Clear all</button>
+    <button class="btn btn-ghost" id="exportcsvbtn" type="button">⬇ Export CSV</button>
+    <button class="btn btn-ghost" id="clearallbtn" type="button">Clear all</button>
   </div>
 </div>
 
@@ -34,8 +34,8 @@
   </div>
 
   <div class="tab-row">
-    <button class="tab-btn active" id="tab-expenses-btn" onclick="setTab('expenses')">Expenses</button>
-    <button class="tab-btn" id="tab-mileage-btn" onclick="setTab('mileage')">Mileage</button>
+    <button class="tab-btn active" id="tab-expenses-btn" type="button">Expenses</button>
+    <button class="tab-btn" id="tab-mileage-btn" type="button">Mileage</button>
   </div>
 
   <!-- EXPENSES -->
@@ -52,7 +52,7 @@
         <div class="field"><label>Amount (₹)</label><input type="number" id="exp-amount" placeholder="0"></div>
       </div>
       <div class="field" style="margin-bottom:10px;"><label>Description / job</label><input id="exp-desc" placeholder="e.g. Paint from Sharma Hardware — Kumar residence job"></div>
-      <button class="btn btn-primary" onclick="addExpense()">+ Add expense</button>
+      <button class="btn btn-primary" id="addexpensebtn" type="button">+ Add expense</button>
     </div>
     <table>
       <thead><tr><th>Date</th><th>Category</th><th>Description</th><th style="text-align:right;">Amount</th><th></th></tr></thead>
@@ -70,7 +70,7 @@
         <div class="field"><label>Miles</label><input type="number" id="mi-miles" placeholder="0"></div>
       </div>
       <div class="field" style="margin-bottom:10px; max-width:220px;"><label>Rate per mile (₹)</label><input type="number" id="mi-rate" value="12"></div>
-      <button class="btn btn-primary" onclick="addMileage()">+ Add trip</button>
+      <button class="btn btn-primary" id="addMileageBtn" type="button">+ Add trip</button>
     </div>
     <table>
       <thead><tr><th>Date</th><th>Route</th><th style="text-align:right;">Miles</th><th style="text-align:right;">Reimbursement</th><th></th></tr></thead>
