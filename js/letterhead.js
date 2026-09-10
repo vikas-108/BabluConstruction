@@ -13,6 +13,18 @@ function uid(){ return 'b' + Math.random().toString(36).slice(2,9); }
 /* ============================================================
    LOGO
    ============================================================ */
+   document
+    .getElementById("logo-box")
+    ?.addEventListener("click", triggerLogoUpload);
+
+document
+    .getElementById("logo-box")
+    ?.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            triggerLogoUpload();
+        }
+    });
 function triggerLogoUpload(){ document.getElementById('logo-input').click(); }
 document.getElementById('logo-input').addEventListener('change', e=>{
   const file = e.target.files[0];
@@ -79,51 +91,475 @@ function moveBlock(id, dir){
   renderBlocks();
 }
 
-function renderBlocks(){
-  const container = document.getElementById('blocks-container');
-  container.innerHTML = state.blocks.map(b=>{
-    const toolbar = `<div class="block-toolbar no-export">
-      <button onclick="moveBlock('${b.id}',-1)" title="Move up">↑</button>
-      <button onclick="moveBlock('${b.id}',1)" title="Move down">↓</button>
-      <button onclick="removeBlock('${b.id}')" title="Delete">✕</button>
-    </div>`;
+function renderBlocks() {
 
-    if(b.type === 'text'){
-      return `<div class="block" data-id="${b.id}">${toolbar}
-        <div class="text-block" contenteditable="true" data-placeholder="Type here…"
-             oninput="onTextBlockInput('${b.id}', this)">${b.html}</div>
-      </div>`;
+    const container =
+        document.getElementById("blocks-container");
+
+    if (!container) {
+        return;
     }
-    if(b.type === 'image'){
-      const sizeMap = { small:'30%', medium:'55%', large:'80%', full:'100%' };
-      const w = sizeMap[b.size] || '55%';
-      return `<div class="block image-block" data-id="${b.id}">${toolbar}
-        <img src="${b.src}" style="width:${w};">
-        <div class="image-size-row no-export">
-          ${['small','medium','large','full'].map(s=>`<button class="${b.size===s?'active':''}" onclick="setImageSize('${b.id}','${s}')">${s}</button>`).join('')}
-        </div>
-      </div>`;
-    }
-    if(b.type === 'table'){
-      const rowsHtml = b.rows.map((row, r)=>
-        `<tr>${row.map((cell,c)=>`<td contenteditable="true" oninput="onTableCellInput('${b.id}',${r},${c},this)">${escapeHtml(cell)}</td>`).join('')}</tr>`
-      ).join('');
-      return `<div class="block" data-id="${b.id}">${toolbar}
-        <table class="lh-table">${rowsHtml}</table>
-        <div class="table-controls no-export">
-          <button onclick="tableAddRow('${b.id}')">+ Row</button>
-          <button onclick="tableRemoveRow('${b.id}')">− Row</button>
-          <button onclick="tableAddCol('${b.id}')">+ Column</button>
-          <button onclick="tableRemoveCol('${b.id}')">− Column</button>
-        </div>
-      </div>`;
-    }
-    return '';
-  }).join('');
-  scheduleRescale();
+
+
+    container.innerHTML = state.blocks
+        .map(function (block) {
+
+            /* ==================================================
+               BLOCK TOOLBAR
+               ================================================== */
+
+            const toolbar = `
+                <div class="block-toolbar no-export">
+
+                    <button
+                        type="button"
+                        class="move-up-btn"
+                        title="Move up"
+                        aria-label="Move block up"
+                    >
+                        ↑
+                    </button>
+
+                    <button
+                        type="button"
+                        class="move-down-btn"
+                        title="Move down"
+                        aria-label="Move block down"
+                    >
+                        ↓
+                    </button>
+
+                    <button
+                        type="button"
+                        class="remove-block-btn"
+                        title="Delete"
+                        aria-label="Delete block"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+            `;
+
+
+            /* ==================================================
+               TEXT BLOCK
+               ================================================== */
+
+            if (block.type === "text") {
+
+                return `
+                    <div
+                        class="block"
+                        data-id="${escapeHtml(block.id)}"
+                    >
+
+                        ${toolbar}
+
+                        <div
+                            class="text-block"
+                            contenteditable="true"
+                            data-placeholder="Type here…"
+                        >${block.html || ""}</div>
+
+                    </div>
+                `;
+
+            }
+
+
+            /* ==================================================
+               IMAGE BLOCK
+               ================================================== */
+
+            if (block.type === "image") {
+
+                const sizeMap = {
+                    small: "30%",
+                    medium: "55%",
+                    large: "80%",
+                    full: "100%"
+                };
+
+
+                const width =
+                    sizeMap[block.size] || "55%";
+
+
+                const sizes =
+                    [
+                        "small",
+                        "medium",
+                        "large",
+                        "full"
+                    ];
+
+
+                const sizeButtons =
+                    sizes
+                        .map(function (size) {
+
+                            return `
+                                <button
+                                    type="button"
+                                    class="${block.size === size ? "active" : ""}"
+                                    data-image-size="${size}"
+                                >
+                                    ${size}
+                                </button>
+                            `;
+
+                        })
+                        .join("");
+
+
+                return `
+                    <div
+                        class="block image-block"
+                        data-id="${escapeHtml(block.id)}"
+                    >
+
+                        ${toolbar}
+
+                        <img
+                            src="${escapeHtml(block.src)}"
+                            style="width:${width};"
+                            alt="Uploaded image"
+                        >
+
+                        <div class="image-size-row no-export">
+                            ${sizeButtons}
+                        </div>
+
+                    </div>
+                `;
+
+            }
+
+
+            /* ==================================================
+               TABLE BLOCK
+               ================================================== */
+
+            if (block.type === "table") {
+
+                const rowsHtml =
+                    block.rows
+                        .map(function (row, rowIndex) {
+
+                            const cellsHtml =
+                                row
+                                    .map(function (
+                                        cell,
+                                        columnIndex
+                                    ) {
+
+                                        return `
+                                            <td
+                                                contenteditable="true"
+                                                data-row="${rowIndex}"
+                                                data-col="${columnIndex}"
+                                            >${escapeHtml(cell)}</td>
+                                        `;
+
+                                    })
+                                    .join("");
+
+
+                            return `
+                                <tr>
+                                    ${cellsHtml}
+                                </tr>
+                            `;
+
+                        })
+                        .join("");
+
+
+                return `
+                    <div
+                        class="block"
+                        data-id="${escapeHtml(block.id)}"
+                    >
+
+                        ${toolbar}
+
+                        <table class="lh-table">
+                            ${rowsHtml}
+                        </table>
+
+                        <div class="table-controls no-export">
+
+                            <button
+                                type="button"
+                                class="table-add-row-btn"
+                            >
+                                + Row
+                            </button>
+
+                            <button
+                                type="button"
+                                class="table-remove-row-btn"
+                            >
+                                − Row
+                            </button>
+
+                            <button
+                                type="button"
+                                class="table-add-col-btn"
+                            >
+                                + Column
+                            </button>
+
+                            <button
+                                type="button"
+                                class="table-remove-col-btn"
+                            >
+                                − Column
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }
+
+
+            return "";
+
+        })
+        .join("");
+
+
+    /* ============================================================
+       ATTACH EVENTS TO RENDERED BLOCKS
+       ============================================================ */
+
+    container
+        .querySelectorAll(".block[data-id]")
+        .forEach(function (blockElement) {
+
+            const blockId =
+                blockElement.dataset.id;
+
+
+            /* ==================================================
+               MOVE UP
+               ================================================== */
+
+            blockElement
+                .querySelector(".move-up-btn")
+                ?.addEventListener(
+                    "click",
+                    function () {
+
+                        moveBlock(
+                            blockId,
+                            -1
+                        );
+
+                    }
+                );
+
+
+            /* ==================================================
+               MOVE DOWN
+               ================================================== */
+
+            blockElement
+                .querySelector(".move-down-btn")
+                ?.addEventListener(
+                    "click",
+                    function () {
+
+                        moveBlock(
+                            blockId,
+                            1
+                        );
+
+                    }
+                );
+
+
+            /* ==================================================
+               REMOVE BLOCK
+               ================================================== */
+
+            blockElement
+                .querySelector(".remove-block-btn")
+                ?.addEventListener(
+                    "click",
+                    function () {
+
+                        removeBlock(
+                            blockId
+                        );
+
+                    }
+                );
+
+
+            /* ==================================================
+               TEXT INPUT
+               ================================================== */
+
+            blockElement
+                .querySelector(".text-block")
+                ?.addEventListener(
+                    "input",
+                    function (event) {
+
+                        onTextBlockInput(
+                            blockId,
+                            event.currentTarget
+                        );
+
+                    }
+                );
+
+
+            /* ==================================================
+               IMAGE SIZE
+               ================================================== */
+
+            blockElement
+                .querySelectorAll(
+                    "[data-image-size]"
+                )
+                .forEach(
+                    function (button) {
+
+                        button.addEventListener(
+                            "click",
+                            function () {
+
+                                setImageSize(
+                                    blockId,
+                                    button.dataset.imageSize
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            /* ==================================================
+               TABLE CELLS
+               ================================================== */
+
+            blockElement
+                .querySelectorAll(
+                    "td[data-row][data-col]"
+                )
+                .forEach(
+                    function (cell) {
+
+                        cell.addEventListener(
+                            "input",
+                            function (event) {
+
+                                onTableCellInput(
+                                    blockId,
+                                    Number(cell.dataset.row),
+                                    Number(cell.dataset.col),
+                                    event.currentTarget
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            /* ==================================================
+               TABLE CONTROLS
+               ================================================== */
+
+            blockElement
+                .querySelector(
+                    ".table-add-row-btn"
+                )
+                ?.addEventListener(
+                    "click",
+                    function () {
+
+                        tableAddRow(
+                            blockId
+                        );
+
+                    }
+                );
+
+
+            blockElement
+                .querySelector(
+                    ".table-remove-row-btn"
+                )
+                ?.addEventListener(
+                    "click",
+                    function () {
+
+                        tableRemoveRow(
+                            blockId
+                        );
+
+                    }
+                );
+
+
+            blockElement
+                .querySelector(
+                    ".table-add-col-btn"
+                )
+                ?.addEventListener(
+                    "click",
+                    function () {
+
+                        tableAddCol(
+                            blockId
+                        );
+
+                    }
+                );
+
+
+            blockElement
+                .querySelector(
+                    ".table-remove-col-btn"
+                )
+                ?.addEventListener(
+                    "click",
+                    function () {
+
+                        tableRemoveCol(
+                            blockId
+                        );
+
+                    }
+                );
+
+        });
+
+
+    /* ============================================================
+       RESCALE
+       ============================================================ */
+
+    scheduleRescale();
+
 }
-function escapeHtml(s){
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+//function escapeHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 function onTextBlockInput(id, el){
   const b = findBlock(id);
@@ -163,6 +599,9 @@ function tableRemoveCol(id){
 /* ============================================================
    FORMAT — 10 selectable letterhead layouts (CSS-only; content unaffected)
    ============================================================ */
+   document.getElementById("format-select")?.addEventListener("change", (event) => {
+        setFormat(event.target.value);
+    });
 const FORMATS = ['classic','centered','split','minimal','formal','band','twocol','navy','charcoal','legal'];
 function setFormat(name){
   const page = document.getElementById('page');
@@ -175,6 +614,9 @@ function setFormat(name){
    THEME — 8 selectable color palettes, independent of format.
    Recolors whichever format is active via CSS variables.
    ============================================================ */
+   document.getElementById("theme-select")?.addEventListener("change", (event) => {
+        setTheme(event.target.value);
+    });
 const THEMES = ['rust','navy','charcoal','forest','burgundy','slate','amber','mono'];
 const THEME_BG_DEFAULTS = {
   rust:'#FFFDF8', navy:'#FBFCFE', charcoal:'#FFFDF9', forest:'#FBFDFC',
@@ -195,6 +637,19 @@ function setTheme(name){
    BACKGROUND COLOR — independent of theme/format, lets you pick
    any custom page background color.
    ============================================================ */
+   document.getElementById("bg-color-input")?.addEventListener("input", (event) => {
+        setPageBg(event.target.value);
+    });
+
+document.getElementById("addTextBlockBtn")?.addEventListener("click", addTextBlock);
+
+document.getElementById("triggerImageUploadBtn")?.addEventListener("click", triggerImageUpload);
+
+document.getElementById("addTableBlockBtn")?.addEventListener("click", addTableBlock);
+
+document.getElementById("resetLetterheadBtn")?.addEventListener("click", resetLetterhead);
+
+document.getElementById("download-btn")?.addEventListener("click", downloadPdf);
 function setPageBg(color){
   document.getElementById('page').style.setProperty('--lh-page-bg', color);
   scheduleRescale();
