@@ -11,7 +11,9 @@ let currentFormat = 'classic';
 const CARD_FORMATS = ['classic','centered','split','minimal','band','compact','stacked','corner','twotone','outline'];
 const CARD_THEMES = ['indigo','rust','navy','charcoal','forest','burgundy','slate','amber','mono'];
 const LIGHT_CARD_FORMATS = ['minimal','outline']; // these ignore the background photo/gradient for readability
-
+document.getElementById("format-select")?.addEventListener("change", (event) => {
+        setCardFormat(event.target.value);
+    });
 function setCardFormat(name){
   currentFormat = name;
   const el = document.getElementById('biz-card');
@@ -19,6 +21,9 @@ function setCardFormat(name){
   el.classList.add('format-'+name);
   render();
 }
+document.getElementById("theme-select")?.addEventListener("change", (event) => {
+        setCardTheme(event.target.value);
+    });
 function setCardTheme(name){
   const el = document.getElementById('biz-card');
   CARD_THEMES.forEach(t=>el.classList.remove('theme-'+t));
@@ -29,6 +34,13 @@ function setCardTheme(name){
 /* ============================================================
    IMAGE UPLOADS
    ============================================================ */
+   document.getElementById("logo-box")?.addEventListener("click", () => {
+        triggerUpload("logo");
+    });
+
+document.getElementById("bg-box")?.addEventListener("click", () => {
+        triggerUpload("bg");
+    });
 function triggerUpload(kind){
   document.getElementById(kind === 'logo' ? 'logo-input' : 'bg-input').click();
 }
@@ -60,6 +72,13 @@ document.getElementById('bg-input').addEventListener('change', e=>{
 /* ============================================================
    CODE TYPE
    ============================================================ */
+   document.getElementById("code-qr-btn")?.addEventListener("click", () => {
+        setCodeType("qr");
+    });
+
+document.getElementById("code-barcode-btn")?.addEventListener("click", () => {
+        setCodeType("barcode");
+    });
 function setCodeType(type){
   codeType = type;
   document.getElementById('code-qr-btn').classList.toggle('active', type==='qr');
@@ -70,6 +89,19 @@ function setCodeType(type){
 /* ============================================================
    RENDER
    ============================================================ */
+   [
+    "f-company",
+    "f-name",
+    "f-address",
+    "f-phone",
+    "f-email"
+].forEach(function (id) {
+
+    document
+        .getElementById(id)
+        ?.addEventListener("input", render);
+
+});
 function render(){
   const company = document.getElementById('f-company').value.trim() || 'Your Company';
   const name = document.getElementById('f-name').value.trim() || 'Your Name';
@@ -128,6 +160,7 @@ function renderCode(payload){
 /* ============================================================
    RESET / DOWNLOAD
    ============================================================ */
+   document.getElementById("resetcardbrn")?.addEventListener("click", resetCard);
 function resetCard(){
   if(!confirm('Clear all card details, images, format, and theme?')) return;
   ['f-company','f-name','f-address','f-phone','f-email'].forEach(id=>document.getElementById(id).value='');
@@ -142,7 +175,7 @@ function resetCard(){
   setCardTheme('indigo');
   render();
 }
-
+document.getElementById("downloadCardBtn")?.addEventListener("click", downloadCard);
 async function downloadCard(){
   const el = document.getElementById('biz-card');
   try{
@@ -156,7 +189,7 @@ async function downloadCard(){
     alert("Couldn't export the card — please try again.");
   }
 }
-
+document.getElementById("backbtn")?.addEventListener("click", goBack);
 function goBack(){
   if(window.history.length > 1){ history.back(); }
   else { window.close(); }
