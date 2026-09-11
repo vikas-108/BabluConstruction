@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#111827"
+>
+
+<title>BuildSkil Admin</title>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+<link rel="icon" type="image/png" href="/favicon.png" />
+ <!-- CSS -->
+    <link rel="stylesheet" href="../dist/css/hedon.min.css" />
+    <!-- Prevents unauthenticated users from seeing a flash of content -->
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+  <script src="../dist/js/auth-guard.min.js"></script>
+</head>
+
+<body>
+
+<header class="admin-header">
+
+    <div class="header-left">
+
+        <div class="admin-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <div class="admin-title">
+
+            <h1>
+                BuildSkil Admin
+            </h1>
+
+            <p>
+                Users, profiles and projects
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <button
+            id="backAccountBtn"
+            class="header-btn"
+            type="button"
+        >
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Account</span>
+        </button>
+
+        <button
+            id="logoutAdminBtn"
+            class="header-btn"
+            type="button"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <!-- =========================
+         LOADING
+    ========================== -->
+
+    <div
+        id="loadingState"
+        class="state-box"
+    >
+
+        <div class="state-icon">
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+        </div>
+
+        <h2>
+            Loading Admin
+        </h2>
+
+        <p>
+            Please wait while BuildSkil loads
+            the administration data.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         ERROR
+    ========================== -->
+
+    <div
+        id="errorState"
+        class="state-box error"
+        hidden
+    >
+
+        <div class="state-icon">
+
+            <i class="fa-solid fa-lock"></i>
+
+        </div>
+
+        <h2>
+            Access Denied
+        </h2>
+
+        <p id="errorMessage">
+            You do not have permission to access
+            this screen.
+        </p>
+
+        <button
+            id="retryBtn"
+            class="retry-btn"
+            type="button"
+        >
+            Try Again
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         CONTENT
+    ========================== -->
+
+    <div
+        id="adminContent"
+        hidden
+    >
+
+        <!-- STATS -->
+
+        <section class="stats-grid">
+
+            <article class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Login Users
+                        </div>
+
+                        <div
+                            id="userCount"
+                            class="stat-value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                </div>
+
+            </article>
+              <article class="stat-card">
+
+        <div class="stat-top">
+
+            <div>
+
+                <div class="stat-label">
+                    Accounts
+                </div>
+
+                <div
+                    id="accountCount"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-user-circle"></i>
+            </div>
+
+        </div>
+
+    </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Profiles
+                        </div>
+
+                        <div
+                            id="profileCount"
+                            class="stat-value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Projects
+                        </div>
+
+                        <div
+                            id="projectCount"
+                            class="stat-value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- USERS -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title">
+
+                    <h2>
+                        Login Users
+                    </h2>
+
+                    <p>
+                        All registered BuildSkil accounts
+                    </p>
+
+                </div>
+
+
+                <div class="section-count">
+                    <span id="usersSectionCount">0</span>
+                </div>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="usersTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+        <section class="section">
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            <h2>
+                Account Details
+            </h2>
+
+            <p>
+                Account information created for BuildSkil users
+            </p>
+
+        </div>
+
+        <div class="section-count">
+            <span id="accountsSectionCount">0</span>
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        User ID
+                    </th>
+
+                    <th>
+                        Phone
+                    </th>
+
+                    <th>
+                        Email Verified
+                    </th>
+
+                    <th>
+                        Role
+                    </th>
+
+                    <th>
+                        Created
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="accountsTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+ 
+
+        <!-- PROFILES -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title">
+
+                    <h2>
+                        User Profiles
+                    </h2>
+
+                    <p>
+                        Profiles created by BuildSkil users
+                    </p>
+
+                </div>
+
+
+                <div class="section-count">
+                    <span id="profilesSectionCount">0</span>
+                </div>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Profile ID
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="profilesTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROJECTS -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title">
+
+                    <h2>
+                        User Created Projects
+                    </h2>
+
+                    <p>
+                        Projects created by BuildSkil users
+                    </p>
+
+                </div>
+
+
+                <div class="section-count">
+                    <span id="projectsSectionCount">0</span>
+                </div>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Project
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Owner
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="projectsTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+        <!-- =========================
+     REPORTED ISSUES
+========================== -->
+
+<section class="section">
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            <h2>
+                Reported Issues
+            </h2>
+
+            <p>
+                Issues submitted by BuildSkil users
+            </p>
+
+        </div>
+
+        <div class="section-count">
+
+            <span id="issuesSectionCount">
+                0
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table class="issues-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        User
+                    </th>
+
+                    <th>
+                        Phone
+                    </th>
+
+                    <th>
+                        Problem
+                    </th>
+
+                    <th>
+                        Description
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Reported
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="issuesTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+    </div>
+
+</main>
+
+
+<script src="../dist/data/hedon.min.js"></script>
+
+</body>
+
+</html>
