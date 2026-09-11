@@ -570,3 +570,192 @@ textarea{
 }
 
 }
+
+/* =========================================
+   MY ISSUES
+========================================= */
+
+.my-issues-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.my-issues-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.my-issues-header h2 {
+    margin: 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.refresh-issues-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-issues-btn:hover {
+    background: #f5f5f5;
+}
+
+.issues-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.issue-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 18px;
+    background: #fff;
+}
+
+.issue-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.issue-info h3 {
+    margin: 0 0 5px;
+    font-size: 17px;
+}
+
+.issue-date {
+    font-size: 12px;
+    color: #777;
+}
+
+.issue-status {
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-open {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-progress {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.status-resolved {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-closed {
+    background: #e2e3e5;
+    color: #41464b;
+}
+
+.issue-description {
+    margin-top: 15px;
+}
+
+.issue-description strong {
+    font-size: 13px;
+}
+
+.issue-description p {
+    margin: 5px 0 0;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.admin-response {
+    margin-top: 15px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #f5f7fa;
+}
+
+.admin-response-title {
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.admin-response p {
+    margin: 7px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.issues-loading,
+.issues-error,
+.no-issues {
+    text-align: center;
+    padding: 25px 15px;
+}
+
+.issues-error {
+    color: #b42318;
+}
+
+.no-issues i {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.no-issues h3 {
+    margin: 5px 0;
+}
+
+.no-issues p {
+    margin: 5px 0;
+    color: #777;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .issue-item {
+        padding: 14px;
+    }
+
+    .issue-item-top {
+        flex-direction: column;
+    }
+
+    .issue-status {
+        align-self: flex-start;
+    }
+
+    .my-issues-header h2 {
+        font-size: 17px;
+    }
+
+}

@@ -67,7 +67,7 @@ body {
 
     font-size: 1rem;
     font-weight: 600;
-
+    margin-bottom: 10px;
     border-radius: 8px;
     transition: background .2s ease, transform .2s ease;
     box-sizing: border-box;
@@ -269,7 +269,67 @@ button:hover {
 .home-btn:active {
     transform: scale(.98);
 }
+.admi-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
+    width: 100%;
+    max-width: 240px;
+    min-height: 46px;
+
+    padding: 12px 20px;
+
+    background: #0d6efd;
+    color: #fff;
+    text-decoration: none;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    border-radius: 8px;
+    transition: background .2s ease, transform .2s ease;
+    box-sizing: border-box;
+}
+.switch-admin-btn {
+    width: 100%;
+    min-height: 44px;
+
+    margin-top: 8px;
+    padding: 11px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #111827;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.switch-admin-btn:hover {
+    opacity: 0.9;
+    background: #c454d7;
+}
+
+.switch-admin-btn i {
+    font-size: 15px;
+}
+.admin-btn:hover {
+    background: #c454d7;
+}
+
+.admi-btn:active {
+    transform: scale(.98);
+}
 @media (max-width: 768px) {
     .section-card {
         padding: 16px;
@@ -280,6 +340,11 @@ button:hover {
     }
 
     .home-btn {
+        max-width: 100%;
+        font-size: 0.95rem;
+        min-height: 44px;
+    }
+    .admi-btn {
         max-width: 100%;
         font-size: 0.95rem;
         min-height: 44px;
@@ -296,6 +361,10 @@ button:hover {
     }
 
     .home-btn {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+    .admi-btn {
         font-size: 0.9rem;
         padding: 10px 16px;
     }
@@ -884,3 +953,6 @@ button:hover {
   transform: scale(0.98);
 }
 
+#switchAdminBtn {
+    display: none;
+}
