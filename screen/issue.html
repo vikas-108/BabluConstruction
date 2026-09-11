@@ -14,6 +14,10 @@
     <!-- Font Awesome -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+         <script>document.documentElement.style.visibility = 'hidden';</script>
+  
+  <!-- Your common auth guard -->
+  <script src="../dist/js/auth-guard.min.js"></script>
 
 </head>
 
@@ -64,7 +68,7 @@
                         </option>
 
                         <option value="OTP Issue">
-                            OTP Not Received
+                           account details
                         </option>
 
                         <option value="Application Crash">
@@ -84,7 +88,7 @@
                         </option>
 
                         <option value="Chat Issue">
-                            Chat Problem
+                            media upoading issue
                         </option>
 
                         <option value="Camera Issue">
@@ -92,7 +96,7 @@
                         </option>
 
                         <option value="Payment Issue">
-                            Payment Issue
+                            scanner Issue
                         </option>
 
                         <option value="Billing Issue">
@@ -160,25 +164,7 @@
                     </div>
 
                 </div>
-
-
-                <!-- Screenshot -->
-
-                <div class="form-group">
-
-                    <label>
-                        Upload Screenshot (Optional)
-                    </label>
-
-                    <input
-                        type="file"
-                        id="screenshot"
-                        accept="image/*">
-
-                </div>
-
-
-                <!-- Preview -->
+                 <!-- Preview -->
 
                 <div class="preview hidden"
                     id="previewBox">
@@ -224,7 +210,68 @@
                 </button>
 
             </form>
+<!-- ============================= -->
+<!-- MY REPORTED ISSUES -->
+<!-- ============================= -->
 
+<section class="my-issues-section">
+
+    <div class="my-issues-header">
+        <h2>
+            <i class="fa-solid fa-list-check"></i>
+            My Reported Issues
+        </h2>
+
+        <button
+            type="button"
+            id="refreshIssuesBtn"
+            class="refresh-issues-btn"
+            title="Refresh Issues">
+
+            <i class="fa-solid fa-rotate"></i>
+
+        </button>
+    </div>
+
+
+    <div
+        id="issuesLoading"
+        class="issues-loading hidden">
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        Loading your issues...
+
+    </div>
+
+
+    <div
+        id="issuesError"
+        class="issues-error hidden">
+    </div>
+
+
+    <div
+        id="issuesList"
+        class="issues-list">
+    </div>
+
+
+    <div
+        id="noIssues"
+        class="no-issues hidden">
+
+        <i class="fa-regular fa-circle-check"></i>
+
+        <h3>No Issues Reported</h3>
+
+        <p>
+            You have not reported any issues yet.
+        </p>
+
+    </div>
+
+</section>
         </section>
 
     </main>
