@@ -1,9 +1,10 @@
 let CURRENT_PROFILE = null;
 let NEW_PHOTO_FILE = null;
 let activeRequests = 0;
-const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
-const SERVER_BASE = "https://api.buildskil.com";
-
+//const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
+//const SERVER_BASE = "https://api.buildskil.com";
+const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
+const SERVER_BASE = "http://localhost:5000"; // change if using domain
 function authHeaders() {
   return {
     "Content-Type": "application/json",
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const profile = await res.json();
 
   renderProfile(profile);
-  
+  setupAdminButton(profile);
   //const membershipButton = document.getElementById("membershipButton");
   const subscriptionSection = document.getElementById("subscriptionSection");
   const closeDrawer = document.getElementById("closeDrawer");
@@ -360,20 +361,6 @@ window.fetch = async (...args) => {
         }
     }
 };
-// Delete account
-/*async function deleteAccount() {
-  if (!confirm("Delete account permanently?")) return;
-
-  await fetch(`${ACCOUNT_BASE}/delete`, {
-    method: "DELETE",
-    headers: authHeaders()
-  });
-
-  localStorage.removeItem("cb_token");
-  localStorage.removeItem(LOGIN_KEY);
-
-  location.href = "index.html";
-}*/
 async function loadDeleteSetting(){
 
     const res = await fetch(
@@ -539,5 +526,189 @@ loadMembershipCard();
 //window.openEditProfile = openEditProfile;
 //window.saveProfile = saveProfile;
 //window.closeEdit = closeEdit;
+
+async function loadAccount() {
+
+    const token =
+        localStorage.getItem("cb_token");
+
+    if (!token) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${ACCOUNT_BASE}/me`,
+            {
+                method: "GET",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
+
+
+        if (!response.ok) {
+
+            console.error(
+                "Account API failed:",
+                response.status
+            );
+
+            return;
+        }
+
+
+        const user =
+            await response.json();
+
+        
+         //* EXISTING ACCOUNT DATA
+         
+
+        const nameInput =
+            document.getElementById("editName");
+
+        if (nameInput) {
+
+            nameInput.value =
+                user.name || "";
+        }
+
+
+        const phoneInput =
+            document.getElementById("editPhone");
+
+        if (phoneInput) {
+
+            phoneInput.value =
+                user.phone || "";
+        }
+
+
+        const roleInput =
+            document.getElementById("editRole");
+
+        if (roleInput) {
+
+            roleInput.value =
+                user.role || "";
+        }
+
+
+        
+         //* ADMIN BUTTON
+         
+
+        setupAdminButton(user);
+
+
+    } catch (error) {
+
+        console.error(
+            "Account loading error:",
+            error
+        );
+    }
+}
 */
+
+/* =========================================================
+   CREATE ADMIN BUTTON
+   ========================================================= */
+
+function setupAdminButton(user) {
+
+    const container =
+        document.getElementById(
+            "adminButtonContainer"
+        );
+
+    if (!container) {
+
+        console.error(
+            "adminButtonContainer not found"
+        );
+
+        return;
+    }
+
+
+    // Remove previous button
+    const oldButton =
+        document.getElementById(
+            "switchAdminBtn"
+        );
+
+    if (oldButton) {
+        oldButton.remove();
+    }
+
+
+    // Only create for admin
+    if (user?.isAdmin !== true) {
+        return;
+    }
+
+
+    const button =
+        document.createElement("button");
+
+
+    button.id =
+        "switchAdminBtn";
+
+    button.type =
+        "button";
+
+    button.className =
+        "switch-admin-btn";
+
+
+    button.innerHTML = `
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Switch to Admin</span>
+    `;
+
+
+    // Force visible
+    button.style.display = "flex";
+    button.style.visibility = "visible";
+    button.style.opacity = "1";
+    button.style.width = "100%";
+    button.style.minHeight = "44px";
+    button.style.marginTop = "8px";
+    button.style.padding = "12px 16px";
+    button.style.background = "#111827";
+    button.style.color = "#ffffff";
+    button.style.border = "0";
+    button.style.borderRadius = "10px";
+    button.style.cursor = "pointer";
+    button.style.alignItems = "center";
+    button.style.justifyContent = "center";
+    button.style.gap = "5px";
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            window.location.href =
+                "/common/hedon.html";
+
+        }
+    );
+    container.appendChild(button);
+}
+
+
+/* =========================================================
+   START ACCOUNT
+   ========================================================= */
+
+//loadAccount();
+
 });
