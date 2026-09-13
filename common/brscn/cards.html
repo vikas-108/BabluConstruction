@@ -11,15 +11,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link rel="stylesheet" href="../../dist/css/cards.min.css">
 <link rel="icon" type="image/png" href="/favicon.png" />
-    <script>
+<script>
       document.documentElement.style.visibility = "hidden";
     </script>
+
+    <!-- Your common auth guard -->
     <script src="../../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
 
 <div class="topbar">
-  <button class="back-btn" id="backbtn" type="button" aria-label="Go back">←</button>
+  <button class="back-btn" id="back-btn" aria-label="Go back">←</button>
   <div class="mark">BC</div>
   <h1>Business Card Studio</h1>
   <div class="topbar-actions">
@@ -46,77 +48,41 @@
       <option value="amber">Amber Gold</option>
       <option value="mono">Monochrome</option>
     </select>
-    <button class="btn btn-ghost btn-icon" id="resetcardbrn" type="button" title="Reset" aria-label="Reset">↺</button>
-    <button class="btn btn-primary btn-icon" id="downloadpngbtn" type="button" title="Download PNG" aria-label="Download PNG">⬇</button>
+    <select class="format-select" id="size-select" title="Card size">
+      <option value="standard">US Standard (3.5×2 in)</option>
+      <option value="eu">EU/ISO (85×55 mm)</option>
+      <option value="japan">Japan (91×55 mm)</option>
+      <option value="square">Square (2.5×2.5 in)</option>
+      <option value="mini">Mini (3×1.5 in)</option>
+      <option value="creditcard">Credit Card (3.37×2.125 in)</option>
+      <option value="slim">Slim (4×2 in)</option>
+    </select>
+    <button class="btn btn-ghost btn-icon" id="reset-size-btn" title="Reset size" aria-label="Reset size">⤾</button>
+    <button class="btn btn-ghost btn-icon" id="reset-btn" title="Reset" aria-label="Reset">↺</button>
+    <button class="btn btn-primary btn-icon" id="download-btn" title="Download PNG" aria-label="Download PNG">⬇</button>
   </div>
 </div>
 
 <div class="wrap">
   <div>
-    <div class="row2">
-
-    <div class="field">
-        <label>Company name</label>
-        <input
-            id="f-company"
-            type="text"
-            placeholder="e.g. Sharma Painting Co."
-        >
-    </div>
-
-    <div class="field">
-        <label>Person name</label>
-        <input
-            id="f-name"
-            type="text"
-            placeholder="e.g. Vikram Sharma"
-        >
-    </div>
-
-</div>
-
-
-<div class="field">
-    <label>Address</label>
-
-    <input
-        id="f-address"
-        type="text"
-        placeholder="Business address"
-    >
-</div>
-
-
-<div class="row2">
-
-    <div class="field">
-        <label>Phone</label>
-
-        <input
-            id="f-phone"
-            type="tel"
-            placeholder="98765 43210"
-    >
-    </div>
-
-    <div class="field">
-        <label>Email (optional)</label>
-
-        <input
-            id="f-email"
-            type="email"
-            placeholder="you@company.com"
-        >
-    </div>
-
-</div>
+    <div class="card">
+      <h2>Details</h2>
+      <div class="row2">
+        <div class="field"><label>Company name</label><input id="f-company" placeholder="e.g. Sharma Painting Co."></div>
+        <div class="field"><label>Person name</label><input id="f-name" placeholder="e.g. Vikram Sharma"></div>
+      </div>
+      <div class="field"><label>Address</label><input id="f-address" placeholder="Business address"></div>
+      <div class="row2">
+        <div class="field"><label>Phone</label><input id="f-phone" placeholder="98765 43210"></div>
+        <div class="field"><label>Email (optional)</label><input id="f-email" placeholder="you@company.com"></div>
+      </div>
     </div>
 
     <div class="card">
       <h2>Images</h2>
       <div class="upload-row">
-        <div class="upload-box" id="logo-box"  tabindex="0">Add logo</div>
-        <div class="upload-box" id="bg-box"  tabindex="0">Add background photo</div>
+        <div class="upload-box" id="logo-box">Add logo</div>
+        <div class="upload-box" id="bg-box">Add background photo</div>
       </div>
       <input type="file" id="logo-input" accept="image/*" style="display:none;">
       <input type="file" id="bg-input" accept="image/*" style="display:none;">
@@ -125,8 +91,8 @@
     <div class="card">
       <h2>Scannable code</h2>
       <div class="code-toggle">
-        <button type="button" id="code-qr-btn" class="active" type="button">QR Code</button>
-        <button type="button" id="code-barcode-btn" type="button">Barcode</button>
+        <button type="button" id="code-qr-btn" class="active">QR Code</button>
+        <button type="button" id="code-barcode-btn">Barcode</button>
       </div>
       <p style="font-size:11.5px; color:var(--muted); line-height:1.6; margin:0;">
         The QR code stores all the card details as data — scan it with Universal Scanner (or any QR reader) to instantly pull up the name, company, phone, address and email. The barcode option encodes just the phone number.
@@ -135,27 +101,48 @@
   </div>
 
   <div class="preview-stage">
-    <div id="biz-card" class="format-classic theme-indigo">
-      <div class="bc-content">
-        <div class="bc-top">
-          <div class="bc-logo" id="bc-logo-wrap"></div>
-          <div class="bc-company" id="bc-company">Your Company</div>
-        </div>
-        <div class="bc-bottom">
-          <div>
-            <div class="bc-person" id="bc-person">Your Name</div>
-            <div class="bc-detail" id="bc-phone"></div>
-            <div class="bc-detail" id="bc-address"></div>
+    <div class="card-flip-wrap" id="card-flip-wrap">
+      <div class="card-flip-inner" id="card-flip-inner">
+
+        <div id="biz-card" class="format-classic theme-indigo">
+          <div class="bc-content">
+            <div class="bc-top">
+              <div class="bc-logo" id="bc-logo-wrap"></div>
+              <div class="bc-company" id="bc-company">Your Company</div>
+            </div>
+            <div class="bc-bottom">
+              <div>
+                <div class="bc-person" id="bc-person">Your Name</div>
+                <div class="bc-detail" id="bc-phone"></div>
+                <div class="bc-detail" id="bc-address"></div>
+              </div>
+              <div class="bc-code" id="bc-code"></div>
+            </div>
           </div>
-          <div class="bc-code" id="bc-code"></div>
         </div>
+
+        <div id="biz-card-back">
+          <div class="bc-back-inner">
+            <div class="bc-back-label">Scan for details</div>
+            <div class="bc-back-codes">
+              <div class="bc-back-code-item">
+                <div id="bc-back-qr"></div>
+                <span>QR Code</span>
+              </div>
+              <div class="bc-back-code-item">
+                <svg id="bc-back-barcode"></svg>
+                <span>Barcode</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-    <div class="hint">Card size matches a standard 3.5″ × 2″ business card. Download exports it as a high-resolution PNG.</div>
+    <div class="hint">Tap the card to flip it over and see the QR code and barcode together. Download exports whichever side is currently facing you.</div>
   </div>
 </div>
 <script src="../../dist/js/tt.min.js"></script>
-<script src="../../dist/js/cards.min.js">
-</script>
+<script src="../../dist/js/cards.min.js"></script>
 </body>
 </html>
