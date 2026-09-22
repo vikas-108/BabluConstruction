@@ -1,10 +1,10 @@
 let CURRENT_PROFILE = null;
 let NEW_PHOTO_FILE = null;
 let activeRequests = 0;
-//const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
-//const SERVER_BASE = "https://api.buildskil.com";
-const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
-const SERVER_BASE = "http://localhost:5000"; // change if using domain
+const ACCOUNT_BASE = "https://api.buildskil.com/api/account";
+const SERVER_BASE = "https://api.buildskil.com";
+//const ACCOUNT_BASE = "http://localhost:5000/api/account"; // change if using domain
+//const SERVER_BASE = "http://localhost:5000"; // change if using domain
 function authHeaders() {
   return {
     "Content-Type": "application/json",
@@ -105,65 +105,41 @@ function renderProfile(profile) {
   document.getElementById("profileBio").textContent =
     profile.bio || "No details added";
 
-  /*Show saved photo if available
-  if (profile.photo) {
-    document.getElementById("profilePhoto").src = profile.photo.startsWith(
-      "http",
-    )
-      ? profile.photo
-      : SERVER_BASE + profile.photo+ "?v=" + Date.now();
-  } else {
-    // Generate initials avatar if no photo
-    const initials = (profile.name || "U N")
-      .split(" ")
-      .map((n) => n[0].toUpperCase())
-      .join("");
-    document.getElementById("profilePhoto").src =
-      `https://via.placeholder.com/140/007bff/ffffff?text=${initials}`;
-  }
- const photo = document.getElementById("profilePhoto");
-
-if (profile.photo) {
-  photo.src = profile.photo.startsWith("http")
-    ? profile.photo
-    : SERVER_BASE + profile.photo;
-} else {
-  const initials = (profile.name || "U N")
-    .split(" ")
-    .map(n => n[0].toUpperCase())
-    .join("");
-
-  photo.src = `https://via.placeholder.com/140/007bff/ffffff?text=${encodeURIComponent(initials)}`;
-}*/
-  /*/ 🔐 LOCK EMAIL IF VERIFIED
-const editEmailInput = document.getElementById("editEmail");
-
-if(profile.emailVerified){
-  editEmailInput?.setAttribute("disabled", true);
-  editEmailInput?.classList.add("locked");
-}else{
-  editEmailInput?.removeAttribute("disabled");
-  editEmailInput?.classList.remove("locked");
-}
-
-
- *   // 🔐 LOCK EMAIL + ROLE IF VERIFIED
-  const editEmailInput = document.getElementById("editEmail");
-  const editRoleInput  = document.getElementById("editRole");
-
-  [editEmailInput, editRoleInput].forEach((input) => {
-    if (!input) return;
-    if (profile.emailVerified) {
-      input.setAttribute("disabled", true);
-      input.classList.add("locked");
-    } else {
-      input.removeAttribute("disabled");
-      input.classList.remove("locked");
-    }
-  }); */
+  renderworkist(profile.role)
    renderRoleActionCard(profile.role);
 }
+function renderworkist(role) {
+    const rolecard = document.getElementById("workreqlist");
 
+    if (!rolecard) return;
+
+    // Normalize the role so "Client", "client", "CLIENT"
+    // are all handled the same way.
+    const normalizedRole = String(role || "")
+        .trim()
+        .toLowerCase();
+
+    if (normalizedRole !== "client") {
+        rolecard.innerHTML = `
+            <article class="account-card">
+                <h3>W.R.</h3>
+
+                <p>
+                   here you will work request.
+                </p>
+
+                <a
+                    href="../oldays/work-requests.html"
+                    class="account-action-btn"
+                >
+                    Work Requests
+                </a>
+            </article>
+        `;
+    } else {
+        rolecard.innerHTML = "";
+    }
+}
 function renderRoleActionCard(role) {
 
   const roleActionCard = document.getElementById("roleActionCard");
@@ -309,6 +285,7 @@ async function saveProfile() {
     renderProfile(updatedProfile);
  // IMPORTANT: update role-specific card
 renderRoleActionCard(updatedProfile.role);
+renderworkist(updatedProfile.role);
     // Optional: update edit form with the new values
     // populateEditForm(updatedProfile);
 
@@ -469,152 +446,7 @@ function showToaster(message, type = "info", duration = 3000) {
     setTimeout(removeToast, duration);
 
 }
-/*
-async function loadMembershipCard() {
 
-
-
-
-    try {
-
-        const res = await fetch(
-            "http://localhost:5000/api/membership/my-membership",
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("cb_token")}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        if (!data.success) {
-
-            document.getElementById("membershipInfo").textContent =
-                "Unable to load membership.";
-
-            return;
-        }
-
-        const membership = data.membership;
-
-        const plan =
-            membership.plan.charAt(0).toUpperCase() +
-            membership.plan.slice(1);
-
-        const endDate = new Date(membership.endDate);
-
-        document.getElementById("membershipInfo").innerHTML = `
-            <strong>Plan:</strong> ${plan}<br>
-            <strong>Status:</strong> ${membership.status}<br>
-            <strong>Valid Until:</strong> ${endDate.toLocaleDateString()}
-        `;
-
-    } catch (err) {
-
-        console.error(err);
-
-        document.getElementById("membershipInfo").textContent =
-            "Server error.";
-
-    }
-
-}
-
-loadMembershipCard();
-//window.previewPhoto = previewPhoto;
-//window.openEditProfile = openEditProfile;
-//window.saveProfile = saveProfile;
-//window.closeEdit = closeEdit;
-
-async function loadAccount() {
-
-    const token =
-        localStorage.getItem("cb_token");
-
-    if (!token) {
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            `${ACCOUNT_BASE}/me`,
-            {
-                method: "GET",
-
-                headers: {
-                    Authorization:
-                        `Bearer ${token}`
-                }
-            }
-        );
-
-
-        if (!response.ok) {
-
-            console.error(
-                "Account API failed:",
-                response.status
-            );
-
-            return;
-        }
-
-
-        const user =
-            await response.json();
-
-        
-         //* EXISTING ACCOUNT DATA
-         
-
-        const nameInput =
-            document.getElementById("editName");
-
-        if (nameInput) {
-
-            nameInput.value =
-                user.name || "";
-        }
-
-
-        const phoneInput =
-            document.getElementById("editPhone");
-
-        if (phoneInput) {
-
-            phoneInput.value =
-                user.phone || "";
-        }
-
-
-        const roleInput =
-            document.getElementById("editRole");
-
-        if (roleInput) {
-
-            roleInput.value =
-                user.role || "";
-        }
-
-
-        
-         //* ADMIN BUTTON
-         
-
-        setupAdminButton(user);
-
-
-    } catch (error) {
-
-        console.error(
-            "Account loading error:",
-            error
-        );
-    }
-}
-*/
 
 /* =========================================================
    CREATE ADMIN BUTTON
@@ -703,12 +535,5 @@ function setupAdminButton(user) {
     );
     container.appendChild(button);
 }
-
-
-/* =========================================================
-   START ACCOUNT
-   ========================================================= */
-
-//loadAccount();
 
 });
