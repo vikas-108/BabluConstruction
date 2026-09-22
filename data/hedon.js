@@ -1,11 +1,6 @@
-    //const API_BASE = "https://api.buildskil.com/api";
-    const API_BASE = "http://localhost:5000/api";
-
-
+    const API_BASE = "https://api.buildskil.com/api";
     const TOKEN_KEY =
         "cb_token";
-
-
     /* =====================================================
        ELEMENTS
     ====================================================== */
@@ -475,33 +470,43 @@
        PROFILES
     ====================================================== */
 
-    function renderProfiles(profiles) {
+function renderProfiles(profiles) {
 
-        const body =
-            document.getElementById(
-                "profilesTable"
-            );
+    const body =
+        document.getElementById(
+            "profilesTable"
+        );
 
+    if (!body) {
+        return;
+    }
 
-        if (!profiles.length) {
+    if (!profiles.length) {
 
-            body.innerHTML = `
-                <tr class="empty-row">
-                    <td colspan="5">
-                        No profiles found.
-                    </td>
-                </tr>
-            `;
+        body.innerHTML = `
+            <tr class="empty-row">
+                <td colspan="6">
+                    No profiles found.
+                </td>
+            </tr>
+        `;
 
-            return;
-        }
+        return;
+    }
 
+    body.innerHTML =
+        profiles.map(profile => {
 
-        body.innerHTML =
-            profiles.map(profile => `
+            const verified =
+                profile.verified === true;
 
+            const profileId =
+                profile._id || "";
+
+            return `
                 <tr>
 
+                    <!-- NAME -->
                     <td class="name-cell">
                         ${escapeHTML(
                             profile.name ||
@@ -510,6 +515,7 @@
                         )}
                     </td>
 
+                    <!-- PHONE -->
                     <td class="phone">
                         ${escapeHTML(
                             profile.phone ||
@@ -517,6 +523,7 @@
                         )}
                     </td>
 
+                    <!-- ROLE -->
                     <td>
                         <span class="badge">
                             ${escapeHTML(
@@ -526,13 +533,49 @@
                         </span>
                     </td>
 
+                    <!-- PROFILE ID -->
                     <td class="id-text">
                         ${escapeHTML(
-                            profile._id ||
+                            profileId ||
                             "-"
                         )}
                     </td>
 
+                    <!-- VERIFIED -->
+                    <td>
+                        <button
+                            type="button"
+                            class="profile-verified-toggle ${
+                                verified
+                                    ? "is-verified"
+                                    : "is-unverified"
+                            }"
+                            data-profile-id="${escapeHTML(
+                                profileId
+                            )}"
+                            data-verified="${verified}"
+                            onclick="toggleProfileVerified(
+                                '${profileId}',
+                                ${verified}
+                            )"
+                        >
+                            <i class="fa-solid ${
+                                verified
+                                    ? "fa-circle-check"
+                                    : "fa-circle-xmark"
+                            }"></i>
+
+                            <span>
+                                ${
+                                    verified
+                                        ? "Verified"
+                                        : "Not Verified"
+                                }
+                            </span>
+                        </button>
+                    </td>
+
+                    <!-- CREATED -->
                     <td>
                         ${escapeHTML(
                             formatDate(
@@ -542,11 +585,166 @@
                     </td>
 
                 </tr>
+            `;
 
-            `).join("");
+        }).join("");
+}
+
+async function toggleProfileVerified(
+    profileId,
+    currentVerified
+) {
+
+    if (!profileId) {
+        alert(
+            "Profile ID is missing."
+        );
+
+        return;
     }
 
+    const token =
+        getToken();
 
+    if (!token) {
+        alert(
+            "Your BuildSkil login session is missing."
+        );
+
+        return;
+    }
+
+    /*
+     * Toggle:
+     *
+     * true  -> false
+     * false -> true
+     */
+
+    const newVerified =
+        currentVerified !== true;
+
+    const button =
+        document.querySelector(
+            `.profile-verified-toggle[data-profile-id="${CSS.escape(
+                profileId
+            )}"]`
+        );
+
+    if (button) {
+        button.disabled = true;
+        button.classList.add(
+            "updating"
+        );
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE}/admin/profiles/${encodeURIComponent(
+                    profileId
+                )}/verified`,
+                {
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        Accept:
+                            "application/json",
+
+                        Authorization:
+                            `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        verified:
+                            newVerified
+                    })
+                }
+            );
+
+        let data = {};
+
+        try {
+
+            data =
+                await response.json();
+
+        } catch {
+            data = {};
+        }
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.message ||
+                "Unable to update profile verification."
+            );
+        }
+
+        /*
+         * Update the button immediately
+         */
+
+        if (button) {
+
+            button.dataset.verified =
+                String(newVerified);
+
+            button.classList.toggle(
+                "is-verified",
+                newVerified
+            );
+
+            button.classList.toggle(
+                "is-unverified",
+                !newVerified
+            );
+
+            button.innerHTML = `
+                <i class="fa-solid ${
+                    newVerified
+                        ? "fa-circle-check"
+                        : "fa-circle-xmark"
+                }"></i>
+
+                <span>
+                    ${
+                        newVerified
+                            ? "Verified"
+                            : "Not Verified"
+                    }
+                </span>
+            `;
+        }
+
+       // console.log( "Profile verification updated:", data?.profile );
+
+    } catch (error) {
+
+        console.error(
+            "Profile verification update error:",
+            error
+        );
+
+        alert(
+            error?.message ||
+            "Unable to update profile verification."
+        );
+
+    } finally {
+
+        if (button) {
+            button.disabled = false;
+            button.classList.remove(
+                "updating"
+            );
+        }
+    }
+}
     /* =====================================================
        PROJECTS
     ====================================================== */
@@ -988,10 +1186,7 @@ async function changeIssueStatus(selectElement) {
         }
 
 
-        console.log(
-            "Issue updated:",
-            data.issue
-        );
+        //console.log(  "Issue updated:",  data.issue);
 
 
         await loadIssues();
