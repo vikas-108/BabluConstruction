@@ -586,3 +586,55 @@
 .issue-status-select:focus {
     border-color: #9ca3af;
 }
+
+.profile-verified-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    min-width: 125px;
+    min-height: 36px;
+
+    padding: 7px 11px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+
+    background: #f8fafc;
+    color: #475569;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        0.18s ease,
+        transform 0.12s ease;
+}
+
+.profile-verified-toggle:hover {
+    transform: translateY(-1px);
+}
+
+.profile-verified-toggle.is-verified {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+}
+
+.profile-verified-toggle.is-unverified {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.profile-verified-toggle.updating {
+    opacity: 0.55;
+    cursor: wait;
+}
+
+.profile-verified-toggle:disabled {
+    cursor: not-allowed;
+}
