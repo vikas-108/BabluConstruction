@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Book User</title>
+    <link rel="stylesheet" href="../dist/css/booking.min.css" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <button class="back" id="back">‹</button>
+        <h1>Book User</h1>
+      </header>
+      <main class="container">
+        <div id="loading" class="empty">
+          <div class="icon">⏳</div>
+          <p>Loading your address…</p>
+        </div>
+        <div id="content" class="hidden">
+          <section class="card" id="workerCard"></section>
+          <section class="panel">
+            <h2 class="form-title">You are booking this user</h2>
+            <p class="muted">
+              Your name, phone number and work location will be included so the
+              professional knows who booked them and where to go.
+            </p>
+            <div class="row space">
+              <span class="meta">Booked by</span
+              ><strong id="clientName">BuildSkil User</strong>
+            </div>
+            <div class="row space" style="margin-top: 8px">
+              <span class="meta">Phone</span
+              ><strong id="clientPhone">Phone not available</strong>
+            </div>
+          </section>
+          <section class="location" id="addressCard"></section>
+          <button
+            class="btn secondary"
+            id="changeAddress"
+            style="margin-top: 10px; width: 100%"
+          >
+            ✎ Change work address
+          </button>
+          <section class="panel">
+            <label class="label" for="note">Work note</label
+            ><textarea
+              class="textarea"
+              id="note"
+              maxlength="500"
+              placeholder="Describe the work or anything the user should know…"
+            ></textarea>
+          </section>
+          <div class="note">
+            <strong>ℹ️ Booking information</strong>
+            <p>
+              The booked user will see your identity and this work address in
+              their Work Requests screen.
+            </p>
+          </div>
+          <button
+            class="btn primary"
+            id="confirm"
+            style="width: 100%; margin-top: 12px"
+          >
+            Confirm Book User
+          </button>
+        </div>
+      </main>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="../data/booking-store.js"></script>
+    <script src="../data/book-user.js"></script>
+  </body>
+</html>

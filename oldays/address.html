@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>My Address</title>
+    <link rel="stylesheet" href="../dist/css/booking.min.css" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <button class="back" id="backBtn" type="button" aria-label="Go back">
+    ‹
+</button>
+        <h1 id="title">My Address</h1>
+        <button id="topAction" class="header-action">+ Add address</button>
+      </header>
+      <main class="container">
+        <section class="panel" id="manager">
+          <div class="manager">
+            <div>
+              <strong>My addresses</strong>
+              <div class="muted" id="countText">
+                Add an address for bookings and work locations.
+              </div>
+            </div>
+            <button class="btn primary" id="toggleForm">+ Add address</button>
+          </div>
+          <div id="savedList" style="margin-top: 10px"></div>
+        </section>
+        <section class="panel hidden" id="formPanel">
+          <div class="manager">
+            <div>
+              <h2 class="form-title" id="formTitle">Create address</h2>
+              <div class="muted">
+                Enter the complete address for accurate contact and delivery.
+              </div>
+            </div>
+            <button class="close" id="closeForm">×</button>
+          </div>
+          <div class="grid" style="margin-top: 12px">
+            <div class="full">
+              <label class="label">name</label
+              ><input
+                class="input"
+                id="name"
+                placeholder="e.g. Home, Work, Client Site"
+              />
+            </div>
+            <div class="full">
+              <label class="label">House / Flat / Plot</label
+              ><input
+                class="input"
+                id="houseFlat"
+                placeholder="House no., flat no., plot no."
+              />
+            </div>
+            <div class="full">
+              <label class="label">Street / Locality / Area</label
+              ><input
+                class="input"
+                id="streetArea"
+                placeholder="Street, colony, sector, locality"
+              />
+            </div>
+            <div class="full">
+              <label class="label">Landmark</label
+              ><input
+                class="input"
+                id="landmark"
+                placeholder="Nearby landmark"
+              />
+            </div>
+            <div class="full">
+              <label class="label">Town / City / Village</label
+              ><input
+                class="input"
+                id="townCityVillage"
+                placeholder="Town, city or village"
+              />
+            </div>
+            <div class="address-location-grid">
+
+  <div class="field">
+    <label for="state">State</label>
+    <div class="select-wrap">
+      <select id="state">
+        <option value="">Select State</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="district">District</label>
+    <div class="select-wrap">
+      <select id="district" disabled>
+        <option value="">Select District</option>
+      </select>
+    </div>
+  </div>
+<div class="field full">
+  <label for="pincode">PIN code</label>
+
+  <div class="select-wrap">
+    <select id="pincode">
+      <option value="">Select PIN code</option>
+      <option value="__manual__">Enter PIN manually</option>
+    </select>
+  </div>
+
+  <input
+    type="text"
+    id="manualPincode"
+    inputmode="numeric"
+    maxlength="6"
+    placeholder="Enter 6-digit PIN code"
+    style="display:none;margin-top:8px;"
+  />
+
+  <small
+    id="pincodeStatus"
+    style="display:block;margin-top:6px;color:#64748b;"
+  ></small>
+</div>
+
+</div>
+            <div>
+              <label class="label">Country</label
+              ><input
+                class="input"
+                id="country"
+                value="India"
+                placeholder="Country"
+              />
+            </div>
+          </div>
+          <div style="margin-top: 12px">
+            <label class="label">Address type</label>
+            <div class="radio-row">
+              <button class="radio active" data-type="Home">Home</button
+              ><button class="radio" data-type="Work">Work</button
+              ><button class="radio" data-type="Other">Other</button>
+            </div>
+          </div>
+          <section
+            class="panel"
+            style="padding: 12px; margin-top: 12px; background: #f8fafc"
+          >
+            <div class="manager">
+              <div>
+                <strong>Location coordinates</strong>
+                <div class="muted">
+                  GPS coordinates help identify the exact place.
+                </div>
+              </div>
+              <button class="btn primary" id="locate">
+                📍 Use current location
+              </button>
+            </div>
+            <div class="grid" style="margin-top: 10px">
+              <div>
+                <label class="label">Latitude</label
+                ><input class="input" id="latitude" readonly />
+              </div>
+              <div>
+                <label class="label">Longitude</label
+                ><input class="input" id="longitude" readonly />
+              </div>
+            </div>
+          </section>
+          <div class="location">
+            <h3>FULL ADDRESS</h3>
+            <div class="address" id="preview">
+              Address details will appear here.
+            </div>
+          </div>
+          <button
+            class="btn primary"
+            id="save"
+            style="width: 100%; margin-top: 12px"
+          >
+            Save Address
+          </button>
+        </section>
+      </main>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="../data/booking-store.js"></script>
+    <script src="../data/address.js"></script>
+  </body>
+</html>

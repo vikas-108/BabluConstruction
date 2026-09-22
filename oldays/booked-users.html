@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Booked Users</title>
+    <link rel="stylesheet" href="../dist/css/booking.min.css" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <button
+  id="backBtn"
+  class="back"
+  type="button"
+  aria-label="Go back"
+>
+  ‹
+</button>
+
+<h1>Booked Users</h1>
+
+<button
+  id="findUserBtn"
+  class="header-action"
+  type="button"
+>
+  Find user
+</button>
+      </header>
+      <main class="container"><div id="list"></div></main>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+    <script src="../dist/data/booking-store.min.js"></script>
+    <script src="../dist/data/booked-users.min.js"></script>
+  </body>
+</html>

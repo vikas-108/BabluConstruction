@@ -1,0 +1,1334 @@
+//one side work open map and reach location destination by blue line  
+
+{/*import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  PermissionsAndroid,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
+import {
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+
+import {
+  SafeAreaView,
+} from 'react-native-safe-area-context';
+
+import WebView from 'react-native-webview';
+
+import Geolocation from '@react-native-community/geolocation';
+
+import {
+  AppHeader,
+} from '../components/AppHeader';
+
+type Coordinates = {
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+};
+
+type RoutePoint = {
+  latitude: number;
+  longitude: number;
+};
+
+export function LocationMapScreen() {
+  const navigation =
+    useNavigation<any>();
+
+  const route =
+    useRoute<any>();
+const RNWebView =
+  WebView as any;
+const webViewRef =
+  useRef<any>(null);
+
+  const watchIdRef =
+    useRef<number | null>(null);
+
+  const lastRoutedLocationRef =
+    useRef<Coordinates | null>(null);
+
+  const [currentLocation, setCurrentLocation] =
+    useState<Coordinates | null>(null);
+
+  const [routePoints, setRoutePoints] =
+    useState<RoutePoint[]>([]);
+
+  const [locationLoading, setLocationLoading] =
+    useState(true);
+
+  const [routeLoading, setRouteLoading] =
+    useState(false);
+
+  const [locationError, setLocationError] =
+    useState('');
+
+  const latitude =
+    Number(route.params?.latitude);
+
+  const longitude =
+    Number(route.params?.longitude);
+
+  const title =
+    route.params?.title ||
+    'Work Location';
+
+  const validDestination =
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude);
+
+ //  * DISTANCE BETWEEN TWO GPS POINTS
+ 
+
+  const distanceInMeters = useCallback(
+    (
+      a: Coordinates,
+      b: Coordinates,
+    ) => {
+      const earthRadius = 6371000;
+
+      const lat1 =
+        (a.latitude * Math.PI) / 180;
+
+      const lat2 =
+        (b.latitude * Math.PI) / 180;
+
+      const deltaLat =
+        ((b.latitude - a.latitude) *
+          Math.PI) /
+        180;
+
+      const deltaLng =
+        ((b.longitude - a.longitude) *
+          Math.PI) /
+        180;
+
+      const x =
+        Math.sin(deltaLat / 2) *
+          Math.sin(deltaLat / 2) +
+        Math.cos(lat1) *
+          Math.cos(lat2) *
+          Math.sin(deltaLng / 2) *
+          Math.sin(deltaLng / 2);
+
+      const y =
+        2 *
+        Math.atan2(
+          Math.sqrt(x),
+          Math.sqrt(1 - x),
+        );
+
+      return earthRadius * y;
+    },
+    [],
+  );
+ //  * ANDROID LOCATION PERMISSION
+ 
+
+  const requestLocationPermission =
+    useCallback(async () => {
+      if (Platform.OS !== 'android') {
+        return true;
+      }
+
+      const granted =
+        await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title:
+              'BuildSkil Location Permission',
+
+            message:
+              'BuildSkil needs your current location to show your route to the work location.',
+
+            buttonPositive:
+              'Allow',
+
+            buttonNegative:
+              'Deny',
+
+            buttonNeutral:
+              'Ask Me Later',
+          },
+        );
+
+      return (
+        granted ===
+        PermissionsAndroid.RESULTS.GRANTED
+      );
+    }, []);
+   //* GET ROAD ROUTE FROM CURRENT LOCATION TO DESTINATION
+   
+
+  const fetchRoadRoute =
+    useCallback(
+      async (
+        from: Coordinates,
+        to: RoutePoint,
+      ) => {
+        try {
+          setRouteLoading(true);
+
+          
+           //* OSRM expects:
+           //* longitude,latitude
+
+          const url =
+            `https://router.project-osrm.org/route/v1/driving/` +
+            `${from.longitude},${from.latitude};` +
+            `${to.longitude},${to.latitude}` +
+            `?overview=full&geometries=geojson`;
+
+          const response =
+            await fetch(url);
+
+          if (!response.ok) {
+            throw new Error(
+              'Route service failed.',
+            );
+          }
+
+          const data =
+            await response.json();
+
+          const coordinates =
+            data?.routes?.[0]?.geometry
+              ?.coordinates;
+
+          if (
+            !Array.isArray(coordinates) ||
+            !coordinates.length
+          ) {
+            throw new Error(
+              'No road route found.',
+            );
+          }
+
+          const points: RoutePoint[] =
+            coordinates
+              .map(
+                (point: any) => ({
+                  longitude:
+                    Number(point[0]),
+
+                  latitude:
+                    Number(point[1]),
+                }),
+              )
+              .filter(
+                (point: RoutePoint) =>
+                  Number.isFinite(
+                    point.latitude,
+                  ) &&
+                  Number.isFinite(
+                    point.longitude,
+                  ),
+              );
+
+          if (!points.length) {
+            throw new Error(
+              'Invalid route received.',
+            );
+          }
+
+          setRoutePoints(points);
+
+          lastRoutedLocationRef.current =
+            from;
+
+          
+           //* Update map immediately
+           
+          sendMapData(
+            from,
+            points,
+          );
+        } catch (error) {
+          console.log(
+            'ROUTE ERROR:',
+            error,
+          );
+
+          // * Fallback:
+          // * draw direct green line
+          // * if road routing fails.
+           
+
+          const fallbackRoute: RoutePoint[] =
+            [
+              {
+                latitude:
+                  from.latitude,
+
+                longitude:
+                  from.longitude,
+              },
+
+              {
+                latitude:
+                  to.latitude,
+
+                longitude:
+                  to.longitude,
+              },
+            ];
+
+          setRoutePoints(
+            fallbackRoute,
+          );
+
+          lastRoutedLocationRef.current =
+            from;
+
+          sendMapData(
+            from,
+            fallbackRoute,
+          );
+        } finally {
+          setRouteLoading(false);
+        }
+      },
+      [],
+    );
+
+ 
+  // * SEND DATA TO LEAFLET WEBVIEW
+  const sendMapData =
+    useCallback(
+      (
+        location: Coordinates,
+        points: RoutePoint[] = [],
+      ) => {
+        if (!webViewRef.current) {
+          return;
+        }
+
+        const payload = {
+          latitude:
+            location.latitude,
+
+          longitude:
+            location.longitude,
+
+          accuracy:
+            location.accuracy || 0,
+
+          route:
+            points,
+        };
+
+        const javascript =
+          `
+          if (window.updateCurrentLocation) {
+            window.updateCurrentLocation(
+              ${JSON.stringify(payload)}
+            );
+          }
+          true;
+          `;
+
+        webViewRef.current.injectJavaScript(
+          javascript,
+        );
+      },
+      [],
+    );
+  // * HANDLE CURRENT LOCATION
+  const handleLocation =
+    useCallback(
+      async (
+        position: any,
+      ) => {
+        const nextLocation: Coordinates =
+          {
+            latitude:
+              Number(
+                position.coords.latitude,
+              ),
+
+            longitude:
+              Number(
+                position.coords.longitude,
+              ),
+
+            accuracy:
+              Number(
+                position.coords.accuracy || 0,
+              ),
+          };
+
+        if (
+          !Number.isFinite(
+            nextLocation.latitude,
+          ) ||
+          !Number.isFinite(
+            nextLocation.longitude,
+          )
+        ) {
+          return;
+        }
+
+        setCurrentLocation(
+          nextLocation,
+        );
+
+        setLocationLoading(false);
+        setLocationError('');
+        // * Show current marker immediately.
+        sendMapData(
+          nextLocation,
+          routePoints,
+        );
+         //* Recalculate road route:
+        // * - First GPS position
+        // * - Or after moving ~20 metres
+         
+
+        const lastRouteLocation =
+          lastRoutedLocationRef.current;
+
+        const shouldFetchRoute =
+          !lastRouteLocation ||
+          distanceInMeters(
+            lastRouteLocation,
+            nextLocation,
+          ) >= 20;
+
+        if (
+          shouldFetchRoute &&
+          validDestination
+        ) {
+          await fetchRoadRoute(
+            nextLocation,
+            {
+              latitude,
+              longitude,
+            },
+          );
+        }
+      },
+      [
+        distanceInMeters,
+        fetchRoadRoute,
+        latitude,
+        longitude,
+        routePoints,
+        sendMapData,
+        validDestination,
+      ],
+    );
+
+   //* START GPS
+const startLocationTracking =
+  useCallback(
+    async () => {
+      try {
+        const allowed =
+          await requestLocationPermission();
+
+        if (!allowed) {
+          setLocationLoading(false);
+
+          setLocationError(
+            'Location permission was denied.',
+          );
+
+          return;
+        }
+
+        setLocationLoading(true);
+        setLocationError('');
+
+        // * GET FIRST LOCATION
+
+        const getFirstLocation = () => {
+          Geolocation.getCurrentPosition(
+            position => {
+              console.log(
+                'CURRENT LOCATION:',
+                position.coords.latitude,
+                position.coords.longitude,
+                'accuracy:',
+                position.coords.accuracy,
+              );
+
+              void handleLocation(
+                position,
+              );
+            },
+
+            error => {
+              console.log(
+                'CURRENT LOCATION ERROR:',
+                error,
+              );
+
+              // * Error code 3 = TIMEOUT
+              // * Retry with lower accuracy.
+               
+              if (error?.code === 3) {
+                console.log(
+                  'GPS timed out. Retrying with network location...',
+                );
+
+                Geolocation.getCurrentPosition(
+                  position => {
+                    console.log(
+                      'FALLBACK LOCATION:',
+                      position.coords.latitude,
+                      position.coords.longitude,
+                    );
+
+                    void handleLocation(
+                      position,
+                    );
+                  },
+
+                  fallbackError => {
+                    console.log(
+                      'FALLBACK LOCATION ERROR:',
+                      fallbackError,
+                    );
+
+                    setLocationLoading(
+                      false,
+                    );
+
+                    setLocationError(
+                      'Unable to get your current location. Turn on GPS/location and try again.',
+                    );
+                  },
+
+                  {
+                    enableHighAccuracy: false,
+                    timeout: 30000,
+                    maximumAge: 10000,
+                  },
+                );
+
+                return;
+              }
+
+              setLocationLoading(false);
+
+              setLocationError(
+                error?.message ||
+                  'Could not get your current location.',
+              );
+            },
+
+            {
+              enableHighAccuracy: true,
+              timeout: 60000,
+              maximumAge: 10000,
+            },
+          );
+        };
+
+        getFirstLocation();
+        // * CONTINUOUS LOCATION WATCH
+
+        const watchId =
+          Geolocation.watchPosition(
+            position => {
+              console.log(
+                'LIVE LOCATION:',
+                position.coords.latitude,
+                position.coords.longitude,
+              );
+
+              void handleLocation(
+                position,
+              );
+            },
+
+            error => {
+              console.log(
+                'WATCH LOCATION ERROR:',
+                error,
+              );
+            },
+
+            {
+              enableHighAccuracy: true,
+              distanceFilter: 10,
+              interval: 5000,
+              fastestInterval: 3000,
+            },
+          );
+
+        watchIdRef.current =
+          watchId;
+      } catch (error) {
+        console.log(
+          'LOCATION START ERROR:',
+          error,
+        );
+
+        setLocationLoading(false);
+
+        setLocationError(
+          'Unable to start location tracking.',
+        );
+      }
+    },
+    [
+      handleLocation,
+      requestLocationPermission,
+    ],
+  );
+
+  
+  // * CLEAN UP GPS
+
+  useEffect(() => {
+    void startLocationTracking();
+
+    return () => {
+      if (
+        watchIdRef.current !== null
+      ) {
+        Geolocation.clearWatch(
+          watchIdRef.current,
+        );
+
+        watchIdRef.current =
+          null;
+      }
+    };
+  }, [
+    startLocationTracking,
+  ]);
+   //* MAP HTML
+  
+
+  const html = useMemo(() => {
+    const safeTitle =
+      String(title)
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/\r?\n/g, ' ');
+
+    return `
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+/>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+
+html,
+body,
+#map {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.leaflet-control-attribution {
+  font-size: 9px;
+}
+
+.current-location-marker {
+  width: 18px;
+  height: 18px;
+  background: #2563eb;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 8px rgba(37, 99, 235, 0.18);
+}
+
+.destination-marker {
+  width: 20px;
+  height: 20px;
+  background: #dc2626;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.route-label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script>
+
+const destinationLatitude =
+  ${latitude};
+
+const destinationLongitude =
+  ${longitude};
+
+const map =
+  L.map('map', {
+    zoomControl: true,
+    attributionControl: true
+  });
+
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    maxZoom: 20,
+    attribution:
+      '&copy; OpenStreetMap contributors'
+  }
+).addTo(map);
+
+
+// * DESTINATION
+ 
+
+const destinationIcon =
+  L.divIcon({
+    className: '',
+    html:
+      '<div class="destination-marker"></div>',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+
+const currentIcon =
+  L.divIcon({
+    className: '',
+    html:
+      '<div class="current-location-marker"></div>',
+    iconSize: [26, 26],
+    iconAnchor: [13, 13]
+  });
+
+const destinationMarker =
+  L.marker(
+    [
+      destinationLatitude,
+      destinationLongitude
+    ],
+    {
+      icon: destinationIcon
+    }
+  ).addTo(map);
+
+destinationMarker
+  .bindPopup(
+    '<b>${safeTitle}</b><br>' +
+    destinationLatitude +
+    ', ' +
+    destinationLongitude
+  );
+
+ //* Initial destination view
+ 
+
+map.setView(
+  [
+    destinationLatitude,
+    destinationLongitude
+  ],
+  16
+);
+
+
+ //* CURRENT MARKER
+ 
+
+let currentMarker =  null;
+
+// * ACCURACY CIRCLE
+ 
+
+let accuracyCircle = null;
+ //* GREEN ROAD ROUTE
+ 
+
+let routeLine = null;
+
+// * FIT MAP
+
+function fitRoute(
+  currentLat,
+  currentLng,
+  route
+) {
+  const points = [
+    [
+      destinationLatitude,
+      destinationLongitude
+    ],
+    [
+      currentLat,
+      currentLng
+    ]
+  ];
+
+  if (
+    Array.isArray(route) &&
+    route.length
+  ) {
+    route.forEach(function(point) {
+      points.push([
+        Number(point.latitude),
+        Number(point.longitude)
+      ]);
+    });
+  }
+
+  const bounds =
+    L.latLngBounds(points);
+
+  map.fitBounds(
+    bounds,
+    {
+      padding: [40, 40],
+      maxZoom: 17
+    }
+  );
+}
+
+// * UPDATE CURRENT LOCATION
+
+
+window.updateCurrentLocation =
+  function(data) {
+
+    const currentLat =
+      Number(data.latitude);
+
+    const currentLng =
+      Number(data.longitude);
+
+    const accuracy =
+      Number(data.accuracy || 0);
+
+    if (
+      !Number.isFinite(currentLat) ||
+      !Number.isFinite(currentLng)
+    ) {
+      return;
+    }
+
+    
+    // * Current marker
+
+    if (!currentMarker) {
+
+      currentMarker =
+        L.marker(
+          [
+            currentLat,
+            currentLng
+          ],
+          {
+            icon: currentIcon
+          }
+        ).addTo(map);
+
+      currentMarker
+        .bindPopup(
+          '<b>Your current location</b>'
+        );
+
+    } else {
+
+      currentMarker.setLatLng([
+        currentLat,
+        currentLng
+      ]);
+
+    }
+
+    
+     //* Accuracy circle
+
+    if (
+      Number.isFinite(accuracy) &&
+      accuracy > 0
+    ) {
+
+      if (!accuracyCircle) {
+
+        accuracyCircle =
+          L.circle(
+            [
+              currentLat,
+              currentLng
+            ],
+            {
+              radius: accuracy,
+              color: '#2563eb',
+              fillColor: '#2563eb',
+              fillOpacity: 0.08,
+              weight: 1
+            }
+          ).addTo(map);
+
+      } else {
+
+        accuracyCircle.setLatLng([
+          currentLat,
+          currentLng
+        ]);
+
+        accuracyCircle.setRadius(
+          accuracy
+        );
+      }
+    }
+
+    
+    // * GREEN ROUTE
+
+    if (
+      Array.isArray(data.route) &&
+      data.route.length
+    ) {
+
+      const routeLatLngs =
+        data.route.map(
+          function(point) {
+            return [
+              Number(point.latitude),
+              Number(point.longitude)
+            ];
+          }
+        );
+
+      if (routeLine) {
+        map.removeLayer(routeLine);
+      }
+
+      routeLine =
+        L.polyline(
+          routeLatLngs,
+          {
+            color: '#16a34a',
+            weight: 6,
+            opacity: 0.9,
+            lineCap: 'round',
+            lineJoin: 'round'
+          }
+        ).addTo(map);
+
+      fitRoute(
+        currentLat,
+        currentLng,
+        data.route
+      );
+    }
+  };
+
+</script>
+
+</body>
+</html>
+`;
+  }, [
+    latitude,
+    longitude,
+    title,
+  ]);
+   //* WEBVIEW LOADED
+
+  const handleWebViewLoad =
+    useCallback(() => {
+      if (!currentLocation) {
+        return;
+      }
+
+      sendMapData(
+        currentLocation,
+        routePoints,
+      );
+    }, [
+      currentLocation,
+      routePoints,
+      sendMapData,
+    ]);
+   //* WEBVIEW MESSAGE
+   
+
+const handleWebViewMessage =
+  useCallback(
+    (event: any) => {
+      console.log(
+        'MAP MESSAGE:',
+        event?.nativeEvent?.data,
+      );
+    },
+    [],
+  );
+  // * INVALID DESTINATION
+  
+
+  if (!validDestination) {
+    return (
+      <SafeAreaView
+        style={styles.screen}
+      >
+        <View
+          style={styles.errorContainer}
+        >
+          <Text
+            style={styles.errorTitle}
+          >
+            Invalid location
+          </Text>
+
+          <Text
+            style={styles.errorText}
+          >
+            Latitude or longitude is missing.
+          </Text>
+
+          <Pressable
+            style={styles.backButton}
+            onPress={() =>
+              navigation.goBack()
+            }
+          >
+            <Text
+              style={styles.backText}
+            >
+              Go Back
+            </Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
+  // * UI
+
+  return (
+    <SafeAreaView
+      style={styles.screen}
+      edges={['bottom']}
+    >
+
+      <AppHeader
+        title="Location view"
+        showBack
+        onBackPress={() =>
+          navigation.goBack()
+        }
+      />
+
+      <View
+        style={styles.coordinatesBar}
+      >
+
+        <View
+          style={styles.coordinateItem}
+        >
+          <Text
+            style={styles.coordinatesLabel}
+          >
+            Destination
+          </Text>
+
+          <Text
+            style={
+              styles.coordinatesValue
+            }
+          >
+            {latitude}, {longitude}
+          </Text>
+        </View>
+
+        <View
+          style={styles.routeStatus}
+        >
+
+          <View
+            style={[
+              styles.statusDot,
+              {
+                backgroundColor:
+                  currentLocation
+                    ? '#16a34a'
+                    : '#f59e0b',
+              },
+            ]}
+          />
+
+          <Text
+            style={styles.routeStatusText}
+          >
+            {locationLoading
+              ? 'Getting your location...'
+              : routeLoading
+              ? 'Calculating route...'
+              : currentLocation
+              ? 'Live route active'
+              : 'Location unavailable'}
+          </Text>
+
+        </View>
+
+      </View>
+
+      {locationError ? (
+        <View
+          style={styles.errorBar}
+        >
+          <Text
+            style={styles.errorBarText}
+          >
+            {locationError}
+          </Text>
+        </View>
+      ) : null}
+
+      <WebView
+        ref={webViewRef}
+        source={{
+          html,
+        }}
+        style={styles.map}
+        javaScriptEnabled
+        domStorageEnabled
+        originWhitelist={['*']}
+        startInLoadingState
+        onLoadEnd={
+          handleWebViewLoad
+        }
+        onMessage={
+          handleWebViewMessage
+        }
+      />
+
+      {currentLocation ? (
+        <View
+          style={styles.bottomInfo}
+        >
+          <View>
+            <Text
+              style={styles.bottomLabel}
+            >
+              Your location
+            </Text>
+
+            <Text
+              style={styles.bottomCoordinates}
+            >
+              {currentLocation.latitude.toFixed(
+                6,
+              )}
+              ,{' '}
+              {currentLocation.longitude.toFixed(
+                6,
+              )}
+            </Text>
+          </View>
+
+          <View
+            style={styles.destinationBadge}
+          >
+            <Text
+              style={styles.destinationBadgeText}
+            >
+              📍 Destination
+            </Text>
+          </View>
+        </View>
+      ) : null}
+
+    </SafeAreaView>
+  );
+}
+
+const styles =
+  StyleSheet.create({
+
+    screen: {
+      flex: 1,
+      backgroundColor: '#fff',
+    },
+
+    coordinatesBar: {
+      minHeight: 58,
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: '#f8fafc',
+      borderBottomWidth: 1,
+      borderBottomColor: '#e2e8f0',
+    },
+
+    coordinateItem: {
+      flex: 1,
+    },
+
+    coordinatesLabel: {
+      fontSize: 9,
+      color: '#64748b',
+      fontWeight: '700',
+    },
+
+    coordinatesValue: {
+      marginTop: 3,
+      fontSize: 10,
+      color: '#0f172a',
+      fontWeight: '800',
+    },
+
+    routeStatus: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginLeft: 10,
+    },
+
+    statusDot: {
+      width: 9,
+      height: 9,
+      borderRadius: 5,
+      marginRight: 6,
+    },
+
+    routeStatusText: {
+      fontSize: 9,
+      color: '#475569',
+      fontWeight: '700',
+    },
+
+    map: {
+      flex: 1,
+    },
+
+    bottomInfo: {
+      position: 'absolute',
+      left: 12,
+      right: 12,
+      bottom: 12,
+      minHeight: 56,
+      paddingHorizontal: 13,
+      paddingVertical: 9,
+      borderRadius: 13,
+      backgroundColor: '#fff',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+
+      shadowColor: '#000',
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+
+      elevation: 5,
+    },
+
+    bottomLabel: {
+      fontSize: 9,
+      color: '#64748b',
+      fontWeight: '700',
+    },
+
+    bottomCoordinates: {
+      marginTop: 3,
+      fontSize: 10,
+      color: '#0f172a',
+      fontWeight: '800',
+    },
+
+    destinationBadge: {
+      paddingHorizontal: 10,
+      paddingVertical: 7,
+      borderRadius: 9,
+      backgroundColor: '#dcfce7',
+    },
+
+    destinationBadgeText: {
+      fontSize: 9,
+      color: '#166534',
+      fontWeight: '800',
+    },
+
+    errorBar: {
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      backgroundColor: '#fef2f2',
+      borderBottomWidth: 1,
+      borderBottomColor: '#fecaca',
+    },
+
+    errorBarText: {
+      fontSize: 10,
+      color: '#b91c1c',
+      fontWeight: '700',
+    },
+
+    errorContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 25,
+    },
+
+    errorTitle: {
+      fontSize: 20,
+      fontWeight: '800',
+      color: '#0f172a',
+    },
+
+    errorText: {
+      marginTop: 8,
+      color: '#64748b',
+      textAlign: 'center',
+    },
+
+    backButton: {
+      marginTop: 20,
+      paddingHorizontal: 20,
+      paddingVertical: 12,
+      borderRadius: 10,
+      backgroundColor: '#0f172a',
+    },
+
+    backText: {
+      color: '#fff',
+      fontWeight: '800',
+    },
+  });
+  */}

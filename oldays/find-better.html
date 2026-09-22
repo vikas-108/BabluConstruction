@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Find Better</title>
+    <link rel="stylesheet" href="../dist/css/booking.min.css" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>Find Better</h1>
+       <button
+  id="backBtn"
+  class="back"
+  type="button"
+  aria-label="Go back"
+>
+  ‹
+</button>
+      </header>
+      <main class="container">
+        <section class="searchbar">
+          <input
+            id="search"
+            class="input"
+            placeholder="Search profiles by name…"
+          /><button class="btn secondary" id="filterBtn">☷ Filters</button>
+        </section>
+        <div id="chips" class="chips" style="margin-bottom: 12px"></div>
+        <div id="state"></div>
+        <div id="results"></div>
+      </main>
+      <div class="modal" id="filterModal">
+        <div class="sheet">
+          <div class="sheet-header">
+            <div class="sheet-title">Filters</div>
+            <button class="close" id="filterClose">×</button>
+          </div>
+          <div class="filter-grid" style="margin-top: 12px">
+            <div>
+              <label class="label">Category</label
+              ><select class="select" id="fCategory">
+                <option value="">All categories</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">Role</label
+              ><select class="select" id="fRole">
+                <option value="">All roles</option>
+              </select>
+            </div>
+            <div class="full">
+              <label class="label">Address</label
+              ><input
+                class="input"
+                id="fAddress"
+                placeholder="Street, locality…"
+              />
+            </div>
+            <div class="full">
+              <label class="label">Phone</label
+              ><input
+                class="input"
+                id="fPhone"
+                inputmode="numeric"
+                placeholder="Phone number"
+              />
+            </div>
+            <div>
+              <label class="label">State</label
+              ><select class="select" id="fState">
+                <option value="">All states</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">District</label
+              ><select class="select" id="fDistrict">
+                <option value="">All districts</option>
+              </select>
+            </div>
+          </div>
+          <div class="two-actions" style="margin-top: 14px">
+            <button class="btn secondary" id="clearFilters">Clear all</button
+            ><button class="btn primary" id="applyFilters">
+              Apply filters
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="../dist/data/booking-store.min.js"></script>
+    <script src="../dist/data/search_data.min.js"></script>
+    <script src="../dist/data/find-better.min.js"></script>
+  </body>
+</html>

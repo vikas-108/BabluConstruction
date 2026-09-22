@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Work Requests</title>
+    <link rel="stylesheet" href="../dist/css/booking.min.css" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      document.documentElement.style.visibility = "hidden";
+    </script>
+
+    <!-- Your common auth guard -->
+    <script src="../dist/js/auth-guard.min.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <button class="back" id="backBtn" type="button">‹</button>
+        <h1>Work Requests</h1>
+      </header>
+      <main class="container"><div id="list"></div></main>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="../dist/data/booking-store.min.js"></script>
+    <script src="../dist/data/work-requests.min.js"></script>
+  </body>
+</html>
