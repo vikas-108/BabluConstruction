@@ -24,7 +24,6 @@ React Native AsyncStorage has been replaced with browser localStorage/sessionSto
 
 ## API
 Find Better uses the existing public profile endpoint:
-https://api.buildskil.com/api/profiles/public
 
 Booking records are client-side in this version because no booking backend endpoint was supplied in the source. That means the booking is shared only within the same browser storage. For two different devices/users, add a backend booking API/model and replace the localStorage read/write functions.
 
