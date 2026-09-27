@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0f172a"
+    >
+
+    <title>BuildSkil Notifications</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <link rel="stylesheet" href="../dist/css/notification.min.css" >
+</head>
+
+<body>
+
+    <header class="notification-header">
+
+        <button
+            id="backBtn"
+            class="header-btn"
+            type="button"
+            aria-label="Go back"
+        >
+            ←
+        </button>
+
+        <div class="header-copy">
+            <h1>Notifications</h1>
+            <p id="headerSubtitle">
+                Loading notifications…
+            </p>
+        </div>
+
+        <button
+            id="refreshBtn"
+            class="header-icon-btn"
+            type="button"
+            title="Refresh"
+            aria-label="Refresh notifications"
+        >
+            ↻
+        </button>
+
+    </header>
+
+    <main class="page">
+
+        <section class="summary-card">
+
+            <div>
+                <h2>Notifications</h2>
+                <p id="summarySubtitle">
+                    You are all caught up.
+                </p>
+            </div>
+
+            <div
+                id="unreadBadge"
+                class="unread-badge hidden"
+            >
+                0
+            </div>
+
+        </section>
+
+        <div class="toolbar">
+
+            <button
+                id="markAllBtn"
+                class="mark-all-btn hidden"
+                type="button"
+            >
+                ✓ Mark all as read
+            </button>
+
+        </div>
+
+        <section
+            id="errorBox"
+            class="error-box hidden"
+        >
+            <div class="error-title">
+                Notification error
+            </div>
+
+            <p id="errorMessage"></p>
+
+            <button
+                id="retryBtn"
+                class="retry-btn"
+                type="button"
+            >
+                Try again
+            </button>
+        </section>
+
+        <section
+            id="loadingState"
+            class="state-card"
+        >
+            <div class="spinner"></div>
+            <h2>Loading notifications</h2>
+            <p>Please wait…</p>
+        </section>
+
+        <section
+            id="emptyState"
+            class="state-card hidden"
+        >
+            <div class="empty-icon">🔔</div>
+            <h2>No notifications</h2>
+            <p>
+                New work requests, booking updates,
+                profile updates and other BuildSkil
+                activity will appear here.
+            </p>
+        </section>
+
+        <section
+            id="notificationsList"
+            class="notifications-list hidden"
+        ></section>
+
+    </main>
+
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+    <script src="../dist/data/notification.min.js"></script>
+
+</body>
+</html>
