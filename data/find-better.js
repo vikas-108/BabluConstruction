@@ -266,7 +266,7 @@ function renderResults(data) {
       String(p.id),
       p
     );
-        return `<article class="card"><div class="profile-head"><div class="avatar">${p.image ? `<img src="${esc(p.image)}" alt="">` : "👤"}</div><div class="identity"><div class="name">${esc(p.name || "Unnamed")}</div><div class="row" style="margin-top:5px"><span class="badge">${esc(categoryLabels[p.category] || p.category || "Professional")}</span>${p.role ? `<span class="sub">${esc(p.role)}</span>` : ""}</div>${p.phone ? `<div class="sub" style="margin-top:5px">${esc(p.phone)}</div>` : ""}</div><span class="status">${Math.round(x.score * 100)}% match</span></div><div class="muted" style="margin-top:12px">${esc([p.location, p.district, p.state].filter(Boolean).join(", "))}</div>${
+        return `<article class="card"><div class="profile-head"><div class="avatar">${p.image ? `<img src="${esc(p.image)}" alt="">` : "👤"}</div><div class="identity"><div class="name">${esc(p.name || "Unnamed")}</div><div class="row" style="margin-top:5px"><span class="badge">${esc(categoryLabels[p.category] || p.category || "Professional")}</span>${p.role ? `<span class="sub">${esc(p.role)}</span>` : ""}</div></div><span class="status">${Math.round(x.score * 100)}% match</span></div><div class="muted" style="margin-top:12px">${esc([p.location, p.district, p.state].filter(Boolean).join(", "))}</div>${
           p.skills?.length
             ? `<div class="chips" style="margin-top:9px">${p.skills
                 .slice(0, 6)
