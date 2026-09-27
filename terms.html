@@ -2,420 +2,715 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Terms & Conditions | BABLU Contractor Construction Service</title>
+  <title>Terms & Conditions | Platform</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="dist/css/style.min.css">
   <link rel="icon" type="image/png" href="/favicon.png" />
-    <!-- Prevents unauthenticated users from seeing a flash of content -->
+
   <script>document.documentElement.style.visibility = 'hidden';</script>
-  
-  <!-- Your common auth guard -->
   <script src="dist/js/auth-guard.min.js"></script>
+
   <style>
-    .section-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
-}
-
-.section-card h3 {
-    margin: 0 0 16px;
-    font-size: 1.4rem;
-    color: #333;
-}
-
-.home-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    max-width: 240px;
-    min-height: 46px;
-
-    padding: 12px 20px;
-
-    background: #0d6efd;
-    color: #fff;
-    text-decoration: none;
-
-    font-size: 1rem;
-    font-weight: 600;
-
-    border-radius: 8px;
-    transition: background .2s ease, transform .2s ease;
-    box-sizing: border-box;
-}
-
-.home-btn:hover {
-    background: #0b5ed7;
-}
-
-.home-btn:active {
-    transform: scale(.98);
-}
-
-@media (max-width: 768px) {
-    .section-card {
-        padding: 16px;
+    .legal-header-meta {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      font-size: 0.85rem;
+      color: #64748b;
     }
 
-    .section-card h3 {
-        font-size: 1.2rem;
+    .legal-document {
+      padding: 30px 0 50px;
     }
 
-    .home-btn {
-        max-width: 100%;
-        font-size: 0.95rem;
-        min-height: 44px;
-    }
-}
-
-@media (max-width: 480px) {
-    .section-card {
-        padding: 14px;
+    .legal-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+      margin-bottom: 20px;
     }
 
-    .section-card h3 {
-        font-size: 1.1rem;
+    .legal-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.12rem;
+      color: #0f172a;
     }
 
-    .home-btn {
+    .legal-card h4 {
+      margin: 18px 0 8px;
+      font-size: 0.98rem;
+      color: #1e293b;
+    }
+
+    .legal-card p,
+    .legal-card li {
+      color: #475569;
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .legal-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .legal-card ul,
+    .legal-card ol {
+      margin: 8px 0 0 22px;
+      padding: 0;
+    }
+
+    .legal-card li {
+      margin-bottom: 7px;
+    }
+
+    .important-note {
+      padding: 14px 16px;
+      border-left: 4px solid #0d6efd;
+      background: #f8fbff;
+      border-radius: 8px;
+      color: #334155;
+      margin-top: 12px;
+    }
+
+    .language-toggle {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .language-toggle button,
+    .language-toggle .home-btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 14px;
+      min-width: 92px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.9rem;
+      text-decoration: none;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .language-toggle button {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .language-toggle button.active {
+      background: #0d6efd;
+      color: #fff;
+    }
+
+    .language-toggle .home-btn {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .legal-card {
+        padding: 20px;
+        border-radius: 12px;
+      }
+
+      .legal-card p,
+      .legal-card li {
         font-size: 0.9rem;
-        padding: 10px 16px;
+      }
     }
-}
+
+    @media (max-width: 480px) {
+      .legal-document {
+        padding-top: 18px;
+      }
+
+      .legal-card {
+        padding: 16px;
+      }
+
+      .language-toggle {
+        padding: 0 12px;
+      }
+
+      .language-toggle button,
+      .language-toggle .home-btn {
+        flex: 1 1 120px;
+        min-width: 0;
+      }
+    }
   </style>
 </head>
+
 <body>
-<section class="page-hero">
-  <div class="container">
-    <h2>Terms & Conditions</h2>
-    <p>Applicable to Clients, Contractors, Technicians, Labour & Members</p>
-  </div>
-   <div class="language-toggle">
-  <button type="button" id="btn-en" class="active" onclick="toggleLang('en')">
-    English
-  </button>
-  <button type="button" id="btn-hi" onclick="toggleLang('hi')">
-    हिंदी
-  </button>
-<button>
-    <a href="/landing.html" class="home-btn">
-        Go to Home
-    </a>
-</button>
-</section>
+  <section class="page-hero">
+    <div class="container">
+      <h2>Terms &amp; Conditions</h2>
+      <p>Applicable to Clients, Contractors, Technicians, Workers, Service Providers and Members</p>
 
-<section class="legal policy policy-en" id="policy-en">
-  <div class="container">
-    <ol class="legal-list">
-      <li>These terms govern the use of BABLU Contractor Construction Service.</li>
-      <li>Accessing this website implies full acceptance of these terms.</li>
-      <li>Terms apply to all clients, contractors, technicians, labour, and visitors.</li>
-      <li>BR & G reserves the right to modify terms at any time.</li>
-      <li>Services include shuttering, soil filling, technician & labour supply.</li>
-      <li>BR & G is not a real estate developer.</li>
-      <li>Service execution depends on agreed scope and site conditions.</li>
-      <li>Clients must provide accurate site and project information.</li>
-      <li>Site access must be provided on agreed schedules.</li>
-      <li>Changes in scope must be communicated in advance.</li>
-      <li>Delays due to client-side issues are not BR & G’s liability.</li>
-      <li>Contractors must follow site rules and safety instructions.</li>
-      <li>Use of alcohol or drugs at site is strictly prohibited.</li>
-      <li>Valid identification is mandatory for all workforce.</li>
-      <li>Safety equipment usage is compulsory.</li>
-      <li>BR & G promotes a zero-accident policy.</li>
-      <li>Clients must ensure safe working conditions.</li>
-      <li>Emergency protocols must be followed.</li>
-      <li>Payments must follow agreed milestones.</li>
-      <li>Advance payments may be required.</li>
-      <li>Delayed payments may result in work suspension.</li>
-      <li>Taxes apply as per Indian law.</li>
-      <li>Refunds depend on work completion stage.</li>
-      <li>Reports are provided for transparency.</li>
-      <li>Reports do not replace statutory certificates.</li>
-      <li>Weather or force majeure may affect timelines.</li>
-      <li>BR & G is not liable for such delays.</li>
-      <li>Website content is intellectual property of BR & G.</li>
-      <li>Unauthorized copying is prohibited.</li>
-      <li>Client information is kept confidential.</li>
-      <li>Contractors must not misuse client data.</li>
-      <li>Services may be terminated for rule violations.</li>
-      <li>Pending payments remain payable after termination.</li>
-      <li>BR & G is not liable for indirect damages.</li>
-      <li>Liability is limited to service value.</li>
-      <li>Disputes should be resolved amicably.</li>
-      <li>Indian law governs these terms.</li>
-      <li>Haryana courts have jurisdiction.</li>
-      <li>Invalid clauses do not affect others.</li>
-      <li>These terms form the complete agreement.</li>
-    </ol>
-    <h3>6A. Accident During Work</h3>
-<p>
-BR & G Contractor Construction Service follows standard safety practices and
-provides instructions for safe working conditions. However, construction work
-involves inherent risks.
-</p>
-<p>
-In the event of any accident, injury, disability, or death occurring at the
-worksite due to negligence, carelessness, or failure to follow safety
-instructions by any employee, labourer, technician, or contractor, the company
-shall not be held responsible for compensation beyond what is legally mandated.
-</p>
-<p>
-All workers are advised to strictly follow safety rules, use protective
-equipment (PPE), and comply with site instructions at all times.
-</p>
-<h3>6B. Alcohol, Drugs & Prohibited Substances</h3>
-<p>
-Consumption of alcohol, drugs, or any intoxicating substances during working
-hours or presence at the workplace under the influence of such substances is
-strictly prohibited.
-</p>
-<p>
-If any accident, injury, damage, or loss occurs while an employee, labourer,
-technician, or contractor is found to be under the influence of alcohol or drugs,
-BR & G Contractor Construction Service shall not be liable for any compensation,
-medical expenses, or damages.
-</p>
-<p>
-Such individuals may be immediately removed from the site and their services
-terminated without notice.
-</p>
-<h3>6C. Personal Responsibility & Medical Fitness</h3>
-<p>
-All workers are responsible for ensuring they are medically fit to perform their
-assigned duties. The company shall not be responsible for any health-related
-issues arising due to pre-existing medical conditions.
-</p>
-<p>
-Workers must inform supervisors of any illness, injury, or condition that may
-affect safe working.
-</p>
-<h3>6D. Damage, Misconduct & Negligence</h3>
-<p>
-Any damage to client property, tools, materials, or equipment caused due to
-negligence, misconduct, or unauthorized actions by workers shall be the sole
-responsibility of the individual involved.
-</p>
-<p>
-The company reserves the right to recover costs or take disciplinary action if
-required.
-</p>
-<h3>6E. No Guarantee of Continuous Employment</h3>
-<p>
-Engagement of contractors, technicians, and labour is based on project
-requirements. BR & G Contractor Construction Service does not guarantee
-continuous or permanent employment unless stated in a written agreement.
-</p>
-<h3>6F. Legal Jurisdiction</h3>
-<p>
-Any disputes arising out of these terms shall be subject to the jurisdiction of
-courts in India only.
-</p>
-<p>
-By engaging with BR & G Contractor Construction Service, all employees,
-contractors, and members acknowledge and accept these terms voluntarily and
-agree that the company shall not be held liable for incidents arising from
-individual negligence, misconduct, or violation of rules.
-</p>
-<h3>Company Support in Case</h3>
-<p>
-If any accident occurs at the worksite purely due to the proven mistake,
-negligence, or failure on the part of
-<strong>BR & G Contractor Construction Service</strong>,
-the company will provide reasonable support as follows:
-</p>
+      <div class="legal-header-meta">
+        <span><strong>Version:</strong> 2.0</span>
+        <span><strong>Effective Date:</strong> 27 September 2026</span>
+      </div>
 
-<ul>
-  <li>Immediate first-aid and necessary medicines</li>
-  <li>Hospital expenses limited to one (1) day only</li>
-  <li>Compensation as decided solely by company management</li>
-</ul>
+      <div class="language-toggle">
+        <button type="button" id="btn-en" class="active" onclick="toggleLang('en')">English</button>
+        <button type="button" id="btn-hi" onclick="toggleLang('hi')">हिंदी</button>
+        <a href="/landing.html" class="home-btn">Go to Home</a>
+      </div>
+    </div>
+  </section>
 
-<p>
-This support will be provided only after internal verification and approval
-by company authorities.
-</p>
+  <!-- ========================= ENGLISH ========================= -->
+  <section class="legal policy policy-en" id="policy-en">
+    <div class="container legal-document">
 
-<p>
-The above support will <strong>NOT</strong> be applicable if the accident occurs due to:
-</p>
+      <div class="legal-card">
+        <h3>1. Introduction and Acceptance</h3>
+        <p>
+          These Terms &amp; Conditions ("Terms") govern access to and use of the Platform,
+          including its website, applications, communication features, work-related tools,
+          profiles, service listings and related functionality.
+        </p>
+        <p>
+          By creating an account, accessing the Platform, or using any Platform service,
+          you acknowledge that you have read, understood and agreed to these Terms.
+          If you do not agree, you should not use the Platform.
+        </p>
+      </div>
 
-<ul>
-  <li>Alcohol or drug consumption</li>
-  <li>Negligence, carelessness, or violation of safety rules</li>
-  <li>Unauthorized work or disobedience of supervisor instructions</li>
-  <li>Personal health conditions or misconduct</li>
-</ul>
+      <div class="legal-card">
+        <h3>2. Platform Role</h3>
+        <p>
+          The Platform is intended to provide digital tools for connecting users, sharing
+          work requirements, profiles, project information and related service information.
+          Unless expressly stated otherwise, the Platform does not replace a direct agreement
+          between a client and a contractor, technician, worker, service provider or other user.
+        </p>
+        <p>
+          Each party remains responsible for assessing suitability, negotiating scope,
+          confirming commercial terms and complying with applicable laws and obligations.
+        </p>
+      </div>
 
-<p>
-The company’s decision in such matters shall be final and binding.
-</p>
+      <div class="legal-card">
+        <h3>3. Eligibility and Account Information</h3>
+        <ul>
+          <li>You must provide accurate and current registration, contact and profile information.</li>
+          <li>You are responsible for protecting your login credentials and for activity carried out through your account.</li>
+          <li>You must not impersonate another person or create an account using false information.</li>
+          <li>You must promptly update information that becomes inaccurate or outdated.</li>
+          <li>The Platform may restrict or suspend access where there is a reasonable basis to believe that these Terms or applicable law has been violated.</li>
+        </ul>
+      </div>
 
-  </div>
-</section>
+      <div class="legal-card">
+        <h3>4. Work, Services and Project Information</h3>
+        <p>
+          Users may post, receive or manage work requirements, project information and service-related
+          communications. Any work scope, pricing, timing, deliverables and other commercial terms
+          should be clearly agreed between the relevant parties before work begins.
+        </p>
+        <ul>
+          <li>Clients should provide accurate site, project and access information.</li>
+          <li>Contractors, technicians and workers should provide accurate qualifications, experience and availability information.</li>
+          <li>Changes to the agreed scope should be communicated and confirmed as early as reasonably possible.</li>
+          <li>Site conditions, weather, access restrictions, material availability and other external factors may affect execution and timelines.</li>
+        </ul>
+      </div>
 
-<section class="legal policy policy-hi" id="policy-hi" style="display:none;">
-  <div class="container">
-    <ol class="legal-list">
-      <li>ये नियम एवं शर्तें BR & G Contractor Construction Service के उपयोग को नियंत्रित करती हैं।</li>
-      <li>इस वेबसाइट या सेवा का उपयोग करना इन नियमों की पूर्ण स्वीकृति माना जाएगा।</li>
-      <li>ये नियम सभी ग्राहकों, ठेकेदारों, तकनीशियनों, मजदूरों और आगंतुकों पर लागू होते हैं।</li>
-      <li>BR & G को किसी भी समय नियमों में संशोधन करने का अधिकार सुरक्षित है।</li>
-      <li>सेवाओं में शटरिंग, मिट्टी भराव, तकनीशियन एवं मजदूर आपूर्ति शामिल है।</li>
-      <li>BR & G कोई रियल एस्टेट डेवलपर नहीं है।</li>
-      <li>सेवा निष्पादन सहमत कार्य-सीमा और साइट की स्थिति पर निर्भर करता है।</li>
-      <li>ग्राहकों को साइट और परियोजना की सही जानकारी प्रदान करनी होगी।</li>
-      <li>निर्धारित समय पर साइट एक्सेस उपलब्ध कराना ग्राहक की जिम्मेदारी है।</li>
-      <li>कार्य-सीमा में किसी भी परिवर्तन की सूचना पहले से देनी होगी।</li>
-      <li>ग्राहक पक्ष से होने वाली देरी के लिए BR & G जिम्मेदार नहीं होगा।</li>
-      <li>ठेकेदारों को साइट नियमों और सुरक्षा निर्देशों का पालन करना अनिवार्य है।</li>
-      <li>साइट पर शराब या नशीले पदार्थों का उपयोग सख्त मना है।</li>
-      <li>सभी श्रमिकों के लिए वैध पहचान पत्र अनिवार्य है।</li>
-      <li>सुरक्षा उपकरणों का उपयोग अनिवार्य है।</li>
-      <li>BR & G शून्य-दुर्घटना नीति को बढ़ावा देता है।</li>
-      <li>ग्राहकों को सुरक्षित कार्य वातावरण सुनिश्चित करना होगा।</li>
-      <li>आपातकालीन प्रक्रियाओं का पालन अनिवार्य है।</li>
-      <li>भुगतान सहमत चरणों (माइलस्टोन) के अनुसार किया जाना चाहिए।</li>
-      <li>अग्रिम भुगतान की आवश्यकता हो सकती है।</li>
-      <li>भुगतान में देरी होने पर कार्य रोका जा सकता है।</li>
-      <li>कर भारतीय कानून के अनुसार लागू होंगे।</li>
-      <li>रिफंड कार्य की प्रगति पर निर्भर करेगा।</li>
-      <li>पारदर्शिता हेतु रिपोर्ट उपलब्ध कराई जाती है।</li>
-      <li>ये रिपोर्ट वैधानिक प्रमाण-पत्रों का स्थान नहीं लेतीं।</li>
-      <li>मौसम या फोर्स मेज्योर के कारण समय-सीमा प्रभावित हो सकती है।</li>
-      <li>ऐसी देरी के लिए BR & G जिम्मेदार नहीं होगा।</li>
-      <li>वेबसाइट की सामग्री BR & G की बौद्धिक संपत्ति है।</li>
-      <li>अनधिकृत कॉपी या उपयोग प्रतिबंधित है।</li>
-      <li>ग्राहक जानकारी गोपनीय रखी जाती है।</li>
-      <li>ठेकेदारों को ग्राहक डेटा का दुरुपयोग नहीं करना चाहिए।</li>
-      <li>नियम उल्लंघन पर सेवाएं समाप्त की जा सकती हैं।</li>
-      <li>सेवा समाप्ति के बाद भी बकाया भुगतान देय रहेगा।</li>
-      <li>BR & G अप्रत्यक्ष या परिणामी नुकसान के लिए जिम्मेदार नहीं है।</li>
-      <li>कंपनी की जिम्मेदारी सेवा मूल्य तक सीमित होगी।</li>
-      <li>विवादों को आपसी सहमति से सुलझाने का प्रयास किया जाएगा।</li>
-      <li>इन नियमों पर भारतीय कानून लागू होगा।</li>
-      <li>हरियाणा न्यायालयों का क्षेत्राधिकार होगा।</li>
-      <li>किसी एक नियम के अमान्य होने से अन्य नियम प्रभावित नहीं होंगे।</li>
-      <li>ये नियम पूर्ण समझौते का निर्माण करते हैं।</li>
-    </ol>
+      <div class="legal-card">
+        <h3>5. Payments, Charges and Refunds</h3>
+        <p>
+          Payment terms, rates, milestones, advances and other charges are based on the arrangements
+          communicated between the relevant parties or displayed through applicable Platform features.
+        </p>
+        <ul>
+          <li>Users are responsible for making agreed payments on time.</li>
+          <li>Applicable taxes, statutory charges or deductions may apply according to law.</li>
+          <li>Work may be delayed or suspended where agreed payment obligations are not met.</li>
+          <li>Refunds, cancellations and adjustments depend on the applicable agreement, transaction stage and governing law.</li>
+        </ul>
+      </div>
 
-    <h3>6A. कार्य के दौरान दुर्घटना</h3>
-    <p>
-      BR & G Contractor Construction Service मानक सुरक्षा प्रक्रियाओं का पालन करता है,
-      फिर भी निर्माण कार्य में स्वाभाविक जोखिम शामिल होते हैं।
-    </p>
-    <p>
-      किसी भी कर्मचारी, मजदूर, तकनीशियन या ठेकेदार की लापरवाही, असावधानी या सुरक्षा
-      निर्देशों के उल्लंघन से हुई दुर्घटना, चोट, विकलांगता या मृत्यु के लिए कंपनी
-      कानूनी सीमा से अधिक किसी मुआवज़े के लिए जिम्मेदार नहीं होगी।
-    </p>
+      <div class="legal-card">
+        <h3>6. Safety and Workplace Conduct</h3>
+        <p>
+          Safety is a shared responsibility. All persons involved in work must comply with applicable
+          safety requirements, site rules and lawful instructions.
+        </p>
+        <ul>
+          <li>Appropriate personal protective equipment (PPE) should be used where required.</li>
+          <li>Unsafe work conditions, hazards and incidents should be reported promptly.</li>
+          <li>Alcohol, illegal drugs and working while impaired are prohibited where they may affect workplace safety.</li>
+          <li>Users must not engage in violent, threatening, abusive, discriminatory or unlawful conduct.</li>
+          <li>Required identification, permits, qualifications and certifications must be maintained where applicable.</li>
+        </ul>
+        <div class="important-note">
+          Nothing in these Terms removes or limits any statutory right, duty or liability that cannot lawfully be excluded or limited.
+        </div>
+      </div>
 
-    <h3>6B. शराब, नशा एवं प्रतिबंधित पदार्थ</h3>
-    <p>
-      कार्य समय के दौरान या कार्य स्थल पर शराब, नशीले पदार्थों या किसी भी प्रकार
-      के नशे की स्थिति सख्त प्रतिबंधित है।
-    </p>
-    <p>
-      नशे की स्थिति में हुई किसी भी दुर्घटना या नुकसान के लिए कंपनी किसी प्रकार
-      की चिकित्सा सहायता या मुआवज़े की जिम्मेदारी नहीं लेगी।
-    </p>
+      <div class="legal-card">
+        <h3>7. Accidents, Injury and Medical Matters</h3>
+        <p>
+          Construction and field work may involve inherent risks. Users and work providers are expected
+          to follow applicable safety practices and legal requirements and to take reasonable steps to
+          protect workers, clients, property and the public.
+        </p>
+        <p>
+          Responsibility for an accident, injury, loss or damage will depend on the facts of the incident,
+          applicable law and any direct agreement between the relevant parties. Nothing in these Terms is
+          intended to waive non-waivable legal rights or statutory protections.
+        </p>
+      </div>
 
-    <h3>6C. व्यक्तिगत जिम्मेदारी एवं स्वास्थ्य</h3>
-    <p>
-      सभी कर्मचारियों की यह जिम्मेदारी है कि वे चिकित्सकीय रूप से कार्य के लिए
-      सक्षम हों। पहले से मौजूद बीमारी से उत्पन्न समस्याओं के लिए कंपनी जिम्मेदार
-      नहीं होगी।
-    </p>
+      <div class="legal-card">
+        <h3>8. Alcohol, Drugs and Prohibited Conduct</h3>
+        <p>
+          Users must not use the Platform to arrange, promote or carry out unlawful activities.
+          Persons working at a site must not attend or perform work while impaired by alcohol,
+          illegal drugs or other substances in a manner that creates a safety or legal risk.
+        </p>
+      </div>
 
-    <h3>6D. नुकसान, अनुशासनहीनता एवं लापरवाही</h3>
-    <p>
-      ग्राहक की संपत्ति, औजार या सामग्री को नुकसान पहुंचाने पर संबंधित व्यक्ति
-      स्वयं जिम्मेदार होगा।
-    </p>
+      <div class="legal-card">
+        <h3>9. Personal Responsibility and Medical Fitness</h3>
+        <p>
+          Each worker, contractor, technician and service provider is responsible for determining
+          whether they are able to safely perform the tasks they accept and for disclosing relevant
+          limitations where required by law or safety procedures.
+        </p>
+      </div>
 
-    <h3>6E. स्थायी रोजगार की कोई गारंटी नहीं</h3>
-    <p>
-      ठेकेदारों, तकनीशियनों एवं मजदूरों की नियुक्ति परियोजना आवश्यकताओं पर आधारित
-      होती है। स्थायी रोजगार की कोई गारंटी नहीं है।
-    </p>
+      <div class="legal-card">
+        <h3>10. Property, Equipment and Damage</h3>
+        <p>
+          Users must exercise reasonable care when handling client property, tools, materials,
+          machinery, documents and other assets. Where loss or damage is caused by negligence,
+          misconduct or unauthorized activity, responsibility may arise in accordance with the
+          applicable agreement and law.
+        </p>
+      </div>
 
-    <h3>6F. कानूनी क्षेत्राधिकार</h3>
-    <p>
-      सभी विवाद भारत के न्यायालयों के अधिकार क्षेत्र में होंगे।
-    </p>
+      <div class="legal-card">
+        <h3>11. User Content and Information</h3>
+        <p>
+          Users are responsible for information, photographs, documents, descriptions, reviews,
+          messages and other material they upload or share through the Platform. Such content must
+          be accurate, lawful and must not infringe the rights of others.
+        </p>
+        <ul>
+          <li>Do not upload content that is unlawful, fraudulent, defamatory, abusive or misleading.</li>
+          <li>Do not upload personal information or confidential material without appropriate authority.</li>
+          <li>Do not attempt to access another user's account or private information without permission.</li>
+        </ul>
+      </div>
 
-    <h3>दुर्घटना की स्थिति में कंपनी सहायता</h3>
-    <p>
-      यदि दुर्घटना कंपनी की सिद्ध गलती या लापरवाही से होती है, तो सीमित सहायता
-      निम्न प्रकार दी जा सकती है:
-    </p>
+      <div class="legal-card">
+        <h3>12. Privacy and Data Handling</h3>
+        <p>
+          Personal information is handled in accordance with the Platform's Privacy Policy and applicable
+          law. Users should review the Privacy Policy to understand how personal information may be collected,
+          used, stored and shared for legitimate Platform purposes.
+        </p>
+      </div>
 
-    <ul>
-      <li>तत्काल प्राथमिक उपचार एवं आवश्यक दवाइयाँ</li>
-      <li>अस्पताल खर्च अधिकतम एक (1) दिन तक</li>
-      <li>कंपनी प्रबंधन द्वारा तय मुआवज़ा</li>
-    </ul>
+      <div class="legal-card">
+        <h3>13. Platform Availability and Third-Party Services</h3>
+        <p>
+          The Platform may depend on internet services, telecommunications, maps, hosting providers,
+          payment systems, cloud services and other third-party infrastructure. Temporary interruptions,
+          maintenance or technical failures may occur.
+        </p>
+        <p>
+          Where the Platform provides links or integrations to third-party services, those services may
+          be governed by separate terms and privacy policies.
+        </p>
+      </div>
 
-    <p>
-      उपरोक्त सहायता केवल आंतरिक जांच और अनुमोदन के बाद दी जाएगी।
-    </p>
+      <div class="legal-card">
+        <h3>14. Limitation of Liability</h3>
+        <p>
+          To the extent permitted by applicable law, the Platform is not responsible for losses arising
+          solely from the independent acts, omissions, representations, agreements or misconduct of users.
+        </p>
+        <p>
+          The Platform does not guarantee that every user, profile, work opportunity, service provider,
+          project detail or communication will be accurate, available, suitable or uninterrupted.
+          Users should carry out their own reasonable verification before relying on information or entering
+          into a transaction.
+        </p>
+        <p>
+          Nothing in these Terms excludes or limits liability where such exclusion or limitation is prohibited
+          by applicable law.
+        </p>
+      </div>
 
-    <p><strong>निम्न स्थितियों में सहायता लागू नहीं होगी:</strong></p>
+      <div class="legal-card">
+        <h3>15. Suspension and Termination</h3>
+        <p>
+          Access to the Platform may be suspended, restricted or terminated where reasonably necessary,
+          including in cases of serious policy violations, unlawful activity, misuse of the Platform,
+          security concerns or legal requirements.
+        </p>
+        <p>
+          Termination does not automatically cancel payment obligations or other responsibilities that
+          accrued before termination.
+        </p>
+      </div>
 
-    <ul>
-      <li>शराब या नशे की स्थिति</li>
-      <li>लापरवाही या नियम उल्लंघन</li>
-      <li>अनधिकृत कार्य या आदेश अवहेलना</li>
-      <li>व्यक्तिगत स्वास्थ्य समस्या या अनुशासनहीनता</li>
-    </ul>
+      <div class="legal-card">
+        <h3>16. Intellectual Property</h3>
+        <p>
+          Platform software, design, interface elements, text, graphics, logos, database structure and
+          other Platform materials may be protected by intellectual-property laws. Except as permitted
+          by law or expressly authorized, users must not copy, modify, distribute, reverse engineer or
+          commercially exploit Platform materials.
+        </p>
+      </div>
 
-    <p>
-      इन मामलों में कंपनी का निर्णय अंतिम और बाध्यकारी होगा।
-    </p>
+      <div class="legal-card">
+        <h3>17. No Guarantee of Employment or Continuous Work</h3>
+        <p>
+          Registration or participation on the Platform does not by itself create an employment relationship,
+          partnership, agency or guarantee of continuous work unless a separate written agreement establishes one.
+        </p>
+      </div>
 
-  </div>
-</section>
+      <div class="legal-card">
+        <h3>18. Dispute Resolution and Governing Law</h3>
+        <p>
+          Users should first attempt to resolve disputes directly and in good faith. Where a dispute cannot
+          be resolved informally, the matter will be addressed according to applicable law and the jurisdiction
+          of the courts legally competent to hear the dispute.
+        </p>
+        <p>
+          These Terms are intended to be governed by the laws applicable in India, subject to any mandatory
+          consumer, employment, labour, safety or other legal protections that apply to a particular user or transaction.
+        </p>
+      </div>
 
+      <div class="legal-card">
+        <h3>19. Changes to These Terms</h3>
+        <p>
+          The Platform may revise these Terms from time to time to reflect changes in features, practices,
+          legal requirements or operational needs. When a material change is made, an updated version and
+          effective date may be published through the Platform.
+        </p>
+        <p>
+          Where required, users may be asked to review and accept the updated Terms before continuing to use
+          affected Platform features.
+        </p>
+      </div>
 
-<footer class="footer">
-  <div class="container">
-    <p>© 2025 BR & G Contractor Construction Service. "सर्वाधिकार सुरक्षिताः"</p>
-  </div>
-</footer>
-<script>
-function toggleLang(lang) {
-  var en = document.getElementById('policy-en');
-  var hi = document.getElementById('policy-hi');
+      <div class="legal-card">
+        <h3>20. Severability and Entire Agreement</h3>
+        <p>
+          If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions
+          will continue to the extent permitted by law. These Terms, together with any applicable policies
+          and transaction-specific agreements, form the framework governing use of the Platform.
+        </p>
+      </div>
 
-  var btnEn = document.getElementById('btn-en');
-  var btnHi = document.getElementById('btn-hi');
+      <div class="legal-card">
+        <h3>21. Contact and Support</h3>
+        <p>
+          Questions, complaints or requests concerning these Terms should be submitted through the support
+          or contact channels made available on the Platform.
+        </p>
+      </div>
 
-  /* Safety guard – prevents JS errors on other pages */
-  if (!en || !hi || !btnEn || !btnHi) return;
+      <div class="legal-card">
+        <h3>Agreement</h3>
+        <p>
+          By continuing to use the Platform after accepting these Terms, you acknowledge that you have had
+          an opportunity to review the applicable Terms and agree to comply with them.
+        </p>
+      </div>
 
-  if (lang === 'en') {
-    en.style.display = 'block';
-    hi.style.display = 'none';
-    btnEn.classList.add('active');
-    btnHi.classList.remove('active');
-  } else {
-    hi.style.display = 'block';
-    en.style.display = 'none';
-    btnHi.classList.add('active');
-    btnEn.classList.remove('active');
-  }
-}
-</script>
-<script src="dist/js/screenshotProtector.min.js"></script>
-<script>
-  // One single line to activate
-  initScreenshotProtector();
-</script>
+    </div>
+  </section>
+
+  <!-- ========================= HINDI ========================= -->
+  <section class="legal policy policy-hi" id="policy-hi" style="display:none;">
+    <div class="container legal-document">
+
+      <div class="legal-card">
+        <h3>1. परिचय एवं स्वीकृति</h3>
+        <p>
+          ये नियम एवं शर्तें ("नियम") प्लेटफ़ॉर्म की वेबसाइट, एप्लिकेशन, संचार सुविधाओं,
+          कार्य-संबंधी उपकरणों, प्रोफ़ाइल, सेवा सूची और संबंधित सुविधाओं के उपयोग पर लागू होती हैं।
+        </p>
+        <p>
+          खाता बनाकर, प्लेटफ़ॉर्म का उपयोग करके या किसी सेवा तक पहुँच प्राप्त करके आप स्वीकार करते हैं
+          कि आपने इन नियमों को पढ़ा, समझा और स्वीकार किया है। यदि आप सहमत नहीं हैं, तो प्लेटफ़ॉर्म का उपयोग न करें।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>2. प्लेटफ़ॉर्म की भूमिका</h3>
+        <p>
+          प्लेटफ़ॉर्म का उद्देश्य उपयोगकर्ताओं को कार्य की आवश्यकताओं, परियोजना की जानकारी,
+          प्रोफ़ाइल और संबंधित सेवाओं की जानकारी साझा करने तथा एक-दूसरे से जुड़ने के लिए डिजिटल सुविधाएँ प्रदान करना है।
+        </p>
+        <p>
+          जब तक स्पष्ट रूप से अलग न बताया गया हो, प्लेटफ़ॉर्म ग्राहक, ठेकेदार, तकनीशियन,
+          श्रमिक या अन्य उपयोगकर्ताओं के बीच होने वाले प्रत्यक्ष समझौते का स्थान नहीं लेता।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>3. पात्रता एवं खाता जानकारी</h3>
+        <ul>
+          <li>आपको सही और अद्यतन पंजीकरण, संपर्क एवं प्रोफ़ाइल जानकारी देनी होगी।</li>
+          <li>अपने लॉगिन विवरण की सुरक्षा और अपने खाते से होने वाली गतिविधियों की जिम्मेदारी आपकी है।</li>
+          <li>किसी अन्य व्यक्ति के नाम से खाता बनाना या गलत जानकारी देना प्रतिबंधित है।</li>
+          <li>जानकारी बदलने पर उसे उचित समय में अपडेट करें।</li>
+          <li>नियमों या लागू कानून के उल्लंघन की उचित आशंका होने पर प्लेटफ़ॉर्म पहुँच सीमित या निलंबित कर सकता है।</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>4. कार्य, सेवाएँ एवं परियोजना जानकारी</h3>
+        <p>
+          उपयोगकर्ता कार्य की आवश्यकताएँ, परियोजना की जानकारी और सेवा-संबंधी संचार साझा या प्रबंधित कर सकते हैं।
+          कार्य शुरू होने से पहले कार्य-क्षेत्र, मूल्य, समय, डिलीवरी और अन्य व्यावसायिक शर्तें संबंधित पक्षों द्वारा स्पष्ट रूप से तय की जानी चाहिए।
+        </p>
+        <ul>
+          <li>ग्राहक साइट, परियोजना और पहुँच से संबंधित सही जानकारी दें।</li>
+          <li>ठेकेदार, तकनीशियन और श्रमिक अपनी योग्यता, अनुभव और उपलब्धता की सही जानकारी दें।</li>
+          <li>सहमति किए गए कार्य-क्षेत्र में परिवर्तन की जानकारी समय पर दी जानी चाहिए।</li>
+          <li>साइट की स्थिति, मौसम, पहुँच, सामग्री की उपलब्धता और अन्य बाहरी कारण समय-सीमा को प्रभावित कर सकते हैं।</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>5. भुगतान, शुल्क एवं रिफंड</h3>
+        <p>
+          भुगतान की दर, चरण, अग्रिम राशि और अन्य शुल्क संबंधित पक्षों के बीच तय शर्तों या प्लेटफ़ॉर्म पर उपलब्ध संबंधित सुविधा के अनुसार होंगे।
+        </p>
+        <ul>
+          <li>सहमत भुगतान समय पर करना संबंधित पक्ष की जिम्मेदारी है।</li>
+          <li>भारतीय कानून के अनुसार लागू कर या वैधानिक शुल्क लग सकते हैं।</li>
+          <li>भुगतान दायित्व पूरे न होने पर कार्य में देरी या अस्थायी रोक हो सकती है।</li>
+          <li>रिफंड, रद्दीकरण और समायोजन संबंधित समझौते, लेन-देन की स्थिति और लागू कानून पर निर्भर करेंगे।</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>6. सुरक्षा एवं कार्यस्थल आचरण</h3>
+        <p>
+          सुरक्षा सभी संबंधित पक्षों की साझा जिम्मेदारी है। सभी व्यक्तियों को लागू सुरक्षा नियमों,
+          साइट के नियमों और वैध निर्देशों का पालन करना चाहिए।
+        </p>
+        <ul>
+          <li>जहाँ आवश्यक हो वहाँ उपयुक्त व्यक्तिगत सुरक्षा उपकरण (PPE) का उपयोग करें।</li>
+          <li>खतरों, असुरक्षित परिस्थितियों और घटनाओं की जानकारी तुरंत दें।</li>
+          <li>कार्यस्थल की सुरक्षा प्रभावित करने वाली नशे की स्थिति में कार्य करना प्रतिबंधित है।</li>
+          <li>हिंसक, धमकीपूर्ण, अपमानजनक, भेदभावपूर्ण या गैर-कानूनी व्यवहार प्रतिबंधित है।</li>
+          <li>जहाँ आवश्यक हो वहाँ पहचान, अनुमति, योग्यता और प्रमाणपत्र वैध रखें।</li>
+        </ul>
+        <div class="important-note">
+          इन नियमों का कोई प्रावधान ऐसे वैधानिक अधिकार, दायित्व या जिम्मेदारी को समाप्त या सीमित नहीं करता जिसे कानूनन समाप्त या सीमित नहीं किया जा सकता।
+        </div>
+      </div>
+
+      <div class="legal-card">
+        <h3>7. दुर्घटना, चोट एवं चिकित्सा संबंधी विषय</h3>
+        <p>
+          निर्माण और साइट आधारित कार्यों में स्वाभाविक जोखिम हो सकते हैं। सभी संबंधित पक्षों को लागू सुरक्षा नियमों,
+          कानूनी आवश्यकताओं और उचित सावधानियों का पालन करना चाहिए।
+        </p>
+        <p>
+          दुर्घटना, चोट, हानि या नुकसान की जिम्मेदारी घटना के तथ्यों, लागू कानून और संबंधित पक्षों के प्रत्यक्ष समझौते पर निर्भर करेगी।
+          इन नियमों का उद्देश्य ऐसे किसी कानूनी अधिकार को समाप्त करना नहीं है जिसे कानून द्वारा समाप्त नहीं किया जा सकता।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>8. शराब, नशीले पदार्थ एवं प्रतिबंधित आचरण</h3>
+        <p>
+          प्लेटफ़ॉर्म का उपयोग किसी गैर-कानूनी गतिविधि को व्यवस्थित, प्रचारित या संचालित करने के लिए नहीं किया जा सकता।
+          कार्यस्थल पर ऐसी नशीली या प्रभावित स्थिति में कार्य करना प्रतिबंधित है जिससे सुरक्षा या कानून का उल्लंघन हो सकता है।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>9. व्यक्तिगत जिम्मेदारी एवं स्वास्थ्य</h3>
+        <p>
+          प्रत्येक श्रमिक, ठेकेदार, तकनीशियन और सेवा प्रदाता की जिम्मेदारी है कि वह स्वीकार किए गए कार्य को सुरक्षित रूप से करने की अपनी क्षमता का उचित आकलन करे और आवश्यक होने पर संबंधित सीमाओं की जानकारी दे।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>10. संपत्ति, उपकरण एवं नुकसान</h3>
+        <p>
+          ग्राहक की संपत्ति, औजार, सामग्री, मशीनरी, दस्तावेज़ और अन्य वस्तुओं के उपयोग में उचित सावधानी बरतना आवश्यक है।
+          लापरवाही, अनुशासनहीनता या अनधिकृत गतिविधि से हुई हानि के लिए लागू समझौते और कानून के अनुसार जिम्मेदारी उत्पन्न हो सकती है।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>11. उपयोगकर्ता सामग्री एवं जानकारी</h3>
+        <p>
+          उपयोगकर्ता द्वारा प्लेटफ़ॉर्म पर अपलोड या साझा की गई जानकारी, फोटो, दस्तावेज़, विवरण, समीक्षा और संदेश के लिए वही जिम्मेदार है।
+          सामग्री सही, वैध और अन्य व्यक्तियों के अधिकारों का उल्लंघन न करने वाली होनी चाहिए।
+        </p>
+        <ul>
+          <li>गैर-कानूनी, धोखाधड़ीपूर्ण, मानहानिकारक, अपमानजनक या भ्रामक सामग्री अपलोड न करें।</li>
+          <li>उचित अधिकार के बिना किसी की निजी या गोपनीय जानकारी साझा न करें।</li>
+          <li>बिना अनुमति किसी अन्य खाते या निजी जानकारी तक पहुँचने का प्रयास न करें।</li>
+        </ul>
+      </div>
+
+      <div class="legal-card">
+        <h3>12. गोपनीयता एवं डेटा प्रबंधन</h3>
+        <p>
+          व्यक्तिगत जानकारी को प्लेटफ़ॉर्म की Privacy Policy और लागू कानून के अनुसार संभाला जाएगा।
+          उपयोगकर्ताओं को यह समझने के लिए Privacy Policy पढ़नी चाहिए कि व्यक्तिगत जानकारी कैसे एकत्र, उपयोग, सुरक्षित और वैध उद्देश्यों के लिए साझा की जा सकती है।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>13. प्लेटफ़ॉर्म उपलब्धता एवं तृतीय-पक्ष सेवाएँ</h3>
+        <p>
+          प्लेटफ़ॉर्म इंटरनेट, दूरसंचार, मैप, होस्टिंग, भुगतान, क्लाउड और अन्य तृतीय-पक्ष सेवाओं पर निर्भर हो सकता है।
+          रखरखाव, तकनीकी समस्या या अस्थायी व्यवधान संभव हैं।
+        </p>
+        <p>
+          तृतीय-पक्ष सेवाओं के लिए अलग नियम और Privacy Policy लागू हो सकती है।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>14. जिम्मेदारी की सीमा</h3>
+        <p>
+          लागू कानून द्वारा अनुमत सीमा तक, प्लेटफ़ॉर्म उपयोगकर्ताओं के स्वतंत्र कार्य, लापरवाही,
+          गलत जानकारी, समझौते या अनुचित आचरण से उत्पन्न हानि के लिए जिम्मेदार नहीं होगा।
+        </p>
+        <p>
+          प्लेटफ़ॉर्म प्रत्येक प्रोफ़ाइल, कार्य अवसर, सेवा प्रदाता, परियोजना विवरण या संचार की पूर्ण सटीकता,
+          उपलब्धता, उपयुक्तता या निरंतरता की गारंटी नहीं देता। लेन-देन से पहले उचित सत्यापन करना उपयोगकर्ताओं की जिम्मेदारी है।
+        </p>
+        <p>
+          ऐसा कोई भी दायित्व इन नियमों द्वारा सीमित या समाप्त नहीं किया जाता जिसे लागू कानून के तहत सीमित या समाप्त नहीं किया जा सकता।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>15. निलंबन एवं समाप्ति</h3>
+        <p>
+          गंभीर नियम उल्लंघन, गैर-कानूनी गतिविधि, प्लेटफ़ॉर्म के दुरुपयोग, सुरक्षा संबंधी समस्या या कानूनी आवश्यकता के कारण
+          प्लेटफ़ॉर्म तक पहुँच अस्थायी या स्थायी रूप से सीमित की जा सकती है।
+        </p>
+        <p>
+          खाता समाप्त होने से पहले उत्पन्न भुगतान या अन्य जिम्मेदारियाँ स्वतः समाप्त नहीं होतीं।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>16. बौद्धिक संपदा</h3>
+        <p>
+          प्लेटफ़ॉर्म का सॉफ़्टवेयर, डिज़ाइन, इंटरफ़ेस, टेक्स्ट, ग्राफ़िक्स, लोगो, डेटाबेस संरचना और अन्य सामग्री
+          बौद्धिक संपदा कानूनों द्वारा संरक्षित हो सकती है। कानून या स्पष्ट अनुमति के बिना इनका अनधिकृत उपयोग,
+          कॉपी, संशोधन, वितरण या व्यावसायिक शोषण प्रतिबंधित है।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>17. रोजगार या निरंतर कार्य की गारंटी नहीं</h3>
+        <p>
+          प्लेटफ़ॉर्म पर पंजीकरण अपने आप रोजगार, साझेदारी, एजेंसी या निरंतर कार्य की गारंटी नहीं देता,
+          जब तक अलग लिखित समझौते में ऐसा स्पष्ट रूप से स्थापित न हो।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>18. विवाद समाधान एवं लागू कानून</h3>
+        <p>
+          उपयोगकर्ताओं को विवादों का समाधान पहले सीधे और सद्भावना के साथ करने का प्रयास करना चाहिए।
+          समाधान न होने पर विवाद लागू कानून और सक्षम न्यायालय के अधिकार क्षेत्र के अनुसार निपटाया जाएगा।
+        </p>
+        <p>
+          इन नियमों पर भारत में लागू कानून लागू होगा, साथ ही उपभोक्ता, रोजगार, श्रम, सुरक्षा और अन्य अनिवार्य वैधानिक सुरक्षा जहाँ लागू हों, वे प्रभावी रहेंगी।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>19. नियमों में परिवर्तन</h3>
+        <p>
+          प्लेटफ़ॉर्म सुविधाओं, कार्यप्रणाली, कानूनी आवश्यकताओं या संचालन संबंधी कारणों से इन नियमों को समय-समय पर अपडेट कर सकता है।
+          महत्वपूर्ण परिवर्तन होने पर नया संस्करण और प्रभावी तिथि प्रकाशित की जा सकती है।
+        </p>
+        <p>
+          जहाँ आवश्यक हो, उपयोगकर्ताओं से प्रभावित सुविधाओं का उपयोग जारी रखने से पहले संशोधित नियमों की समीक्षा और स्वीकृति माँगी जा सकती है।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>20. पृथक्करणीयता एवं पूर्ण समझौता</h3>
+        <p>
+          यदि किसी प्रावधान को अमान्य या अप्रवर्तनीय माना जाता है, तो शेष प्रावधान कानून द्वारा अनुमत सीमा तक लागू रहेंगे।
+          ये नियम, Privacy Policy और किसी लेन-देन या सेवा पर लागू विशिष्ट समझौते, प्लेटफ़ॉर्म के उपयोग के लिए समग्र ढाँचा प्रदान करते हैं।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>21. संपर्क एवं सहायता</h3>
+        <p>
+          इन नियमों से संबंधित प्रश्न, शिकायत या अनुरोध प्लेटफ़ॉर्म पर उपलब्ध सहायता या संपर्क माध्यमों के द्वारा भेजे जा सकते हैं।
+        </p>
+      </div>
+
+      <div class="legal-card">
+        <h3>स्वीकृति</h3>
+        <p>
+          इन नियमों को स्वीकार करने और उसके बाद प्लेटफ़ॉर्म का उपयोग जारी रखने से आप पुष्टि करते हैं कि आपको लागू नियमों की समीक्षा करने का अवसर मिला है और आप उनका पालन करने के लिए सहमत हैं।
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 Platform. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleLang(lang) {
+      var en = document.getElementById('policy-en');
+      var hi = document.getElementById('policy-hi');
+      var btnEn = document.getElementById('btn-en');
+      var btnHi = document.getElementById('btn-hi');
+
+      if (!en || !hi || !btnEn || !btnHi) return;
+
+      if (lang === 'en') {
+        en.style.display = 'block';
+        hi.style.display = 'none';
+        btnEn.classList.add('active');
+        btnHi.classList.remove('active');
+      } else {
+        hi.style.display = 'block';
+        en.style.display = 'none';
+        btnHi.classList.add('active');
+        btnEn.classList.remove('active');
+      }
+    }
+  </script>
+
+  <script src="dist/js/screenshotProtector.min.js"></script>
+  <script>
+    initScreenshotProtector();
+  </script>
 </body>
 </html>
