@@ -1,18 +1,11 @@
-/* =========================================
-   TERMS & CONDITIONS
-   SHOW MODAL WHEN TERMS VERSION CHANGES
-========================================= */
-
 const CURRENT_TERMS_VERSION = "2.0";
 
-//const TERMS_API = "https://api.buildskil.com/api/terms";
-// For local development:
-const TERMS_API = "http://localhost:5000/api/terms";
+const TERMS_API = "https://api.buildskil.com/api/terms";
 
 const termsModal = document.getElementById("termsModal");
 const termsCheckbox = document.getElementById("termsCheckbox");
 const termsError = document.getElementById("termsError");
-
+const termsCloseBtn = document.getElementById( "termsCloseBtn");
 
 /* =========================================
    GET AUTH TOKEN
@@ -329,3 +322,35 @@ document.addEventListener(
 
     }
 );
+
+function closeTermsModalWithCheck() {
+
+  /*
+   * User must accept the terms
+   * before the modal can be closed.
+   */
+  if (!termsCheckbox?.checked) {
+
+    termsError?.removeAttribute("hidden");
+
+    termsCheckbox?.focus();
+
+    return;
+  }
+
+  termsError?.setAttribute(
+    "hidden",
+    ""
+  );
+
+  termsModal?.setAttribute(
+    "hidden",
+    ""
+  );
+
+  /*
+   * Re-enable page scrolling.
+   */
+  document.body.style.overflow = "";
+}
+termsCloseBtn?.addEventListener( "click", closeTermsModalWithCheck );

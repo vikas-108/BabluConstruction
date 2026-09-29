@@ -1,8 +1,6 @@
 const BOOKING_API = "https://api.buildskil.com/api/bookings";
-//const BOOKING_API = "http://localhost:5000/api/bookings";
-const BOOKING_TOKEN_KEY =
-  "cb_token";
 
+const BOOKING_TOKEN_KEY = "cb_token";
 
 // =========================================================
 // API REQUEST
@@ -21,44 +19,25 @@ function escapeHTML(value) {
 }
 
 //const escapeHtml = escapeHTML;
-async function bookingApi(
-  path,
-  options = {}
-) {
-  const token =
-    localStorage.getItem(
-      BOOKING_TOKEN_KEY
-    );
+async function bookingApi(path, options = {}) {
+  const token = localStorage.getItem(BOOKING_TOKEN_KEY);
 
   const headers = {
     ...(options.headers || {}),
   };
 
-
-  if (
-    options.body &&
-    !(options.body instanceof FormData)
-  ) {
-    headers["Content-Type"] =
-      "application/json";
+  if (options.body && !(options.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
   }
-
 
   if (token) {
-    headers["Authorization"] =
-      `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
-
-  const response =
-    await fetch(
-      `${BOOKING_API}${path}`,
-      {
-        ...options,
-        headers,
-      }
-    );
-
+  const response = await fetch(`${BOOKING_API}${path}`, {
+    ...options,
+    headers,
+  });
 
   let data = null;
 
@@ -68,41 +47,26 @@ async function bookingApi(
     data = null;
   }
 
-
   if (!response.ok) {
-    const error =
-      new Error(
-        data?.message ||
-        `Request failed (${response.status})`
-      );
+    const error = new Error(
+      data?.message || `Request failed (${response.status})`,
+    );
 
-    error.status =
-      response.status;
+    error.status = response.status;
 
     throw error;
   }
 
+  if (data && data.success === false) {
+    const error = new Error(data.message || "Request failed.");
 
-  if (
-    data &&
-    data.success === false
-  ) {
-    const error =
-      new Error(
-        data.message ||
-        "Request failed."
-      );
-
-    error.status =
-      response.status;
+    error.status = response.status;
 
     throw error;
   }
-
 
   return data;
 }
-
 
 // =========================================================
 // STATUS LABEL
@@ -115,38 +79,29 @@ function statusLabel(status) {
       rejected: "Rejected",
       cancelled: "Cancelled",
       pending: "New request",
+      processing: "Processing",
       completed: "Completed",
-    }[status] ||
-    "New request"
+    }[status] || "New request"
   );
 }
-
 
 // =========================================================
 // LOAD WORK REQUESTS
 // =========================================================
 
 async function loadWorkRequests() {
-  const list =
-    document.getElementById(
-      "list"
-    );
+  const list = document.getElementById("list");
 
   if (!list) return;
-
 
   // -------------------------------------------------------
   // Login check
   // -------------------------------------------------------
 
-  const token =
-    localStorage.getItem(
-      BOOKING_TOKEN_KEY
-    );
+  const token = localStorage.getItem(BOOKING_TOKEN_KEY);
 
   if (!token) {
-    list.innerHTML =
-      `
+    list.innerHTML = `
         <div class="empty">
 
           <div class="icon">
@@ -168,13 +123,11 @@ async function loadWorkRequests() {
     return;
   }
 
-
   // -------------------------------------------------------
   // Loading
   // -------------------------------------------------------
 
-  list.innerHTML =
-    `
+  list.innerHTML = `
       <div class="empty">
 
         <div class="icon">
@@ -192,45 +145,21 @@ async function loadWorkRequests() {
       </div>
     `;
 
-
   try {
-
     // -----------------------------------------------------
     // GET /api/bookings/requests
     // -----------------------------------------------------
 
-    const result =
-      await bookingApi(
-        "/requests"
-      );
+    const result = await bookingApi("/requests");
 
+    const items = Array.isArray(result?.data) ? result.data : [];
 
-    const items =
-      Array.isArray(
-        result?.data
-      )
-        ? result.data
-        : [];
-
-
-    renderRequests(
-      items
-    );
-
-
+    renderRequests(items);
   } catch (error) {
+    console.error("WORK REQUEST LOAD ERROR:", error);
 
-    console.error(
-      "WORK REQUEST LOAD ERROR:",
-      error
-    );
-
-
-    if (
-      error.status === 401
-    ) {
-      list.innerHTML =
-        `
+    if (error.status === 401) {
+      list.innerHTML = `
           <div class="empty">
 
             <div class="icon">
@@ -252,9 +181,7 @@ async function loadWorkRequests() {
       return;
     }
 
-
-    list.innerHTML =
-      `
+    list.innerHTML = `
         <div class="empty">
 
           <div class="icon">
@@ -266,10 +193,7 @@ async function loadWorkRequests() {
           </h2>
 
           <p>
-            ${escapeHtml(
-              error.message ||
-              "Something went wrong."
-            )}
+            ${escapeHtml(error.message || "Something went wrong.")}
           </p>
 
          <button
@@ -287,33 +211,22 @@ async function loadWorkRequests() {
   }
 }
 
-const loadWorkRequestsBtn =
-    document.getElementById("loadWorkRequestsBtn");
+const loadWorkRequestsBtn = document.getElementById("loadWorkRequestsBtn");
 
 if (loadWorkRequestsBtn) {
-    loadWorkRequestsBtn.addEventListener(
-        "click",
-        loadWorkRequests
-    );
+  loadWorkRequestsBtn.addEventListener("click", loadWorkRequests);
 }
 // =========================================================
 // RENDER REQUESTS
 // =========================================================
 
-function renderRequests(
-  items
-) {
-  const list =
-    document.getElementById(
-      "list"
-    );
+function renderRequests(items) {
+  const list = document.getElementById("list");
 
   if (!list) return;
 
-
   if (!items.length) {
-    list.innerHTML =
-      `
+    list.innerHTML = `
         <div class="empty">
 
           <div class="icon">
@@ -336,7 +249,6 @@ function renderRequests(
     return;
   }
 
-
   list.innerHTML =
     `
       <section class="panel">
@@ -356,46 +268,21 @@ function renderRequests(
 
       </section>
 
-    ` +
-    items
-      .map(
-        (item) =>
-          renderRequestCard(
-            item
-          )
-      )
-      .join("");
+    ` + items.map((item) => renderRequestCard(item)).join("");
 }
-
 
 // =========================================================
 // REQUEST CARD
 // =========================================================
 
-function renderRequestCard(
-  item
-) {
-  const c =
-    item.client ||
-    item.user ||
-    {};
+function renderRequestCard(item) {
+  const c = item.client || item.user || {};
 
-  const address =
-    item.workAddress ||
-    item.address ||
-    {};
+  const address = item.workAddress || item.address || {};
 
-  const addr =
-    formatFullAddress(
-      address
-    );
+  const addr = formatFullAddress(address);
 
-
-  const bookingId =
-    item.id ||
-    item._id ||
-    "";
-
+  const bookingId = item.id || item._id || "";
 
   return `
     <article class="card">
@@ -415,10 +302,10 @@ function renderRequestCard(
 
           <div class="name">
     ${escapeHtml(
-        address?.name?.trim() ||
+      address?.name?.trim() ||
         item?.workAddressSnapshot?.name?.trim() ||
         c?.name?.trim() ||
-        "BuildSkil User"
+        "BuildSkil User",
     )}
 </div>
 
@@ -431,14 +318,9 @@ function renderRequestCard(
 
 
         <span
-          class="status ${escapeHtml(
-            item.status ||
-            "pending"
-          )}"
+          class="status ${escapeHtml(item.status || "pending")}"
         >
-          ${statusLabel(
-            item.status
-          )}
+          ${statusLabel(item.status)}
         </span>
 
       </div>
@@ -462,10 +344,7 @@ function renderRequestCard(
         </span>
 
         <strong>
-          ${escapeHtml(
-            c.phone ||
-            "Not available"
-          )}
+          ${escapeHtml(c.phone || "Not available")}
         </strong>
 
       </div> -->
@@ -484,10 +363,7 @@ function renderRequestCard(
 
         <div class="address">
 
-          ${escapeHtml(
-            addr ||
-            "Work address not provided"
-          )}
+          ${escapeHtml(addr || "Work address not provided")}
 
         </div>
 
@@ -526,13 +402,20 @@ ${
     `
     : ""
 }
-  <!-- ${address.latitude !== undefined &&address.latitude !== null &&address.longitude !== undefined &&address.longitude !== null  ? `
+  <!-- ${
+    address.latitude !== undefined &&
+    address.latitude !== null &&
+    address.longitude !== undefined &&
+    address.longitude !== null
+      ? `
       <div  class="coords"  onclick="openGoogleMap( ${Number(address.latitude)},${Number(address.longitude)})" title="Open location in Google Maps">
         <i class="fa-solid fa-location-dot"></i><span>  ${escapeHtml(String(address.latitude))},  ${escapeHtml(String(address.longitude))}
-        </span> </div>`: ""}
+        </span> </div>`
+      : ""
+  }
 
         <div class="actions"><buttonclass="btn secondary"
-            onclick='viewWorkAddress(${JSON.stringify(  address).replace( /'/g, "&#39;")})' >   View full address </button>  </div> -->
+            onclick='viewWorkAddress(${JSON.stringify(address).replace(/'/g, "&#39;")})' >   View full address </button>  </div> -->
 
       </div>
 
@@ -551,9 +434,7 @@ ${
               </strong>
 
               <p>
-                ${escapeHtml(
-                  item.note
-                )}
+                ${escapeHtml(item.note)}
               </p>
 
             </div>
@@ -574,9 +455,7 @@ ${
         <span class="meta">
 
           Requested
-          ${formatDateTime(
-            item.createdAt
-          )}
+          ${formatDateTime(item.createdAt)}
 
         </span>
 
@@ -586,7 +465,9 @@ ${
           style="margin-top:0"
         >
 
-          ${item.status === "accepted" && c.phone ? `
+          ${
+            item.status === "accepted" && c.phone
+              ? `
     <button
         class="call-client-btn"
         type="button"
@@ -595,12 +476,14 @@ ${
         <i class="fa-solid fa-phone"></i>
         Call Client
       </button>
-` : ""}
+`
+              : ""
+          }
 
 
          ${
-    item.status === "pending"
-        ? `
+           item.status === "pending"
+             ? `
            <button
     type="button"
     class="btn danger"
@@ -619,22 +502,38 @@ ${
     Accept
 </button>
         `
-        : ""
-}
+             : ""
+         }
 
 ${
-    item.status === "accepted"
-        ? `
-           <select
-    class="status-select"
-    data-booking-id="${escapeHtml(bookingId)}"
->
-    <option value="">Update status</option>
-    <option value="completed">Completed</option>
-    <option value="cancelled">Cancelled</option>
-</select>
-        `
-        : ""
+  item.status === "accepted" || item.status === "processing"
+    ? `
+        <select
+          class="status-select"
+          data-booking-id="${escapeHtml(bookingId)}"
+        >
+          <option value="">Update status</option>
+
+          ${
+            item.status === "accepted"
+              ? `
+                <option value="processing">
+                  Processing
+                </option>
+              `
+              : ""
+          }
+
+          <option value="completed">
+            Completed
+          </option>
+
+          <option value="cancelled">
+            Cancelled
+          </option>
+        </select>
+      `
+    : ""
 }
 
         </div>
@@ -645,60 +544,40 @@ ${
   `;
 }
 document.addEventListener("change", function (event) {
+  const select = event.target.closest(".status-select");
 
-    const select = event.target.closest(
-        ".status-select"
-    );
+  if (!select) {
+    return;
+  }
 
-    if (!select) {
-        return;
-    }
+  const bookingId = select.dataset.bookingId;
 
-    const bookingId =
-        select.dataset.bookingId;
+  const status = select.value;
 
-    const status =
-        select.value;
+  if (!bookingId || !status) {
+    return;
+  }
 
-    if (!bookingId || !status) {
-        return;
-    }
-
-    changeRequestStatus(
-        bookingId,
-        status,
-        select
-    );
+  changeRequestStatus(bookingId, status, select);
 });
 document.addEventListener("click", function (event) {
+  const button = event.target.closest("[data-booking-status]");
 
-    const button =
-        event.target.closest(
-            "[data-booking-status]"
-        );
+  if (!button) {
+    return;
+  }
 
-    if (!button) {
-        return;
-    }
+  const bookingId = button.dataset.bookingId;
 
-    const bookingId =
-        button.dataset.bookingId;
+  const status = button.dataset.bookingStatus;
 
-    const status =
-        button.dataset.bookingStatus;
+  if (!bookingId || !status) {
+    console.error("Missing booking ID or status.");
 
-    if (!bookingId || !status) {
-        console.error(
-            "Missing booking ID or status."
-        );
+    return;
+  }
 
-        return;
-    }
-
-    updateStatus(
-        bookingId,
-        status
-    );
+  updateStatus(bookingId, status);
 });
 document.addEventListener("click", function (event) {
   const button = event.target.closest(".call-client-btn");
@@ -707,8 +586,7 @@ document.addEventListener("click", function (event) {
     return;
   }
 
-  const phone =
-    button.getAttribute("data-phone");
+  const phone = button.getAttribute("data-phone");
 
   if (!phone) {
     return;
@@ -718,37 +596,23 @@ document.addEventListener("click", function (event) {
 });
 
 document.addEventListener("click", function (event) {
-
-  const coords =
-    event.target.closest(".coords-clickable");
+  const coords = event.target.closest(".coords-clickable");
 
   if (!coords) {
     return;
   }
 
-  const latitude =
-    Number(coords.dataset.latitude);
+  const latitude = Number(coords.dataset.latitude);
 
-  const longitude =
-    Number(coords.dataset.longitude);
+  const longitude = Number(coords.dataset.longitude);
 
-  if (
-    !Number.isFinite(latitude) ||
-    !Number.isFinite(longitude)
-  ) {
-    console.error(
-      "Invalid coordinates:",
-      latitude,
-      longitude
-    );
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    console.error("Invalid coordinates:", latitude, longitude);
 
     return;
   }
 
-  openGoogleMap(
-    latitude,
-    longitude
-  );
+  openGoogleMap(latitude, longitude);
 });
 function callClient(phone) {
   if (!phone) {
@@ -795,269 +659,170 @@ function openGoogleMap(latitude, longitude) {
     return;
   }
 
-  const googleMapUrl =
-    `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  const googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
 
-  window.open(
-    googleMapUrl,
-    "_blank",
-    "noopener,noreferrer"
-  );
+  window.open(googleMapUrl, "_blank", "noopener,noreferrer");
 }
 // VIEW FULL WORK ADDRESS
 // =========================================================
 
-function viewWorkAddress(
-  address
-) {
+function viewWorkAddress(address) {
   try {
-
     sessionStorage.setItem(
       "buildskil_readonly_address_v1",
-      JSON.stringify(
-        address || {}
-      )
+      JSON.stringify(address || {}),
     );
 
-
-    location.href =
-      "address.html?readonly=1&title=Work%20Location";
-
+    location.href = "address.html?readonly=1&title=Work%20Location";
   } catch (error) {
+    console.error("VIEW WORK ADDRESS ERROR:", error);
 
-    console.error(
-      "VIEW WORK ADDRESS ERROR:",
-      error
-    );
-
-    alert(
-      "Could not open work address."
-    );
+    alert("Could not open work address.");
   }
 }
-
 
 // =========================================================
 // ACCEPT / REJECT REQUEST
 // =========================================================
 
-async function updateStatus(
-  id,
-  status
-) {
+async function updateStatus(id, status) {
   if (!id) {
-    alert(
-      "Booking ID is missing."
-    );
+    alert("Booking ID is missing.");
 
     return;
   }
 
-
-if (
-    ![
-        "accepted",
-        "rejected",
-        "completed",
-        "cancelled",
-    ].includes(status)
-) {
-    alert(
-      "Invalid booking status."
-    );
+  if (
+    !["accepted", "rejected", "processing", "completed", "cancelled"].includes(
+      status,
+    )
+  ) {
+    alert("Invalid booking status.");
 
     return;
   }
-
 
   const actionText =
     status === "accepted"
       ? "accept this work request"
       : "reject this work request";
 
-
-  const confirmed =
-    window.confirm(
-      `Are you sure you want to ${actionText}?`
-    );
-
+  const confirmed = window.confirm(`Are you sure you want to ${actionText}?`);
 
   if (!confirmed) {
     return;
   }
 
-
   try {
-
     // -----------------------------------------------------
     // PATCH /api/bookings/:id/status
     // -----------------------------------------------------
 
-    const result =
-      await bookingApi(
-        `/${encodeURIComponent(
-          id
-        )}/status`,
-        {
-          method: "PATCH",
+    const result = await bookingApi(`/${encodeURIComponent(id)}/status`, {
+      method: "PATCH",
 
-          body:
-            JSON.stringify({
-              status,
-            }),
-        }
-      );
-
+      body: JSON.stringify({
+        status,
+      }),
+    });
 
     showBookingToast(
       result?.message ||
-      (
-        status === "accepted"
-          ? "Booking accepted."
-          : "Booking rejected."
-      )
+        (status === "accepted" ? "Booking accepted." : "Booking rejected."),
     );
-
 
     // -----------------------------------------------------
     // Reload directly from MongoDB
     // -----------------------------------------------------
 
     await loadWorkRequests();
-
-
   } catch (error) {
+    console.error("UPDATE BOOKING STATUS ERROR:", error);
 
-    console.error(
-      "UPDATE BOOKING STATUS ERROR:",
-      error
-    );
-
-
-    if (
-      error.status === 401
-    ) {
-      alert(
-        "Your BuildSkil login has expired. Please sign in again."
-      );
+    if (error.status === 401) {
+      alert("Your BuildSkil login has expired. Please sign in again.");
 
       return;
     }
 
-
-    alert(
-      error.message ||
-      "Could not update booking status."
-    );
+    alert(error.message || "Could not update booking status.");
   }
 }
 
 async function changeRequestStatus(id, status, selectElement) {
+  if (!id || !status) {
+    return;
+  }
 
-    if (!id || !status) {
-        return;
+  const labels = {
+    processing: "mark this work as processing",
+    completed: "mark this work as completed",
+    cancelled: "cancel this work request",
+  };
+
+  const actionText = labels[status] || "update this work request";
+
+  const confirmed = window.confirm(`Are you sure you want to ${actionText}?`);
+
+  if (!confirmed) {
+    if (selectElement) {
+      selectElement.value = "";
+    }
+    return;
+  }
+
+  try {
+    const result = await bookingApi(`/${encodeURIComponent(id)}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        status,
+      }),
+    });
+
+    showBookingToast(result?.message || `Booking status changed to ${status}.`);
+
+    await loadWorkRequests();
+  } catch (error) {
+    console.error("CHANGE BOOKING STATUS ERROR:", error);
+
+    if (selectElement) {
+      selectElement.value = "";
     }
 
-    const labels = {
-        completed: "mark this work as completed",
-        cancelled: "cancel this accepted work request",
-    };
-
-    const actionText =
-        labels[status] || "update this work request";
-
-    const confirmed = window.confirm(
-        `Are you sure you want to ${actionText}?`
-    );
-
-    if (!confirmed) {
-        if (selectElement) {
-            selectElement.value = "";
-        }
-        return;
+    if (error.status === 401) {
+      alert("Your BuildSkil login has expired. Please sign in again.");
+      return;
     }
 
-    try {
-
-        const result = await bookingApi(
-            `/${encodeURIComponent(id)}/status`,
-            {
-                method: "PATCH",
-                body: JSON.stringify({
-                    status,
-                }),
-            }
-        );
-
-        showBookingToast(
-            result?.message ||
-            `Booking status changed to ${status}.`
-        );
-
-        await loadWorkRequests();
-
-    } catch (error) {
-
-        console.error(
-            "CHANGE BOOKING STATUS ERROR:",
-            error
-        );
-
-        if (selectElement) {
-            selectElement.value = "";
-        }
-
-        if (error.status === 401) {
-            alert(
-                "Your BuildSkil login has expired. Please sign in again."
-            );
-            return;
-        }
-
-        alert(
-            error.message ||
-            "Could not update booking status."
-        );
-    }
+    alert(error.message || "Could not update booking status.");
+  }
 }
 // =========================================================
 // TOAST
 // =========================================================
 
-function showBookingToast(
-  message
-) {
-  const toast =
-    document.getElementById(
-      "toast"
-    );
+function showBookingToast(message) {
+  const toast = document.getElementById("toast");
 
   if (!toast) {
     return;
   }
 
+  toast.textContent = message;
 
-  toast.textContent =
-    message;
-
-  toast.classList.add(
-    "show"
-  );
-
+  toast.classList.add("show");
 
   setTimeout(() => {
-    toast.classList.remove(
-      "show"
-    );
+    toast.classList.remove("show");
   }, 3000);
 }
 
 const backBtn = document.getElementById("backBtn");
 
 if (backBtn) {
-    backBtn.addEventListener("click", function () {
-        history.back();
-    });
+  backBtn.addEventListener("click", function () {
+    history.back();
+  });
 }
 
 // =========================================================
