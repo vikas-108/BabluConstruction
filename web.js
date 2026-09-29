@@ -10,7 +10,8 @@ let lastSearchResults = [];
 let activeRequests = 0;
 const SERVER_BASE = "https://api.buildskil.com";
 const PROFILE_API = "https://api.buildskil.com/api/profiles/public";
-
+//const SERVER_BASE = "http://localhost:5000";
+//const PROFILE_API = "http://localhost:5000/api/profiles/public";
 let API_PROFILES_CACHE = [];
 const states = [
   "Haryana",
@@ -543,7 +544,7 @@ function levenshtein(a, b) {
 // notification updates (could come from API or JSON file)
 const updates = [
   "🚀 New feature launched: search engine",
-  "📢 Scheduled maintenance on 28 December",
+  "📢 Scheduled maintenance on 29 December",
   "🎨 Updated design and notebook guidelines available",
   "📢 C.P. for contractor, tech, helper & others create profiles",
   "📢 A.P. for client add project profile ",
@@ -898,10 +899,51 @@ window.fetch = async (...args) => {
 };
 async function fetchPublishedProfiles() {
   try {
-    
     const res = await fetch(PROFILE_API);
+    if (!res.ok) {
+      throw new Error("Failed to load profiles");
+    }
+
     const data = await res.json();
 
+    // Only show UNVERIFIED profiles
+    const unverifiedProfiles = data.filter(
+      (p) => p?.verified === false
+    );
+
+    // Normalize data to match your current render format
+    API_PROFILES_CACHE = unverifiedProfiles.map((p) => ({
+      id: p._id,
+      profileUrl: `profile-details.html?id=${p._id}`,
+      name: p.name,
+      role: p.role,
+      rating: p.rating,
+      experience: p.experience,
+      category: p.category || "contractor",
+
+      image: p.mediaType === "image" ? p.media : "",
+      video: p.mediaType === "video" ? p.media : "",
+
+      languages: p.languages,
+      phone: p.phone,
+      description: p.description,
+      location: p.location,
+      state: p.state,
+      district: p.district,
+
+      verified: p.verified === true,
+
+      source: "api",
+    }));
+  } catch (e) {
+    console.error("Profile API error", e);
+    API_PROFILES_CACHE = [];
+  }
+}
+/*
+async function fetchPublishedProfiles() { try {
+    const res = await fetch(PROFILE_API);
+    const data = await res.json();
     // 🔥 NORMALIZE DATA TO MATCH YOUR CURRENT RENDER FORMAT api cards
     API_PROFILES_CACHE = data.map((p) => ({
       id: p._id,
@@ -914,7 +956,6 @@ async function fetchPublishedProfiles() {
       //image: p.mediaType === "image" ? SERVER_BASE + p.media : "",
       //video: p.mediaType === "video" ? SERVER_BASE + p.media : "",
       image: p.mediaType === "image" ? p.media : "",
-
       video: p.mediaType === "video" ? p.media : "",
       languages: p.languages,
       phone: p.phone,
@@ -922,14 +963,8 @@ async function fetchPublishedProfiles() {
       location: p.location,
       state: p.state,
       district: p.district,
-
-      source: "api",
-    }));
-  } catch (e) {
-    console.error("Profile API error", e);
-  }
-}
-//fetchPublishedProfiles();
+      source: "api",  })); } catch (e) { console.error("Profile API error", e); }}
+//fetchPublishedProfiles();*/
 // all card code if all type of data set render code ui from below code
 function render(items) {
   results.innerHTML = "";
