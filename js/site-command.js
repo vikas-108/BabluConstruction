@@ -1,6 +1,6 @@
 (function(){
-
   const API_BASE = 'https://api.buildskil.com/api';
+  //const API_BASE = 'http://localhost:5000/api';
   async function apiFetch(path, options = {}) {
 
     const token = localStorage.getItem('cb_token');
@@ -61,7 +61,7 @@
   let tomorrow = [];    // strings
   /* let photoFiles = []; — photos feature disabled for now */
  
-  const UNITS = ['bags','kg','tons','pcs','m','m³','ltr','rolls'];
+  const UNITS = ['bags','kg','tons','pcs','m','m³','ltr','rolls','foot'];
   const SITE_NAME_KEY = 'dailySiteReportSiteName_v1';
  
   function todayISO(){ const d=new Date(); return d.toISOString().slice(0,10); }
@@ -263,8 +263,7 @@
     const payload = collect();
     try {
       const saved = await apiFetch('/daily-reports', { method:'POST', body: JSON.stringify(payload) });
-      currentReport = normalizeReport(saved);
-      renderTicket(currentReport);
+      showOwnerReport(saved);
       formView.style.display = 'none';
       ctaBar.style.display = 'none';
       reportView.style.display = 'block';
@@ -292,85 +291,586 @@
     }
   });
  
-  // ---------- Share drawer (no third-party links — native share / SMS only) ----------
-  const SHARED_NUMS_KEY = 'dailySiteReportSharedNumbers_v1';
+  // =========================================================
+  // DAILY REPORT SHARING
+  // =========================================================
+  // Owner endpoints:
+  //   POST   /daily-reports/:id/share
+  //   GET    /daily-reports/:id/shared
+  //   DELETE /daily-reports/:id/share/:phone
+  //
+  // Recipient endpoints:
+  //   GET /daily-reports/shared-with-me
+  //   GET /daily-reports/shared-with-me/:id
+  // =========================================================
+
+  let viewingSharedReport = false;
+  let sharedReports = [];
+
   const shareBackdrop = document.getElementById('shareBackdrop');
   const shareDrawer = document.getElementById('shareDrawer');
   const sharePhone = document.getElementById('sharePhone');
   const shareNote = document.getElementById('shareNote');
   const sharedListWrap = document.getElementById('sharedListWrap');
   const sharedList = document.getElementById('sharedList');
- 
-  function loadSharedNumbers(){
-    try{ return JSON.parse(localStorage.getItem(SHARED_NUMS_KEY)) || []; }catch(e){ return []; }
+  const shareSendBtn = document.getElementById('shareSendBtn');
+
+  function normalizeIndianPhone(value){
+    let digits = String(value || '').replace(/\D/g, '');
+
+    if (digits.length === 12 && digits.startsWith('91')) {
+      digits = digits.slice(2);
+    }
+
+    if (digits.length === 11 && digits.startsWith('0')) {
+      digits = digits.slice(1);
+    }
+
+    return /^[6-9]\d{9}$/.test(digits) ? digits : '';
   }
-  function saveSharedNumbers(list){
-    try{ localStorage.setItem(SHARED_NUMS_KEY, JSON.stringify(list)); }catch(e){}
+
+  function displayIndianPhone(phone){
+    const normalized = normalizeIndianPhone(phone);
+    return normalized ? '+91 ' + normalized : String(phone || '');
   }
-  function addSharedNumber(num){
-    let list = loadSharedNumbers().filter(n=> n !== num);
-    list.unshift(num);
-    list = list.slice(0, 8);
-    saveSharedNumbers(list);
-    renderSharedList();
+
+  function getReportId(report){
+    return String(
+      report?.id ||
+      report?._id ||
+      (report?.reportId && typeof report.reportId === 'object'
+        ? report.reportId._id || report.reportId.id
+        : report?.reportId) ||
+      ''
+    );
   }
-  function renderSharedList(){
-    const list = loadSharedNumbers();
-    sharedListWrap.style.display = list.length ? 'block' : 'none';
-    sharedList.innerHTML = list.map(num=>
-      '<div class="shared-row" data-num="'+escAttr(num)+'">' +
-        '<span>'+escHtml(num)+'</span>' +
-        '<button class="mini-x" aria-label="Remove">✕</button>' +
-      '</div>'
-    ).join('');
-    sharedList.querySelectorAll('.shared-row').forEach(row=>{
-      row.addEventListener('click', (e)=>{
-        const num = row.getAttribute('data-num');
-        if(e.target.classList.contains('mini-x')){
-          e.stopPropagation();
-          saveSharedNumbers(loadSharedNumbers().filter(n=> n !== num));
-          renderSharedList();
-        } else {
-          sharePhone.value = num;
-        }
-      });
+
+  function normalizeSharedReport(item){
+    // Backend normally returns a flattened report. This fallback also
+    // supports a response where reportId is populated as an object.
+    const source =
+      item?.reportId && typeof item.reportId === 'object'
+        ? { ...item.reportId, ...item }
+        : item || {};
+
+    source.id =
+      source._id ||
+      source.id ||
+      (item?.reportId && typeof item.reportId === 'object'
+        ? item.reportId._id || item.reportId.id
+        : item?.reportId) ||
+      '';
+
+    if (source.date) {
+      source.date = String(source.date).slice(0, 10);
+    }
+
+    source.siteName = String(source.siteName || '');
+    source.technicians = Number(source.technicians) || 0;
+    source.labour = Number(source.labour) || 0;
+    source.other = Number(source.other) || 0;
+    source.pct = Math.max(0, Math.min(100, Number(source.pct) || 0));
+
+    source.workers =
+      Number(source.workers) ||
+      source.technicians + source.labour + source.other;
+
+    source.materials = Array.isArray(source.materials)
+      ? source.materials.map(m => ({
+          name: String(m?.name || ''),
+          qty: String(m?.qty ?? ''),
+          unit: String(m?.unit || 'bags'),
+        }))
+      : [];
+
+    source.problems = Array.isArray(source.problems)
+      ? source.problems.map(p => String(p).trim()).filter(Boolean)
+      : [];
+
+    source.tomorrow = Array.isArray(source.tomorrow)
+      ? source.tomorrow.map(t => String(t).trim()).filter(Boolean)
+      : [];
+
+    return source;
+  }
+
+  function setReportActionMode(isShared){
+    viewingSharedReport = !!isShared;
+
+    const editButton = document.getElementById('editBtn');
+    const shareButton = document.getElementById('shareBtn');
+    const newDayButton = document.getElementById('newDayBtn');
+
+    if(editButton){
+      editButton.style.display = isShared ? 'none' : '';
+    }
+
+    if(shareButton){
+      shareButton.style.display = isShared ? 'none' : '';
+    }
+
+    if(newDayButton){
+      newDayButton.style.display = isShared ? 'none' : '';
+    }
+  }
+
+  function showOwnerReport(report){
+    viewingSharedReport = false;
+    setReportActionMode(false);
+
+    currentReport = normalizeReport(report);
+    renderTicket(currentReport);
+
+    formView.style.display = 'none';
+    histView.style.display = 'none';
+    ctaBar.style.display = 'none';
+    reportView.style.display = 'block';
+
+    setBackVisible(true);
+  }
+
+  function showSharedReport(report){
+    viewingSharedReport = true;
+    setReportActionMode(true);
+
+    currentReport = normalizeSharedReport(report);
+    renderTicket(currentReport);
+
+    formView.style.display = 'none';
+    histView.style.display = 'none';
+    ctaBar.style.display = 'none';
+    reportView.style.display = 'block';
+
+    setBackVisible(true);
+
+    const siteTitle = document.getElementById('rSiteName');
+
+    if(siteTitle){
+      const ownerName = report?.owner?.name || ' user';
+      const ownerPhone = report?.owner?.phone || '';
+
+      let title = currentReport.siteName || 'Daily Site Report';
+      title += ' · Shared by ' + ownerName;
+
+      if(ownerPhone){
+        title += ' (' + displayIndianPhone(ownerPhone) + ')';
+      }
+
+      siteTitle.textContent = title;
+    }
+  }
+
+  function ensureSharedReportsUI(){
+    let button = document.getElementById('openSharedReportsBtn');
+    if(button) return button;
+
+    const historyButton = document.getElementById('openHistBtn');
+    if(!historyButton || !historyButton.parentElement){
+      console.warn('openHistBtn not found.');
+      return null;
+    }
+
+    button = document.createElement('button');
+    button.id = 'openSharedReportsBtn';
+    button.type = 'button';
+   button.className = 'shared-reports-btn';
+
+button.innerHTML =
+  '<span class="shared-reports-icon">↗</span>' +
+  '<span class="shared-reports-text">Shared with me</span>' +
+  '<span id="sharedReportsBadge" class="shared-reports-badge">0</span>';
+
+    historyButton.parentElement.insertBefore(
+      button,
+      historyButton.nextSibling
+    );
+
+    button.addEventListener('click', openSharedReports);
+    return button;
+  }
+
+  function updateSharedReportsBadge(count){
+    const badge = document.getElementById('sharedReportsBadge');
+    if(!badge) return;
+
+    const total = Math.max(0, Number(count) || 0);
+    badge.textContent = String(total);
+    badge.style.display = total > 0 ? 'inline-flex' : 'none';
+  }
+
+  async function fetchSharedReports(){
+    const data = await apiFetch('/daily-reports/shared-with-me');
+
+    sharedReports = Array.isArray(data)
+      ? data.map(normalizeSharedReport)
+      : [];
+
+    updateSharedReportsBadge(sharedReports.length);
+    return sharedReports;
+  }
+
+  async function fetchSharedReportDetails(report){
+    const reportId = getReportId(report);
+
+    if(!reportId){
+      throw new Error('Shared report ID is missing.');
+    }
+
+    // Always fetch the protected single-report endpoint when opening.
+    // This guarantees the preview uses the complete report content.
+    const data = await apiFetch(
+      '/daily-reports/shared-with-me/' +
+      encodeURIComponent(reportId)
+    );
+
+    return normalizeSharedReport({
+      ...(report || {}),
+      ...(data || {}),
     });
   }
- 
+
+  async function openSharedReports(){
+    const button = document.getElementById('openSharedReportsBtn');
+
+    if(button) button.disabled = true;
+
+    try{
+      const all = await fetchSharedReports();
+
+      formView.style.display = 'none';
+      reportView.style.display = 'none';
+      ctaBar.style.display = 'none';
+      histView.style.display = 'block';
+
+      setBackVisible(true);
+      renderSharedHistory(all);
+    }catch(error){
+      console.error('OPEN SHARED DAILY REPORTS ERROR:', error);
+
+      alert(
+        'Could not load shared reports: ' +
+        (error?.message || 'Something went wrong.')
+      );
+    }finally{
+      if(button) button.disabled = false;
+    }
+  }
+
+  function renderSharedHistory(all){
+    const histList = document.getElementById('histList');
+    const histEmpty = document.getElementById('histEmpty');
+
+    if(!histList || !histEmpty) return;
+
+    histList.innerHTML = '';
+    histEmpty.textContent =
+      'No reports have been shared with you yet.';
+    histEmpty.style.display = all.length ? 'none' : 'block';
+
+    all.forEach(report => {
+      const item = document.createElement('div');
+      item.className = 'hist-item';
+
+      const ownerName =
+        report?.owner?.name || ' user';
+
+      const ownerPhone =
+        report?.owner?.phone || '';
+
+      const siteText = report.siteName
+        ? ' · ' + escHtml(report.siteName)
+        : '';
+
+      item.innerHTML =
+        '<div>' +
+          '<div class="d">' +
+            formatDay(report.date) +
+            siteText +
+          '</div>' +
+          '<div class="m">' +
+            escHtml(ownerName) +
+            (ownerPhone ? ' · ' + escHtml(ownerPhone) : '') +
+            ' · ' + report.workers +
+            ' workers · ' + report.pct + '% complete' +
+          '</div>' +
+          '<div style="margin-top:5px;font-size:12px;font-weight:700;color:#2563eb;">' +
+            '🔒 Read Only · Shared with you' +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="del-btn shared-open-btn">Open</button>';
+
+      item.addEventListener('click', async event => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        try{
+          histList.querySelectorAll('.shared-open-btn').forEach(btn => {
+            btn.disabled = true;
+          });
+
+          // Fetch the complete protected report before showing it.
+          const completeReport =
+            await fetchSharedReportDetails(report);
+
+          showSharedReport(completeReport);
+        }catch(error){
+          console.error('OPEN SHARED REPORT ERROR:', error);
+
+          alert(
+            'Preview unavailable: ' +
+            (error?.message || 'This shared report cannot be opened.')
+          );
+        }finally{
+          histList.querySelectorAll('.shared-open-btn').forEach(btn => {
+            btn.disabled = false;
+          });
+        }
+      });
+
+      histList.appendChild(item);
+    });
+  }
+
+  // =========================================================
+  // OWNER SHARE DRAWER
+  // =========================================================
+
   function openShareDrawer(){
+    if(!currentReport || !getReportId(currentReport)){
+      alert('Save the daily report first before sharing it.');
+      return;
+    }
+
     shareNote.textContent = '';
-    renderSharedList();
+    sharePhone.value = '';
+
     shareBackdrop.classList.add('show');
     shareDrawer.classList.add('show');
+
+    loadSharedUsers();
   }
+
   function closeShareDrawer(){
     shareBackdrop.classList.remove('show');
     shareDrawer.classList.remove('show');
+    shareNote.textContent = '';
   }
-  //document.getElementById('shareBtn').addEventListener('click', openShareDrawer);
-  shareBackdrop.addEventListener('click', closeShareDrawer);
- 
-  document.getElementById('shareSendBtn').addEventListener('click', ()=>{
-    const phone = sharePhone.value.trim();
-    const text = reportToText(currentReport);
- 
-    if(phone){
-      const digits = phone.replace(/[^\d+]/g,'');
+
+  if(document.getElementById('shareBtn')){
+    document.getElementById('shareBtn').addEventListener(
+      'click',
+      openShareDrawer
+    );
+  }
+
+  if(shareBackdrop){
+    shareBackdrop.addEventListener('click', closeShareDrawer);
+  }
+
+  async function loadSharedUsers(){
+    if(!currentReport || !getReportId(currentReport)) return;
+
+    if(sharedListWrap){
+      sharedListWrap.style.display = 'block';
+    }
+
+    if(sharedList){
+      sharedList.innerHTML =
+        '<div class="shared-row"><span>Loading shared users...</span></div>';
+    }
+
+    try{
+      const users = await apiFetch(
+        '/daily-reports/' +
+        encodeURIComponent(getReportId(currentReport)) +
+        '/shared'
+      );
+
+      if(!Array.isArray(users) || !users.length){
+        sharedList.innerHTML =
+          '<div class="shared-row"><span>No users have access yet.</span></div>';
+        return;
+      }
+
+      sharedList.innerHTML = users.map(user => {
+        const phone = user.userPhone || user.phone || '';
+        const name = user.name || ' user';
+
+        return (
+          '<div class="shared-row">' +
+            '<div style="display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;">' +
+              '<strong>' + escHtml(name) + '</strong>' +
+              '<span>' + escHtml(displayIndianPhone(phone)) + '</span>' +
+              '<small>🔒 Read Only</small>' +
+            '</div>' +
+            '<button class="mini-x" type="button" data-remove-phone="' +
+              escAttr(phone) +
+              '" aria-label="Remove access">✕</button>' +
+          '</div>'
+        );
+      }).join('');
+
+      sharedList
+        .querySelectorAll('[data-remove-phone]')
+        .forEach(button => {
+          button.addEventListener('click', async event => {
+            event.stopPropagation();
+
+            const phone = button.getAttribute('data-remove-phone');
+            if(phone) await removeSharedUser(phone);
+          });
+        });
+    }catch(error){
+      console.error('LOAD SHARED USERS ERROR:', error);
+
+      if(sharedList){
+        sharedList.innerHTML =
+          '<div class="shared-row"><span>Unable to load shared users.</span></div>';
+      }
+    }
+  }
+
+  async function shareCurrentReport(){
+    if(viewingSharedReport){
+      shareNote.textContent =
+        'Shared reports are read-only.';
+      return;
+    }
+
+    const reportId = getReportId(currentReport);
+
+    if(!reportId){
+      shareNote.textContent =
+        'Save the report before sharing it.';
+      return;
+    }
+
+    const rawPhone = sharePhone.value.trim();
+
+    if(!rawPhone){
+      shareNote.textContent =
+        'Please enter a phone number.';
+      sharePhone.focus();
+      return;
+    }
+
+    const phone = normalizeIndianPhone(rawPhone);
+
+    if(!phone){
+      shareNote.textContent =
+        'Enter a valid 10-digit Indian mobile number.';
+      sharePhone.focus();
+      return;
+    }
+
+    shareSendBtn.disabled = true;
+    const oldText = shareSendBtn.textContent;
+
+    shareSendBtn.textContent = 'Sharing...';
+    shareNote.textContent = 'Checking your account...';
+
+    try{
+      const result = await apiFetch(
+        '/daily-reports/' +
+        encodeURIComponent(reportId) +
+        '/share',
+        {
+          method: 'POST',
+          body: JSON.stringify({ phone })
+        }
+      );
+
+      shareNote.textContent =
+        result?.message ||
+        'Report shared successfully.';
+
+      sharePhone.value = '';
+      await loadSharedUsers();
+
+      // Keep the existing direct SMS behavior after successful API sharing.
+      const text = reportToText(currentReport);
       const isIOS = /iP(hone|od|ad)/.test(navigator.userAgent);
       const sep = isIOS ? '&' : '?';
-      window.location.href = 'sms:' + digits + sep + 'body=' + encodeURIComponent(text);
-      shareNote.textContent = 'Opening your messages app…';
-      addSharedNumber(phone);
-    } else if(navigator.share){
-      navigator.share({ title:'Daily Site Report', text: text }).catch(()=>{});
-      shareNote.textContent = '';
-    } else if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text);
-      shareNote.textContent = 'No phone entered — report text copied instead.';
+
+      setTimeout(() => {
+        window.location.href =
+          'sms:' +
+          phone +
+          sep +
+          'body=' +
+          encodeURIComponent(text);
+      }, 150);
+    }catch(error){
+      console.error('SHARE DAILY REPORT ERROR:', error);
+      shareNote.textContent =
+        error?.message ||
+        'Failed to share report.';
+    }finally{
+      shareSendBtn.disabled = false;
+      shareSendBtn.textContent = oldText;
     }
-  });
- 
+  }
+
+  if(shareSendBtn){
+    shareSendBtn.addEventListener(
+      'click',
+      shareCurrentReport
+    );
+  }
+
+  async function removeSharedUser(phone){
+    const reportId = getReportId(currentReport);
+
+    if(!reportId) return;
+
+    const normalizedPhone = normalizeIndianPhone(phone);
+
+    if(!normalizedPhone){
+      shareNote.textContent = 'Invalid shared phone number.';
+      return;
+    }
+
+    if(!window.confirm(
+      'Remove report access for ' +
+      displayIndianPhone(normalizedPhone) +
+      '?' 
+    )){
+      return;
+    }
+
+    shareNote.textContent = 'Removing access...';
+
+    try{
+      const result = await apiFetch(
+        '/daily-reports/' +
+        encodeURIComponent(reportId) +
+        '/share/' +
+        encodeURIComponent(normalizedPhone),
+        { method: 'DELETE' }
+      );
+
+      shareNote.textContent =
+        result?.message ||
+        'Report access removed.';
+
+      await loadSharedUsers();
+    }catch(error){
+      console.error('REMOVE REPORT SHARE ERROR:', error);
+      shareNote.textContent =
+        error?.message ||
+        'Failed to remove report access.';
+    }
+  }
+
+  ensureSharedReportsUI();
+
   document.getElementById('newDayBtn').addEventListener('click', ()=>{
+    if(viewingSharedReport){
+      alert('A shared report is read-only.');
+      return;
+    }
+    currentReport = null;
+    setReportActionMode(false);
     techInput.value = ''; labourInput.value = ''; otherInput.value = ''; updateWorkersTotal();
     syncPct(0);
     materials = [{name:'', qty:'', unit:'bags'}]; renderMaterials();
@@ -418,28 +918,38 @@
           }
           return;
         }
-        currentReport = r;
-        renderTicket(r);
-        histView.style.display = 'none';
-        reportView.style.display = 'block';
-        ctaBar.style.display = 'none';
+        showOwnerReport(r);
       });
       histList.appendChild(item);
     });
   }
  
   document.getElementById('openHistBtn').addEventListener('click', ()=>{
+    setReportActionMode(false);
     formView.style.display = 'none';
     ctaBar.style.display = 'none';
     renderHistory();
     histView.style.display = 'block';
     setBackVisible(true);
   });
-  /*document.getElementById('closeHistBtn').addEventListener('click', ()=>{
+  // Preload recipient inbox badge when the page opens.
+  (async function preloadSharedReports(){
+    try{
+      await fetchSharedReports();
+    }catch(error){
+      console.warn(
+        'Shared daily reports preload failed:',
+        error?.message || error
+      );
+    }
+  })();
+
+  document.getElementById('closeHistBtn').addEventListener('click', ()=>{
+    setReportActionMode(false);
     histView.style.display = 'none';
     formView.style.display = 'block';
     ctaBar.style.display = 'flex';
     setBackVisible(false);
-  });*/
+  });
  
 })();
