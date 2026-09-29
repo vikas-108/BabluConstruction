@@ -239,3 +239,214 @@
     color:var(--red); font-size:14px; display:flex; align-items:center; justify-content:center;
     cursor:pointer; flex:none;
   }
+
+  /* =========================================
+   SHARED WITH ME BUTTON
+========================================= */
+
+.shared-reports-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: 100%;
+  min-height: 46px;
+
+  padding: 11px 16px;
+
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f8fbff 100%
+  );
+
+  color: #1e293b;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.06);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* Icon */
+
+.shared-reports-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 25px;
+  height: 25px;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  flex-shrink: 0;
+}
+
+
+/* Text */
+
+.shared-reports-text {
+  flex: 1;
+
+  text-align: left;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* Unread badge */
+
+.shared-reports-badge {
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 22px;
+  height: 22px;
+
+  padding: 0 7px;
+
+  border-radius: 999px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  flex-shrink: 0;
+
+  box-shadow:
+    0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+
+/* Hover */
+
+.shared-reports-btn:hover {
+  background: #f8fbff;
+
+  border-color: #93c5fd;
+
+  color: #1d4ed8;
+
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.09);
+
+  transform: translateY(-1px);
+}
+
+
+/* Press */
+
+.shared-reports-btn:active {
+  transform: translateY(0);
+
+  box-shadow:
+    0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+
+/* Focus */
+
+.shared-reports-btn:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.18);
+
+  outline-offset: 2px;
+
+  border-color: #60a5fa;
+}
+
+
+/* Disabled */
+
+.shared-reports-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
+}
+
+
+/* =========================================
+   WHEN BADGE HAS A VALUE
+========================================= */
+
+.shared-reports-btn.has-unread
+.shared-reports-badge {
+  display: inline-flex;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .shared-reports-btn {
+    min-height: 44px;
+
+    padding: 10px 13px;
+
+    gap: 7px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+  }
+
+  .shared-reports-icon {
+    width: 23px;
+    height: 23px;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+  }
+
+  .shared-reports-badge {
+    min-width: 21px;
+    height: 21px;
+
+    padding: 0 6px;
+
+    font-size: 10px;
+  }
+}
