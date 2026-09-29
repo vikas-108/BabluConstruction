@@ -942,7 +942,101 @@
   <div class="no-results" id="noResults">No tools match that search — try a different word.</div>
 
 </div>
+<!-- =========================================
+     TERMS & CONDITIONS MODAL
+========================================= -->
+<div id="termsModal" class="terms-modal" hidden>
+  <div class="terms-overlay" id="termsOverlay"></div>
 
+  <div
+    class="terms-box"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="termsTitle"
+  >
+    <div class="terms-header">
+      <div>
+        <h2 id="termsTitle">Welcome to Patform</h2>
+        <p>accept our terms before continuing.</p>
+      </div>
+
+      <!-- CLOSE BUTTON -->
+      <button
+        type="button"
+        id="termsCloseBtn"
+        class="terms-close-btn"
+        aria-label="Close terms"
+        title="Close"
+      >
+        &times;
+      </button>
+    </div>
+
+    <div class="terms-body">
+      <p class="terms-text">
+        Please read the following before using services.
+      </p>
+
+      <div class="terms-links">
+        <a
+          href="/terms.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Terms &amp; Conditions
+        </a>
+
+        <a
+          href="/privacy.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Privacy Policy
+        </a>
+      </div>
+
+      <label
+        class="terms-check-row"
+        for="termsCheckbox"
+      >
+        <input
+          type="checkbox"
+          id="termsCheckbox"
+        />
+
+        <span class="custom-check"></span>
+
+        <span class="terms-check-text">
+          I have read and agree to the
+          <a
+            href="/terms.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Terms &amp; Conditions
+          </a>
+          and
+          <a
+            href="/privacy.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Privacy Policy
+          </a>.
+        </span>
+      </label>
+
+      <p
+        id="termsError"
+        class="terms-error"
+        hidden
+      >
+        Please check the box to continue.
+      </p>
+    </div>
+  </div>
+</div>
+<script src="../../dist/data/checkbocuser.min.js"></script>
 <script src="../../dist/js/toolpanel.min.js">
 </script>
 </body>
