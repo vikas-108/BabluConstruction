@@ -919,6 +919,7 @@ async function fetchPublishedProfiles() {
       role: p.role,
       rating: p.rating,
       experience: p.experience,
+      price: p.price,
       category: p.category || "contractor",
 
       image: p.mediaType === "image" ? p.media : "",
@@ -1159,6 +1160,7 @@ function render(items) {
 
         ${item.rating ? `<div class="rating">⭐ ${item.rating}</div>` : ""}
         ${item.experience ? `<div class="experience">${item.experience} years</div>` : ""}
+        ${item.price ? `<div class="price">₹ ${item.price}</div>` : ""}
         <p>${item.state}, ${item.district}, ${item.location}</p>
             <p>${item.description}</p>
         ${
@@ -1259,7 +1261,7 @@ function applySearch() {
 
     // 🔹 Unified search function
     function searchProfiles(queryTokens, category, role, state, district) {
-      const combinedData = [...SEARCH_DATA, ...API_PROFILES_CACHE];
+      const combinedData = [...API_PROFILES_CACHE];
 
       const dataResults = shuffleArray(
         combinedData.filter((item) => {
@@ -1320,8 +1322,8 @@ function applySearch() {
 
     // 🔹 Other data sources
     const theoryResults = q ? searchTheory(q) : [];
-    const designResults = q ? searchDesigns(q) : [];
-    const mediaResults = q ? searchMedia(q) : [];
+    //const designResults = q ? searchDesigns(q) : [];
+   // const mediaResults = q ? searchMedia(q) : [];
     const mathResults = q ? searchMathFormulas(q) : [];
     const kidsResults = q ? searchKids(q) : [];
     const QuizResults = q ? searchQuiz(q) : [];
@@ -1332,8 +1334,8 @@ function applySearch() {
     // 🔹 Merge results
     lastSearchResults = [
       ...theoryResults,
-      ...designResults,
-      ...mediaResults,
+     // ...designResults,
+      //...mediaResults,
       ...dataResults,
       ...mathResults,
       ...kidsResults,
