@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#101827" />
+  <title>BuildSkil · Live</title>
+  <link rel="stylesheet" href="/css/live.css" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="BuildSkil Live home">
+        <span class="brand-mark">B</span>
+        <span><strong>BuildSkil</strong><small>Live</small></span>
+      </a>
+      <span class="connection-pill"><span id="connectionDot" class="status-dot"></span><span id="connectionText">Not connected</span></span>
+    </header>
+
+    <section class="intro-row">
+      <div>
+        <p class="eyebrow">REAL-TIME CAMERA</p>
+        <h1>Live view</h1>
+        <p class="intro-copy">Start your camera to share a live view with people you authorize.</p>
+      </div>
+      <div class="top-actions">
+        <button id="startLiveBtn" class="button button-primary" type="button">Start live</button>
+        <button id="stopLiveBtn" class="button button-danger" type="button" disabled>Stop live</button>
+      </div>
+    </section>
+
+    <section class="stage-grid" aria-label="Live camera stage">
+      <article class="video-card owner-card">
+        <div class="video-heading">
+          <div><span class="live-badge" id="ownerLiveBadge"><span></span> OFFLINE</span><h2>Your camera</h2></div>
+          <span id="ownerAudioLabel" class="subtle-label">Microphone off</span>
+        </div>
+        <div class="video-frame">
+          <video id="localVideo" autoplay playsinline muted></video>
+          <div id="localEmpty" class="video-empty">
+            <div class="camera-icon" aria-hidden="true">◉</div>
+            <strong>Your live camera appears here</strong>
+            <span>Start live and allow camera/microphone access.</span>
+          </div>
+          <span class="video-corner-label">YOU</span>
+        </div>
+        <div class="video-footer">
+          <span id="sessionLabel" class="session-label">No active live session</span>
+          <button id="micBtn" class="button button-secondary" type="button" disabled>Mute microphone</button>
+        </div>
+      </article>
+
+      <article class="video-card viewer-card">
+        <div class="video-heading">
+          <div><p class="eyebrow">SHARED WITH YOU</p><h2>Shared live</h2></div>
+          <button id="refreshSharedBtn" class="button button-ghost" type="button">Refresh</button>
+        </div>
+        <div class="video-frame viewer-frame">
+          <video id="remoteVideo" autoplay playsinline controls></video>
+          <div id="remoteEmpty" class="video-empty">
+            <div class="viewer-icon" aria-hidden="true">▷</div>
+            <strong>No live stream selected</strong>
+            <span>Choose a session below to watch and hear it.</span>
+          </div>
+          <span id="remoteLiveBadge" class="video-corner-label">VIEWER</span>
+        </div>
+        <div class="video-footer">
+          <span id="viewerLabel" class="session-label">Not watching a stream</span>
+          <button id="leaveViewerBtn" class="button button-secondary" type="button" disabled>Leave stream</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="share-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">CONTROL ACCESS</p><h2>Share your live view</h2></div>
+        <button id="shareBtn" class="button button-primary" type="button" disabled>＋ Share live</button>
+      </div>
+      <p class="section-copy">Enter the phone number of a registered BuildSkil user. Only users authorized by the backend should be able to join.</p>
+    </section>
+
+    <section class="shared-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">ACCESS GRANTED TO YOU</p><h2>Available shared streams</h2></div>
+        <span id="sharedCount" class="count-chip">0 streams</span>
+      </div>
+      <div id="sharedList" class="shared-list" aria-live="polite">
+        <div class="list-placeholder">Sign in, then refresh to load streams shared with your account.</div>
+      </div>
+    </section>
+
+    <p id="toast" class="toast" role="status" aria-live="polite"></p>
+    <footer class="footer-note">Camera and microphone are used only after you start a live session. Stop live to end sharing.</footer>
+  </main>
+
+  <div id="shareModal" class="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <button id="closeShareModalBtn" class="modal-close" type="button" aria-label="Close">×</button>
+      <p class="eyebrow">GRANT VIEW ACCESS</p>
+      <h2 id="shareModalTitle">Share live with a user</h2>
+      <p class="modal-copy">Enter a registered user's 10-digit phone number. They will be able to open this live session while it is active.</p>
+      <form id="shareForm">
+        <label for="sharePhone">Phone number</label>
+        <div class="phone-input-wrap"><span>+91</span><input id="sharePhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" minlength="10" placeholder="10-digit phone number" required /></div>
+        <p id="shareError" class="field-error" aria-live="polite"></p>
+        <div class="modal-actions">
+          <button id="cancelShareBtn" class="button button-secondary" type="button">Cancel</button>
+          <button id="sendShareBtn" class="button button-primary" type="submit">Send access</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- Socket.IO client must match the Socket.IO server version used by the backend. -->
+   <script src="../dist/data/auth-session.min.js"></script>
+<script src="https://api.buildskil.com/socket.io/socket.io.js"></script>
+  <script src="/data/live.js"></script>
+</body>
+</html>
