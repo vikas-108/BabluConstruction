@@ -7,8 +7,6 @@
   <title>BuildSkil · Live</title>
   <link rel="stylesheet" href="../dist/css/live.min.css" />
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <script>document.documentElement.style.visibility = 'hidden';</script>
-  <script src="../dist/js/auth-guard.min.js"></script>
 </head>
 <body>
   <main class="page-shell">
@@ -81,6 +79,54 @@
       </div>
       <p class="section-copy">Enter the phone number of a registered BuildSkil user. Only users authorized by the backend should be able to join.</p>
     </section>
+
+    <!-- Users with access to the owner's current live session -->
+<section class="shared-panel">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">MANAGE ACCESS</p>
+      <h2>People you've shared with</h2>
+    </div>
+
+    <div class="shared-item-actions">
+      <span id="ownerSharesCount" class="count-chip">0 users</span>
+      <button
+        id="refreshOwnerSharesBtn"
+        class="button button-ghost"
+        type="button"
+      >Refresh</button>
+    </div>
+  </div>
+
+  <div id="ownerSharesList" class="shared-list" aria-live="polite">
+    <div class="list-placeholder">
+      Start a live session and share access to see users here.
+    </div>
+  </div>
+</section>
+
+<!-- Owner's previous live sessions -->
+<section class="shared-panel">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">PAST SESSIONS</p>
+      <h2>Live history</h2>
+    </div>
+
+    <div class="shared-item-actions">
+      <span id="liveHistoryCount" class="count-chip">0 sessions</span>
+      <button
+        id="refreshLiveHistoryBtn"
+        class="button button-ghost"
+        type="button"
+      >Refresh</button>
+    </div>
+  </div>
+
+  <div id="liveHistoryList" class="shared-list" aria-live="polite">
+    <div class="list-placeholder">Loading your live history...</div>
+  </div>
+</section>
 
     <section class="shared-panel">
       <div class="section-heading">
