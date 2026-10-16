@@ -112,3 +112,471 @@ body.modal-open { overflow: hidden; }
   .modal { padding: 23px 18px 18px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+/* ================================
+   RESPONSIVE ICON BUTTONS
+================================ */
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+
+  flex: 0 0 auto;
+  padding: 0;
+
+  border: 1px solid rgba(226, 85, 85, 0.35);
+  border-radius: 10px;
+
+  background: rgba(226, 85, 85, 0.12);
+  color: #ffaaaa;
+
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.icon-button svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: rgba(226, 85, 85, 0.25);
+  border-color: rgba(226, 85, 85, 0.65);
+}
+
+.icon-button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.icon-button:focus-visible {
+  outline: 2px solid #7198ff;
+  outline-offset: 3px;
+}
+
+.icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.remove-share-button,
+.history-delete-button {
+  margin: 0;
+}
+
+/* ================================
+   SHARED PANELS
+================================ */
+
+.shared-panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.shared-panel + .shared-panel {
+  margin-top: 18px;
+}
+
+.shared-panel *,
+.shared-panel *::before,
+.shared-panel *::after {
+  box-sizing: border-box;
+}
+
+.shared-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 100%;
+  min-width: 0;
+}
+
+/* ================================
+   SHARED USER / HISTORY ROWS
+================================ */
+
+.shared-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+
+  padding: 16px;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+.shared-item-main {
+  flex: 1 1 220px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.shared-item-title {
+  margin: 0 0 6px;
+  max-width: 100%;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.45;
+}
+
+.shared-item-meta {
+  margin: 0;
+  max-width: 100%;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.55;
+}
+
+.shared-item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  min-width: 0;
+  max-width: 100%;
+}
+
+.shared-item-actions .small-live-status {
+  display: inline-flex;
+  align-items: center;
+
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/* Make the text and buttons shrink safely in narrow layouts. */
+.shared-item .button {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* ================================
+   TABLETS
+================================ */
+
+@media (max-width: 768px) {
+  .shared-panel + .shared-panel {
+    margin-top: 14px;
+  }
+
+  .shared-item {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .shared-item-main {
+    flex-basis: 180px;
+  }
+
+  .shared-item-actions {
+    gap: 7px;
+  }
+}
+
+/* ================================
+   MOBILE PHONES
+================================ */
+
+@media (max-width: 600px) {
+  .shared-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+
+    padding: 13px;
+  }
+
+  .shared-item-main {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .shared-item-title {
+    font-size: 15px;
+  }
+
+  .shared-item-meta {
+    font-size: 13px;
+  }
+
+  .shared-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    flex: 1 1 auto;
+    gap: 8px;
+  }
+
+  .shared-item-actions .small-live-status {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 11px;
+  }
+
+  .icon-button {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+  }
+
+  .remove-share-button,
+  .history-delete-button {
+    margin-left: 0;
+  }
+
+  .shared-panel + .shared-panel {
+    margin-top: 12px;
+  }
+}
+
+/* ================================
+   VERY SMALL PHONES
+================================ */
+
+@media (max-width: 380px) {
+  .shared-item {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .shared-item-title {
+    font-size: 14px;
+  }
+
+  .shared-item-meta {
+    font-size: 12px;
+  }
+
+  .shared-item-actions {
+    gap: 6px;
+  }
+
+  .icon-button {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+  }
+
+  .icon-button svg {
+    width: 17px;
+    height: 17px;
+  }
+}
+
+/* ================================
+   REDUCED MOTION ACCESSIBILITY
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-button {
+    transition: none;
+  }
+}
+
+/* ===== Full-screen controls ===== */
+.fullscreen-button {
+  position: absolute;
+  z-index: 10;
+  top: 10px;
+  right: 10px;
+
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  background: rgba(5, 12, 24, 0.82);
+  color: #fff;
+
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fullscreen-button:hover {
+  background: rgba(70, 104, 177, 0.95);
+}
+
+.fullscreen-button:focus-visible {
+  outline: 2px solid #87a8ff;
+  outline-offset: 3px;
+}
+
+/* Native browser full-screen container */
+.video-frame:fullscreen,
+.video-frame:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+  min-height: 0;
+  max-height: 100vh;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  background: #000;
+}
+
+.video-frame:fullscreen::backdrop {
+  background: #000;
+}
+
+/* ===== Remote viewers displayed on the owner's camera ===== */
+.owner-remote-viewers {
+  position: absolute;
+  z-index: 4;
+  top: 54px;
+  right: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 9px;
+
+  width: clamp(105px, 28%, 175px);
+  max-height: calc(100% - 65px);
+  overflow-y: auto;
+  pointer-events: none;
+}
+
+.owner-remote-viewers:empty {
+  display: none;
+}
+
+.owner-viewer-tile {
+  position: relative;
+  flex: 0 0 auto;
+
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+
+  border: 1px solid rgba(143, 174, 255, 0.65);
+  border-radius: 11px;
+  background: #070c14;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.45);
+}
+
+.owner-viewer-tile video {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #070c14;
+
+  pointer-events: auto;
+}
+
+.owner-viewer-label {
+  position: absolute;
+  z-index: 2;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+
+  overflow: hidden;
+  padding: 4px 6px;
+  border-radius: 5px;
+  background: rgba(3, 8, 16, 0.78);
+  color: #fff;
+
+  font-size: 9px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ===== Viewer's own camera picture-in-picture ===== */
+.video-frame video.viewer-self-video {
+  display: none;
+
+  inset: auto;
+  right: 12px;
+  bottom: 12px;
+
+  width: clamp(90px, 25%, 165px);
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+
+  z-index: 5;
+  border: 2px solid #8eafff;
+  border-radius: 11px;
+  background: #070c14;
+
+  transform: scaleX(-1);
+}
+
+.video-frame video.viewer-self-video.visible {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .fullscreen-button {
+    top: 8px;
+    right: 8px;
+    width: 38px;
+    height: 38px;
+    font-size: 23px;
+  }
+
+  .owner-remote-viewers {
+    top: 49px;
+    right: 7px;
+    width: clamp(90px, 30%, 130px);
+    gap: 7px;
+  }
+
+  .owner-viewer-label {
+    font-size: 8px;
+  }
+
+  .video-frame video.viewer-self-video {
+    right: 8px;
+    bottom: 8px;
+    width: clamp(85px, 29%, 125px);
+  }
+
+  .video-frame:fullscreen,
+  .video-frame:-webkit-full-screen {
+    min-height: 100vh;
+  }
+}
