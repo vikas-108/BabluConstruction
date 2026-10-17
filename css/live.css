@@ -580,3 +580,39 @@ body.modal-open { overflow: hidden; }
     min-height: 100vh;
   }
 }
+/* in future need to change full screen styles*/
+/**
+#remoteVideoFrame.mobile-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: #000;
+}
+
+#remoteVideoFrame.mobile-fullscreen #remoteVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#remoteVideoFrame.mobile-fullscreen .fullscreen-button {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 100000;
+}
+
+@media (max-width: 768px) {
+  #remoteVideoFrame.mobile-fullscreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+*/
