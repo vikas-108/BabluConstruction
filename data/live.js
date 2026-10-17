@@ -1,27 +1,6 @@
-/*
- * BuildSkil Live screen
- * Expected backend contract (implement and enforce authorization server-side):
- *   POST   /api/live/session/start             -> { sessionId, ... }
- *   POST   /api/live/session/:id/stop          -> { success: true }
- *   POST   /api/live/session/:id/share         body { phone } -> { success: true, ... }
- *   GET    /api/live/shared                    -> { sessions: [{ sessionId, ownerName, ownerPhone, live, sharedAt }] }
- *
- * Socket.IO events, with server-side authorization on every event:
- *   live:viewer-joined { sessionId, viewerSocketId } -> live owner
- *   live:join          { sessionId }                 -> viewer asks to join an authorized session
- *   live:offer/answer  { sessionId, to, offer|answer }
- *   live:ice           { sessionId, to, candidate }
- *   live:leave         { sessionId }
- *   live:end            { sessionId }
- *   live:ended          { sessionId }
- *   live:error          { message }
- *
- * Do not trust phone numbers, user IDs, session IDs, or socket IDs sent by a browser.
- * Verify the JWT, session owner, and explicit share permission on the backend.
- */
 (() => {
-  "use strict";
-   //const SERVER_BASE = 'http://localhost:5000';
+  //"use strict";
+  //const SERVER_BASE = 'http://localhost:5000';
   const SERVER_BASE = "https://api.buildskil.com";
   const API_BASE = `${SERVER_BASE}/api/live`;
   const AUTH_KEY = "cb_token";
@@ -36,6 +15,7 @@
     ownerLiveBadge: $("ownerLiveBadge"),
     ownerAudioLabel: $("ownerAudioLabel"),
     localVideo: $("localVideo"),
+    switchCameraBtn: $("switchCameraBtn"),
     localEmpty: $("localEmpty"),
     sessionLabel: $("sessionLabel"),
     micBtn: $("micBtn"),
@@ -62,6 +42,10 @@
     liveHistoryList: $("liveHistoryList"),
     liveHistoryCount: $("liveHistoryCount"),
     refreshLiveHistoryBtn: $("refreshLiveHistoryBtn"),
+    ownerRemoteViewers: $('ownerRemoteViewers'),
+    viewerSelfVideo: $('viewerSelfVideo'),
+    viewerMicBtn: $("viewerMicBtn"),
+    viewerSwitchCameraBtn: $("viewerSwitchCameraBtn"),
   };
 
   let socket = null;
@@ -75,7 +59,18 @@
   let viewerOwnerSocketId = null;
   const ownerPeers = new Map(); // viewer socket id -> RTCPeerConnection
   let viewerPeer = null;
+// Camera/microphone belonging to the person watching another user's live.
+let viewerLocalStream = null;
+let currentFacingMode = 'user';
+let cameraSwitchInProgress = false;
+let viewerFacingMode = "user";
+let viewerCameraSwitchInProgress = false;
+let ownerHeartbeatTimer = null;
+let ownerHeartbeatInProgress = false;
 
+const OWNER_HEARTBEAT_INTERVAL_MS = 20_000;
+// One remote video tile per connected shared user.
+const ownerViewerTiles = new Map();
   function getToken() {
     return localStorage.getItem(AUTH_KEY);
   }
@@ -141,6 +136,8 @@
         ? "Microphone on"
         : "Microphone muted"
       : "Microphone off";
+
+      updateCameraSwitchButton();
   }
 
   function setViewerUI(watching, label = "") {
@@ -176,6 +173,252 @@
       peer.close();
     } catch (_) {}
   }
+function registerLiveOwnerSocket() {
+  if (
+    socket?.connected &&
+    isLiveOwner &&
+    activeSessionId
+  ) {
+    socket.emit("live:owner-started", {
+      sessionId: activeSessionId,
+    });
+  }
+}
+
+async function sendOwnerHeartbeat(sessionId = activeSessionId) {
+  if (!sessionId || ownerHeartbeatInProgress || !isLiveOwner) {
+    return;
+  }
+
+  ownerHeartbeatInProgress = true;
+
+  try {
+    await api(
+      `/session/${encodeURIComponent(sessionId)}/heartbeat`,
+      { method: "POST" }
+    );
+  } catch (error) {
+    // A temporary network failure should not instantly end the live.
+    console.warn("[Live] Heartbeat failed; it will retry:", error);
+  } finally {
+    ownerHeartbeatInProgress = false;
+  }
+}
+
+function startOwnerHeartbeat(sessionId) {
+  stopOwnerHeartbeat();
+
+  // Send immediately, then renew the lease every 20 seconds.
+  void sendOwnerHeartbeat(sessionId);
+
+  ownerHeartbeatTimer = setInterval(() => {
+    if (
+      isLiveOwner &&
+      activeSessionId === sessionId
+    ) {
+      void sendOwnerHeartbeat(sessionId);
+    }
+  }, OWNER_HEARTBEAT_INTERVAL_MS);
+}
+
+function stopOwnerHeartbeat() {
+  if (ownerHeartbeatTimer !== null) {
+    clearInterval(ownerHeartbeatTimer);
+    ownerHeartbeatTimer = null;
+  }
+
+  ownerHeartbeatInProgress = false;
+}
+  async function toggleVideoFullscreen(frameId, videoId) {
+  const frame = $(frameId);
+  const video = $(videoId);
+
+  if (!frame || !video) {
+    showToast('Video frame not found.');
+    return;
+  }
+
+  const currentFullscreen =
+    document.fullscreenElement ||
+    document.webkitFullscreenElement;
+
+  try {
+    if (currentFullscreen) {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+
+      if (currentFullscreen === frame) return;
+    }
+
+    if (typeof frame.requestFullscreen === 'function') {
+      await frame.requestFullscreen();
+      return;
+    }
+
+    // Fallback for iPhone Safari, which may only support
+    // native full screen on the video element.
+    if (typeof video.webkitEnterFullscreen === 'function') {
+      video.webkitEnterFullscreen();
+      return;
+    }
+
+    showToast('Full screen is not supported by this browser.');
+  } catch (error) {
+    console.error('[Live] Full-screen error:', error);
+    showToast('Unable to open full screen.');
+  }
+}
+/** //buy sover of hull screen button
+async function toggleVideoFullscreen(targetId, videoId) {
+  const target = document.getElementById(targetId);
+  const video = document.getElementById(videoId);
+
+  if (!target || !video) {
+    console.error('[Fullscreen] Missing element:', { targetId, videoId });
+    showToast('Unable to find the shared video.');
+    return;
+  }
+
+  try {
+    // Exit fullscreen if already active.
+    if (
+      document.fullscreenElement ||
+      document.webkitFullscreenElement
+    ) {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+      return;
+    }
+
+    // iOS Safari uses a native video fullscreen API.
+    if (typeof video.webkitEnterFullscreen === 'function') {
+      video.webkitEnterFullscreen();
+      return;
+    }
+
+    // Android Chrome and other browsers.
+    if (typeof target.requestFullscreen === 'function') {
+      await target.requestFullscreen();
+      return;
+    }
+
+    if (typeof video.requestFullscreen === 'function') {
+      await video.requestFullscreen();
+      return;
+    }
+
+    // Fallback for browsers without a fullscreen API.
+    target.classList.toggle('mobile-fullscreen');
+  } catch (error) {
+    console.error('[Fullscreen] Failed:', error);
+
+    // Try the video element if the container request failed.
+    try {
+      if (typeof video.requestFullscreen === 'function') {
+        await video.requestFullscreen();
+        return;
+      }
+
+      target.classList.toggle('mobile-fullscreen');
+    } catch (fallbackError) {
+      console.error('[Fullscreen] Fallback failed:', fallbackError);
+      showToast('Unable to open shared video full screen.');
+    }
+  }
+}
+ */
+function getOwnerViewerTile(viewerSocketId) {
+  const key = String(viewerSocketId);
+
+  const existing = ownerViewerTiles.get(key);
+  if (existing) return existing;
+
+  const tile = document.createElement('div');
+  tile.className = 'owner-viewer-tile';
+
+  const video = document.createElement('video');
+  video.className = 'owner-viewer-video';
+  video.autoplay = true;
+  video.playsInline = true;
+  video.muted = false;
+  video.controls = false;
+  video.setAttribute('playsinline', '');
+  video.setAttribute('aria-label', "Shared user's camera");
+
+  // A tap retries playback if the browser blocks incoming audio.
+  video.addEventListener('click', () => {
+    video.play().catch(error => {
+      console.warn('[Live] Viewer audio playback is blocked:', error);
+    });
+  });
+
+  const label = document.createElement('span');
+  label.className = 'owner-viewer-label';
+  label.textContent = 'SHARED USER';
+
+  tile.append(video, label);
+  els.ownerRemoteViewers.appendChild(tile);
+
+  const result = { tile, video };
+  ownerViewerTiles.set(key, result);
+
+  return result;
+}
+
+function attachOwnerViewerTrack(viewerSocketId, event) {
+  const item = getOwnerViewerTile(viewerSocketId);
+
+  let stream = item.video.srcObject;
+
+  if (event.streams?.[0]) {
+    stream = event.streams[0];
+  } else {
+    if (!(stream instanceof MediaStream)) {
+      stream = new MediaStream();
+    }
+
+    if (
+      event.track &&
+      !stream.getTracks().some(track => track.id === event.track.id)
+    ) {
+      stream.addTrack(event.track);
+    }
+  }
+
+  if (item.video.srcObject !== stream) {
+    item.video.srcObject = stream;
+  }
+
+  item.video.play().catch(error => {
+    console.warn('[Live] Could not autoplay shared-user video/audio:', error);
+    showToast('Shared user connected. Tap their video to enable audio.');
+  });
+}
+
+function removeOwnerViewerTile(viewerSocketId) {
+  const key = String(viewerSocketId);
+  const item = ownerViewerTiles.get(key);
+
+  if (!item) return;
+
+  item.video.pause();
+  item.video.srcObject = null;
+  item.tile.remove();
+
+  ownerViewerTiles.delete(key);
+}
+
+function clearOwnerViewerTiles() {
+  for (const viewerSocketId of ownerViewerTiles.keys()) {
+    removeOwnerViewerTile(viewerSocketId);
+  }
+}
 
   function ensureSocket() {
     if (!getToken())
@@ -207,6 +450,7 @@
 
       nextSocket.on("connect", () => {
         setConnection(true, "Connected");
+         registerLiveOwnerSocket();
         if (!settled) {
           settled = true;
           socketConnectPromise = null;
@@ -247,6 +491,25 @@
           return;
         void offerToViewer(payload.viewerSocketId, payload.sessionId);
       });
+       
+      nextSocket.on('live:viewer-left', payload => {
+  if (
+    !payload?.viewerSocketId ||
+    payload.sessionId !== activeSessionId
+  ) {
+    return;
+  }
+
+  const viewerSocketId = String(payload.viewerSocketId);
+  const peer = ownerPeers.get(viewerSocketId);
+
+  if (peer) {
+    closePeer(peer);
+    ownerPeers.delete(viewerSocketId);
+  }
+
+  removeOwnerViewerTile(viewerSocketId);
+});
 
       // Viewer receives an offer only after backend has authorized the live:join request.
       nextSocket.on("live:offer", (payload) => {
@@ -282,7 +545,7 @@
   async function startLive() {
     if (isLiveOwner) return;
     els.startLiveBtn.disabled = true;
-
+   let createdSessionId = null;
     try {
       if (!window.isSecureContext && location.hostname !== "localhost") {
         throw new Error(
@@ -312,10 +575,12 @@
       activeSessionId = data?.sessionId || data?.session?._id || data?._id;
       if (!activeSessionId)
         throw new Error("The server did not return a live session ID.");
-
+       createdSessionId = activeSessionId;
       await ensureSocket();
       isLiveOwner = true;
       setOwnerLiveUI(true);
+      registerLiveOwnerSocket();
+startOwnerHeartbeat(activeSessionId);
       //await loadSharedStreams();
       await Promise.all([
   loadSharedStreams(),
@@ -324,6 +589,21 @@
 ]);
       showToast("Live camera started. Share access with a registered user.");
     } catch (error) {
+      stopOwnerHeartbeat();
+
+if (createdSessionId) {
+  try {
+    await api(
+      `/session/${encodeURIComponent(createdSessionId)}/stop`,
+      { method: "POST" }
+    );
+  } catch (cleanupError) {
+    console.warn(
+      "[Live] Could not clean up the failed start; server cleanup will recover it:",
+      cleanupError
+    );
+  }
+}
       if (localStream) localStream.getTracks().forEach((track) => track.stop());
       localStream = null;
       els.localVideo.srcObject = null;
@@ -337,6 +617,7 @@
   }
 
   async function stopLive() {
+    stopOwnerHeartbeat();
     if (!isLiveOwner && !activeSessionId) return;
     const endedSessionId = activeSessionId;
 
@@ -344,8 +625,14 @@
       if (socket?.connected && endedSessionId) {
         socket.emit("live:end", { sessionId: endedSessionId });
       }
-      for (const peer of ownerPeers.values()) closePeer(peer);
-      ownerPeers.clear();
+      for (const [viewerSocketId, peer] of ownerPeers.entries()) {
+  closePeer(peer);
+  removeOwnerViewerTile(viewerSocketId);
+}
+
+ownerPeers.clear();
+clearOwnerViewerTiles();
+     // for (const peer of ownerPeers.values()) closePeer(peer);  ownerPeers.clear();
       if (localStream) localStream.getTracks().forEach((track) => track.stop());
       localStream = null;
       els.localVideo.srcObject = null;
@@ -769,7 +1056,82 @@
       els.sharedList.appendChild(placeholder);
     }
   }
+  async function startViewing(sessionId, ownerName) {
+  if (isLiveOwner && sessionId === activeSessionId) {
+    showToast('You cannot watch your own camera as a shared stream.');
+    return;
+  }
 
+  try {
+    await stopViewing(true);
+    await ensureSocket();
+
+    viewingSessionId = String(sessionId);
+    setViewerUI(true, `Preparing to connect to ${ownerName}…`);
+    els.remoteVideo.srcObject = null;
+
+    // Explicitly request permission to share the viewer's camera/mic.
+    if (
+      navigator.mediaDevices?.getUserMedia &&
+      (window.isSecureContext || location.hostname === 'localhost')
+    ) {
+      try {
+        viewerLocalStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user' },
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+          },
+        });
+
+        els.viewerSelfVideo.srcObject = viewerLocalStream;
+        viewerFacingMode = "user";
+        updateViewerMediaButtons();
+        els.viewerSelfVideo.classList.add('visible');
+
+        // Self-preview is muted to prevent audio feedback.
+        await els.viewerSelfVideo.play().catch(() => {});
+      } catch (mediaError) {
+        viewerLocalStream = null;
+        els.viewerSelfVideo.srcObject = null;
+        els.viewerSelfVideo.classList.remove('visible');
+
+        console.info(
+          '[Live] Viewer chose watch-only mode or camera/microphone is unavailable:',
+          mediaError
+        );
+      }
+    }
+
+    // Only send the join request after camera permission has been resolved.
+    // The owner creates the offer in response to this authorized join.
+    updateViewerMediaButtons();
+    socket.emit('live:join', { sessionId: viewingSessionId });
+
+    if (viewerLocalStream) {
+      showToast('Joining live. Your camera and microphone are enabled for this session.');
+    } else {
+      showToast('Joining in watch-only mode. Your camera is not being shared.');
+    }
+  } catch (error) {
+    console.error('[Live] Join failed:', error);
+
+    if (viewerLocalStream) {
+      viewerLocalStream.getTracks().forEach(track => track.stop());
+      viewerLocalStream = null;
+    }
+
+    els.viewerSelfVideo.pause();
+    els.viewerSelfVideo.srcObject = null;
+    els.viewerSelfVideo.classList.remove('visible');
+
+    viewingSessionId = null;
+    setViewerUI(false);
+
+    showToast(error?.message || 'Could not connect to this live stream.');
+  }
+}
+/*
   async function startViewing(sessionId, ownerName) {
     if (isLiveOwner && sessionId === activeSessionId) {
       showToast(
@@ -790,8 +1152,82 @@
       setViewerUI(false);
       showToast(error?.message || "Could not connect to this live stream.");
     }
+  }*/
+
+    async function offerToViewer(viewerSocketId, sessionId) {
+  if (!localStream || !socket?.connected || sessionId !== activeSessionId) {
+    return;
   }
 
+  const key = String(viewerSocketId);
+
+  const existing = ownerPeers.get(key);
+  if (existing) closePeer(existing);
+
+  removeOwnerViewerTile(key);
+
+  const peer = new RTCPeerConnection({
+    iceServers: ICE_SERVERS,
+  });
+
+  ownerPeers.set(key, peer);
+
+  // Send the owner's camera and microphone to the viewer.
+  localStream.getTracks().forEach(track => {
+    peer.addTrack(track, localStream);
+  });
+
+  // Receive the viewer's camera and microphone when they answer.
+  peer.ontrack = event => {
+    if (sessionId !== activeSessionId) return;
+
+    attachOwnerViewerTrack(key, event);
+  };
+
+  peer.onicecandidate = event => {
+    if (event.candidate && socket?.connected) {
+      socket.emit('live:ice', {
+        sessionId,
+        to: viewerSocketId,
+        candidate: event.candidate,
+      });
+    }
+  };
+
+  peer.onconnectionstatechange = () => {
+    if (peer.connectionState === 'connected') {
+      console.log('[Live] Connected to shared user:', key);
+    }
+
+    if (['failed', 'closed'].includes(peer.connectionState)) {
+      closePeer(peer);
+
+      if (ownerPeers.get(key) === peer) {
+        ownerPeers.delete(key);
+      }
+
+      removeOwnerViewerTile(key);
+    }
+  };
+
+  try {
+    const offer = await peer.createOffer();
+    await peer.setLocalDescription(offer);
+
+    socket.emit('live:offer', {
+      sessionId,
+      to: viewerSocketId,
+      offer: peer.localDescription,
+    });
+  } catch (error) {
+    console.error('[Live] Offer failed:', error);
+    closePeer(peer);
+    ownerPeers.delete(key);
+    removeOwnerViewerTile(key);
+    showToast('Could not connect to the shared user.');
+  }
+}
+/*
   async function offerToViewer(viewerSocketId, sessionId) {
     if (!localStream || !socket?.connected || sessionId !== activeSessionId)
       return;
@@ -835,9 +1271,121 @@
       console.error("[Live] Offer failed:", error);
       showToast("Could not connect to the viewer.");
     }
+  }*/
+
+    async function handleOffer(payload) {
+  if (
+    !payload ||
+    payload.sessionId !== viewingSessionId ||
+    !payload.offer ||
+    !payload.from
+  ) {
+    return;
   }
 
-  async function handleOffer(payload) {
+  try {
+    closePeer(viewerPeer);
+
+    viewerOwnerSocketId = payload.from;
+
+    const peer = new RTCPeerConnection({
+      iceServers: ICE_SERVERS,
+    });
+
+    viewerPeer = peer;
+
+    peer.ontrack = event => {
+      if (peer !== viewerPeer) return;
+
+      let stream = els.remoteVideo.srcObject;
+
+      if (event.streams?.[0]) {
+        stream = event.streams[0];
+      } else {
+        if (!(stream instanceof MediaStream)) {
+          stream = new MediaStream();
+        }
+
+        if (
+          event.track &&
+          !stream.getTracks().some(track => track.id === event.track.id)
+        ) {
+          stream.addTrack(event.track);
+        }
+      }
+
+      els.remoteVideo.srcObject = stream;
+      els.remoteVideo.classList.add('visible');
+      els.remoteEmpty.hidden = true;
+
+      const playAttempt = els.remoteVideo.play();
+
+      if (playAttempt?.catch) {
+        playAttempt.catch(error => {
+          console.warn('[Live] Remote playback needs user interaction:', error);
+          showToast('Live connected. Tap Play to enable video/audio.');
+        });
+      }
+    };
+
+    peer.onicecandidate = event => {
+      if (event.candidate && socket?.connected) {
+        socket.emit('live:ice', {
+          sessionId: viewingSessionId,
+          to: viewerOwnerSocketId,
+          candidate: event.candidate,
+        });
+      }
+    };
+
+    peer.onconnectionstatechange = () => {
+      if (peer !== viewerPeer) return;
+
+      if (peer.connectionState === 'connected') {
+        els.viewerLabel.textContent = viewerLocalStream
+          ? 'Connected · Two-way video/audio enabled'
+          : 'Connected · Watch-only mode';
+      } else if (
+        ['failed', 'disconnected'].includes(peer.connectionState)
+      ) {
+        els.viewerLabel.textContent = 'Connection interrupted';
+      }
+    };
+
+    // 1. Accept the owner's offer.
+    await peer.setRemoteDescription(
+      new RTCSessionDescription(payload.offer)
+    );
+
+    // 2. Add the viewer's own camera and microphone tracks.
+    // The answer can then carry media in both directions.
+    if (viewerLocalStream) {
+      viewerLocalStream.getTracks().forEach(track => {
+        const alreadyAdded = peer
+          .getSenders()
+          .some(sender => sender.track?.id === track.id);
+
+        if (!alreadyAdded) {
+          peer.addTrack(track, viewerLocalStream);
+        }
+      });
+    }
+
+    // 3. Return an answer to the owner.
+    const answer = await peer.createAnswer();
+    await peer.setLocalDescription(answer);
+
+    socket.emit('live:answer', {
+      sessionId: viewingSessionId,
+      to: viewerOwnerSocketId,
+      answer: peer.localDescription,
+    });
+  } catch (error) {
+    console.error('[Live] Offer handling failed:', error);
+    showToast('Could not open the shared live stream.');
+  }
+}
+ /* async function handleOffer(payload) {
     if (
       !payload ||
       payload.sessionId !== viewingSessionId ||
@@ -896,7 +1444,7 @@
       console.error("[Live] Offer handling failed:", error);
       showToast("Could not open the shared live stream.");
     }
-  }
+  }*/
 
   async function handleAnswer(payload) {
     if (!payload?.from || !payload.answer || !payload.sessionId) return;
@@ -933,6 +1481,36 @@
   }
 
   async function stopViewing(sendLeave = true) {
+  const leavingSessionId = viewingSessionId;
+
+  if (sendLeave && leavingSessionId && socket?.connected) {
+    socket.emit('live:leave', {
+      sessionId: leavingSessionId,
+    });
+  }
+
+  closePeer(viewerPeer);
+  viewerPeer = null;
+  viewerOwnerSocketId = null;
+  viewingSessionId = null;
+
+  els.remoteVideo.pause();
+  els.remoteVideo.srcObject = null;
+
+  // Stop the recipient's camera and mic when they leave.
+  if (viewerLocalStream) {
+    viewerLocalStream.getTracks().forEach(track => track.stop());
+    viewerLocalStream = null;
+  }
+
+  els.viewerSelfVideo.pause();
+  els.viewerSelfVideo.srcObject = null;
+  els.viewerSelfVideo.classList.remove('visible');
+
+  setViewerUI(false);
+  updateViewerMediaButtons();
+}
+  /*async function stopViewing(sendLeave = true) {
     const leavingSessionId = viewingSessionId;
     if (sendLeave && leavingSessionId && socket?.connected) {
       socket.emit("live:leave", { sessionId: leavingSessionId });
@@ -945,7 +1523,7 @@
     els.remoteVideo.srcObject = null;
     setViewerUI(false);
   }
-
+*/
   function toggleMicrophone() {
     if (!localStream) return;
     isMicEnabled = !isMicEnabled;
@@ -989,6 +1567,7 @@ els.refreshLiveHistoryBtn.addEventListener('click', () => {
     if (event.key === "Escape" && !els.shareModal.hidden) closeShareModal();
   });
   window.addEventListener("beforeunload", () => {
+    stopOwnerHeartbeat();
     if (socket?.connected && activeSessionId && isLiveOwner)
       socket.emit("live:end", { sessionId: activeSessionId });
     if (localStream) localStream.getTracks().forEach((track) => track.stop());
@@ -1009,6 +1588,463 @@ els.refreshLiveHistoryBtn.addEventListener('click', () => {
         setConnection(false, "Realtime unavailable");
       });
   }
+document
+  .querySelectorAll('[data-fullscreen-target]')
+  .forEach(button => {
+    button.addEventListener('click', () => {
+      void toggleVideoFullscreen(
+        button.dataset.fullscreenTarget,
+        button.dataset.fullscreenVideo
+      );
+    });
+  });
+
+function getCurrentVideoTrack() {
+  return localStream?.getVideoTracks()?.[0] || null;
+}
+// these owner only
+function updateCameraSwitchButton() {
+  const btn = els.switchCameraBtn;
+  if (!btn) return;
+
+  const supported =
+    !!navigator.mediaDevices?.getUserMedia &&
+    !!navigator.mediaDevices?.enumerateDevices;
+
+  const hasVideoTrack =
+    !!localStream?.getVideoTracks()?.[0];
+
+  btn.disabled =
+    !isLiveOwner ||
+    !activeSessionId ||
+    !hasVideoTrack ||
+    cameraSwitchInProgress ||
+    !supported;
+}
+
+
+//shared view 
+
+function updateViewerMediaButtons() {
+  const audioTracks = viewerLocalStream?.getAudioTracks() || [];
+  const videoTrack = viewerLocalStream?.getVideoTracks()?.[0];
+
+  if (els.viewerMicBtn) {
+    const micEnabled =
+      audioTracks.length > 0 &&
+      audioTracks.every(track => track.enabled);
+
+    els.viewerMicBtn.disabled = !viewingSessionId || !audioTracks.length;
+    els.viewerMicBtn.textContent = micEnabled
+      ? "Mute microphone"
+      : "Unmute microphone";
+  }
+
+  if (els.viewerSwitchCameraBtn) {
+    const supported =
+      !!navigator.mediaDevices?.getUserMedia &&
+      !!navigator.mediaDevices?.enumerateDevices;
+
+    els.viewerSwitchCameraBtn.disabled =
+      !viewingSessionId ||
+      !videoTrack ||
+      viewerCameraSwitchInProgress ||
+      !supported;
+  }
+}
+
+function toggleViewerMicrophone() {
+  const audioTracks = viewerLocalStream?.getAudioTracks() || [];
+
+  if (!audioTracks.length) {
+    showToast("Your microphone is not available.");
+    updateViewerMediaButtons();
+    return;
+  }
+
+  // If any audio track is muted, enable all tracks; otherwise mute all.
+  const shouldEnable = audioTracks.some(track => !track.enabled);
+
+  audioTracks.forEach(track => {
+    track.enabled = shouldEnable;
+  });
+
+  updateViewerMediaButtons();
+
+  showToast(
+    shouldEnable
+      ? "Your microphone is unmuted."
+      : "Your microphone is muted."
+  );
+}
+
+
+function getViewerVideoTrack() {
+  return viewerLocalStream?.getVideoTracks()?.[0] || null;
+}
+
+async function switchViewerCamera() {
+  if (
+    viewerCameraSwitchInProgress ||
+    !viewingSessionId ||
+    !viewerLocalStream
+  ) {
+    return;
+  }
+
+  const oldTrack = getViewerVideoTrack();
+
+  if (!oldTrack) {
+    showToast("Your camera is not active.");
+    return;
+  }
+
+  const oldDeviceId = oldTrack.getSettings?.().deviceId;
+  const nextFacingMode =
+    viewerFacingMode === "user" ? "environment" : "user";
+
+  let replacementStream = null;
+  let cameraReleased = false;
+  let videoSenders = [];
+
+  viewerCameraSwitchInProgress = true;
+  updateViewerMediaButtons();
+
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cameras = devices.filter(
+      device => device.kind === "videoinput"
+    );
+
+    const alternate = cameras.find(
+      device =>
+        device.deviceId &&
+        device.deviceId !== oldDeviceId
+    );
+
+    if (!alternate) {
+      showToast("No alternate camera is available.");
+      return;
+    }
+
+    // Keep the sender references so we can replace their tracks.
+    if (viewerPeer) {
+      videoSenders = viewerPeer
+        .getSenders()
+        .filter(sender => sender.track?.kind === "video");
+    }
+
+    // Detach outgoing video before releasing the current camera.
+    await Promise.allSettled(
+      videoSenders.map(sender => sender.replaceTrack(null))
+    );
+
+    viewerLocalStream.removeTrack(oldTrack);
+    oldTrack.stop();
+    cameraReleased = true;
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // Prefer switching to the opposite front/back facing mode.
+    try {
+      replacementStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: nextFacingMode } },
+        audio: false
+      });
+    } catch {
+      // Fall back to the alternate physical camera.
+      replacementStream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: { exact: alternate.deviceId } },
+        audio: false
+      });
+    }
+
+    const newTrack = replacementStream.getVideoTracks()[0];
+
+    if (!newTrack) {
+      throw new Error("The selected camera returned no video track.");
+    }
+
+    viewerLocalStream.addTrack(newTrack);
+    els.viewerSelfVideo.srcObject = viewerLocalStream;
+
+    await els.viewerSelfVideo.play().catch(() => {});
+
+    // Update the viewer's outgoing video sent to the owner.
+    await Promise.allSettled(
+      videoSenders.map(sender => sender.replaceTrack(newTrack))
+    );
+
+    viewerFacingMode = nextFacingMode;
+
+    showToast(
+      viewerFacingMode === "environment"
+        ? "Switched to back camera."
+        : "Switched to front camera."
+    );
+
+  } catch (error) {
+    console.error("[Live] Viewer camera switch failed:", error);
+
+    // Attempt to restore the previous camera if the new one failed.
+    if (cameraReleased && !getViewerVideoTrack()) {
+      try {
+        const constraints = oldDeviceId
+          ? { deviceId: { exact: oldDeviceId } }
+          : { facingMode: { ideal: viewerFacingMode } };
+
+        const restoredStream = await navigator.mediaDevices.getUserMedia({
+          video: constraints,
+          audio: false
+        });
+
+        const restoredTrack = restoredStream.getVideoTracks()[0];
+
+        if (!restoredTrack) {
+          throw new Error("Could not restore the previous camera.");
+        }
+
+        viewerLocalStream.addTrack(restoredTrack);
+        els.viewerSelfVideo.srcObject = viewerLocalStream;
+
+        await Promise.allSettled(
+          videoSenders.map(sender => sender.replaceTrack(restoredTrack))
+        );
+
+        await els.viewerSelfVideo.play().catch(() => {});
+
+        showToast("Camera switch failed. Previous camera restored.");
+      } catch (restoreError) {
+        console.error(
+          "[Live] Could not restore viewer camera:",
+          restoreError
+        );
+
+        showToast("Camera unavailable. Please rejoin the live session.");
+      }
+    } else {
+      showToast(error?.message || "Unable to switch camera.");
+    }
+  } finally {
+    if (replacementStream) {
+      replacementStream.getTracks().forEach(track => {
+        const isInViewerStream =
+          viewerLocalStream?.getTracks().some(
+            currentTrack => currentTrack.id === track.id
+          );
+
+        if (!isInViewerStream) {
+          track.stop();
+        }
+      });
+    }
+
+    viewerCameraSwitchInProgress = false;
+    updateViewerMediaButtons();
+  }
+}
+
+
+async function switchLiveCamera() {
+  if (
+    cameraSwitchInProgress ||
+    !isLiveOwner ||
+    !activeSessionId ||
+    !localStream
+  ) {
+    return;
+  }
+
+  const oldTrack = getCurrentVideoTrack();
+
+  if (!oldTrack) {
+    showToast("Camera is not active. Please restart your live session.");
+    return;
+  }
+
+  const oldDeviceId = oldTrack.getSettings?.().deviceId;
+  const nextFacingMode =
+    currentFacingMode === "user" ? "environment" : "user";
+
+  let replacementStream = null;
+  let cameraReleased = false;
+
+  cameraSwitchInProgress = true;
+  updateCameraSwitchButton();
+
+  try {
+    // Find a camera different from the current one.
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cameras = devices.filter(
+      device => device.kind === "videoinput"
+    );
+
+    const alternate = cameras.find(
+      camera =>
+        camera.deviceId &&
+        camera.deviceId !== oldDeviceId
+    );
+
+    if (!alternate) {
+      showToast("No alternate camera is available.");
+      return;
+    }
+
+    // Save the viewer connections' outgoing video senders.
+    const videoSenders = [];
+
+    for (const peer of ownerPeers.values()) {
+      const sender = peer
+        .getSenders()
+        .find(item => item.track?.kind === "video");
+
+      if (sender) videoSenders.push(sender);
+    }
+
+    // Release the current camera before requesting another one.
+    localStream.removeTrack(oldTrack);
+    oldTrack.stop();
+    cameraReleased = true;
+
+    // Allow the browser time to release the camera hardware.
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // Open the alternate physical camera.
+    replacementStream =
+      await navigator.mediaDevices.getUserMedia({
+        video: {
+          deviceId: { exact: alternate.deviceId }
+        },
+        audio: false
+      });
+
+    const newTrack = replacementStream.getVideoTracks()[0];
+
+    if (!newTrack) {
+      throw new Error("The alternate camera returned no video track.");
+    }
+
+    // Update local preview and stream.
+    localStream.addTrack(newTrack);
+    els.localVideo.srcObject = localStream;
+
+    // Replace the old outgoing video for connected viewers.
+    const results = await Promise.allSettled(
+      videoSenders.map(sender => sender.replaceTrack(newTrack))
+    );
+
+    const failures = results.filter(
+      result => result.status === "rejected"
+    );
+
+    if (failures.length) {
+      console.error(
+        "[Live] Some viewer video tracks could not be replaced:",
+        failures
+      );
+      showToast("Camera switched, but some viewers may need to reconnect.");
+    } else {
+      showToast(
+        nextFacingMode === "environment"
+          ? "Switched camera."
+          : "Switched camera."
+      );
+    }
+
+    currentFacingMode = nextFacingMode;
+
+  } catch (error) {
+    console.error("[Live] Camera switch failed:", error);
+
+    // If the new camera failed, try to restore the previous camera.
+    if (cameraReleased && !getCurrentVideoTrack()) {
+      try {
+        const constraints = oldDeviceId
+          ? { deviceId: { exact: oldDeviceId } }
+          : { facingMode: { ideal: currentFacingMode } };
+
+        const restoredStream =
+          await navigator.mediaDevices.getUserMedia({
+            video: constraints,
+            audio: false
+          });
+
+        const restoredTrack = restoredStream.getVideoTracks()[0];
+
+        if (!restoredTrack) {
+          throw new Error("Could not restore the previous camera.");
+        }
+
+        localStream.addTrack(restoredTrack);
+        els.localVideo.srcObject = localStream;
+
+        const restoreSenders = [];
+
+        for (const peer of ownerPeers.values()) {
+          const sender = peer
+            .getSenders()
+            .find(item => item.track?.kind === "video");
+
+          if (sender) restoreSenders.push(sender);
+        }
+
+        await Promise.allSettled(
+          restoreSenders.map(sender =>
+            sender.replaceTrack(restoredTrack)
+          )
+        );
+
+        showToast("Camera switch failed. Previous camera restored.");
+      } catch (restoreError) {
+        console.error(
+          "[Live] Previous camera restoration failed:",
+          restoreError
+        );
+
+        showToast(
+          "Camera switch failed. Please stop and restart your live session."
+        );
+      }
+    } else {
+      showToast(
+        error?.message || "Unable to switch camera."
+      );
+    }
+  } finally {
+    // Stop temporary tracks only if they are not being used by localStream.
+    if (replacementStream) {
+      replacementStream.getTracks().forEach(track => {
+        const isInLocalStream =
+          localStream?.getTracks().some(
+            currentTrack => currentTrack.id === track.id
+          );
+
+        if (!isInLocalStream) {
+          track.stop();
+        }
+      });
+    }
+
+    cameraSwitchInProgress = false;
+    updateCameraSwitchButton();
+  }
+}
+
+
+els.switchCameraBtn?.addEventListener("click", () => {
+  void switchLiveCamera();
+});
+els.viewerMicBtn?.addEventListener("click", toggleViewerMicrophone);
+
+els.viewerSwitchCameraBtn?.addEventListener("click", () => {
+  void switchViewerCamera();
+});
+
   void loadSharedStreams();
 void loadLiveHistory();
+updateCameraSwitchButton();
+if (viewerLocalStream) {
+  viewerLocalStream.getTracks().forEach(track => track.stop());
+}
+clearOwnerViewerTiles();
 })();
